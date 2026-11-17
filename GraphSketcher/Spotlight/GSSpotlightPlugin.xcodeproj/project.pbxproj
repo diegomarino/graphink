@@ -777,7 +777,7 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREPROCESS = YES;
-				OMNI_BUNDLE_IDENTIFIER = com.graphsketcher.GraphSketcher.mdimporter;
+				OMNI_BUNDLE_IDENTIFIER = com.diegomarino.Graphink.mdimporter;
 				PRODUCT_NAME = GSSpotlightPlugin;
 				WRAPPER_EXTENSION = mdimporter;
 			};
@@ -790,7 +790,7 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREPROCESS = YES;
-				OMNI_BUNDLE_IDENTIFIER = com.graphsketcher.GraphSketcher.mdimporter;
+				OMNI_BUNDLE_IDENTIFIER = com.diegomarino.Graphink.mdimporter;
 				PRODUCT_NAME = GSSpotlightPlugin;
 				WRAPPER_EXTENSION = mdimporter;
 			};

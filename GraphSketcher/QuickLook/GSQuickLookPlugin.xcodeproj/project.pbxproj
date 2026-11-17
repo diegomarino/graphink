@@ -753,7 +753,7 @@
 					$DERIVED_SOURCES_DIR/FrameworkHeaders,
 				);
 				INFOPLIST_FILE = Info.plist;
-				OMNI_BUNDLE_IDENTIFIER = com.graphsketcher.GraphSketcher.qlgenerator;
+				OMNI_BUNDLE_IDENTIFIER = com.diegomarino.Graphink.qlgenerator;
 				PRODUCT_NAME = GSQuickLookPlugin;
 				WRAPPER_EXTENSION = qlgenerator;
 			};
@@ -769,7 +769,7 @@
 					$DERIVED_SOURCES_DIR/FrameworkHeaders,
 				);
 				INFOPLIST_FILE = Info.plist;
-				OMNI_BUNDLE_IDENTIFIER = com.graphsketcher.GraphSketcher.qlgenerator;
+				OMNI_BUNDLE_IDENTIFIER = com.diegomarino.Graphink.qlgenerator;
 				PRODUCT_NAME = GSQuickLookPlugin;
 				WRAPPER_EXTENSION = qlgenerator;
 			};

@@ -191,7 +191,7 @@ static void LinkBackRunAppNotFoundPanel(NSString* appName, NSURL* url)
     result = NSRunCriticalAlertPanel(title, @"%@", ok, urlstr,
                                      (url) ? NSLocalizedStringFromTableInBundle(@"_AppNotFoundMessageWithURL", @"Localized", b, @"app not found msg") : NSLocalizedStringFromTableInBundle(@"_AppNotFoundMessageNoURL", @"Localized", b, @"app not found msg"),
                                      nil) ;
-    if (NSAlertAlternateReturn == result) {
+    if (url && NSAlertAlternateReturn == result) {
         [[NSWorkspace sharedWorkspace] openURL: url] ;
     }
 }
@@ -203,8 +203,9 @@ static void LinkBackRunAppNotFoundPanel(NSString* appName, NSURL* url)
 
 	// Is this our own server?
     ret = [LinkBackServers objectForKey:serverName];
-    if (ret != nil)
+    if (ret != nil) {
         return ret;
+    }
 
 	// Try to connect
 	ret = [NSConnection rootProxyForConnectionWithRegisteredName: serverName host: nil] ;

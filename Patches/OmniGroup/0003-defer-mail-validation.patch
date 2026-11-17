@@ -1,0 +1,25 @@
+diff --git a/Frameworks/OmniAppKit/Carbon/OAInternetConfig.m b/Frameworks/OmniAppKit/Carbon/OAInternetConfig.m
+index 7afe2d42..cdc1d84a 100644
+--- a/Frameworks/OmniAppKit/Carbon/OAInternetConfig.m
++++ b/Frameworks/OmniAppKit/Carbon/OAInternetConfig.m
+@@ -47,10 +47,6 @@ static void _checkProcessEntitlements(void)
+     }
+ }
+ 
+-OBDidLoad(^{
+-    _checkProcessEntitlements();
+-});
+-
+ #endif
+ 
+ + (instancetype)internetConfig;
+@@ -136,6 +132,9 @@ static void HandleAppleScriptError(NSString *source, NSString *message, NSDictio
+ 
+ static BOOL _executeScript(NSString *source, NSError **outError)
+ {
++#ifdef OMNI_ASSERTIONS_ON
++    _checkProcessEntitlements();
++#endif
+     NSAppleScript *runner = [[NSAppleScript alloc] initWithSource:source];
+     NSDictionary *errorInfo = nil;
+     if (![runner compileAndReturnError:&errorInfo]) {

@@ -14,3 +14,7 @@ project.xcworkspace
 # osx noise
 .DS_Store
 profile
+
+# Python bytecode (release scripts and tests)
+__pycache__/
+*.pyc

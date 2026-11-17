@@ -25,6 +25,12 @@
     -->
 
     <types>
+        <type name="com.diegomarino.graphink.document">
+            <allattrs>
+            </allattrs>
+            <displayattrs>
+            </displayattrs>
+        </type>
         <type name="com.graphsketcher.graphdocument">  <!-- add one <type>...</type> entry for each UTI that you need to define.
          
             <!-- 'allattrs' is a whitespace separated list of all of the attributes that this UTI type normally has.

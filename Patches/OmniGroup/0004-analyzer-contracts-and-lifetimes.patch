@@ -1,0 +1,273 @@
+diff --git a/Frameworks/OmniAppKit/Appearance/OAColorCatalog.m b/Frameworks/OmniAppKit/Appearance/OAColorCatalog.m
+index 98015bf0..5a798c8e 100644
+--- a/Frameworks/OmniAppKit/Appearance/OAColorCatalog.m
++++ b/Frameworks/OmniAppKit/Appearance/OAColorCatalog.m
+@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
+ 
+ static NSString *nameForProperty(objc_property_t property, Class *outClass);
+ static _Nullable Class classFromTypeEncoding(const char *type);
+-static objc_property_t propertyForSelectorInClass(SEL selector, Class cls, BOOL matchGetter);
++static objc_property_t _Nullable propertyForSelectorInClass(SEL selector, Class cls, BOOL matchGetter);
+ 
+ #pragma mark -
+ 
+@@ -191,7 +191,7 @@ static _Nullable Class classFromTypeEncoding(const char *type)
+     return valueClass;
+ }
+ 
+-static objc_property_t propertyForSelectorInClass(SEL selector, Class cls, BOOL matchGetter)
++static objc_property_t _Nullable propertyForSelectorInClass(SEL selector, Class cls, BOOL matchGetter)
+ {
+     unsigned int propertyCount;
+     objc_property_t *allProperties = class_copyPropertyList(cls, &propertyCount);
+diff --git a/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTableView-OAExtensions.m b/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTableView-OAExtensions.m
+index ffd6c645..5964bdf5 100644
+--- a/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTableView-OAExtensions.m
++++ b/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTableView-OAExtensions.m
+@@ -119,13 +119,7 @@ OBDidLoad(^{
+                 if ([cell respondsToSelector:@selector(setDrawsBackground:)])
+                     [(NSTextFieldCell *)cell setDrawsBackground:0];
+ 
+-                // It isn't clear what the correct value for the view argument is here since we aren't drawing ourselves, but drawing into an image.
+-                // Really, though, the right solution might be to remove this override entirely.
+-                // <bug:///117839> (Unassigned: Fix disabled 'nonnull' warning in NSTableView(OAExtensions) row dragging override)
+-#pragma clang diagnostic push
+-#pragma clang diagnostic ignored "-Wnonnull"
+-                [cell drawWithFrame:cellRect inView:nil];
+-#pragma clang diagnostic pop
++                [cell drawWithFrame:cellRect inView:self];
+             }
+         }
+     }
+diff --git a/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTextStorage-OAExtensions.m b/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTextStorage-OAExtensions.m
+index 6e6c9814..d04f4442 100644
+--- a/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTextStorage-OAExtensions.m
++++ b/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTextStorage-OAExtensions.m
+@@ -439,7 +439,7 @@ OBDidLoad(^{
+ 
+ - (id)appleScriptBlankInit;
+ {
+-    [self init];
++    self = [self init];
+     [self setText:@" "]; // so there will be something to apply traits to
+     return self;
+ }
+diff --git a/Frameworks/OmniFoundation/OFBundleMigrationTarget.h b/Frameworks/OmniFoundation/OFBundleMigrationTarget.h
+index 2555d598..ce07f784 100644
+--- a/Frameworks/OmniFoundation/OFBundleMigrationTarget.h
++++ b/Frameworks/OmniFoundation/OFBundleMigrationTarget.h
+@@ -12,7 +12,7 @@
+ NS_ASSUME_NONNULL_BEGIN
+ 
+ @protocol OFBundleMigrationTarget <NSObject>
+-+ (void)migrateItems:(NSArray <NSDictionary <NSString *, NSString *> *> *)items bundle:(NSBundle *)bundle;
+++ (void)migrateItems:(NSArray <NSDictionary <NSString *, NSString *> *> *)items bundle:(nullable NSBundle *)bundle;
+ @end
+ 
+ NS_ASSUME_NONNULL_END
+diff --git a/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSObject-OFAppleScriptExtensions.h b/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSObject-OFAppleScriptExtensions.h
+index 6efedb74..8a20f7f0 100644
+--- a/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSObject-OFAppleScriptExtensions.h
++++ b/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSObject-OFAppleScriptExtensions.h
+@@ -16,6 +16,8 @@
+ + (id)coerceObject:(id)object toRecordClass:(Class)aClass;
+ 
+ 
++- (id)appleScriptBlankInit __attribute__((objc_method_family(init)));
++
+ - (BOOL)ignoreAppleScriptValueForKey:(NSString *)key; // implement for keys to ignore for 'make' and record coercion
+ // or implement -(BOOL)ignoreAppleScriptValueFor<KeyName>
+ - (NSDictionary *)appleScriptAsRecord;
+diff --git a/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.h b/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.h
+index 9e1fb184..597e6360 100644
+--- a/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.h
++++ b/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.h
+@@ -54,7 +54,7 @@ extern NSURL * _Nullable OFURLWithNameAffix(NSURL *baseURL, NSString *quotedSuff
+ /* Finds the range of the last path component of a URL. Returns NO if it can't find it for some reason. The returned range will not include the trailing slash, if it existed in the source URL; the length of any trailing slash is returned in *andTrailingSlash. */
+ extern BOOL OFURLRangeOfLastPathComponent(NSString *urlString, NSRange *lastComponentRange, unsigned *andTrailingSlash);
+ 
+-extern NSString *OFURLAnalogousRewrite(NSURL *oldSourceURL, NSString *oldDestination, NSURL *newSourceURL);
++extern NSString * _Nullable OFURLAnalogousRewrite(NSURL *oldSourceURL, NSString *oldDestination, NSURL *newSourceURL);
+ 
+ extern BOOL OFShouldIgnoreURLDuringScan(NSURL *fileURL);
+ 
+diff --git a/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m b/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m
+index 0b4ed37a..6613a940 100644
+--- a/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m
++++ b/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m
+@@ -443,7 +443,7 @@ BOOL OFURLRangeOfLastPathComponent(NSString *urlString, NSRange *lastComponentRa
+ // Generally we're just MOVEing something to rename it within its containing collection. So this function checks to see if that is true, and if so, returns a new Destination: URL which represents the same rewrite within the new collection pointed to by the redirect.
+ // For more complicated situations, this function just gives up and returns nil; the caller will need to have some way to handle that.
+ 
+-static NSString *OFURLAnalogousRewriteByLastPathComponent(NSURL *oldSourceURL, NSString *oldDestination, NSURL *newSourceURL)
++static NSString * _Nullable OFURLAnalogousRewriteByLastPathComponent(NSURL *oldSourceURL, NSString *oldDestination, NSURL *newSourceURL)
+ {
+     NSString *oldSource = [oldSourceURL absoluteString];
+     NSRange oldSourceLastComponent, oldDestinationLastComponent, newSourceLastComponent;
+@@ -485,7 +485,7 @@ static NSString *OFURLAnalogousRewriteByLastPathComponent(NSURL *oldSourceURL, N
+     return newDestination;
+ }
+ 
+-static NSString *OFURLAnalogousRewriteByHost(NSURL *oldSourceURL, NSString *oldDestination, NSURL *newSourceURL)
++static NSString * _Nullable OFURLAnalogousRewriteByHost(NSURL *oldSourceURL, NSString *oldDestination, NSURL *newSourceURL)
+ {
+     NSString *oldSource = [oldSourceURL absoluteString];
+     NSRange oldSourceHostRange = OFURLRangeOfHost(oldSource);
+diff --git a/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSUserDefaults-OFExtensions.m b/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSUserDefaults-OFExtensions.m
+index 4a378702..5e1b575e 100644
+--- a/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSUserDefaults-OFExtensions.m
++++ b/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSUserDefaults-OFExtensions.m
+@@ -86,7 +86,7 @@ static OFPreferenceWrapper * _Nullable _destinationPreferenceWrapper(NSString *d
+     }
+ }
+ 
+-+ (void)migrateItems:(NSArray <NSDictionary <NSString *, NSString *> *> *)items bundle:(NSBundle *)bundle;
+++ (void)migrateItems:(NSArray <NSDictionary <NSString *, NSString *> *> *)items bundle:(nullable NSBundle *)bundle;
+ {
+     // App Extensions can not access standard user defaults and should not attempt to perform migrations in case that's the migration's source/destination.
+     OBPRECONDITION(!OFIsRunningInAppExtension());
+diff --git a/Frameworks/OmniFoundation/XML/OFXMLMaker.m b/Frameworks/OmniFoundation/XML/OFXMLMaker.m
+index eae0a7a4..f1dd24f0 100644
+--- a/Frameworks/OmniFoundation/XML/OFXMLMaker.m
++++ b/Frameworks/OmniFoundation/XML/OFXMLMaker.m
+@@ -432,7 +432,7 @@ RCS_ID("$Id$");
+     if (nsPrefix)
+         return nsPrefix;
+     
+-    if ([knownNamespacePrefixes containsObject:prefixHint]) {
++    if (prefixHint && [knownNamespacePrefixes containsObject:prefixHint]) {
+         // Can't use the hint; that prefix is already in use somewhere.
+         prefixHint = nil;
+     }
+diff --git a/Frameworks/OmniFoundation/XML/OFXMLSignature.m b/Frameworks/OmniFoundation/XML/OFXMLSignature.m
+index b42b5c23..0dd0b41c 100644
+--- a/Frameworks/OmniFoundation/XML/OFXMLSignature.m
++++ b/Frameworks/OmniFoundation/XML/OFXMLSignature.m
+@@ -537,8 +537,8 @@ static BOOL canonicalizeToBuffer(xmlDoc *owningDocument, xmlNode *cNode, xmlNode
+         keepComments = 0;
+         version = version_exc_10;
+     } else {
+-        xmlFree(algid);
+         signatureValidationFailure(err, @"Unsupported canonicalization method <%s>", algid);
++        xmlFree(algid);
+         return NO;
+     }
+     xmlFree(algid);
+@@ -1886,6 +1886,10 @@ static xmlNode *singleNodeFromXptrExpression(const xmlChar *expr, xmlDocPtr inDo
+         xmlFree(refType);
+         xmlFree(refURI);
+         
++        if (stream->openStream == NULL) {
++            signatureStructuralFailure(outError, @"Transform requires a node set; external byte-stream references are not supported");
++            return NO;
++        }
+         xmlOutputBuffer *byteStream = (stream->openStream)(stream, outError);
+         if (!byteStream)
+             return NO;
+diff --git a/Frameworks/OmniInspector/OIInspectorRegistry.m b/Frameworks/OmniInspector/OIInspectorRegistry.m
+index 87fddebd..3e101d0c 100644
+--- a/Frameworks/OmniInspector/OIInspectorRegistry.m
++++ b/Frameworks/OmniInspector/OIInspectorRegistry.m
+@@ -1182,7 +1182,7 @@ static NSString *OIWorkspaceOrderPboardType = @"OIWorkspaceOrder";
+ }
+ 
+ /// Helper to do the right thing for embedded/floating inspectors. With a common floating inspector, we want the various controllers to inspect the objects in the main window (stored here as lastWindowAskedToInspect - see the various NSWindow... notifications we observe on this class). With an embedded inspector sidebar, though, we want the controllers to be tied to their own window.
+-- (NSWindow *)_windowForGettingInspectedObjects;
++- (nullable NSWindow *)_windowForGettingInspectedObjects;
+ {
+     NSArray *controllers = self.controllers;
+     BOOL hasFloating = NO;
+diff --git a/Frameworks/OmniInspector/OIInspectorTabController.h b/Frameworks/OmniInspector/OIInspectorTabController.h
+index 619999e1..a0be8045 100644
+--- a/Frameworks/OmniInspector/OIInspectorTabController.h
++++ b/Frameworks/OmniInspector/OIInspectorTabController.h
+@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
+ @end
+ 
+ @protocol OIInspectorTabContainer
+-- (OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
++- (nullable OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
+ @end
+ 
+ NS_ASSUME_NONNULL_END
+diff --git a/Frameworks/OmniInspector/OIScrollingTabbedInspector.h b/Frameworks/OmniInspector/OIScrollingTabbedInspector.h
+index 1c97ee8b..c44e40a8 100644
+--- a/Frameworks/OmniInspector/OIScrollingTabbedInspector.h
++++ b/Frameworks/OmniInspector/OIScrollingTabbedInspector.h
+@@ -33,7 +33,7 @@
+ - (NSArray *)allTabIdentifiers; // this includes disabled tabs as well.
+ - (void)setEnabledTabIdentifiers:(NSArray *)tabIdentifiers;
+ 
+-- (OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
++- (nullable OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
+ - (OIInspector <OIConcreteInspector> *)inspectorWithIdentifier:(NSString *)tabIdentifier;
+ - (void)switchToInspectorWithIdentifier:(NSString *)tabIdentifier;
+ 
+diff --git a/Frameworks/OmniInspector/OIScrollingTabbedInspector.m b/Frameworks/OmniInspector/OIScrollingTabbedInspector.m
+index 54c90e27..646eb5f7 100644
+--- a/Frameworks/OmniInspector/OIScrollingTabbedInspector.m
++++ b/Frameworks/OmniInspector/OIScrollingTabbedInspector.m
+@@ -282,7 +282,7 @@ RCS_ID("$Id$")
+ }
+ 
+ 
+-- (OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
++- (nullable OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
+ {
+     for (OIInspectorTabController *tab in _enabledTabControllers)
+         if (OFISEQUAL(identifier, tab.inspector.inspectorIdentifier))
+@@ -741,17 +741,23 @@ RCS_ID("$Id$")
+         if (self.topConstraint)
+             [self.contentView removeConstraint:self.topConstraint];
+         
+-        self.topConstraint = [self.contentView.topAnchor constraintEqualToAnchor:firstInspectorView.topAnchor];
+-        [constraints addObject:self.topConstraint];
++        self.topConstraint = nil;
++        if (firstInspectorView) {
++            self.topConstraint = [self.contentView.topAnchor constraintEqualToAnchor:firstInspectorView.topAnchor];
++            [constraints addObject:self.topConstraint];
++        }
+     }
+     
+     if (self.bottomConstraint.secondItem != lastInspectorView) {
+         if (self.bottomConstraint)
+             [self.contentView removeConstraint:self.bottomConstraint];
+         
+-        self.bottomConstraint = [self.contentView.bottomAnchor constraintEqualToAnchor:lastInspectorView.bottomAnchor];
+-        self.bottomConstraint.priority = NSLayoutPriorityDefaultLow;
+-        [constraints addObject:self.bottomConstraint];
++        self.bottomConstraint = nil;
++        if (lastInspectorView) {
++            self.bottomConstraint = [self.contentView.bottomAnchor constraintEqualToAnchor:lastInspectorView.bottomAnchor];
++            self.bottomConstraint.priority = NSLayoutPriorityDefaultLow;
++            [constraints addObject:self.bottomConstraint];
++        }
+     }
+     
+     if (!self.scrollViewWidthConstraint) {
+diff --git a/Frameworks/OmniInspector/OITabbedInspector.h b/Frameworks/OmniInspector/OITabbedInspector.h
+index bf348acf..d746994a 100644
+--- a/Frameworks/OmniInspector/OITabbedInspector.h
++++ b/Frameworks/OmniInspector/OITabbedInspector.h
+@@ -47,7 +47,7 @@
+ - (NSArray *)allTabIdentifiers; // this includes disabled tabs as well.
+ - (void)setEnabledTabIdentifiers:(NSArray *)tabIdentifiers;
+ 
+-- (OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
++- (nullable OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
+ - (OIInspector <OIConcreteInspector> *)inspectorWithIdentifier:(NSString *)tabIdentifier;
+ - (void)switchToInspectorWithIdentifier:(NSString *)tabIdentifier;
+ 
+diff --git a/Frameworks/OmniInspector/OITabbedInspector.m b/Frameworks/OmniInspector/OITabbedInspector.m
+index b968b6a7..8299e55d 100644
+--- a/Frameworks/OmniInspector/OITabbedInspector.m
++++ b/Frameworks/OmniInspector/OITabbedInspector.m
+@@ -278,7 +278,7 @@ RCS_ID("$Id$")
+ }
+ 
+ 
+-- (OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
++- (nullable OIInspectorTabController *)tabWithIdentifier:(NSString *)identifier;
+ {
+     for (OIInspectorTabController *tab in _enabledTabControllers)
+         if (OFISEQUAL(identifier, tab.inspector.inspectorIdentifier))

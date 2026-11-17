@@ -1,0 +1,14 @@
+diff --git a/Tools/FixStringsFile/Tests/RunTests b/Tools/FixStringsFile/Tests/RunTests
+index f24a7c56..9f36f47c 100755
+--- a/Tools/FixStringsFile/Tests/RunTests
++++ b/Tools/FixStringsFile/Tests/RunTests
+@@ -2,6 +2,9 @@
+ 
+ CMD="$CONFIGURATION_BUILD_DIR/$PRODUCT_NAME"
+ 
++# This phase runs before Xcode signs the tool; arm64 execution requires a signature.
++/usr/bin/codesign --force --sign - "$CMD"
++
+ TEST_OUTPUT_DIR="$DERIVED_FILES_DIR/TestOutput"
+ rm -rf "$TEST_OUTPUT_DIR"
+ mkdir -p "$TEST_OUTPUT_DIR"
