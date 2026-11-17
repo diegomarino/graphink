@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import plistlib
 import subprocess
+import time
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output', required=True, type=Path, help='New evidence directory; existing paths refused')
@@ -36,7 +37,15 @@ subprocess.run(command, check=True)
 try:
     result = subprocess.run([str(contents / 'MacOS/checks'), str(args.output.resolve())], capture_output=True)
 finally:
-    subprocess.run(['/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister', '-u', str(contents.parent)], check=True)
+    # Launch Services can register a fixture that just ran again after a first -u (seen on GitHub's
+    # macOS runners), so unregister until its dump no longer lists the bundle.
+    lsregister = "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+    for _ in range(10):
+        subprocess.run([lsregister, "-u", str(contents.parent)], check=True)
+        dump = subprocess.run([lsregister, "-dump"], capture_output=True, text=True, check=True).stdout
+        if str(contents.parent.resolve()) not in {line.split(":", 1)[1].strip().rsplit(" (0x", 1)[0] for line in dump.splitlines() if line.startswith("path:")}:
+            break
+        time.sleep(1)
 (args.output / 'checks.log').write_bytes(result.stdout + result.stderr)
 print((result.stdout + result.stderr).decode())
 assert result.returncode == 0 and b'PASS production extension method' in result.stdout

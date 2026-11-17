@@ -14,6 +14,7 @@ import plistlib
 import re
 import subprocess
 import sys
+import time
 import uuid
 
 parser = argparse.ArgumentParser(description=__doc__)
@@ -131,8 +132,15 @@ scratch.mkdir()
 try:
     result = subprocess.run([str(contents / "MacOS/checks"), str(contents / "Resources/NewFrom"), str(scratch)], capture_output=True, text=True, timeout=120)
 finally:
-    # Running the fixture registered it with Launch Services; drop that registration again.
-    subprocess.run(["/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister", "-u", str(contents.parent)], check=True)
+    # Launch Services can register a fixture that just ran again after a first -u (seen on GitHub's
+    # macOS runners), so unregister until its dump no longer lists the bundle.
+    lsregister = "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+    for _ in range(10):
+        subprocess.run([lsregister, "-u", str(contents.parent)], check=True)
+        dump = subprocess.run([lsregister, "-dump"], capture_output=True, text=True, check=True).stdout
+        if str(contents.parent.resolve()) not in {line.split(":", 1)[1].strip().rsplit(" (0x", 1)[0] for line in dump.splitlines() if line.startswith("path:")}:
+            break
+        time.sleep(1)
 (output / "checks.log").write_text(result.stdout + result.stderr)
 print(result.stdout, end="")
 assert result.returncode == 0 and "COMPLETE failures=0" in result.stdout, "Checks failed; inspect checks.log"
