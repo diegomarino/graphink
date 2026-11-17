@@ -1,0 +1,3 @@
+# Mechanical renames with no behaviour change; see docs/CONTRIBUTING-CI.md, "Known compiler warnings".
+# refactor: replace AppKit constants renamed since 2014 with their current names (#4)
+a34f1247f99f6e736be02bce923d790116383fd2
