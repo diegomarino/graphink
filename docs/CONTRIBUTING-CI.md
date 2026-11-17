@@ -363,28 +363,32 @@ the DMG, notarizes it with `notarytool --wait`, staples it, and checks it with
   asks for verification evidence and native-acceptance status.
 - [`CODEOWNERS`](../.github/CODEOWNERS) assigns everything to `@diegomarino`.
 
-### Recommended branch protection (documented, not applied)
+### Branch protection and repository settings
 
-For `main`, using a ruleset or classic protection:
-- require a pull request before merging, with 1 approval and Code Owner review
-  (a sole maintainer can allow admins to bypass);
-- dismiss stale approvals when new commits are pushed;
+Applied on `diegomarino/graphink`. Ruleset **main** (the default branch):
+- a pull request before merging, with 1 approval, Code Owner review and stale
+  approvals dismissed on new commits; admins may bypass it only through a pull
+  request (a sole maintainer merges their own PRs, never pushes to `main`);
 - required status checks, with branches up to date:
   `Lint workflows and scripts`, `Fast checks (no Xcode)`, `macOS Debug`,
   `macOS Release`, `PR title (Conventional Commits)`;
-- require conversation resolution; allow **squash merging only** (the PR title
-  is the commit subject the release notes are built from);
-- block force pushes and deletion;
-- restrict tag creation for `v*` to maintainers and the Release workflow (tag
-  ruleset; allow GitHub Actions to bypass it, or the Release workflow cannot tag).
+- conversations resolved; **squash merging only** (the PR title is the commit
+  subject the release notes are built from);
+- no force pushes, no deletion.
 
-Repository settings to check:
-- Actions: require approval for workflows from fork PRs (outside collaborators,
-  or all external contributors);
-- default `GITHUB_TOKEN` permission: read-only;
-- `release` environment with required reviewers (the publish gate) and
+Ruleset **release tags** (`v*`): a published tag cannot be moved or deleted
+(admins may bypass). Tag *creation* is not restricted: a personal repository
+cannot list GitHub Actions as a ruleset bypass, and `release-tag.yml` creates the
+tag with the workflow token. Only accounts with write access can create tags.
+
+Repository settings:
+- squash merging only, with the PR title and body; branches deleted on merge;
+- Actions: workflows from fork PRs need approval for all external contributors;
+  the default `GITHUB_TOKEN` permission is read-only and cannot approve PRs;
+- environment `release` with a required reviewer (the publish gate) and
   `release-build` without reviewers (signing secrets later), both limited to
   `v*` tags;
+- secret scanning and push protection on.
 
 ## Pages
 
