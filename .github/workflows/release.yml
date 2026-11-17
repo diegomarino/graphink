@@ -47,7 +47,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0  # every tag and commit: the notes cover the range since the previous tag
       - name: Load CI settings
-        run: cat .github/ci.env >> "$GITHUB_ENV"
+        run: grep -Ev '^[[:space:]]*(#|$)' .github/ci.env >> "$GITHUB_ENV"
       - name: The ref must be a release tag vYYYY.M.n; its version is injected into the builds
         run: |
           if [ "$GITHUB_REF_TYPE" != tag ]; then

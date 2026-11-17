@@ -67,7 +67,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0  # git-cliff needs the tags and every commit since the last release
       - name: Load CI settings
-        run: cat .github/ci.env >> "$GITHUB_ENV"
+        run: grep -Ev '^[[:space:]]*(#|$)' .github/ci.env >> "$GITHUB_ENV"
       - name: Install git-cliff (checksum-verified release binary)
         run: .github/scripts/install-git-cliff.sh "$RUNNER_TEMP/bin"
       # feat/fix/perf commits since the last vYYYY.M.n tag, grouped as Added/Fixed/Improved (cliff.toml).
@@ -101,7 +101,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0  # tags: MARKETING_VERSION and the bundled release notes come from them
       - name: Load CI settings
-        run: cat .github/ci.env >> "$GITHUB_ENV"
+        run: grep -Ev '^[[:space:]]*(#|$)' .github/ci.env >> "$GITHUB_ENV"
       # The build injects MARKETING_VERSION from tags and bundles the published versions' notes.
       - name: Install git-cliff (in-app release notes)
         run: .github/scripts/install-git-cliff.sh "$RUNNER_TEMP/bin"

@@ -36,7 +36,14 @@ subprocess.run(command, check=True)
 try:
     result = subprocess.run([str(contents / 'MacOS/checks'), str(args.output.resolve())], capture_output=True)
 finally:
-    subprocess.run(['/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister', '-u', str(contents.parent)], check=True)
+    # Once it has run, the fixture stops declaring document types and is unregistered: Launch Services
+    # can register a bundle on disk again on its own (GitHub's macOS runners do), and then it must
+    # claim nothing (Checks/check-fixture-bundles.py).
+    fixture_plist = plistlib.loads((contents / "Info.plist").read_bytes())
+    for key in ("CFBundleDocumentTypes", "UTExportedTypeDeclarations", "UTImportedTypeDeclarations"):
+        fixture_plist.pop(key, None)
+    (contents / "Info.plist").write_bytes(plistlib.dumps(fixture_plist))
+    subprocess.run(["/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister", "-u", str(contents.parent)], check=True)
 (args.output / 'checks.log').write_bytes(result.stdout + result.stderr)
 print((result.stdout + result.stderr).decode())
 assert result.returncode == 0 and b'PASS production extension method' in result.stdout
