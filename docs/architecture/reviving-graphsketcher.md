@@ -87,10 +87,10 @@ list is in [../CONTRIBUTING-CI.md](../CONTRIBUTING-CI.md#which-checks-run-where)
 
 ## Left as is, on purpose
 
-- **About 180 deprecation warnings in the 2014 code.** About 100 are renamed constants with a
-  drop-in replacement (`NSOnState`, `NS*KeyMask`, event types, calendar units), to be replaced
-  later in one mechanical commit listed in `.git-blame-ignore-revs`. The rest (pasteboard types,
-  `lockFocus`, `colorUsingColorSpaceName:`, sheets and alerts) need real rewrites. A few 2026
+- **About 90 deprecation warnings in the 2014 code.** None has a drop-in replacement (pasteboard
+  types, `lockFocus`, `colorUsingColorSpaceName:`, sheets and alerts need real rewrites). The
+  renamed constants (`NSOnState`, `NS*KeyMask`, event types, calendar units) were replaced in one
+  mechanical commit listed in `.git-blame-ignore-revs`. A few 2026
   lines keep deprecated calls whose replacement is not equivalent; see
   [../CONTRIBUTING-CI.md](../CONTRIBUTING-CI.md#known-compiler-warnings).
 - **Internal names.** Classes, paths, project and framework names and the XML namespace stay

@@ -154,9 +154,13 @@ Deprecation warnings left as they are, on purpose:
   of the synchronous `saveToURL:ofType:forSaveOperation:error:` (synchronous callers still use
   it); `RSGraphView.m` `beginSheet:modalForWindow:modalDelegate:…` (a completion block changes
   the context ownership); `RSNumber.m` `NSRunAlertPanel`.
-- 2014 code: about 180 warnings, left so blame stays meaningful. About 100 are renamed-constant
-  drop-ins (`NSOnState`, `NS*KeyMask`, event types, calendar units); the rest (pasteboard types,
-  `lockFocus`, `colorUsingColorSpaceName:`, sheets and alerts) are not drop-in.
+- 2014 code: about 90 warnings (`GraphSketcher/` and `LinkBack/`), left so blame stays meaningful.
+  None is a drop-in rename: pasteboard types, `lockFocus`, `colorUsingColorSpaceName:`, sheets and
+  alerts, `commitEditing`, `NSConnection` and similar need real rewrites. The renamed constants
+  (`NSOnState`, `NS*KeyMask`, event types, calendar units) were replaced in one mechanical commit
+  listed in [`.git-blame-ignore-revs`](../.git-blame-ignore-revs); run
+  `git config blame.ignoreRevsFile .git-blame-ignore-revs` once per clone so `git blame` skips it
+  (GitHub's blame view reads the file by itself).
 - Checks: `ZoomAccessibilityChecks.m` uses the attribute-based accessibility API on purpose (it
   drives the path that crashed); `ViewportChecks.m` calls the synchronous save the app
   overrides; `XMLChecks.m` passes nil on purpose to test a nil contract.
