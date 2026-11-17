@@ -10,4 +10,4 @@
 RCS_ID("$Header$");
 
 // Can't use OMNI_BUNDLE_IDENTIFIER since the iPad app builds only a single bundle and we need our error codes to be disjoint from others.
-NSString * const GSMErrorDomain = @"com.graphsketcher.GraphSketcherModel.ErrorDomain";
+NSString * const GSMErrorDomain = @"com.diegomarino.Graphink.GraphSketcherModel.ErrorDomain";

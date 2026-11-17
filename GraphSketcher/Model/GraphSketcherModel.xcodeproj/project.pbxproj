@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        B22000000000000000000001 /* RSGraphArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = B22000000000000000000011; settings = {ATTRIBUTES = (Public, ); }; };
+        B22000000000000000000002 /* RSGraphArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = B22000000000000000000012; };
+        B22000000000000000000003 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B22000000000000000000013; };
 		00551D41138AE22800635682 /* RSEquationLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 00551D3F138AE22800635682 /* RSEquationLine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00551D42138AE22800635682 /* RSEquationLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 00551D40138AE22800635682 /* RSEquationLine.m */; };
 		00551E1E138B1FD300635682 /* BackwardsCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 00551E1C138B1FD300635682 /* BackwardsCompatibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -153,6 +156,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        B22000000000000000000011 /* RSGraphArchive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSGraphArchive.h; sourceTree = "<group>"; };
+        B22000000000000000000012 /* RSGraphArchive.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSGraphArchive.m; sourceTree = "<group>"; };
+        B22000000000000000000013 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		00551D3F138AE22800635682 /* RSEquationLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSEquationLine.h; sourceTree = "<group>"; };
 		00551D40138AE22800635682 /* RSEquationLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSEquationLine.m; sourceTree = "<group>"; };
 		00551E1C138B1FD300635682 /* BackwardsCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackwardsCompatibility.h; path = ../BackwardsCompatibility.h; sourceTree = "<group>"; };
@@ -336,7 +342,8 @@
 				34AA3F82111A8A080003280D /* OmniBase.framework in Frameworks */,
 				34AA3F84111A8A080003280D /* OmniFoundation.framework in Frameworks */,
 				34E57541111ADB2F0023A55B /* OmniUnzip.framework in Frameworks */,
-				34E575C0111AE2770023A55B /* libxml2.dylib in Frameworks */,
+				B22000000000000000000003 /* libz.tbd in Frameworks */,
+                34E575C0111AE2770023A55B /* libxml2.dylib in Frameworks */,
 				3491AFE911762B6200D401B4 /* OmniQuartz.framework in Frameworks */,
 				34AA345B119361B3005ACDC0 /* OmniAppKit.framework in Frameworks */,
 			);
@@ -378,7 +385,9 @@
 				34A64076111A8C2F002CCA09 /* RSFitLine.h */,
 				34A64077111A8C2F002CCA09 /* RSFitLine.m */,
 				34A5B0CF111B51810009E163 /* RSFontAttributes.h */,
-				34A64078111A8C2F002CCA09 /* RSGraph.h */,
+				B22000000000000000000011 /* RSGraphArchive.h */,
+                B22000000000000000000012 /* RSGraphArchive.m */,
+                34A64078111A8C2F002CCA09 /* RSGraph.h */,
 				34801AAD11226F0700798B2C /* RSGraphDelegate.h */,
 				34A64079111A8C2F002CCA09 /* RSGraph.m */,
 				34A6407A111A8C2F002CCA09 /* RSGraphElement.h */,
@@ -510,7 +519,8 @@
 				34AA345A119361B3005ACDC0 /* OmniAppKit.framework */,
 				3491AFE811762B6200D401B4 /* OmniQuartz.framework */,
 				34E57540111ADB2F0023A55B /* OmniUnzip.framework */,
-				34E575BF111AE2770023A55B /* libxml2.dylib */,
+				B22000000000000000000013 /* libz.tbd */,
+                34E575BF111AE2770023A55B /* libxml2.dylib */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -692,7 +702,8 @@
 				34A640A2111A8C2F002CCA09 /* RSConnectLine.h in Headers */,
 				34A640A4111A8C2F002CCA09 /* RSFill.h in Headers */,
 				34A640A6111A8C2F002CCA09 /* RSFitLine.h in Headers */,
-				34A640A8111A8C2F002CCA09 /* RSGraph.h in Headers */,
+				B22000000000000000000001 /* RSGraphArchive.h in Headers */,
+                34A640A8111A8C2F002CCA09 /* RSGraph.h in Headers */,
 				34A640AA111A8C2F002CCA09 /* RSGraphElement.h in Headers */,
 				5FC62D4D184FF3A900B05EB4 /* OSURLStyleAttribute.h in Headers */,
 				34A640AC111A8C2F002CCA09 /* RSGrid.h in Headers */,
@@ -837,7 +848,8 @@
 				34A640A3111A8C2F002CCA09 /* RSConnectLine.m in Sources */,
 				34A640A5111A8C2F002CCA09 /* RSFill.m in Sources */,
 				34A640A7111A8C2F002CCA09 /* RSFitLine.m in Sources */,
-				34A640A9111A8C2F002CCA09 /* RSGraph.m in Sources */,
+				B22000000000000000000002 /* RSGraphArchive.m in Sources */,
+                34A640A9111A8C2F002CCA09 /* RSGraph.m in Sources */,
 				34A640AB111A8C2F002CCA09 /* RSGraphElement.m in Sources */,
 				34A640AD111A8C2F002CCA09 /* RSGrid.m in Sources */,
 				5FC62D42184FF32900B05EB4 /* OSNumberStyleAttribute.m in Sources */,
@@ -940,7 +952,7 @@
 					$SDKROOT/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = Info.plist;
-				OMNI_BUNDLE_IDENTIFIER = com.graphsketcher.GraphSketcherModel;
+				OMNI_BUNDLE_IDENTIFIER = com.diegomarino.Graphink.GraphSketcherModel;
 				PRODUCT_NAME = GraphSketcherModel;
 			};
 			name = Debug;
@@ -954,7 +966,7 @@
 					$SDKROOT/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = Info.plist;
-				OMNI_BUNDLE_IDENTIFIER = com.graphsketcher.GraphSketcherModel;
+				OMNI_BUNDLE_IDENTIFIER = com.diegomarino.Graphink.GraphSketcherModel;
 				PRODUCT_NAME = GraphSketcherModel;
 			};
 			name = Release;

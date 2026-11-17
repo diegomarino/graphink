@@ -15,7 +15,7 @@
 #import <GraphSketcherModel/RSNumber.h>
 #import <GraphSketcherModel/RSTextLabel.h>
 #import <GraphSketcherModel/NSArray-RSExtensions.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
 #import <OmniAppKit/NSUserDefaults-OAExtensions.h>
@@ -65,7 +65,7 @@
     CGPoint placement = CGPointMake(0.5f, 0.5f);
     
     // use defaults:
-    OQColor *color = [OQColor colorForPreferenceKey:@"DefaultFillColor"];
+    NSColor *color = [[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultFillColor"];
     
     return [self initWithGraph:graph identifier:nil vertexGroup:vertices color:color placement:placement];
 }
@@ -73,7 +73,7 @@
 // DESIGNATED INITIALIZER
 - (id)initWithGraph:(RSGraph *)graph identifier:(NSString *)identifier
 	vertexGroup:(RSGroup *)vertices
-	      color:(OQColor *)color
+	      color:(NSColor *)color
 	  placement:(CGPoint)placement;
 {
     if (!(self = [super initWithGraph:graph identifier:identifier]))
@@ -156,7 +156,7 @@
 
 - (void)acceptLatestDefaults;
 {
-    [self setColor:[OQColor colorForPreferenceKey:@"DefaultFillColor"]];
+    [self setColor:[[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultFillColor"]];
 }
 
 
@@ -165,10 +165,10 @@
 #pragma mark RSGraphElement subclass
 /////////////////////////////////////////
 
-- (OQColor *)color {
+- (NSColor *)color {
     return _color;
 }
-- (void)setColor:(OQColor *)color;
+- (void)setColor:(NSColor *)color;
 {
     if ([color isEqual:_color])
         return;

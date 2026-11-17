@@ -12,7 +12,7 @@
 #import <GraphSketcherModel/RSGraphDelegate.h>
 
 @class OSStyleContext, OSStyle;
-@class RSAxis, OQColor, RSUndoer, RSLine, RSVertex, RSTextLabel, RSGraphElement, RSFill, RSConnectLine, RSGroup, RSFitLine, RSEquationLine;
+@class RSAxis, NSColor, RSUndoer, RSLine, RSVertex, RSTextLabel, RSGraphElement, RSFill, RSConnectLine, RSGroup, RSFitLine, RSEquationLine;
 
 // Percentage of auto-scaled graph allowed to be between origin and first data point.  This MUST be less than 0.5:
 #define RS_SCALE_TO_FIT_MAX_SPACE_TO_ZERO_PERCENTAGE (0.38f)
@@ -83,7 +83,8 @@ NSString *messageForCanvasSize(CGSize size);
     RSAxis *_xAxis;
     RSAxis *_yAxis;
     
-    OQColor *_bgColor;
+    NSDictionary *_creationDefaults;
+    NSColor *_bgColor;
     CGFloat _shadowStrength;  // strength of shadow (0 is "off")
     
     CGSize _canvasSize;
@@ -217,7 +218,9 @@ NSString *messageForCanvasSize(CGSize size);
 - (NSArray *)importedDataPrototypes;
 
 // Accessor methods for graph properties
-@property(nonatomic,copy) OQColor *backgroundColor; // canvas color
+// Concrete optional font-name / line-color / fill-color / text-color values, never a theme binding.
+@property(nonatomic,copy) NSDictionary *creationDefaults;
+@property(nonatomic,copy) NSColor *backgroundColor; // canvas color
 
 - (BOOL)displayAxes;
 - (void)setDisplayAxes:(BOOL)flag;
@@ -313,8 +316,8 @@ NSString *messageForCanvasSize(CGSize size);
 - (void)displayGridIfNotAlready;
 - (CGFloat)gridWidth;
 - (void)setGridWidth:(CGFloat)width;
-- (OQColor *)gridColor;
-- (void)setGridColor:(OQColor *)newColor;
+- (NSColor *)gridColor;
+- (void)setGridColor:(NSColor *)newColor;
 
 
 // Number formatting
@@ -338,11 +341,13 @@ NSString *messageForCanvasSize(CGSize size);
 @end
 
 extern NSString * const RSGraphFileType;
+extern NSString * const RSGraphLegacyFileType;
 
 @interface RSGraph (Archiving)
 
 + (RSGraph *)graphFromData:(NSData *)data fileName:(NSString *)fileName type:(NSString *)typeName undoer:(RSUndoer *)undoer error:(NSError **)outError;
 + (RSGraph *)graphFromURL:(NSURL *)url type:(NSString *)typeName undoer:(RSUndoer *)undoer error:(NSError **)outError;
++ (RSGraph *)graphFromURL:(NSURL *)url type:(NSString *)typeName undoer:(RSUndoer *)undoer encoding:(NSInteger *)encoding error:(NSError **)outError;
 + (BOOL)getGraphPDFPreviewData:(NSData **)outPDFData modificationDate:(NSDate **)outModificationDate fromURL:(NSURL *)url error:(NSError **)outError;
 
 - (NSData *)generateXMLOfType:(NSString *)typeName frame:(CGRect)frame error:(NSError **)outError;
@@ -353,3 +358,5 @@ extern NSString * const RSGraphFileType;
 
 @end
 
+
+BOOL RSCreationDefaultsEqual(NSDictionary *a, NSDictionary *b);

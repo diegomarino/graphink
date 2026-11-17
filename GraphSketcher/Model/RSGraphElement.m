@@ -5,11 +5,12 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <AppKit/NSColorSpace.h>
 #import <GraphSketcherModel/RSGraphElement.h>
 
 #import <GraphSketcherModel/RSGraph.h>
 #import <GraphSketcherModel/RSGroup.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 CGFloat dimensionOfPointInOrientation(CGPoint p, int orientation) {
     if (orientation == RS_ORIENTATION_HORIZONTAL)
@@ -347,18 +348,21 @@ CGFloat dimensionOfSizeInOrientation(CGSize size, int orientation) {
 
 #pragma mark - Graphical properties
 
-- (OQColor *)color {
+- (NSColor *)color {
     Log1(@"WARNING: \"color\" Not implemented for class: %@", [self class]);
-    return [OQColor blueColor];
+    return [NSColor blueColor];
 }
-- (void)setColor:(OQColor *)color {
+- (void)setColor:(NSColor *)color {
     Log1(@"WARNING: \"color\" Not implemented for class: %@", [self class]);
 }
 - (CGFloat)opacity {
-    return [[[self color] colorUsingColorSpace:OQColorSpaceRGB] alphaComponent];
+    return [[self color] alphaComponent];
 }
 - (void)setOpacity:(CGFloat)opacity {
-    [self setColor:[[[self color] colorUsingColorSpace:OQColorSpaceRGB] colorWithAlphaComponent:opacity]];
+    NSColor *color = [[self color] colorWithAlphaComponent:opacity];
+    // Native pattern colors cannot change alpha; keep their existing color.
+    if (color)
+        [self setColor:color];
 }
 - (BOOL)hasColor;
 {

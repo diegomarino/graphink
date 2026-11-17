@@ -234,7 +234,7 @@ CGPoint lineIntersection(CGPoint p1, CGPoint p2, CGPoint q1, CGPoint q2) {
         UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Invalid state reached" message:@"We recommend that you quit and relaunch OmniGraphSketcher, then alert the developers using Send Feedback.\n\nReason: A non-finite point value was detected when calculating a line intersection." delegate:nil cancelButtonTitle:NSLocalizedStringFromTableInBundle(@"Cancel", @"GraphSketcherModel", OMNI_BUNDLE, @"button title") otherButtonTitles:nil] autorelease];
         [alert show];
 #else
-        NSRunAlertPanel(@"Invalid state reached.", @"We recommend that you quit and relaunch OmniGraphSketcher, then alert the developers using the Help > Send Feedback menu item.\n\nReason: A non-finite point value was detected when calculating a line intersection.", @"Continue", nil, nil);
+        NSRunAlertPanel(@"Invalid state reached.", @"We recommend that you quit and relaunch Graphink, then alert the developers using the Help > Send Feedback menu item.\n\nReason: A non-finite point value was detected when calculating a line intersection.", @"Continue", nil, nil);
 #endif
     }
     
@@ -458,7 +458,7 @@ static NSNumberFormatter *_strictNumberFormatter;
     }
     
     NSNumber *number = [_strictNumberFormatter numberFromString:string];
-    if (number) {
+    if (number != nil) {
         *doubleVal = [number doubleValue];
         return YES;
     }

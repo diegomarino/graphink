@@ -8,8 +8,10 @@
 #import "RSVertex-XML.h"
 
 #import <GraphSketcherModel/RSGraph.h>
+#import <GraphSketcherModel/RSLine.h>
+#import <GraphSketcherModel/NSArray-RSExtensions.h>
 #import "OFObject-XML.h"
-#import <OmniQuartz/OQColor-Archiving.h>
+#import <OmniAppKit/NSColor-OAExtensions.h>
 
 #import <OmniFoundation/OFXMLCursor.h>
 #import <OmniFoundation/OFXMLDocument.h>
@@ -62,10 +64,10 @@
     [_color release];
     _color = nil;
     if ([cursor openNextChildElementNamed:@"color"]) {
-	_color = [[OQColor colorFromXML:cursor] retain];
+	_color = [[NSColor colorFromXML:cursor] retain];
 	[cursor closeElement];
     } else {
-	_color = [[OQColor blackColor] retain];
+	_color = [[NSColor blackColor] retain];
     }
     
     if ([cursor openNextChildElementNamed:@"snapped-to"]) {
@@ -140,6 +142,13 @@
     
     [xmlDoc popElement];
     return YES;
+}
+
+// Call once all lines have been read. An arrow parent that never became one of this vertex's parents (missing, unrelated, or left outside a paste) falls back to the first parent line.
+- (void)validateArrowParentAfterReadingXML;
+{
+    if (_arrowParent && ![_parents containsObjectIdenticalTo:_arrowParent])
+        _arrowParent = [_parents firstObjectWithClass:[RSLine class]];
 }
 
 

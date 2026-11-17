@@ -8,6 +8,10 @@
 #import <GraphSketcherModel/OFPreference-RSExtensions.h>
 
 #import <OmniAppKit/OAFontDescriptor.h>
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
+#import <AppKit/NSColor.h>
+#import <AppKit/NSColorSpace.h>
+#include <math.h>
 
 @implementation OFPreferenceWrapper (RSExtensions)
 
@@ -19,12 +23,23 @@
     if ([attributes count] == 0)
         return nil;
 
-    return [[[OAFontDescriptor alloc] initWithFamily:nil size:12] autorelease];
+    return [[[OAFontDescriptor alloc] initWithFontAttributes:attributes] autorelease];
 }
 
 - (void)setFontDescriptor:(OAFontDescriptor *)fontDescriptor forKey:(NSString *)defaultName;
 {
     [[OFPreference preferenceForKey: defaultName] setDictionaryValue:[fontDescriptor fontAttributes]];
+}
+
+- (void)setColorIfConvertible:(NSColor *)color forKey:(NSString *)defaultName;
+{
+    NSColor *rgb = [color colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+    if (!rgb)
+        return;
+    CGFloat r, g, b, a;
+    [rgb getRed:&r green:&g blue:&b alpha:&a];
+    if (isfinite(r) && isfinite(g) && isfinite(b) && isfinite(a))
+        [self setColor:rgb forKey:defaultName];
 }
 
 - (CGSize)sizeForKey:(NSString *)defaultName;

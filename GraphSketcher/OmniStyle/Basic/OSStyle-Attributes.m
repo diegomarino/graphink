@@ -199,7 +199,7 @@ OSStyleAttributeBeginRegistration
 
     // We use NaN to represent the 'no adjustment' and zero for 'turn off kerning'
     OSKerningAdjustmentStyleAttribute = [[OSNumberStyleAttribute alloc] initWithKey:@"kerning-adjust"
-                                                                       defaultValue:(id)[OFNaN sharedNaN]
+                                                                       defaultValue:(id)[NSDecimalNumber notANumber]
                                                                         valueExtent:OFExtentMake(-1000, 2000)
                                                                            integral:NO];
     ASSIGN_NAMES(OSKerningAdjustmentStyleAttribute, NSLocalizedStringFromTableInBundle(@"kerning", @"OmniStyle", bundle, "style attribute or group name"), NSLocalizedStringFromTableInBundle(@"adjust", @"OmniStyle", bundle, "style attribute or group name"));

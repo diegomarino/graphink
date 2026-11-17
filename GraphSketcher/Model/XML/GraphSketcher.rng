@@ -629,12 +629,14 @@
 	
 	<define name="def.color">
 		<element name="color">
+            <optional><attribute name="space"><data type="string"/></attribute></optional>
 			<choice>
 				<group>
 					<attribute name="w"><data type="float"/></attribute>
 					<optional>
 						<attribute name="a"><data type="float"/></attribute>
 					</optional>
+                    <optional><attribute name="archive"><data type="base64Binary"/></attribute></optional>
 				</group>
 				<group>
 					<attribute name="r"><data type="float"/></attribute>
@@ -643,6 +645,7 @@
 					<optional>
 						<attribute name="a"><data type="float"/></attribute>
 					</optional>
+                    <optional><attribute name="archive"><data type="base64Binary"/></attribute></optional>
 				</group>
 				<group>
 					<attribute name="h"><data type="float"/></attribute>
@@ -654,6 +657,7 @@
 					<optional>
 						<attribute name="a"><data type="float"/></attribute>
 					</optional>
+                    <optional><attribute name="archive"><data type="base64Binary"/></attribute></optional>
 				</group>
 				<group>
 					<attribute name="c"><data type="float"/></attribute>
@@ -663,10 +667,18 @@
 					<optional>
 						<attribute name="a"><data type="float"/></attribute>
 					</optional>
+                    <optional><attribute name="archive"><data type="base64Binary"/></attribute></optional>
 				</group>
 				<group>
 					<attribute name="catalog"><data type="string"/></attribute>
 					<attribute name="name"><data type="string"/></attribute>
+                    <optional><group>
+                        <attribute name="r"><data type="float"/></attribute>
+                        <attribute name="g"><data type="float"/></attribute>
+                        <attribute name="b"><data type="float"/></attribute>
+                    </group></optional>
+                    <optional><attribute name="a"><data type="float"/></attribute></optional>
+                    <optional><attribute name="archive"><data type="base64Binary"/></attribute></optional>
 				</group>                   
 				<attribute name="tiff"> <!-- pattern image: base 64 encoded tiff data -->
 					<data type="base64Binary"/> 

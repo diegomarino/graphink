@@ -8,7 +8,7 @@
 #import "RSLine-XML.h"
 
 #import <GraphSketcherModel/RSGroup.h>
-#import <OmniQuartz/OQColor-Archiving.h>
+#import <OmniAppKit/NSColor-OAExtensions.h>
 #import "RSVertex-XML.h"
 #import "RSGraph-XML.h"
 
@@ -102,10 +102,10 @@ static NSUInteger dashStyleFromName(NSString *name)
     
     _color = nil;
     if ([cursor openNextChildElementNamed:@"color"]) {
-	_color = [[OQColor colorFromXML:cursor] retain];
+	_color = [[NSColor colorFromXML:cursor] retain];
 	[cursor closeElement];
     } else {
-	_color = [[OQColor blackColor] retain];
+	_color = [[NSColor blackColor] retain];
     }
     
     return YES;
@@ -268,14 +268,14 @@ static NSUInteger dashStyleFromName(NSString *name)
 	
 	NSString *idrefs = [[cursor currentElement] attributeNamed:@"ids"];
 	NSArray *idrefsArray = [idrefs componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	for (NSString *idref in idrefsArray) {
+	for (NSString *dataID in idrefsArray) {
 	    DEBUG_XML(@"Reading fit-line data: %@", idref);
-	    RSVertex *V = [_graph objectForIdentifier:idref];
+	    RSVertex *V = [_graph objectForIdentifier:dataID];
 	    if (V) {
 		[_data addElement:V];
 	    }
 	    else {
-		NSLog(@"XML error: Best-fit line vertex '%@' not found.", idref);
+		NSLog(@"XML error: Best-fit line vertex '%@' not found.", dataID);
 	    }
 	}
 	[_data addParent:self];

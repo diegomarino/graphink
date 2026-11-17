@@ -5,6 +5,7 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import "RSDataImporter.h"
 
 #import <GraphSketcherModel/RSTextLabel.h>
@@ -13,7 +14,8 @@
 #import <GraphSketcherModel/RSGroup.h>
 #import <GraphSketcherModel/RSConnectLine.h>
 #import <OmniFoundation/OFPreference.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
+#import <OmniAppKit/NSColor-OAExtensions.h>
 
 NSString * const RSDataImporterWarningTitle = @"RSDataImporterWarningTitle";
 NSString * const RSDataImporterWarningDescription = @"RSDataImporterWarningDescription";
@@ -37,7 +39,7 @@ static NSString *nameFromColumnType(NSInteger type) {
 #endif
 
 // Ensure that the value in the user preference is reasonable.
-static NSUInteger maximumDataSetSize() {
+static NSUInteger maximumDataSetSize(void) {
     NSInteger maxDataSetSize = [[OFPreferenceWrapper sharedPreferenceWrapper] integerForKey:@"MaximumDataSetSize"];
     
     // Make sure there's *some* limit even if prefs are messed up
@@ -66,6 +68,12 @@ static RSDataImporter *sharedDataImporter;
 
 @synthesize delegate;
 @synthesize warning = _warning;
+
+- (void)dealloc
+{
+    [_warning release];
+    [super dealloc];
+}
 
 
 ////////////////////
@@ -389,10 +397,12 @@ static NSUInteger columnTypeForCell(NSString *cell) {
     }
 }
 
-// returns an array of column types
-+ (void)detectColumnTypes:(NSArray *)table intoArray:(NSInteger *)types {
+// Fills the caller's column type array.
++ (BOOL)detectColumnTypes:(NSArray *)table intoArray:(NSInteger *)types {
     // get the number of columns
     NSUInteger nmofCols = [RSDataImporter numberOfColumnsInTable:table];
+    if (nmofCols == 0)
+        return NO;
     NSUInteger nmofTypes = RS_NM_OF_COL_TYPES;  // unknown, label, float, date
     
     // set up the result array and the voting matrix
@@ -413,7 +423,6 @@ static NSUInteger columnTypeForCell(NSString *cell) {
     if( checkEnd > 30 )
 	checkEnd = 30;  // check up to 30 rows, not including header
     
-    NSUInteger rowsAnalyzed = 0;
     NSUInteger i;
     for( i=checkStart; i<checkEnd; i++ ) {
 	NSArray *row = [table objectAtIndex:i];
@@ -427,7 +436,6 @@ static NSUInteger columnTypeForCell(NSString *cell) {
                 votes[j][colType] += 1;
             }
 	}
-        rowsAnalyzed += 1;
     }
     
     // Find out whether some columns have no votes (i.e. were blank)
@@ -464,11 +472,8 @@ static NSUInteger columnTypeForCell(NSString *cell) {
                     votes[j][colType] += 1;
                 }
             }
-            rowsAnalyzed += 1;
         }
     }
-    
-    DEBUG_DATA_IMPORT(@"Analyzed cell type for %ld rows", (long)rowsAnalyzed);
     
     // find out who won
     for( j=0; j<nmofCols; j++ ) {
@@ -500,6 +505,7 @@ static NSUInteger columnTypeForCell(NSString *cell) {
     }
     DEBUG_DATA_IMPORT(@"%@", cat);
 #endif
+    return YES;
 }
 
 
@@ -987,6 +993,13 @@ static RSAxis *_shouldHideEndLabels = nil;
     //
     // Get stats and initialize some variables
     //
+    // Measure the transposed table before sizing the column type buffer.
+    OFPreferenceWrapper *prefWrapper = [OFPreferenceWrapper sharedPreferenceWrapper];
+    if ([prefWrapper boolForKey:@"ImportDataSeriesAsRows"]) {
+        DEBUG_DATA_IMPORT(@"Transposing table");
+        table = [self transposeTable:table numberOfColumns:[RSDataImporter numberOfColumnsInTable:table]];
+    }
+
     NSUInteger nmofRows = [table count];
     if (!nmofRows) {
 	self.warning = [RSDataImporter noDataDetectedMessage];
@@ -997,13 +1010,6 @@ static RSAxis *_shouldHideEndLabels = nil;
     if (!nmofCols) {
 	self.warning = [RSDataImporter noDataDetectedMessage];
 	return nil;
-    }
-    
-    // Transpose if necessary
-    OFPreferenceWrapper *prefWrapper = [OFPreferenceWrapper sharedPreferenceWrapper];
-    if ([prefWrapper boolForKey:@"ImportDataSeriesAsRows"]) {
-        DEBUG_DATA_IMPORT(@"Transposing table");
-        table = [self transposeTable:table numberOfColumns:nmofCols];
     }
     
     DEBUG_DATA_IMPORT(@"Table has %ld rows, %ld columns", nmofRows, nmofCols);
@@ -1017,7 +1023,10 @@ static RSAxis *_shouldHideEndLabels = nil;
     
     // get the column types
     NSInteger types[nmofCols];
-    [RSDataImporter detectColumnTypes:table intoArray:types];
+    if (![RSDataImporter detectColumnTypes:table intoArray:types]) {
+        self.warning = [RSDataImporter noDataDetectedMessage];
+        return nil;
+    }
     
     NSMutableArray *numberColumns = [NSMutableArray array];
     NSInteger firstLabelsColumn = -1;
@@ -1204,7 +1213,7 @@ static RSAxis *_shouldHideEndLabels = nil;
 }
 
 
-- (void)processDataSeries:(RSGroup *)series addToGroup:(RSGroup *)everything width:(CGFloat)width shape:(NSUInteger)shape color:(OQColor *)currentColor connectMethod:(RSConnectType)connectMethod dashStyle:(NSInteger)dashStyle;
+- (void)processDataSeries:(RSGroup *)series addToGroup:(RSGroup *)everything width:(CGFloat)width shape:(NSUInteger)shape color:(NSColor *)currentColor connectMethod:(RSConnectType)connectMethod dashStyle:(NSInteger)dashStyle;
 {
     OBASSERT([series isKindOfClass:[RSGroup class]]);
     if (![series count]) {
@@ -1274,18 +1283,18 @@ static RSAxis *_shouldHideEndLabels = nil;
     return colorPalette;
 }
 
-+ (OQColor *)_colorForDataSeriesNumber:(NSUInteger)n;
++ (NSColor *)_colorForDataSeriesNumber:(NSUInteger)n;
 {
     NSArray *colorPalette = [RSDataImporter _dataSeriesColorPalette];
     NSUInteger count = [colorPalette count];
     if (count == 0)
-        return [OQColor blackColor];
+        return [NSColor blackColor];
 
     NSUInteger index = n % count;
     
-    OQColor *currentColor = [OQColor colorFromRGBAString:[colorPalette objectAtIndex:index]];
-    if (!currentColor)
-        currentColor = [OQColor blackColor];
+    double r, g, b, alpha = 1;
+    int components = sscanf([[colorPalette objectAtIndex:index] UTF8String], "%lf %lf %lf %lf", &r, &g, &b, &alpha);
+    NSColor *currentColor = (components == 3 || components == 4) ? OARGBA(r, g, b, alpha) : [NSColor blackColor];
     return currentColor;
 }
 
@@ -1315,7 +1324,7 @@ static RSAxis *_shouldHideEndLabels = nil;
     if (![colorPalette count] || ![[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"UseColorPaletteWhenImportingData"])
         colorPalette = nil;
     NSUInteger currentColorIndex = 0;
-    OQColor *currentColor = nil;
+    NSColor *currentColor = nil;
 
     // Process each data series
     for (RSGroup *series in A) {
@@ -1340,9 +1349,9 @@ static RSAxis *_shouldHideEndLabels = nil;
         // Get a new color for this series
         if (colorPalette) {
             OBASSERT(currentColorIndex < [colorPalette count]);
-            currentColor = [OQColor colorFromRGBAString:[colorPalette objectAtIndex:currentColorIndex]];
+            currentColor = [NSColor colorFromRGBAString:[colorPalette objectAtIndex:currentColorIndex]];
             if (!currentColor)
-                currentColor = [OQColor blackColor];
+                currentColor = [NSColor blackColor];
             // set up for next iteration
             currentColorIndex += 1;
             if (currentColorIndex >= [colorPalette count])
@@ -1388,7 +1397,7 @@ static RSAxis *_shouldHideEndLabels = nil;
         // Initialize default style settings
         CGFloat currentWidth = 0;
         NSUInteger currentShape = RS_NONE;
-        OQColor *currentColor = nil;
+        NSColor *currentColor = nil;
         RSConnectType connectMethod = RSConnectNone;
         NSInteger dashStyle = 0;
         

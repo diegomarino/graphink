@@ -7,13 +7,14 @@
 //
 // $Header$
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import <GraphSketcherModel/RSEquationLine.h>
 
 #import <GraphSketcherModel/RSGraph.h>
 #import <GraphSketcherModel/RSVertex.h>
 #import <GraphSketcherModel/RSTextLabel.h>
 
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 #import <OmniFoundation/OFPreference.h>
 
 
@@ -51,7 +52,7 @@ RSEquation RSEquationZero(void) {
 - (id)initWithGraph:(RSGraph *)graph identifier:(NSString *)identifier equation:(RSEquation)equation;
 {
     // use defaults
-    OQColor *color = [OQColor colorForPreferenceKey:@"DefaultLineColor"];
+    NSColor *color = [[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultLineColor"];
     CGFloat width = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"DefaultLineWidth"];
     CGFloat dash = [[OFPreferenceWrapper sharedPreferenceWrapper] integerForKey:@"DefaultDashStyle"];
     CGFloat slide = 0.5f;

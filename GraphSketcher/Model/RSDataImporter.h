@@ -68,7 +68,7 @@ extern NSString * const RSDataImporterWarningDescription;
 
 // table:
 + (NSUInteger)numberOfColumnsInTable:(NSArray *)table;
-+ (void)detectColumnTypes:(NSArray *)table intoArray:(NSInteger *)types;  // takes an int array and fills it with column types
++ (BOOL)detectColumnTypes:(NSArray *)table intoArray:(NSInteger *)types;  // Fills column types; returns NO without writing for a zero-column table.
 - (NSArray *)tableFromString:(NSString *)rawString;
 
 

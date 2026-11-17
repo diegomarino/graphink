@@ -48,8 +48,7 @@ Attribute keys from the Cocoa text system should not be used as attribute names 
     OBPRECONDITION(key);
     OBPRECONDITION(defaultValue); // Yes, you must have a default value.  Otherwise the default isn't worth much, is it?
 
-    // Allow OFNaN to work around Radar bug that is its whole reason for existance.
-    OBPRECONDITION([defaultValue isKindOfClass: [self valueClass]] || ([self valueClass] == [NSNumber class] && defaultValue == [OFNaN sharedNaN]));
+    OBPRECONDITION([defaultValue isKindOfClass: [self valueClass]]);
 
     if (!(self = [super init]))
         return nil;

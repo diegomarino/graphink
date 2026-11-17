@@ -9,7 +9,7 @@
 
 #import <GraphSketcherModel/RSGraphElement.h>
 
-@class OQColor;
+@class NSColor;
 
 @interface RSGrid : OFObject
 {
@@ -18,7 +18,7 @@
     CGFloat _width;  // width of grid lines
     BOOL _extendsPastAxis;  // determines whether the grid extends past the graph rectangle
     
-    OQColor *_color;  // color of grid lines
+    NSColor *_color;  // color of grid lines
     BOOL _dotted;  // whether to display as dotted lines
     
     BOOL _displayGrid;  // whether or not to draw the grid
@@ -30,8 +30,8 @@
 
 
 // Accessor methods:
-- (OQColor *)color;
-- (void)setColor:(OQColor *)color;
+- (NSColor *)color;
+- (void)setColor:(NSColor *)color;
 - (CGFloat)width;
 - (void)setWidth:(CGFloat)width;
 

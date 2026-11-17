@@ -5,7 +5,9 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import <GraphSketcherModel/RSGroup.h>
+#import <AppKit/NSImage.h>
 
 #import <GraphSketcherModel/RSVertex.h>
 #import <GraphSketcherModel/RSGraph.h>
@@ -106,9 +108,9 @@
 #pragma mark -
 #pragma mark RSGraphElement subclass
 ///////////////////////////////////////////////////
-- (OQColor *)color;
+- (NSColor *)color;
 {
-    OQColor *consensus = nil;
+    NSColor *consensus = nil;
     
     for (RSGraphElement *obj in _elements)
     {
@@ -120,13 +122,19 @@
             continue;
         }
         
-        if ( ![consensus isEqual:[obj color]] )
-            return nil;
+        NSColor *color = [obj color];
+        if (![consensus isEqual:color]) {
+            // Reopened patterns have distinct NSImage identities but identical contents.
+            if (!color || consensus.type != NSColorTypePattern || color.type != NSColorTypePattern ||
+                !NSEqualSizes(consensus.patternImage.size, color.patternImage.size) ||
+                ![consensus.patternImage.TIFFRepresentation isEqual:color.patternImage.TIFFRepresentation])
+                return nil;
+        }
     }
     // if got this far, we have a consensus:
     return consensus;
 }
-- (void)setColor:(OQColor *)color {
+- (void)setColor:(NSColor *)color {
     RSGraphElement *obj;
     
     for (obj in _elements)

@@ -55,3 +55,6 @@
 /* Default y-axis label */
 "Y Axis" = "Y Axis";
 
+/* Fallback text for a missing styled-text XML element */
+"[Unknown]" = "[Unknown]";
+

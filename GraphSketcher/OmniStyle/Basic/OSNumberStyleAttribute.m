@@ -81,7 +81,7 @@ RCS_ID("$Header$");
     if (![child isKindOfClass: [NSString class]])
         [NSException raise:NSInvalidArgumentException format:NSLocalizedStringFromTableInBundle(@"-[%@ %@] expected a string in the cursor", @"OmniStyle", OMNI_BUNDLE, "exception reason"), NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
     if ([child isEqualToString:@"NaN"])
-        return (id)[[OFNaN sharedNaN] retain];
+        return (id)[[NSDecimalNumber notANumber] retain];
     return [[NSDecimalNumber alloc] initWithString: child];
 }
 

@@ -45,7 +45,6 @@ static NSString *defaultTabStopStringCache;
 
 static NSString *defaultTabStopString(void)
 {
-    static NSString *defaultTabStopStringCache = nil;
     if (!defaultTabStopStringCache)
         defaultTabStopStringCache = [[OSStyle stringForTabStops:defaultTabStops()] copy];
     return defaultTabStopStringCache;

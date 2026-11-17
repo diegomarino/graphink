@@ -71,6 +71,7 @@
 - (void)useEffectiveScale:(CGFloat)effectiveScale;
 #endif
 
+- (RSText *)formattedTextObject;  // the text as drawn (exponents formatted on axis labels)
 - (void)drawAtPoint:(CGPoint)pt baselineRotatedByDegrees:(CGFloat)degrees;
 
 + (NSAttributedString *)formatExponentsInString:(NSAttributedString *)original exponentSymbol:(NSString *)exponentSymbol removeLeadingOne:(BOOL)removeLeadingOne;

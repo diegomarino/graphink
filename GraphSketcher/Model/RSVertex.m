@@ -5,6 +5,7 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <AppKit/NSColorSpace.h>
 #import <GraphSketcherModel/RSVertex.h>
 
 #import <GraphSketcherModel/RSUnknown.h>
@@ -15,7 +16,7 @@
 #import <GraphSketcherModel/RSGroup.h>
 #import <GraphSketcherModel/RSNumber.h>
 #import <GraphSketcherModel/RSTextLabel.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 #import <GraphSketcherModel/NSArray-RSExtensions.h>
 
 #import <OmniFoundation/OFPreference.h>
@@ -77,14 +78,14 @@
     int shape = 0;
     
     // use defaults:
-    OQColor *color = [OQColor colorForPreferenceKey:@"DefaultLineColor"];
+    NSColor *color = [[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultLineColor"];
     CGFloat width = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"DefaultLineWidth"];
     
     return [self initWithGraph:graph identifier:nil point:p width:width color:color shape:shape];
 }
 
 // DESIGNATED INITIALIZER
-- (id)initWithGraph:(RSGraph *)graph identifier:(NSString *)identifier point:(RSDataPoint)p width:(CGFloat)width color:(OQColor *)color shape:(NSInteger)shape;
+- (id)initWithGraph:(RSGraph *)graph identifier:(NSString *)identifier point:(RSDataPoint)p width:(CGFloat)width color:(NSColor *)color shape:(NSInteger)shape;
 {
     if (!(self = [super initWithGraph:graph identifier:identifier]))
 	return nil;
@@ -144,7 +145,7 @@
 
 - (void)acceptLatestDefaults;
 {
-    [self setColor:[OQColor colorForPreferenceKey:@"DefaultLineColor"]];
+    [self setColor:[[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultLineColor"]];
     [self setWidth:[[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"DefaultLineWidth"]];
 }
 
@@ -155,10 +156,10 @@
 #pragma mark RSGraphElement subclass
 ////////////////////////////////////////
 
-- (OQColor *)color {
+- (NSColor *)color {
     return _color;
 }
-- (void)setColor:(OQColor *)color;
+- (void)setColor:(NSColor *)color;
 {
     if ([color isEqual:_color])
         return;
@@ -471,7 +472,8 @@
     if (![_parents containsObjectIdenticalTo:e]) {
         //OBASSERT([_parents count] == 0);
         [_parents addObject:e];
-        if ([_parents count] == 1 && [self shape] == RS_ARROW && [e isKindOfClass:[RSLine class]]) {
+        // Keep an arrow parent read from XML; its line may attach after an earlier one.
+        if ([_parents count] == 1 && [self shape] == RS_ARROW && !_arrowParent && [e isKindOfClass:[RSLine class]]) {
             [self setArrowParent:e];
         }
     }
@@ -1103,8 +1105,8 @@
     if ( [self position].y < [other position].y ) return NSOrderedAscending;
     if ( [self position].y > [other position].y ) return NSOrderedDescending;
     
-    OQColor *selfColor = [[self color] colorUsingColorSpace:OQColorSpaceRGB];
-    OQColor *otherColor = [(OQColor *)[other color] colorUsingColorSpace:OQColorSpaceRGB];
+    NSColor *selfColor = [[self color] colorUsingColorSpace:[NSColorSpace extendedSRGBColorSpace]];
+    NSColor *otherColor = [(NSColor *)[other color] colorUsingColorSpace:[NSColorSpace extendedSRGBColorSpace]];
     if ( [selfColor brightnessComponent] < [otherColor brightnessComponent] )
         return NSOrderedAscending;
     if ( [selfColor brightnessComponent] > [otherColor brightnessComponent] )
@@ -1190,7 +1192,7 @@
 
 - (NSMutableDictionary *)debugDictionary;
 /*
- possible objects: self, CGPoint _p, CGFloat _width, OQColor * _color, 
+ possible objects: self, CGPoint _p, CGFloat _width, NSColor * _color,
  RSGroup *_parents, RSTextLabel *_label;
  
  */

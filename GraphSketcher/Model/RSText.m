@@ -5,9 +5,10 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import "RSText.h"
 
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 #import <OmniAppKit/OAFontDescriptor.h>
 #import <OmniAppKit/OATextAttributes.h>
 #import <OmniFoundation/NSMutableAttributedString-OFExtensions.h>
@@ -43,7 +44,7 @@ static OAFontDescriptorPlatformFont _getDefaultFont(void)
 #endif
 }
 
-NSDictionary *RSTextAttributesMake(OAFontDescriptor *fontDescriptor, OQColor *color)
+NSDictionary *RSTextAttributesMake(OAFontDescriptor *fontDescriptor, NSColor *color)
 {
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     
@@ -57,9 +58,9 @@ NSDictionary *RSTextAttributesMake(OAFontDescriptor *fontDescriptor, OQColor *co
         [attributes setObject:font forKey:NSFontAttributeName];
 
     if (!color)
-        color = [OQColor colorForPreferenceKey:@"DefaultTextColor"];
+        color = [[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultTextColor"];
     if (color)
-        [attributes setObject:color.toColor forKey:NSForegroundColorAttributeName];
+        [attributes setObject:color forKey:NSForegroundColorAttributeName];
 
     return attributes;
 }
@@ -192,35 +193,35 @@ NSDictionary *RSTextAttributesMake(OAFontDescriptor *fontDescriptor, OQColor *co
     [_attributedString addAttribute:key value:value range:NSMakeRange(0, [_attributedString length])];
 }
 
-- (OQColor *)color;
+- (NSColor *)color;
 {
     if (![_attributedString length])
 	return nil;
     
     id rawColor = [_attributedString attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:NULL];
-    OQColor *color = nil;
+    NSColor *color = nil;
     
     if (rawColor) {
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
         OBASSERT([rawColor isKindOfClass:[UIColor class]]);
-        color = [OQColor colorWithPlatformColor:rawColor];
+        color = rawColor;
 #else
-        color = [OQColor colorWithPlatformColor:rawColor];
+        color = rawColor;
 #endif
     }
     if (!color)
-        color = [OQColor blackColor]; // The default for NSForegroundColorAttributeName
+        color = [NSColor blackColor]; // The default for NSForegroundColorAttributeName
 
     return color;
 }
 
-- (void)setColor:(OQColor *)color;
+- (void)setColor:(NSColor *)color;
 {
     [self _changed];
 
     // TODO: Instead of using kCTForegroundColor... and OAForegroundColor... take addAttribute: out of the #if defined and use OSOriginalOAForegroundColorAttributeName
     // <bug:///76344> (Fix build error that occurs when OSOriginalOAForegroundColorAttributeName is mentioned)
-    [_attributedString addAttribute:NSForegroundColorAttributeName  value:color.toColor
+    [_attributedString addAttribute:NSForegroundColorAttributeName  value:color
                               range:NSMakeRange(0, [_attributedString length])];
 }
 

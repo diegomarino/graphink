@@ -13,7 +13,7 @@
 
 @interface RSUnknown : RSGraphElement 
 {
-    OQColor *_color;
+    NSColor *_color;
     CGFloat _width;
     RSDataPoint _position;
     RSTextLabel *_label;
@@ -23,7 +23,7 @@
 }
 
 // Designated initializer:
-- (id)initWithIdentifier:(NSString *)identifier color:(OQColor *)color width:(CGFloat)width position:(RSDataPoint)p label:(RSTextLabel *)label dash:(NSInteger)dash shape:(NSInteger)shape connectMethod:(RSConnectType)connect;
+- (id)initWithIdentifier:(NSString *)identifier color:(NSColor *)color width:(CGFloat)width position:(RSDataPoint)p label:(RSTextLabel *)label dash:(NSInteger)dash shape:(NSInteger)shape connectMethod:(RSConnectType)connect;
 
 
 

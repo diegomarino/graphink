@@ -8,7 +8,7 @@
 #import "RSGraphElement-XML.h"
 
 #import <GraphSketcherModel/RSGraph.h>
-#import <OmniQuartz/OQColor-Archiving.h>
+#import <OmniAppKit/NSColor-OAExtensions.h>
 #import "OFObject-XML.h"
 
 #import <OmniFoundation/OFVersionNumber.h>
@@ -127,20 +127,16 @@ static OFVersionNumber *appVersionOfImportedFile = nil;
     [xmlDoc setAttribute:@"h" real:(float)rect.size.height];
 }
 
-+ (void)appendColorIfNotBlack:(OQColor *)color toXML:(OFXMLDocument *)xmlDoc;
++ (void)appendColorIfNotBlack:(NSColor *)color toXML:(OFXMLDocument *)xmlDoc;
 {
-    OQColor *rgbColor = [color colorUsingColorSpace:OQColorSpaceRGB];
-    if ([rgbColor brightnessComponent] > 0 || [rgbColor alphaComponent] < 1) {
-	[color appendXML:xmlDoc];
-    }
+    if (![color isEqual:[NSColor blackColor]])
+        [color appendXML:xmlDoc];
 }
 
-+ (void)appendColorIfNotWhite:(OQColor *)color toXML:(OFXMLDocument *)xmlDoc;
++ (void)appendColorIfNotWhite:(NSColor *)color toXML:(OFXMLDocument *)xmlDoc;
 {
-    OQColor *rgbColor = [color colorUsingColorSpace:OQColorSpaceRGB];
-    if ([rgbColor brightnessComponent] < 1 || [rgbColor saturationComponent] > 0 || [rgbColor alphaComponent] < 1) {
-	[color appendXML:xmlDoc];
-    }
+    if (![color isEqual:[NSColor whiteColor]])
+        [color appendXML:xmlDoc];
 }
 
 @end

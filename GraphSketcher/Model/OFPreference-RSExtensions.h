@@ -7,12 +7,15 @@
 
 #import <OmniFoundation/OFPreference.h>
 
-@class OAFontDescriptor;
+@class OAFontDescriptor, NSColor;
 
 @interface OFPreferenceWrapper (RSExtensions)
 
 - (OAFontDescriptor *)fontDescriptorForKey:(NSString *)defaultName;
 - (void)setFontDescriptor:(OAFontDescriptor *)fontDescriptor forKey:(NSString *)defaultName;
+
+// Keeps the existing RGB preference when the native color cannot be represented.
+- (void)setColorIfConvertible:(NSColor *)color forKey:(NSString *)defaultName;
 
 - (CGSize)sizeForKey:(NSString *)defaultName;
 

@@ -6,9 +6,10 @@
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
 #import <GraphSketcherModel/RSGraph.h>
-#import "RSGraphElement-XML.h"
+#import <GraphSketcherModel/RSGraphElement-XML.h>
 
 extern NSString * const RSGraphFileType;
+extern NSString * const RSGraphLegacyFileType;
 
 @interface RSGraph (XML) <XMLArchiving>
 

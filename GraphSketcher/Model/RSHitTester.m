@@ -753,7 +753,7 @@ static NSInteger sortHitResultValues(NSValue *value1, NSValue *value2, void *con
     CGPoint start2, end2;
     CGRect bounds = [_mapper bounds];
     NSNumber *val = [constraints objectForKey:constraintKey];
-    OBASSERT(val);
+    OBASSERT(val != nil);
     if ([constraintKey isEqualToString:RSSnapConstraintXKey]) {
         RSDataPoint d = RSDataPointMake([val doubleValue], 0);
         start2.x = end2.x = [_mapper convertToViewCoords:d].x;
@@ -1600,21 +1600,21 @@ static NSInteger sortHitResultValues(NSValue *value1, NSValue *value2, void *con
     CGRect r;
     if ([axis orientation] == RS_ORIENTATION_HORIZONTAL) {  // x-axis
         //r = CGRectMake(maxes.x - hitOffset, origin.y - hitOffset, hitOffset*2, hitOffset*2);
-        r = [_mapper rectFromPosition:[axis max] onAxis:axis];
+        r = [_mapper rectFromPosition:[axis max] onAxis:axis sensitivity:[self selectionSensitivity]];
         if (CGRectContainsPoint(r, p))
             return RSAxisXMax;
         
         //r = CGRectMake(mins.x - hitOffset, origin.y - hitOffset, hitOffset*2, hitOffset*2);
-        r = [_mapper rectFromPosition:[axis min] onAxis:axis];
+        r = [_mapper rectFromPosition:[axis min] onAxis:axis sensitivity:[self selectionSensitivity]];
         if (CGRectContainsPoint(r, p))
             return RSAxisXMin;
     }
     else { // vertical
-        r = [_mapper rectFromPosition:[axis max] onAxis:axis];
+        r = [_mapper rectFromPosition:[axis max] onAxis:axis sensitivity:[self selectionSensitivity]];
         if (CGRectContainsPoint(r, p))
             return RSAxisYMax;
         
-        r = [_mapper rectFromPosition:[axis min] onAxis:axis];
+        r = [_mapper rectFromPosition:[axis min] onAxis:axis sensitivity:[self selectionSensitivity]];
         if (CGRectContainsPoint(r, p))
             return RSAxisYMin;
     }

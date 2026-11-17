@@ -12,7 +12,7 @@
 #import <GraphSketcherModel/RSNumber.h>
 
 @class NSArray;
-@class OQColor;
+#import <AppKit/NSColor.h>
 @class OAFontDescriptor;
 @class RSGraph, RSTextLabel, RSGroup;
 
@@ -148,8 +148,8 @@ typedef enum _RSGraphElementSubpart {
 // Default methods that subclasses should generally override:
 
 // Graphical properties
-- (OQColor *)color;
-- (void)setColor:(OQColor *)color;
+- (NSColor *)color;
+- (void)setColor:(NSColor *)color;
 - (CGFloat)opacity;
 - (void)setOpacity:(CGFloat)opacity;
 - (BOOL)hasColor;

@@ -102,7 +102,7 @@ void RSAppendShapeToBezierPath(NSBezierPath *P, CGPoint p, NSInteger shape, CGFl
 
 
 // Drawing methods for interactive feedback
-- (void)drawHalfSelectedPosition:(data_p)pos onAxis:(RSAxis *)axis;
+- (void)drawHalfSelectedPosition:(data_p)pos onAxis:(RSAxis *)axis sensitivity:(CGFloat)sensitivity;
 - (void)drawMarginGuide:(NSUInteger)edge;
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
 - (void)drawFocusRingAroundRect:(CGRect)r;
@@ -113,7 +113,7 @@ void RSAppendShapeToBezierPath(NSBezierPath *P, CGPoint p, NSInteger shape, CGFl
 
 
 // Highest-level graph drawing methods
-- (void)drawBackgroundWithColor:(OQColor *)backgroundColor;
+- (void)drawBackgroundWithColor:(NSColor *)backgroundColor;
 - (void)turnOnShadows;
 - (void)turnOffShadows;
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE

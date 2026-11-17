@@ -5,6 +5,8 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
+#import <AppKit/NSColorSpace.h>
 #import <GraphSketcherModel/RSGraphRenderer.h>
 
 #import <GraphSketcherModel/RSGraphElement-Rendering.h>
@@ -20,7 +22,7 @@
 #import <GraphSketcherModel/RSGrid.h>
 #import <GraphSketcherModel/NSBezierPath-RSExtensions.h>
 #import <GraphSketcherModel/NSArray-RSExtensions.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 #import <OmniFoundation/OFPreference.h>
 #import <OmniFoundation/CFArray-OFExtensions.h>
@@ -44,19 +46,21 @@ static CGFloat nearestPixelIfEnabled(CGFloat f) {
     return f;
 }
 
-static OQColor *baseSelectionColor() {
-    OQColor *selectionColor = [[OQColor selectedTextBackgroundColor] colorUsingColorSpace:OQColorSpaceRGB];
-    selectionColor = [OQColor colorWithHue:[selectionColor hueComponent]
-                                saturation:[selectionColor saturationComponent] * 2
-                                brightness:[selectionColor brightnessComponent] * 0.92f
-                                     alpha:1];
-    return selectionColor;
+static NSColor *baseSelectionColor(void) {
+    NSColor *systemColor = [NSColor selectedTextBackgroundColor];
+    NSColor *selectionColor = [systemColor colorUsingColorSpace:[NSColorSpace extendedSRGBColorSpace]];
+    if (!selectionColor)
+        return systemColor;
+    return [NSColor colorWithHue:[selectionColor hueComponent]
+                     saturation:MIN(1, MAX(0, [selectionColor saturationComponent] * 2))
+                     brightness:MIN(1, MAX(0, [selectionColor brightnessComponent] * 0.92))
+                          alpha:1];
 }
 
 void drawRectangularSelectRect(CGRect rect) {
     NSBezierPath *P = [NSBezierPath bezierPathWithRect:rect];
     [P setLineWidth:2.0f];
-    OQColor *color = [baseSelectionColor() colorWithAlphaComponent:0.5f];
+    NSColor *color = [baseSelectionColor() colorWithAlphaComponent:0.5f];
     [color set];
     [P stroke];
 }
@@ -2471,7 +2475,6 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     }
     
     CGPoint p, t, b; // current working points
-    NSUInteger count = 0;
     
     // Adjust for the width of the grid lines
     CGFloat adj = width/2.0f;
@@ -2512,10 +2515,8 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
             [path moveToPoint:t];
             [path lineToPoint:b];
             
-            count += 1;
         }
         
-        //DEBUG_RS(@"appended %d grid lines in orientation %d", count, [A orientation]);
     }
     
     else if ([grid orientation] == RS_ORIENTATION_HORIZONTAL) {  // yGrid
@@ -2553,7 +2554,6 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
             [path moveToPoint:t];
             [path lineToPoint:b];
             
-            count += 1;
         }
     }
     
@@ -2668,7 +2668,6 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     // make mini arrows along the line's length
     if( [L dash] == RS_ARROWS_DASH ) {  
 	CGFloat t = 0;
-	CGFloat w = [L width];
 	CGFloat b = w*3;
 	CGRect r = CGRectMake(0,0,b,b);
 	CGFloat rotation;
@@ -2705,7 +2704,6 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     // reverse direction
     else if( [L dash] == RS_REVERSE_ARROWS_DASH ) {  
 	CGFloat t = 1;
-	CGFloat w = [L width];
 	CGFloat b = w*3;
 	CGRect r = CGRectMake(0,0,b,b);
 	CGFloat rotation;
@@ -2739,7 +2737,6 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     //
     else if( [L dash] == RS_RAILROAD_DASH ) {  
 	CGFloat t = 0;
-	CGFloat w = [L width];
 	CGFloat b = w*4;
 	CGRect r = CGRectMake(0,0,b,b);
 	CGFloat rotation;
@@ -2903,17 +2900,17 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     CGPoint min, max, p;
     
     // original behavior is to draw a light-colored version of where the point will be drawn:
-    OQColor *color = [OQColor colorForPreferenceKey:@"DefaultLineColor"];
+    NSColor *color = [[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultLineColor"];
     CGFloat width = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"DefaultLineWidth"];
     V = [[RSVertex alloc] initWithGraph:_graph identifier:nil point:gridPoint width:width color:color shape:0];
     //use current default//[V setWidth:(_hitOffset*2)];
     
     P = [V pathUsingMapper:_mapper];
-    OQColor *backgroundColor = [[_graph backgroundColor] colorUsingColorSpace:OQColorSpaceRGB];
+    NSColor *backgroundColor = [[_graph backgroundColor] colorUsingColorSpace:[NSColorSpace extendedSRGBColorSpace]];
     if ( [backgroundColor brightnessComponent] < 0.5 )
-	[[backgroundColor blendedColorWithFraction:0.2f ofColor:[OQColor whiteColor]] set];
+	[[backgroundColor blendedColorWithFraction:0.2f ofColor:[NSColor whiteColor]] set];
     else
-	[[backgroundColor blendedColorWithFraction:0.2f ofColor:[OQColor blackColor]] set];
+	[[backgroundColor blendedColorWithFraction:0.2f ofColor:[NSColor blackColor]] set];
     [P fill];
     [V release];
     
@@ -2937,11 +2934,11 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     [P setLineWidth:1];
     // if grids are turned on, use grid line color as the base color
     //if ( [[_graph gridColor] brightnessComponent] < 0.5 )
-    //	[[[_graph gridColor] blendedColorWithFraction:0.2 ofColor:[OQColor whiteColor]] set];
+    //	[[[_graph gridColor] blendedColorWithFraction:0.2 ofColor:[NSColor whiteColor]] set];
     //else
-    //	[[[_graph gridColor] blendedColorWithFraction:0.2 ofColor:[OQColor blackColor]] set];
+    //	[[[_graph gridColor] blendedColorWithFraction:0.2 ofColor:[NSColor blackColor]] set];
     // or just use a standard color
-    [[[OQColor blueColor] colorWithAlphaComponent:0.38f] set];
+    [[[NSColor blueColor] colorWithAlphaComponent:0.38f] set];
     [P stroke];
 }
 
@@ -3174,13 +3171,13 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     [P stroke];
 }
 
-- (void)drawHalfSelectedPosition:(data_p)pos onAxis:(RSAxis *)axis;
-// pos is the tick value (in data coords)
+- (void)drawHalfSelectedPosition:(data_p)pos onAxis:(RSAxis *)axis sensitivity:(CGFloat)sensitivity;
+// pos is the tick value (in data coords); sensitivity is the hit tester's selection sensitivity
 {
-    CGRect r = [_mapper rectFromPosition:pos onAxis:axis];
+    CGRect r = [_mapper rectFromPosition:pos onAxis:axis sensitivity:sensitivity];
     
     NSBezierPath *P = [NSBezierPath bezierPathWithRect:r];
-    [[[[axis color] colorUsingColorSpace:OQColorSpaceRGB] colorWithAlphaComponent:0.25f] set];
+    [[[[axis color] colorUsingColorSpace:[NSColorSpace extendedSRGBColorSpace]] colorWithAlphaComponent:0.25f] set];
     [P fill];
 }
 
@@ -3213,7 +3210,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    break;
     }
     
-    [[OQColor purpleColor] set];
+    [[NSColor purpleColor] set];
     [P setLineWidth:1];
     [P stroke];
 }
@@ -3221,7 +3218,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
 - (void)drawFocusRingAroundRect:(CGRect)r;
 {
-    OQColor *focusColor = [[OQColor keyboardFocusIndicatorColor] colorUsingColorSpace:OQColorSpaceRGB];
+    NSColor *focusColor = [[NSColor keyboardFocusIndicatorColor] colorUsingColorSpace:[NSColorSpace extendedSRGBColorSpace]];
     NSInteger nmofRings = 5;
     
     for (NSInteger i = nmofRings - 1; i >= 0; i-- ) {
@@ -3245,15 +3242,15 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 
 #define RS_SELECTION_BORDER_WIDTH 4  /*was 1.1*/
 #define RS_SELECTION_RINGS 1  /*was 4 -- number of "rings" to draw around the selection*/
-#define RS_SELECTION_BASE_COLOR selectionColor /*was [OQColor keyboardFocusIndicatorColor]*/
+#define RS_SELECTION_BASE_COLOR selectionColor /*was [NSColor keyboardFocusIndicatorColor]*/
 #define RS_SELECTION_STARTING_ALPHA ((CGFloat)0.618033)
 
 - (void)drawSelected:(RSGraphElement *)selection windowIsKey:(BOOL)windowIsKey;
 {
-    OQColor *selectionColor = nil;
+    NSColor *selectionColor = nil;
     if (!windowIsKey) {
         // Use a gray selection color to help distinguish key from non-key windows
-        selectionColor = [OQColor colorWithWhite:0.618033f alpha:1];
+        selectionColor = [NSColor colorWithWhite:0.618033f alpha:1];
     }
     else {
         selectionColor = baseSelectionColor();
@@ -3291,10 +3288,10 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 		alpha += 1/(CGFloat)RS_SELECTION_RINGS;
 	    }
 	    
-	    //[[OQColor colorWithRed:107 green:166 blue:225 alpha:1.0] set];
-	    //[[[OQColor selectedControlColor] 
+	    //[[NSColor colorWithRed:107 green:166 blue:225 alpha:1.0] set];
+	    //[[[NSColor selectedControlColor]
 	    //		blendedColorWithFraction:0.0 
-	    //						 ofColor:[OQColor blackColor]] set];
+	    //						 ofColor:[NSColor blackColor]] set];
 	    
 	    [self drawLine:(RSLine *)obj];
 	}
@@ -3325,7 +3322,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
         // AXES //
 	else if ( [obj isKindOfClass:[RSAxis class]] ) {
 	    P = [self pathFromAxis:(RSAxis *)obj width:[obj width] disableTicks:YES];
-            P.lineCapStyle = kCGLineCapSquare;
+            P.lineCapStyle = NSLineCapStyleSquare;
 	    newWidth = [obj width] + (RS_SELECTION_RINGS * RS_SELECTION_BORDER_WIDTH * 2);
 	    
 	    CGFloat alpha = RS_SELECTION_STARTING_ALPHA;
@@ -3362,7 +3359,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     
     for (RSGraphElement *obj in [halfSelection elements])
     {
-        OQColor *color = [[obj color] colorUsingColorSpace:OQColorSpaceRGB];
+        NSColor *color = [[obj color] colorUsingColorSpace:[NSColorSpace extendedSRGBColorSpace]];
         
 	// Line
 	if ( [obj isKindOfClass:[RSLine class]] ) {
@@ -3375,9 +3372,9 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    newWidth -= RS_HALF_SELECTION_BORDER_WIDTH;
 	    [P setLineWidth:newWidth];
 	    if ( [color brightnessComponent] < 0.5 )
-		[[color blendedColorWithFraction:0.5f ofColor:[OQColor whiteColor]] set];
+		[[color blendedColorWithFraction:0.5f ofColor:[NSColor whiteColor]] set];
 	    else
-		[[color blendedColorWithFraction:0.5f ofColor:[OQColor blackColor]] set];
+		[[color blendedColorWithFraction:0.5f ofColor:[NSColor blackColor]] set];
 	    [P stroke];
 	}
         
@@ -3387,10 +3384,10 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    if( [(RSVertex *)obj isBar] ) {
 		P = [(RSVertex *)obj pathUsingMapper:_mapper];
 		if ( [color brightnessComponent] < 0.5 )
-		    [[[color blendedColorWithFraction:0.3f ofColor:[OQColor whiteColor]] 
+		    [[[color blendedColorWithFraction:0.3f ofColor:[NSColor whiteColor]]
 		      colorWithAlphaComponent:0.66f] set];
 		else
-		    [[[color blendedColorWithFraction:0.2f ofColor:[OQColor blackColor]] 
+		    [[[color blendedColorWithFraction:0.2f ofColor:[NSColor blackColor]]
 		      colorWithAlphaComponent:0.66f] set];
 		[P fill];
 	    }
@@ -3406,9 +3403,9 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 		[P fill];
 		P = [(RSVertex *)obj pathUsingMapper:_mapper];
 		if ( [color brightnessComponent] < 0.5 )
-		    [[color blendedColorWithFraction:0.5f ofColor:[OQColor whiteColor]] set];
+		    [[color blendedColorWithFraction:0.5f ofColor:[NSColor whiteColor]] set];
 		else
-		    [[color blendedColorWithFraction:0.5f ofColor:[OQColor blackColor]] set];
+		    [[color blendedColorWithFraction:0.5f ofColor:[NSColor blackColor]] set];
 		[P fill];
 	    }
 	}
@@ -3421,10 +3418,10 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    [P rotateInFrame:r byDegrees:[(RSTextLabel *)obj rotation]];
 	    [P setLineWidth:1];
 	    //if ( [[_graph color] brightnessComponent] < 0.5 )
-	    //	[[[_graph color] blendedColorWithFraction:0.2 ofColor:[OQColor whiteColor]] set];
+	    //	[[[_graph color] blendedColorWithFraction:0.2 ofColor:[NSColor whiteColor]] set];
 	    //else
-	    //	[[[_graph color] blendedColorWithFraction:0.2 ofColor:[OQColor blackColor]] set];
-	    //[[OQColor selectedControlColor] set];
+	    //	[[[_graph color] blendedColorWithFraction:0.2 ofColor:[NSColor blackColor]] set];
+	    //[[NSColor selectedControlColor] set];
 	    //[[[_graph color] blendedColorWithFraction:0.2 ofColor:color] set];
 	    [[color colorWithAlphaComponent:0.25f] set];
 	    [P fill];
@@ -3432,10 +3429,10 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	else if ( [obj isKindOfClass:[RSFill class]] ) {
 	    P = [self pathFromFill:(RSFill *)obj];
 	    if ( [color brightnessComponent] < 0.5 )
-		[[[color blendedColorWithFraction:0.3f ofColor:[OQColor whiteColor]] 
+		[[[color blendedColorWithFraction:0.3f ofColor:[NSColor whiteColor]]
 		  colorWithAlphaComponent:(CGFloat)(0.2 + [(RSFill *)obj opacity]/2)] set];
 	    else
-		[[[color blendedColorWithFraction:0.2f ofColor:[OQColor blackColor]] 
+		[[[color blendedColorWithFraction:0.2f ofColor:[NSColor blackColor]]
 		  colorWithAlphaComponent:(CGFloat)(0.2 + [(RSFill *)obj opacity]/2)] set];
 	    [P fill];
 	}
@@ -3450,7 +3447,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    [P stroke];
 	    newWidth -= RS_HALF_SELECTION_BORDER_WIDTH;
 	    [P setLineWidth:newWidth];
-	    [[color blendedColorWithFraction:0.5f ofColor:[OQColor whiteColor]] set];
+	    [[color blendedColorWithFraction:0.5f ofColor:[NSColor whiteColor]] set];
 	    [P stroke];
 	}
 	else {
@@ -3465,7 +3462,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 #pragma mark -
 #pragma mark Highest-level graph rendering methods
 /////////////////
-- (void)drawBackgroundWithColor:(OQColor *)backgroundColor;
+- (void)drawBackgroundWithColor:(NSColor *)backgroundColor;
 {
     CGRect bounds = [_mapper bounds];
     if (bounds.size.width <= 1 || bounds.size.height <= 1) {
@@ -3495,11 +3492,11 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 
     CGFloat normalOffset = 1 + 3*[_graph shadowStrength];
 
-    OQColor *shadowColor;
-    if( [[[_graph backgroundColor] colorUsingColorSpace:OQColorSpaceRGB] brightnessComponent] > 0.2 )
-        shadowColor = [[OQColor blackColor] colorWithAlphaComponent:[_graph shadowStrength]];
+    NSColor *shadowColor;
+    if( [[[_graph backgroundColor] colorUsingColorSpace:[NSColorSpace extendedSRGBColorSpace]] brightnessComponent] > 0.2 )
+        shadowColor = [[NSColor blackColor] colorWithAlphaComponent:[_graph shadowStrength]];
     else  // dark background
-        shadowColor = [[OQColor whiteColor] colorWithAlphaComponent:[_graph shadowStrength]];
+        shadowColor = [[NSColor whiteColor] colorWithAlphaComponent:[_graph shadowStrength]];
     
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -3509,13 +3506,13 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     CGContextSetShadowWithColor(ctx,
                                 CGSizeMake(normalOffset, normalOffset),
                                 (CGFloat)(3.0 + 1.5*[_graph shadowStrength]),
-                                [shadowColor.toColor CGColor]);
+                                [shadowColor CGColor]);
 #else
     [NSGraphicsContext saveGraphicsState];
 
     [_shadow setShadowOffset:CGSizeMake(normalOffset, -normalOffset)];
     [_shadow setShadowBlurRadius:(CGFloat)(3.0 + 1.5*[_graph shadowStrength])];
-    [_shadow setShadowColor:shadowColor.toColor];
+    [_shadow setShadowColor:shadowColor];
     
     [_shadow set];
 #endif
@@ -3659,10 +3656,10 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     }
     
     // fill in boxes
-    [[OQColor colorWithRed:0 green:0 blue:0 alpha:0.15f] set];
+    [[NSColor colorWithRed:0 green:0 blue:0 alpha:0.15f] set];
     [P fill];
     // draw borders
-    [[OQColor colorWithRed:0 green:0 blue:0 alpha:0.2f] set];
+    [[NSColor colorWithRed:0 green:0 blue:0 alpha:0.2f] set];
     [P setLineWidth:2];
     [P stroke];
     
@@ -3680,7 +3677,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     CGFloat offset = 3;  // pixels
     CGRect r = CGRectMake(p.x - offset, p.y - offset, offset*2, offset*2);
     NSBezierPath *P = [NSBezierPath bezierPathWithOvalInRect:r];
-    [[OQColor redColor] set];
+    [[NSColor redColor] set];
     [P stroke];
 }
 #endif

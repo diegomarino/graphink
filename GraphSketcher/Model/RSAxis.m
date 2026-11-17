@@ -15,7 +15,7 @@
 #import <GraphSketcherModel/RSGroup.h>
 #import <GraphSketcherModel/RSUndoer.h>
 #import <GraphSketcherModel/OFPreference-RSExtensions.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
 #import <OmniAppKit/NSUserDefaults-OAExtensions.h>
@@ -150,7 +150,7 @@ RSAxisTickLayout tickLayoutFromName(NSString *name)
     return RSAxisTickLayoutSimple;
 }
 
-NSString *nameFromAxisType(int axisType)
+NSString *nameFromAxisType(RSAxisType axisType)
 {
     if (axisType == RSAxisTypeLinear) {
         return @"linear";
@@ -262,7 +262,7 @@ RSScientificNotationSetting scientificNotationSettingFromName(NSString *name)
     // axis
     _placement = placementFromName([prefWrapper stringForKey:@"DefaultAxisPlacement"]);
     _width = [prefWrapper floatForKey:@"DefaultAxisWidth"];
-    _color = [[OQColor colorForPreferenceKey:@"DefaultAxisColor"] retain];
+    _color = [[[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultAxisColor"] retain];
     _displayAxis = [prefWrapper boolForKey:@"DisplayAxis"];
     _extent = RSAxisExtentFull;
     
@@ -397,10 +397,10 @@ RSScientificNotationSetting scientificNotationSettingFromName(NSString *name)
 #pragma mark RSGraphElement subclass
 ///////////////////////////////////////////////////
 
-- (OQColor *)color {
+- (NSColor *)color {
     return _color;
 }
-- (void)setColor:(OQColor *)color;
+- (void)setColor:(NSColor *)color;
 {
     if ([color isEqual:_color])
         return;

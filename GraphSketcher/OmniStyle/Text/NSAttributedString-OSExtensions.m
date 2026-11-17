@@ -29,7 +29,7 @@
 #import <OmniFoundation/NSMutableAttributedString-OFExtensions.h>
 #import <OmniFoundation/OFEnumNameTable.h>
 #import <OmniFoundation/OFPoint.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
 #import <UIKit/UIColor.h>
@@ -193,8 +193,8 @@ OS_COLOR_CLASS *OSColorForTextAttribute(NSDictionary *textAttributes, NSString *
 #endif
     
     if (!colorObject) {
-        OQ_PLATFORM_COLOR_CLASS *colorValue = ATTR(textKey);
-        OBPRECONDITION(!colorValue || [colorValue isKindOfClass:[OQ_PLATFORM_COLOR_CLASS class]]);
+        NSColor *colorValue = ATTR(textKey);
+        OBPRECONDITION(!colorValue || [colorValue isKindOfClass:[NSColor class]]);
         
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
         colorObject = [OQColor colorWithPlatformColor:colorValue];
@@ -219,7 +219,7 @@ void OSSetColorForTextAttribute(NSMutableDictionary *textAttributes, NSString *t
         textAttributes[originalKey] = color;
 #endif
 
-    OQ_PLATFORM_COLOR_CLASS *colorValue = OS_COLOR_CLASS_TO_PLATFORM_COLOR(color);
+    NSColor *colorValue = OS_COLOR_CLASS_TO_PLATFORM_COLOR(color);
 
     textAttributes[textKey] = colorValue;
 }
@@ -414,7 +414,7 @@ void _OSMutableAttributedStringRemoveStyleTextAttributes(NSMutableAttributedStri
         [style setParagraphStyle:paragraphStyle];
 
     NSNumber *underlineMaskValue;
-    if ((underlineMaskValue = ATTR(NSUnderlineStyleAttributeName))) {
+    if ((underlineMaskValue = ATTR(NSUnderlineStyleAttributeName)) != nil) {
         NSUInteger underlineMask = [underlineMaskValue unsignedIntegerValue];
         
         if ((underlineMask & OAUnderlineByWordMask) == OAUnderlineByWordMask)
@@ -438,7 +438,7 @@ void _OSMutableAttributedStringRemoveStyleTextAttributes(NSMutableAttributedStri
     }
     
     NSNumber *strikethroughMaskValue;
-    if ((strikethroughMaskValue = ATTR(NSStrikethroughStyleAttributeName))) {
+    if ((strikethroughMaskValue = ATTR(NSStrikethroughStyleAttributeName)) != nil) {
         NSUInteger strikethroughMask = [strikethroughMaskValue unsignedIntegerValue];
         
         if ((strikethroughMask & OAUnderlineByWordMask) == OAUnderlineByWordMask)
@@ -467,19 +467,19 @@ void _OSMutableAttributedStringRemoveStyleTextAttributes(NSMutableAttributedStri
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
     // <bug:///94057> (Emulate superscript/subscript with formula from Apple)
 #else
-    if ((number = ATTR(OASuperscriptAttributeName)))
+    if ((number = ATTR(OASuperscriptAttributeName)) != nil)
         [style setValue:number forAttribute:OSBaselineSuperscriptStyleAttribute];
-    if ((number = ATTR(NSBaselineOffsetAttributeName)))
+    if ((number = ATTR(NSBaselineOffsetAttributeName)) != nil)
         [style setValue:number forAttribute:OSBaselineOffsetStyleAttribute];
 #endif
     
     number = ATTR(NSKernAttributeName);
     OBASSERT([[OSKerningAdjustmentStyleAttribute defaultValue] isEqual: [OSKerningAdjustmentStyleAttribute defaultValue]]); // NaN == NaN in this world?
-    if (number)
+    if (number != nil)
         [style setValue:number forAttribute:OSKerningAdjustmentStyleAttribute];
     
     number = ATTR(NSLigatureAttributeName);
-    if (number) {
+    if (number != nil) {
         NSString *name = [[OSLigatureSelectionStyleAttribute enumTable] nameForEnum:[number intValue]];
         [style setValue:name forAttribute:OSLigatureSelectionStyleAttribute];
     }
@@ -510,10 +510,10 @@ void _OSMutableAttributedStringRemoveStyleTextAttributes(NSMutableAttributedStri
     if ((color = COLOR_ATTR(NSBackgroundColorAttributeName)))
         [style setValue:color forAttribute:OSBackgroundColorStyleAttribute];
     
-    if ((number = ATTR(NSObliquenessAttributeName)))
+    if ((number = ATTR(NSObliquenessAttributeName)) != nil)
         [style setValue:number forAttribute:OSObliquenessStyleAttribute];
     
-    if ((number = ATTR(NSExpansionAttributeName)))
+    if ((number = ATTR(NSExpansionAttributeName)) != nil)
         [style setValue:number forAttribute:OSExpansionStyleAttribute];
 
     NSShadow *shadow = ATTR(NSShadowAttributeName);

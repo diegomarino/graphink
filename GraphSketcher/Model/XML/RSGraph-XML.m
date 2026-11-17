@@ -16,7 +16,7 @@
 #import "RSTextLabel-XML.h"
 #import "RSGroup-XML.h"
 #import "BackwardsCompatibility.h"
-#import <OmniQuartz/OQColor-Archiving.h>
+#import <OmniAppKit/NSColor-OAExtensions.h>
 
 #import <OmniFoundation/OFXMLDocument.h>
 #import <OmniFoundation/OFXMLCursor.h>
@@ -24,13 +24,17 @@
 #import <OmniUnzip/OUUnzipArchive.h>
 #import <OmniUnzip/OUUnzipEntry.h>
 #import <OmniUnzip/OUZipArchive.h>
+#import "RSGraphArchive.h"
+#import "RSUndoer.h"
 
 #import "OSStyle.h"
 #import "OSStringStyleAttribute.h"
 #import "OSColorStyleAttribute.h"
 #import "OSStyledTextStorage-XML.h"
 
-NSString * const RSGraphFileType = @"com.graphsketcher.graphdocument";
+// .graphink is Graphink's own exported type; .ograph keeps the original GraphSketcher type, imported.
+NSString * const RSGraphFileType = @"com.diegomarino.graphink.document";
+NSString * const RSGraphLegacyFileType = @"com.graphsketcher.graphdocument";
 NSString * const XMLNamespaceIdentifier = @"http://www.omnigroup.com/namespace/OmniGraphSketcher/v1";
 NSString * const XMLRootElementName = @"document";
 
@@ -180,8 +184,8 @@ static BOOL _isGraphDocumentType(NSString *typeName)
         return NO;
     
     // Do a case-insensitive compare since the UTI seems to come in as all lowercase.
-    NSComparisonResult result = [typeName caseInsensitiveCompare:RSGraphFileType];
-    return result == NSOrderedSame;
+    // Both document types share one reader and writer; the container is detected from the bytes.
+    return [typeName caseInsensitiveCompare:RSGraphFileType] == NSOrderedSame || [typeName caseInsensitiveCompare:RSGraphLegacyFileType] == NSOrderedSame;
 }
 
 + (RSGraph *)graphFromData:(NSData *)data fileName:(NSString *)fileName type:(NSString *)typeName undoer:(RSUndoer *)undoer error:(NSError **)outError;
@@ -243,7 +247,7 @@ static BOOL _isGraphDocumentType(NSString *typeName)
             if (outError != NULL)
                 *outError = [[NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil] retain];
             
-            return NO;
+            return nil;
         }
         
         // Read in the xml elements above the main "graph" elements.
@@ -282,72 +286,37 @@ static BOOL _isGraphDocumentType(NSString *typeName)
 
 static NSString * const PreviewFileName = @"preview.pdf";
 
-+ (RSGraph *)graphFromURL:(NSURL *)url type:(NSString *)typeName undoer:(RSUndoer *)undoer error:(NSError **)outError;
+ + (RSGraph *)graphFromURL:(NSURL *)url type:(NSString *)typeName undoer:(RSUndoer *)undoer error:(NSError **)outError;
 {
-    if (!_isGraphDocumentType(typeName))
-        return _badFileType(NO/*write*/, typeName, outError);
-    
-    if (![url isFileURL]) {
-        NSString *description = NSLocalizedStringFromTableInBundle(@"Unable to read file.", @"GraphSketcherModel", OMNI_BUNDLE, @"error description");
-        NSString *reason = [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"\"%@\" is not a file URL.", @"GraphSketcherModel", OMNI_BUNDLE, @"error reason format string"), [url absoluteString]];
-        GSMError(outError, GSMUnrecognizedURLScheme, description, reason);
-        return nil;
+    return [self graphFromURL:url type:typeName undoer:undoer encoding:NULL error:outError];
+}
++ (RSGraph *)graphFromURL:(NSURL *)url type:(NSString *)typeName undoer:(RSUndoer *)undoer encoding:(NSInteger *)encoding error:(NSError **)outError;
+{
+    if (!_isGraphDocumentType(typeName)) return _badFileType(NO, typeName, outError);
+    NSDictionary *archive=[RSGraphArchive readURL:url error:outError]; if (!archive) return nil;
+    RSGraph *graph=[self graphFromData:archive[@"xml"] fileName:url.lastPathComponent type:typeName undoer:undoer error:outError];
+    if (!graph) return nil;
+    if (archive[@"defaults"]) {
+        NSUndoManager *manager=undoer.undoManager; [manager disableUndoRegistration];
+        @try { graph.creationDefaults=archive[@"defaults"]; } @finally { [manager enableUndoRegistration]; }
     }
-    NSString *path = [[url absoluteURL] path];
-    
-    NSData *data;
-    NSError *unzipError = nil;
-    OUUnzipArchive *zipArchive = [[[OUUnzipArchive alloc] initWithPath:path error:&unzipError] autorelease];
-    
-    if (zipArchive) {
-        DEBUG_XML(@"Getting xml file from zip archive");
-        OUUnzipEntry *zipEntry = [zipArchive entryNamed:@"contents.xml"];
-        data = [zipArchive dataForEntry:zipEntry error:outError];
-    } else {
-        // If a zip archive was not constructed, this is most likely an autosave.
-        data = [NSData dataWithContentsOfURL:url options:0 error:outError];
-    }
-    
-    return [self graphFromData:data fileName:[path lastPathComponent] type:typeName undoer:undoer error:outError];
+    if (encoding) *encoding=[archive[@"encoding"] integerValue];
+    return graph;
 }
 
-+ (BOOL)getGraphPDFPreviewData:(NSData **)outPDFData modificationDate:(NSDate **)outModificationDate fromURL:(NSURL *)url error:(NSError **)outError;
+ + (BOOL)getGraphPDFPreviewData:(NSData **)outPDFData modificationDate:(NSDate **)outModificationDate fromURL:(NSURL *)url error:(NSError **)outError;
 {
-    if (![url isFileURL]) {
-        NSString *description = NSLocalizedStringFromTableInBundle(@"Unable to read file.", @"GraphSketcherModel", OMNI_BUNDLE, @"error description");
-        NSString *reason = [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"\"%@\" is not a file URL.", @"GraphSketcherModel", OMNI_BUNDLE, @"error reason format string"), [url absoluteString]];
-        GSMError(outError, GSMUnrecognizedURLScheme, description, reason);
+    NSDictionary *archive=[RSGraphArchive readURL:url error:outError]; if (!archive) return NO;
+    NSData *preview=archive[@"preview"];
+    if (!preview) {
+        if (outError) *outError=[NSError errorWithDomain:@"GraphinkPackage" code:3 userInfo:@{NSLocalizedDescriptionKey:@"This graph has no PDF preview."}];
         return NO;
     }
-    
-    NSString *path = [[url absoluteURL] path];
-
-    OUUnzipArchive *unzip = [[[OUUnzipArchive alloc] initWithPath:path error:outError] autorelease];
-    if (!unzip)
-        return NO;
-
-    // Don't return a date based on the zip contents. This causes duplicated documents to have the same date as their original instead of consistently moving to the left most edge.
-#if 0
+    if (outPDFData) *outPDFData=preview;
     if (outModificationDate) {
-        OUUnzipEntry *contentsEntry = [unzip entryNamed:PreviewFileName];
-        if (!contentsEntry) {
-            NSString *description = NSLocalizedStringFromTableInBundle(@"No preview.pdf found inside the zip wrapper.", @"GraphSketcherModel", OMNI_BUNDLE, @"error description");
-            NSString *reason = [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Unable to find preview.", @"GraphSketcherModel", OMNI_BUNDLE, @"error reason format string"), [url absoluteString]];
-            GSMError(outError, GSMNoPreviewAvailable, description, reason);
-            return NO;
-        }
-        *outModificationDate = [contentsEntry date];
+        NSDictionary *attributes=[[NSFileManager defaultManager] attributesOfItemAtPath:url.path error:outError];
+        if (!attributes) return NO; *outModificationDate=attributes.fileModificationDate;
     }
-#endif
-    
-    if (outPDFData) {
-        OUUnzipEntry *previewEntry = [unzip entryNamed:PreviewFileName];
-        if (previewEntry)
-            *outPDFData = [unzip dataForEntry:previewEntry error:outError];
-        else
-            *outPDFData = nil;
-    }
-    
     return YES;
 }
 
@@ -542,10 +511,10 @@ static NSString * const PreviewFileName = @"preview.pdf";
     [_bgColor release];
     _bgColor = nil;
     if ([cursor openNextChildElementNamed:@"color"]) {
-	_bgColor = [[OQColor colorFromXML:cursor] retain];
+	_bgColor = [[NSColor colorFromXML:cursor] retain];
 	[cursor closeElement];
     } else {
-	_bgColor = [[OQColor whiteColor] retain];
+	_bgColor = [[NSColor whiteColor] retain];
     }
     
     if ([cursor openNextChildElementNamed:@"whitespace"]) {
@@ -597,6 +566,9 @@ static NSString * const PreviewFileName = @"preview.pdf";
     
     _baseStyle = [[OSStyle alloc] initWithContext:[self styleContext]];
 
+    // The baseline for omitted attributes in saved documents. It is not the default for new labels
+    // (DefaultLabelFont, Helvetica Neue), so a saved document reopens exactly as before.
+
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
     [_baseStyle setValue:@"Lucida Grande" forAttribute:OSFontFamilyNameStyleAttribute];
 #else
@@ -604,10 +576,7 @@ static NSString * const PreviewFileName = @"preview.pdf";
     [_baseStyle setValue:@"Verdana" forAttribute:OSFontFamilyNameStyleAttribute];
 #endif
     
-    id blackColor = [OQColor blackColor];
-#if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
-    blackColor = ((OQColor *)blackColor).toColor; // Mac wants NSColor, iPad OQColor
-#endif
+    id blackColor = [NSColor blackColor];
     [_baseStyle setValue:blackColor forAttribute:OSFontFillColorStyleAttribute];
     
     return _baseStyle;
@@ -789,6 +758,10 @@ static void allocAndRegisterObject(OFXMLElement *element, void *context)
         [self updateNonePointTypes];
     }
     
+    for (RSVertex *V in Vertices) {
+        [V validateArrowParentAfterReadingXML];
+    }
+    
     // A bug in XML writing caused no textlabels to ever be labeled visible=NO. We'll just mark all of the tick labels as invisible (the axis layout code will reset the visibility flag for labels that actually should be visible).
     [_xAxis resetUserLabelVisibility];
     [_yAxis resetUserLabelVisibility];
@@ -913,9 +886,9 @@ static NSInteger verticesFirstSort(id obj1, id obj2, void *context)
     [doc pushElement:[RSGraph _pasteboardXMLElementName]];
     
     BOOL success = YES;
-    for (RSGraphElement *GE in result) {
-        DEBUG_XML(@"archiving [%@]", GE.shortDescription);
-        success = [(id)GE writeContentsXML:doc error:outError];
+    for (RSGraphElement *child in result) {
+        DEBUG_XML(@"archiving [%@]", child.shortDescription);
+        success = [(id)child writeContentsXML:doc error:outError];
         
         if (!success) {
             return nil;
@@ -991,6 +964,11 @@ static NSInteger verticesFirstSort(id obj1, id obj2, void *context)
 	
 	
 	[cursor closeElement];
+    }
+    
+    for (RSGraphElement *GE in [all elements]) {
+        if ([GE isKindOfClass:[RSVertex class]])
+            [(RSVertex *)GE validateArrowParentAfterReadingXML];
     }
     
     // Finished with identifier mapping

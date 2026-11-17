@@ -128,7 +128,7 @@ typedef struct _RSTwoPoints {
 
 // Helper methods for text labels
 - (CGRect)rectFromLabel:(RSTextLabel *)TL offset:(CGFloat)offset;
-- (CGRect)rectFromPosition:(data_p)pos onAxis:(RSAxis *)axis;
+- (CGRect)rectFromPosition:(data_p)pos onAxis:(RSAxis *)axis sensitivity:(CGFloat)sensitivity;
 
 
 // Helper methods for axes

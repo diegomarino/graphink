@@ -252,7 +252,8 @@ RCS_ID("$Header: svn+ssh://source.omnigroup.com/Source/svn/Omni/trunk/OmniGroup/
         width = nearbyint(width*5)/5;
     }
     
-    if ( [obj isKindOfClass:[RSUnknown class]] || [obj isKindOfClass:[RSVertex class]] || [RSGraph isLine:obj]) {
+    // Only the no-selection inspector explicitly changes future creation defaults.
+    if ([obj isKindOfClass:[RSUnknown class]]) {
 	[[OFPreferenceWrapper sharedPreferenceWrapper] setDouble:width forKey:@"DefaultLineWidth"];
     }
     
@@ -823,7 +824,6 @@ static RSGraphElement *_arrowElement(RSGraphElement *obj)
     
     NSMutableArray *newVertices = [NSMutableArray array];
     
-    NSUInteger count = 0;
     data_p tick = DBL_MAX;
     for (NSNumber *number in tickArray) {
         data_p oldTick = tick;
@@ -850,9 +850,8 @@ static RSGraphElement *_arrowElement(RSGraphElement *obj)
         [newVertices addObject:V];
         [V release];
         
-        count += 1;
     }
-    DEBUG_RS(@"generated %d data points (out of %d ticks)", (int)count, (int)[tickArray count]);
+    DEBUG_RS(@"generated %d data points (out of %d ticks)", (int)[newVertices count], (int)[tickArray count]);
     
     return newVertices;
 }

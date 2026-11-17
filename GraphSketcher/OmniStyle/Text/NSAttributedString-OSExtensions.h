@@ -37,7 +37,7 @@ extern NSString * const OSInheritedStylesAttributeName;
 @end
 
 #define OS_DEFINE_ORIGINAL_COLOR_KEY(key) \
-NSString * const OSOriginal ## key OB_HIDDEN;
+extern NSString * const OSOriginal ## key OB_HIDDEN;
 
 OS_DEFINE_ORIGINAL_COLOR_KEY(NSForegroundColorAttributeName);
 OS_DEFINE_ORIGINAL_COLOR_KEY(NSBackgroundColorAttributeName);

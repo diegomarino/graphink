@@ -346,10 +346,10 @@ static NSMutableDictionary *mergedDictionary(NSDictionary *first, NSDictionary *
 {
     RSDataPoint final = p;
     NSNumber *val;
-    if ( (val = [constraints valueForKey:RSSnapConstraintXKey]) ) {
+    if ((val = [constraints valueForKey:RSSnapConstraintXKey]) != nil) {
         final.x = [val doubleValue];
     }
-    if ( (val = [constraints valueForKey:RSSnapConstraintYKey]) ) {
+    if ((val = [constraints valueForKey:RSSnapConstraintYKey]) != nil) {
         final.y = [val doubleValue];
     }
     
@@ -997,8 +997,9 @@ static NSMutableDictionary *mergedDictionary(NSDictionary *first, NSDictionary *
 {
     CGFloat distance, angle;
 
-    CGFloat hitOffset = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"SelectionSensitivity"];
-    CGFloat popoutOffset = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"PopoutSensitivity"];
+    // Both are screen distances, like the other sensitivities.
+    CGFloat hitOffset = [self selectionSensitivity];
+    CGFloat popoutOffset = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"PopoutSensitivity"]/_scale;
 
     RSGraphElement *owner = [label owner];
      

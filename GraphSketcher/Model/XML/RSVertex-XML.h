@@ -9,4 +9,5 @@
 #import "RSGraphElement-XML.h"
 
 @interface RSVertex (XML) <XMLArchiving>
+- (void)validateArrowParentAfterReadingXML;
 @end

@@ -1550,12 +1550,13 @@ static CGFloat yValueOfLineAtXValue(CGPoint p1, CGPoint p2, CGFloat x) {
 }
 
 
-- (CGRect)rectFromPosition:(data_p)pos onAxis:(RSAxis *)axis;
+- (CGRect)rectFromPosition:(data_p)pos onAxis:(RSAxis *)axis sensitivity:(CGFloat)sensitivity;
+// sensitivity is the hit tester's selection sensitivity, in view coords
 {
     if (![axis displayAxis])  // axis is not visible
         OBASSERT_NOT_REACHED("This method shouldn't be needed when the axis is not visible");
     
-    CGFloat hitOffset = [axis width]/2 + [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"SelectionSensitivity"];
+    CGFloat hitOffset = [axis width]/2 + sensitivity;
     
     RSBorder border = RSMakeBorder(hitOffset, hitOffset, hitOffset, hitOffset);
     RSDataPoint center;
