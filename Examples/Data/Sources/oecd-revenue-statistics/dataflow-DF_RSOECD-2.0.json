@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "id": "IREF609700",
+    "test": false,
+    "schema": "https://raw.githubusercontent.com/sdmx-twg/sdmx-json/develop/structure-message/tools/schemas/2.0.0/sdmx-json-structure-schema.json",
+    "prepared": "2026-11-15T17:42:58Z",
+    "contentLanguages": [
+      "en"
+    ],
+    "sender": {
+      "id": "FusionRegistry"
+    }
+  },
+  "data": {
+    "dataflows": [
+      {
+        "links": [
+          {
+            "rel": "self",
+            "type": "dataflow",
+            "uri": "https://raw.githubusercontent.com/sdmx-twg/sdmx-json/develop/structure-message/tools/schemas/2.0.0/sdmx-json-structure-schema.json",
+            "urn": "urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=OECD.CTP.TPS:DSD_REV_COMP_OECD@DF_RSOECD(2.0)"
+          }
+        ],
+        "id": "DSD_REV_COMP_OECD@DF_RSOECD",
+        "annotations": [
+          {
+            "type": "NonProductionDataflow",
+            "text": "true",
+            "texts": {
+              "en": "true"
+            }
+          },
+          {
+            "id": "@SDMX",
+            "title": "REF_AREA,MEASURE,UNIT_MEASURE",
+            "type": "LAYOUT_ROW"
+          },
+          {
+            "id": "@SDMX",
+            "title": "TIME_PERIOD",
+            "type": "LAYOUT_COLUMN"
+          },
+          {
+            "title": "REVENUE_CODE",
+            "type": "LAYOUT_FLAG"
+          },
+          {
+            "id": "@SDMX",
+            "title": "UNIT_MULT=0,OBS_STATUS=A,FREQ=A,MEASURE=TAX_REV,UNIT_MEASURE=XDC",
+            "type": "NOT_DISPLAYED"
+          },
+          {
+            "id": "@SDMX",
+            "title": "STANDARD_REVENUE=_T,SECTOR=S13,UNIT_MEASURE=PT_B1GQ,LASTNPERIODS=10",
+            "type": "DEFAULT"
+          },
+          {
+            "title": "COMBINED_MEASURE:STANDARD_REVENUE;COMBINED_UNIT_MEASURE:UNIT_MEASURE,CURRENCY,UNIT_MULT",
+            "type": "COMBINED_CONCEPTS",
+            "text": "COMBINED_MEASURE:Tax category;COMBINED_UNIT_MEASURE:Unit of measure",
+            "texts": {
+              "en": "COMBINED_MEASURE:Tax category;COMBINED_UNIT_MEASURE:Unit of measure",
+              "fr": "COMBINED_MEASURE:Catégorie fiscale;COMBINED_UNIT_MEASURE:Unité de mesure"
+            }
+          },
+          {
+            "type": "NonFinalArtefact",
+            "text": "false",
+            "texts": {
+              "en": "false"
+            }
+          }
+        ],
+        "name": "Revenue Statistics in OECD member countries - Comparative tax revenues",
+        "names": {
+          "en": "Revenue Statistics in OECD member countries - Comparative tax revenues",
+          "fr": "Tableaux comparatifs des Statistiques des recettes publiques pour les pays membres de l'OCDE"
+        },
+        "description": "<p>Internationally comparable tax revenue data for OECD countries presented as a percentage of GDP and as a share of total tax or non-tax revenues as well as in national currency and US dollars. Tax revenues are harmonised according to the OECD classification of taxes.</p><p>Related topics: Tax-to-GDP, Taxation, Tax structure, Tax mix, Regional average – change for each region, Domestic resource mobilisation, Public finance, Income tax, Social security contributions, Goods and services, Value added tax, VAT, Excise, Customs, Property tax.</p>",
+        "descriptions": {
+          "en": "<p>Internationally comparable tax revenue data for OECD countries presented as a percentage of GDP and as a share of total tax or non-tax revenues as well as in national currency and US dollars. Tax revenues are harmonised according to the OECD classification of taxes.</p><p>Related topics: Tax-to-GDP, Taxation, Tax structure, Tax mix, Regional average – change for each region, Domestic resource mobilisation, Public finance, Income tax, Social security contributions, Goods and services, Value added tax, VAT, Excise, Customs, Property tax.</p>",
+          "fr": "<p>Données comparables au niveau international sur les recettes publiques des pays de l'OCDE, présentées en pourcentage du PIB et en proportion des recettes fiscales totales, ainsi qu'en monnaie nationale et en dollars américains. Les recettes fiscales sont harmonisées selon la classification des impôts de l'OCDE.</p><p> Sujet associé :Ratios Impôts/PIB, Fiscalité, Structure fiscale, Composition fiscale, Moyenne des pays d'Amérique latine et des Caraïbes, Mobilisation des ressources intérieures, Finances publiques, Impôt sur le revenu, Cotisations de sécurité sociale, impôts sur les biens et services, Taxe sur la valeur ajoutée, TVA, Droits d'accise, Douane, Impôts sur le patrimoine.</p>"
+        },
+        "version": "2.0",
+        "agencyID": "OECD.CTP.TPS",
+        "isExternalReference": false,
+        "structure": "urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=OECD.CTP.TPS:DSD_REV_COMP_OECD(2.0)"
+      }
+    ]
+  }
+}
