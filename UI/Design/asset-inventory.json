@@ -1,0 +1,2591 @@
+{
+  "baseline": "0db95b9",
+  "scope": "Mac App/Images; lexical callers in App source/config/nibs; project resource membership; no runtime claims",
+  "assets": [
+    {
+      "path": "GraphSketcher/App/Images/Cursors/DrawCursor.tiff",
+      "family": "Cursors",
+      "name": "DrawCursor",
+      "scale": 1,
+      "sha256": "b5fc8b889a31c9e9c011ac80cb1be4992da7f2da6f481e873e9a58996125c941",
+      "bytes": 3922,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 105,
+          "text": "_penCursor = [[NSCursor alloc]  initWithImage:[NSImage imageNamed:@\"DrawCursor\"] hotSpot:NSMakePoint(0, 15)];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            16,
+            16
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Cursors/FillCursor.tiff",
+      "family": "Cursors",
+      "name": "FillCursor",
+      "scale": 1,
+      "sha256": "3116c1ec050fbc8ba048c0cb84bb963f73e4ce2e4be77e6678da7353750c5796",
+      "bytes": 11096,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 106,
+          "text": "_fillCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@\"FillCursor\"] hotSpot:NSMakePoint(0, 2)];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            16,
+            16
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Cursors/MarkerCursor.tif",
+      "family": "Cursors",
+      "name": "MarkerCursor",
+      "scale": 1,
+      "sha256": "b15545b1e949a6aded216d604cc0cc2c973971cd2f38894a933f3970941fd62d",
+      "bytes": 24132,
+      "in_resources_build_phase": true,
+      "callers": [],
+      "frames": [
+        {
+          "pixels": [
+            16,
+            16
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Cursors/MarkerCursor_old.tif",
+      "family": "Cursors",
+      "name": "MarkerCursor_old",
+      "scale": 1,
+      "sha256": "1d9af74d1c6b9bfeed41d5a0c8e546ea7649edd230420b56c13da5714696de4b",
+      "bytes": 17308,
+      "in_resources_build_phase": false,
+      "callers": [],
+      "frames": [
+        {
+          "pixels": [
+            16,
+            16
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Cursors/PenCursor.tif",
+      "family": "Cursors",
+      "name": "PenCursor",
+      "scale": 1,
+      "sha256": "f4b907a90f85a59ecfeadb0061d5fa278002231b5d4747d20ee3be15c1728933",
+      "bytes": 15420,
+      "in_resources_build_phase": true,
+      "callers": [],
+      "frames": [
+        {
+          "pixels": [
+            16,
+            16
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Cursors/arrow16.tif",
+      "family": "Cursors",
+      "name": "arrow16",
+      "scale": 1,
+      "sha256": "3b8a70c5c0bbca543accb9b8ba7b60b1cf33078664b4bff339df016a9e05bb57",
+      "bytes": 15412,
+      "in_resources_build_phase": true,
+      "callers": [],
+      "frames": [
+        {
+          "pixels": [
+            16,
+            16
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Cursors/ibeam16.tif",
+      "family": "Cursors",
+      "name": "ibeam16",
+      "scale": 1,
+      "sha256": "7d4b6df660c637499be5c0d0924c0908182b7bd62277431af8302a4c0a7bb713",
+      "bytes": 17216,
+      "in_resources_build_phase": true,
+      "callers": [],
+      "frames": [
+        {
+          "pixels": [
+            16,
+            16
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/arrowEndsDisabled.png",
+      "family": "Inspectors",
+      "name": "arrowEndsDisabled",
+      "scale": 1,
+      "sha256": "54127bdf6eb1ba3b4614429dfcd0a3c309808f20ef35dc543df6a3f8b8135899",
+      "bytes": 3511,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/StyleInspector.m",
+          "line": 457,
+          "text": "[_arrowGraphic setImage:[NSImage imageNamed:@\"arrowEndsDisabled\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            84,
+            12
+          ],
+          "dpi": [
+            72.009,
+            72.009
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/arrowEndsEnabled.png",
+      "family": "Inspectors",
+      "name": "arrowEndsEnabled",
+      "scale": 1,
+      "sha256": "48cf66c6f1c9b0af435e91c2f8533ad902269a48711a498e08fb1e66e7866995",
+      "bytes": 3417,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 291,
+          "text": "<imageCell key=\"cell\" refusesFirstResponder=\"YES\" alignment=\"left\" animates=\"YES\" image=\"arrowEndsEnabled\" id=\"50\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 660,
+          "text": "<image name=\"arrowEndsEnabled\" width=\"84\" height=\"12\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/StyleInspector.m",
+          "line": 462,
+          "text": "[_arrowGraphic setImage:[NSImage imageNamed:@\"arrowEndsEnabled\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            84,
+            12
+          ],
+          "dpi": [
+            72.009,
+            72.009
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisPlacementBothEdgesX.pdf",
+      "family": "Inspectors",
+      "name": "axisPlacementBothEdgesX",
+      "scale": 1,
+      "sha256": "09ffa51e26552faff2e7c9725710f7d0a24f22ef89fa991b3efc5070949c5ebe",
+      "bytes": 9192,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 228,
+          "text": "<buttonCell type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisPlacementBothEdgesX\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" toolTip=\"Draw the X-axis at the top and bottom of the graph.\" tag=\"2\" inset=\"2\" id=\"228\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 764,
+          "text": "<image name=\"axisPlacementBothEdgesX\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisPlacementBothEdgesY.pdf",
+      "family": "Inspectors",
+      "name": "axisPlacementBothEdgesY",
+      "scale": 1,
+      "sha256": "9a59f9d3bf6ee0b5f42a69d88420d71fd156dc9baf7d1fd4c49a7674ba3dbac2",
+      "bytes": 9361,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 177,
+          "text": "<buttonCell type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisPlacementBothEdgesY\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" toolTip=\"Draw the Y-axis at the left and right sides of the graph.\" tag=\"2\" inset=\"2\" id=\"244\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 765,
+          "text": "<image name=\"axisPlacementBothEdgesY\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisPlacementEdgeX.pdf",
+      "family": "Inspectors",
+      "name": "axisPlacementEdgeX",
+      "scale": 1,
+      "sha256": "2322102d8fbae63f028a51b6ea74f06d1758bc39a503b67eaf8191ab22ae6f19",
+      "bytes": 7992,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 210,
+          "text": "<buttonCell type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisPlacementEdgeX\" imagePosition=\"overlaps\" alignment=\"center\" borderStyle=\"border\" toolTip=\"Draw the X-axis at the bottom of the graph.\" inset=\"2\" id=\"223\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 766,
+          "text": "<image name=\"axisPlacementEdgeX\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisPlacementEdgeY.pdf",
+      "family": "Inspectors",
+      "name": "axisPlacementEdgeY",
+      "scale": 1,
+      "sha256": "c5049b4e4f457e79b231f05aa03227bb55515e8a87ba06aec0e15a0ad7781858",
+      "bytes": 8028,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 159,
+          "text": "<buttonCell type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisPlacementEdgeY\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" toolTip=\"Draw the Y-axis at the left side of the graph.\" inset=\"2\" id=\"246\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 767,
+          "text": "<image name=\"axisPlacementEdgeY\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisPlacementNoneX.pdf",
+      "family": "Inspectors",
+      "name": "axisPlacementNoneX",
+      "scale": 1,
+      "sha256": "95adb937ca2d23cad88d3eafefe675753ff2225be0c52db6137cc4c4b19f273a",
+      "bytes": 6679,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 237,
+          "text": "<buttonCell type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisPlacementNoneX\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" toolTip=\"Hide the X-axis.\" tag=\"3\" inset=\"2\" id=\"227\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 768,
+          "text": "<image name=\"axisPlacementNoneX\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisPlacementNoneY.pdf",
+      "family": "Inspectors",
+      "name": "axisPlacementNoneY",
+      "scale": 1,
+      "sha256": "9f69000442be59f60e4d8fee6590157aa840b5a3184954bde147729c5da6e3cf",
+      "bytes": 6679,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 186,
+          "text": "<buttonCell type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisPlacementNoneY\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" toolTip=\"Hide the Y-axis.\" tag=\"3\" inset=\"2\" id=\"245\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 769,
+          "text": "<image name=\"axisPlacementNoneY\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisPlacementOriginX.pdf",
+      "family": "Inspectors",
+      "name": "axisPlacementOriginX",
+      "scale": 1,
+      "sha256": "4c7fa214e95a0ea31bdf155ab00fe309795258df17421c4ab5133b08c743c0d7",
+      "bytes": 9230,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 219,
+          "text": "<buttonCell type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisPlacementOriginX\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" toolTip=\"Draw the X-axis at the origin (0, 0) if it is visible.\" tag=\"1\" inset=\"2\" id=\"229\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 770,
+          "text": "<image name=\"axisPlacementOriginX\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisPlacementOriginY.pdf",
+      "family": "Inspectors",
+      "name": "axisPlacementOriginY",
+      "scale": 1,
+      "sha256": "828eeb6e2a35467fbaf7409b872f76d7c94651fc584160743065d1aa72e8b4e0",
+      "bytes": 9314,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 168,
+          "text": "<buttonCell type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisPlacementOriginY\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" toolTip=\"Draw the Y-axis at the origin (0, 0) if it is visible.\" tag=\"1\" inset=\"2\" id=\"243\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 771,
+          "text": "<image name=\"axisPlacementOriginY\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisTickLabelsX.pdf",
+      "family": "Inspectors",
+      "name": "axisTickLabelsX",
+      "scale": 1,
+      "sha256": "d98f309c4825d6f73646f434f302222958542e176c9e4223dd0d585249a397ac",
+      "bytes": 22768,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 301,
+          "text": "<buttonCell key=\"cell\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisTickLabelsX\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"129\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 772,
+          "text": "<image name=\"axisTickLabelsX\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisTickLabelsY.pdf",
+      "family": "Inspectors",
+      "name": "axisTickLabelsY",
+      "scale": 1,
+      "sha256": "9398ee49af1eb9617a29178a47331861b4939d5a7a6c0a59dee68160d389a5d2",
+      "bytes": 21110,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 277,
+          "text": "<buttonCell key=\"cell\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisTickLabelsY\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"136\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 773,
+          "text": "<image name=\"axisTickLabelsY\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisTickMarksX.pdf",
+      "family": "Inspectors",
+      "name": "axisTickMarksX",
+      "scale": 1,
+      "sha256": "9ed0179d876e5d13e24d9713421df1b49c1b1fe8761087f73a96c5830838f4e4",
+      "bytes": 11604,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 153,
+          "text": "<buttonCell key=\"prototype\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisTickMarksX\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"247\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 204,
+          "text": "<buttonCell key=\"prototype\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisTickMarksX\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"226\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 313,
+          "text": "<buttonCell key=\"cell\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisTickMarksX\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"104\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 774,
+          "text": "<image name=\"axisTickMarksX\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisTickMarksY.pdf",
+      "family": "Inspectors",
+      "name": "axisTickMarksY",
+      "scale": 1,
+      "sha256": "4c45cc5c1bfed33d612cbf65cb85ca22d05252b9a48dc50c710a0f13252b3222",
+      "bytes": 11633,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 289,
+          "text": "<buttonCell key=\"cell\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisTickMarksY\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"134\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 775,
+          "text": "<image name=\"axisTickMarksY\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisTitleX.pdf",
+      "family": "Inspectors",
+      "name": "axisTitleX",
+      "scale": 1,
+      "sha256": "c631884f9435ed58c40f7e8c4c6bc0fc302590d81ab02678fc64337fad283106",
+      "bytes": 14297,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 265,
+          "text": "<buttonCell key=\"cell\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisTitleX\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"152\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 776,
+          "text": "<image name=\"axisTitleX\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/axisTitleY.pdf",
+      "family": "Inspectors",
+      "name": "axisTitleY",
+      "scale": 1,
+      "sha256": "8ba5ea70f2b9b82985428cfe50d5e9d7434ea97a935f57e20ea92e776f01cee9",
+      "bytes": 14151,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 253,
+          "text": "<buttonCell key=\"cell\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"axisTitleY\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"154\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 777,
+          "text": "<image name=\"axisTitleY\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/canvasHeight.tiff",
+      "family": "Inspectors",
+      "name": "canvasHeight",
+      "scale": 1,
+      "sha256": "4a1aa1071ab9145cfb43abe5454f6b4821fed17ea2b5de1f3da34b80f7000e22",
+      "bytes": 1428,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/DocumentInspector.h",
+          "line": 28,
+          "text": "@property (nonatomic, assign) IBOutlet id canvasHeight;"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 12,
+          "text": "<outlet property=\"canvasHeight\" destination=\"18\" id=\"57\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 33,
+          "text": "<imageCell key=\"cell\" refusesFirstResponder=\"YES\" alignment=\"left\" animates=\"YES\" imageScaling=\"proportionallyDown\" image=\"canvasHeight\" id=\"235\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 456,
+          "text": "<image name=\"canvasHeight\" width=\"14\" height=\"18\"/>"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            14,
+            18
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/canvasWidth.tiff",
+      "family": "Inspectors",
+      "name": "canvasWidth",
+      "scale": 1,
+      "sha256": "3698c44fa422b14bde3265ebd39e0cf711041b9d1f89a4da60cab3130637788e",
+      "bytes": 1450,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/DocumentInspector.h",
+          "line": 26,
+          "text": "@property (nonatomic, assign) IBOutlet id canvasWidth;"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 13,
+          "text": "<outlet property=\"canvasWidth\" destination=\"16\" id=\"56\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 48,
+          "text": "<imageCell key=\"cell\" refusesFirstResponder=\"YES\" alignment=\"left\" animates=\"YES\" imageScaling=\"proportionallyDown\" image=\"canvasWidth\" id=\"233\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 457,
+          "text": "<image name=\"canvasWidth\" width=\"14\" height=\"18\"/>"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            14,
+            18
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/checkboxFancyDeselected.png",
+      "family": "Inspectors",
+      "name": "checkboxFancyDeselected",
+      "scale": 1,
+      "sha256": "59328db1ea7acff7501746e3462ffe6c1fdd562161fde5f73db660c53f166644",
+      "bytes": 3121,
+      "in_resources_build_phase": true,
+      "callers": [],
+      "frames": [
+        {
+          "pixels": [
+            18,
+            18
+          ],
+          "dpi": [
+            72.009,
+            72.009
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/checkboxFancySelected.png",
+      "family": "Inspectors",
+      "name": "checkboxFancySelected",
+      "scale": 1,
+      "sha256": "1dfabd2c8044b77711eccb6c361d9c1ec1d0b2235313137be1500817322ecc77",
+      "bytes": 3321,
+      "in_resources_build_phase": true,
+      "callers": [],
+      "frames": [
+        {
+          "pixels": [
+            19,
+            20
+          ],
+          "dpi": [
+            72.009,
+            72.009
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/gridDisplayHorizontal.pdf",
+      "family": "Inspectors",
+      "name": "gridDisplayHorizontal",
+      "scale": 1,
+      "sha256": "274a4438a173d60334f686bdaf1c71da4047123759467baecaa5f91e4bc5cefb",
+      "bytes": 8273,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 139,
+          "text": "<buttonCell key=\"cell\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"gridDisplayHorizontal\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"256\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 778,
+          "text": "<image name=\"gridDisplayHorizontal\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/gridDisplayVertical.pdf",
+      "family": "Inspectors",
+      "name": "gridDisplayVertical",
+      "scale": 1,
+      "sha256": "a70a90d6656566d5fc81ebfd3b23b6c0c966194f71fe8cd456a861bead06642e",
+      "bytes": 8294,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 127,
+          "text": "<buttonCell key=\"cell\" type=\"square\" bezelStyle=\"shadowlessSquare\" image=\"gridDisplayVertical\" imagePosition=\"only\" alignment=\"center\" borderStyle=\"border\" inset=\"2\" id=\"258\" customClass=\"ButtonRibbonCell\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/AxisInspector.xib",
+          "line": 779,
+          "text": "<image name=\"gridDisplayVertical\" width=\"32\" height=\"32\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        32.0,
+        32.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/inspectorAxes.tiff",
+      "family": "Inspectors",
+      "name": "inspectorAxes",
+      "scale": 1,
+      "sha256": "e22c2ec3b61f82136cbee43066ab43aeb0cf74b76a86837f1158c44f7cbb6f64",
+      "bytes": 4580,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 57,
+          "text": "<string>inspectorAxes</string> <!-- tab image -->"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 67,
+          "text": "<string>inspectorAxes</string> <!-- menu item image -->"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/inspectorAxes@2x.tiff",
+      "family": "Inspectors",
+      "name": "inspectorAxes",
+      "scale": 2,
+      "sha256": "74bf7e73449c8872d6da6cb9840d3d293f1496ed18e241c3eb498359a67aa8e9",
+      "bytes": 11806,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 57,
+          "text": "<string>inspectorAxes</string> <!-- tab image -->"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 67,
+          "text": "<string>inspectorAxes</string> <!-- menu item image -->"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            46,
+            46
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/inspectorCanvas.tiff",
+      "family": "Inspectors",
+      "name": "inspectorCanvas",
+      "scale": 1,
+      "sha256": "8fabdddb82ff83b62c20488aabd5d2d9863e6c6a39e137069b361576218c4a9e",
+      "bytes": 4216,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 84,
+          "text": "<string>inspectorCanvas</string> <!-- tab image -->"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 94,
+          "text": "<string>inspectorCanvas</string> <!-- menu item image -->"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/inspectorCanvas@2x.tiff",
+      "family": "Inspectors",
+      "name": "inspectorCanvas",
+      "scale": 2,
+      "sha256": "dd15bba08257b9e4f76d157e219e94c3576b58b7aae30430f6d9409886dacfc0",
+      "bytes": 11050,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 84,
+          "text": "<string>inspectorCanvas</string> <!-- tab image -->"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 94,
+          "text": "<string>inspectorCanvas</string> <!-- menu item image -->"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            47,
+            41
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/inspectorData.tiff",
+      "family": "Inspectors",
+      "name": "inspectorData",
+      "scale": 1,
+      "sha256": "078baeeaff2361a19db8beec43fd6dbb93c29189adc574ae13b71c6763f46b84",
+      "bytes": 4288,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 111,
+          "text": "<string>inspectorData</string> <!-- tab image -->"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 121,
+          "text": "<string>inspectorData</string> <!-- menu item image -->"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/inspectorData@2x.tiff",
+      "family": "Inspectors",
+      "name": "inspectorData",
+      "scale": 2,
+      "sha256": "3b3b19140daf004ce6715d21703704e0bdf416d4ba1c0586ca575d0ea6051cf0",
+      "bytes": 11086,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 111,
+          "text": "<string>inspectorData</string> <!-- tab image -->"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 121,
+          "text": "<string>inspectorData</string> <!-- menu item image -->"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            44,
+            44
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/inspectorStyle.tiff",
+      "family": "Inspectors",
+      "name": "inspectorStyle",
+      "scale": 1,
+      "sha256": "1e9e91151bc7512222146581a53ad0f9729e3447761f9885b3d9cfaff978f3c6",
+      "bytes": 4520,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 30,
+          "text": "<string>inspectorStyle</string> <!-- tab image -->"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 40,
+          "text": "<string>inspectorStyle</string> <!-- menu item image -->"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/inspectorStyle@2x.tiff",
+      "family": "Inspectors",
+      "name": "inspectorStyle",
+      "scale": 2,
+      "sha256": "a549cb0ea3a38c58dcdfda394997ec8fc82914a5f18bc9f2cef3d458c0a65062",
+      "bytes": 12366,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 30,
+          "text": "<string>inspectorStyle</string> <!-- tab image -->"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/Inspectors.plist",
+          "line": 40,
+          "text": "<string>inspectorStyle</string> <!-- menu item image -->"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            48,
+            47
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/lineTypeBestFit.pdf",
+      "family": "Inspectors",
+      "name": "lineTypeBestFit",
+      "scale": 1,
+      "sha256": "18f82b608abb8d2b2c8d26ac46d305b6b47fb4c31213a701225fde328edfca96",
+      "bytes": 2747,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 259,
+          "text": "<segment toolTip=\"Best-fit line\" image=\"lineTypeBestFit\" imageScaling=\"none\" width=\"29\" tag=\"2\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 661,
+          "text": "<image name=\"lineTypeBestFit\" width=\"24\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        24.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/lineTypeCurved.pdf",
+      "family": "Inspectors",
+      "name": "lineTypeCurved",
+      "scale": 1,
+      "sha256": "e08d1512d0aeb194462e5593c20e810c106c8832c90c1a9ad0d612c0d6fe8899",
+      "bytes": 2732,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 258,
+          "text": "<segment toolTip=\"Curved segments\" image=\"lineTypeCurved\" imageScaling=\"none\" width=\"30\" selected=\"YES\" tag=\"1\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 662,
+          "text": "<image name=\"lineTypeCurved\" width=\"19\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        19.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/lineTypeNone.pdf",
+      "family": "Inspectors",
+      "name": "lineTypeNone",
+      "scale": 1,
+      "sha256": "e20daeb116e66a7a9068affcdd3096ec5a3e2f8246ffb9653d7f17a5f3772e6b",
+      "bytes": 2661,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 262,
+          "text": "<segment toolTip=\"No connections between points\" image=\"lineTypeNone\" imageScaling=\"none\" width=\"29\" tag=\"3\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 663,
+          "text": "<image name=\"lineTypeNone\" width=\"19\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        19.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/lineTypeStraight.pdf",
+      "family": "Inspectors",
+      "name": "lineTypeStraight",
+      "scale": 1,
+      "sha256": "c1e53f4d547d11265d1dc947433df7c185d6e02c34bacac09f093cac53312f4d",
+      "bytes": 2730,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 257,
+          "text": "<segment toolTip=\"Straight segments\" image=\"lineTypeStraight\" imageScaling=\"none\" width=\"29\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 664,
+          "text": "<image name=\"lineTypeStraight\" width=\"19\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        19.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/pointTypeHorizontalBar.pdf",
+      "family": "Inspectors",
+      "name": "pointTypeHorizontalBar",
+      "scale": 1,
+      "sha256": "ad7da15767e4541193e05a95f98dd30deab6aee723faeef98f5e702d98772784",
+      "bytes": 3751,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 105,
+          "text": "<segment toolTip=\"Horizontal Bar\" image=\"pointTypeHorizontalBar\" width=\"22\" tag=\"3\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 665,
+          "text": "<image name=\"pointTypeHorizontalBar\" width=\"12\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        12.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/pointTypeNone.pdf",
+      "family": "Inspectors",
+      "name": "pointTypeNone",
+      "scale": 1,
+      "sha256": "8222b29139e3bca8df9842ea5c3ced44b80dc7d397b750637f09e50da1c3b389",
+      "bytes": 2966,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 108,
+          "text": "<segment toolTip=\"Hidden\" image=\"pointTypeNone\" width=\"22\" tag=\"4\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 666,
+          "text": "<image name=\"pointTypeNone\" width=\"12\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        12.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/pointTypePoint.pdf",
+      "family": "Inspectors",
+      "name": "pointTypePoint",
+      "scale": 1,
+      "sha256": "c9526787141dd5f71dd2e802c82ea5226189bbfcd14e8d08434a57926923ab89",
+      "bytes": 2658,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 100,
+          "text": "<segment toolTip=\"Shape\" image=\"pointTypePoint\" width=\"28\" selected=\"YES\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 667,
+          "text": "<image name=\"pointTypePoint\" width=\"12\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        12.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/pointTypeTick.pdf",
+      "family": "Inspectors",
+      "name": "pointTypeTick",
+      "scale": 1,
+      "sha256": "892294eb1b57f8c8058c4dd55ac47949fd0822c785930a6765107b5fe5d2d800",
+      "bytes": 2627,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 101,
+          "text": "<segment toolTip=\"Tick Mark\" image=\"pointTypeTick\" width=\"22\" tag=\"1\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 668,
+          "text": "<image name=\"pointTypeTick\" width=\"12\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        12.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/pointTypeVerticalBar.pdf",
+      "family": "Inspectors",
+      "name": "pointTypeVerticalBar",
+      "scale": 1,
+      "sha256": "cede03219ee50f8ac3191c70bbf33ac589d7119fc6989d07d7725c4b41332c3c",
+      "bytes": 3786,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 102,
+          "text": "<segment toolTip=\"Vertical Bar\" image=\"pointTypeVerticalBar\" width=\"22\" tag=\"2\">"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/StyleInspector.xib",
+          "line": 669,
+          "text": "<image name=\"pointTypeVerticalBar\" width=\"12\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        12.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/shadowNone.pdf",
+      "family": "Inspectors",
+      "name": "shadowNone",
+      "scale": 1,
+      "sha256": "da5b71755e8e9dcb89ac9b799fa98b1be5a202d2abd6d604f23618ca1548c522",
+      "bytes": 3847,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 43,
+          "text": "<imageCell key=\"cell\" refusesFirstResponder=\"YES\" alignment=\"left\" animates=\"YES\" image=\"shadowNone\" id=\"238\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 458,
+          "text": "<image name=\"shadowNone\" width=\"12\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        12.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Inspectors/shadowStrong.pdf",
+      "family": "Inspectors",
+      "name": "shadowStrong",
+      "scale": 1,
+      "sha256": "aa4ba8f5fcc1fcd01d9bb8da4a6fa852daa6dcca3e21afdda67c16fb7467be41",
+      "bytes": 3877,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 38,
+          "text": "<imageCell key=\"cell\" refusesFirstResponder=\"YES\" alignment=\"left\" animates=\"YES\" image=\"shadowStrong\" id=\"240\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Inspectors/English.lproj/DocumentInspector.xib",
+          "line": 459,
+          "text": "<image name=\"shadowStrong\" width=\"12\" height=\"12\"/>"
+        }
+      ],
+      "pdf_page_points": [
+        12.0,
+        12.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/copyAsImageIcon.tiff",
+      "family": "Toolbar",
+      "name": "copyAsImageIcon",
+      "scale": 1,
+      "sha256": "c19c1274e9aed059a54df6fa66848a9d4091a09b1143bc4a2749528e835a06f8",
+      "bytes": 6868,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 98,
+          "text": "imageName = copyAsImageIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/copyAsImageIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "copyAsImageIcon",
+      "scale": 2,
+      "sha256": "95e01efa57e1476f32063076f9ae29bdb9e1f7b4e7cd55146225bf84a1fe944f",
+      "bytes": 26068,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 98,
+          "text": "imageName = copyAsImageIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            48,
+            48
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/detachIcon.tiff",
+      "family": "Toolbar",
+      "name": "detachIcon",
+      "scale": 1,
+      "sha256": "717844b194bafdf7be6161b00609f71f43321aaae76589f0ed3d471e0c3052ba",
+      "bytes": 4282,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 68,
+          "text": "imageName = detachIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/detachIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "detachIcon",
+      "scale": 2,
+      "sha256": "b31b5a06ac8351b6f11fde8ac17fcbcbfe2239d99381e99e2bc158bd1b229e17",
+      "bytes": 16570,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 68,
+          "text": "imageName = detachIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/drawTool.png",
+      "family": "Toolbar",
+      "name": "drawTool",
+      "scale": 1,
+      "sha256": "333540f05bc771c716836d30bdffb6d34657ace79a8f23ed6ef86e627b306b9d",
+      "bytes": 4014,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.h",
+          "line": 71,
+          "text": "- (IBAction)drawTool:(id)sender;"
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 471,
+          "text": "- (IBAction)drawTool:(id)sender {"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/MainMenu.xib",
+          "line": 634,
+          "text": "<action selector=\"drawTool:\" target=\"205\" id=\"425\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 43,
+          "text": "imageName = drawTool;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": []
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/drawTool@2x.png",
+      "family": "Toolbar",
+      "name": "drawTool",
+      "scale": 2,
+      "sha256": "d4372bfe57bca296b7c7c827d3d04f29273331c657d08c84325b3f7c045c33c3",
+      "bytes": 5945,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.h",
+          "line": 71,
+          "text": "- (IBAction)drawTool:(id)sender;"
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 471,
+          "text": "- (IBAction)drawTool:(id)sender {"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/MainMenu.xib",
+          "line": 634,
+          "text": "<action selector=\"drawTool:\" target=\"205\" id=\"425\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 43,
+          "text": "imageName = drawTool;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": []
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/errorBarsIcon.tiff",
+      "family": "Toolbar",
+      "name": "errorBarsIcon",
+      "scale": 1,
+      "sha256": "207952585ea86e03f493fd251d994c78b55ecabc0fdc2cd777113cd0024ad9c2",
+      "bytes": 4282,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 83,
+          "text": "imageName = errorBarsIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/errorBarsIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "errorBarsIcon",
+      "scale": 2,
+      "sha256": "d2f4fe98c1e0d35798507ea8063079a4f94fa71fad695a8c3edd2e9b57614b3d",
+      "bytes": 16570,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 83,
+          "text": "imageName = errorBarsIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/fillTool.png",
+      "family": "Toolbar",
+      "name": "fillTool",
+      "scale": 1,
+      "sha256": "e59d8edc1a50af788d4b6c94530eee5a414a04b02481ead90c23c2139d755911",
+      "bytes": 4482,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.h",
+          "line": 72,
+          "text": "- (IBAction)fillTool:(id)sender;"
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 475,
+          "text": "- (IBAction)fillTool:(id)sender {"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/MainMenu.xib",
+          "line": 640,
+          "text": "<action selector=\"fillTool:\" target=\"205\" id=\"426\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 48,
+          "text": "imageName = fillTool;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": []
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/fillTool@2x.png",
+      "family": "Toolbar",
+      "name": "fillTool",
+      "scale": 2,
+      "sha256": "87759db5c391464b6753c691c00fe3943f555fac3385be59c385b37f624d5a47",
+      "bytes": 7731,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.h",
+          "line": 72,
+          "text": "- (IBAction)fillTool:(id)sender;"
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 475,
+          "text": "- (IBAction)fillTool:(id)sender {"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/MainMenu.xib",
+          "line": 640,
+          "text": "<action selector=\"fillTool:\" target=\"205\" id=\"426\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 48,
+          "text": "imageName = fillTool;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": []
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/groupIcon.tiff",
+      "family": "Toolbar",
+      "name": "groupIcon",
+      "scale": 1,
+      "sha256": "be6e05ef3fb4dec4956d2780b3f781751a2cc7478ce29f5f3e9bb894c522aa76",
+      "bytes": 6868,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 63,
+          "text": "imageName = groupIcon;"
+        },
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3030,
+          "text": "[item setImage:[NSImage imageNamed:@\"groupIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/groupIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "groupIcon",
+      "scale": 2,
+      "sha256": "efbfbf2520fd83d3873ea4029719a734f7ec158249ec2fb4a8d1ad1389f0d4ee",
+      "bytes": 26068,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 63,
+          "text": "imageName = groupIcon;"
+        },
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3030,
+          "text": "[item setImage:[NSImage imageNamed:@\"groupIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            48,
+            48
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/hideGridIcon.tiff",
+      "family": "Toolbar",
+      "name": "hideGridIcon",
+      "scale": 1,
+      "sha256": "7f4968e659f3468f684a8c26d072cd4389eceebac94bd9e6f685955bcf747e90",
+      "bytes": 4282,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3054,
+          "text": "[item setImage:[NSImage imageNamed:@\"hideGridIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/hideGridIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "hideGridIcon",
+      "scale": 2,
+      "sha256": "07c9f6750a287d0102cedf60691e85dd15f3ed85ba5b08b6fb6c19c3b8f29d65",
+      "bytes": 16570,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3054,
+          "text": "[item setImage:[NSImage imageNamed:@\"hideGridIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/inspectorIcon.tiff",
+      "family": "Toolbar",
+      "name": "inspectorIcon",
+      "scale": 1,
+      "sha256": "9f86ba72627bd87ca6b1e2f72978ffcda73b8dc35bb1450df0ca689853dec43a",
+      "bytes": 17384,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 103,
+          "text": "imageName = inspectorIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/interpolateIcon.tiff",
+      "family": "Toolbar",
+      "name": "interpolateIcon",
+      "scale": 1,
+      "sha256": "bc2c1b74edf504c2f8f6d5033489dc6e779528522c337bb5c9e5bc39e855f680",
+      "bytes": 4282,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 88,
+          "text": "imageName = interpolateIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/interpolateIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "interpolateIcon",
+      "scale": 2,
+      "sha256": "01bd9bc1393045e02e835953aa5ee8bb2a9b0a1bda76a25087a0e7d85914d0d0",
+      "bytes": 16570,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 88,
+          "text": "imageName = interpolateIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/lockIcon.tiff",
+      "family": "Toolbar",
+      "name": "lockIcon",
+      "scale": 1,
+      "sha256": "7c5b8ace05b012f2eca968437869a0919892937a1b267faecf722775e4577f26",
+      "bytes": 6868,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 58,
+          "text": "imageName = lockIcon;"
+        },
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3005,
+          "text": "[item setImage:[NSImage imageNamed:@\"lockIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/lockIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "lockIcon",
+      "scale": 2,
+      "sha256": "33b83c1868a1967fd39fb72013e43c37fed6f37a4a115d9e7e696e533fe67b00",
+      "bytes": 26068,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 58,
+          "text": "imageName = lockIcon;"
+        },
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3005,
+          "text": "[item setImage:[NSImage imageNamed:@\"lockIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            48,
+            48
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/modifyTool.png",
+      "family": "Toolbar",
+      "name": "modifyTool",
+      "scale": 1,
+      "sha256": "7cbcd0f77e1a02ffc289c6221ad3b413fc0fa13740c86729912baf444e4f7e95",
+      "bytes": 3568,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.h",
+          "line": 70,
+          "text": "- (IBAction)modifyTool:(id)sender;"
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 467,
+          "text": "- (IBAction)modifyTool:(id)sender {"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/MainMenu.xib",
+          "line": 628,
+          "text": "<action selector=\"modifyTool:\" target=\"205\" id=\"424\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 38,
+          "text": "imageName = modifyTool;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": []
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/modifyTool@2x.png",
+      "family": "Toolbar",
+      "name": "modifyTool",
+      "scale": 2,
+      "sha256": "ab1a20d3adf4a1aa92a19ce8dd45bab8ddb02947327c1f89809952ebc52d1361",
+      "bytes": 4589,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.h",
+          "line": 70,
+          "text": "- (IBAction)modifyTool:(id)sender;"
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 467,
+          "text": "- (IBAction)modifyTool:(id)sender {"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/MainMenu.xib",
+          "line": 628,
+          "text": "<action selector=\"modifyTool:\" target=\"205\" id=\"424\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 38,
+          "text": "imageName = modifyTool;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": []
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/opaqueWindowIcon.tiff",
+      "family": "Toolbar",
+      "name": "opaqueWindowIcon",
+      "scale": 1,
+      "sha256": "c5c9b2b4ab56df3e255f62ada06256f7ec4db5084281e12196a5e7b1aa9f4fc5",
+      "bytes": 4282,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/GraphDocument.m",
+          "line": 651,
+          "text": "[item setImage:[NSImage imageNamed:@\"opaqueWindowIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/opaqueWindowIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "opaqueWindowIcon",
+      "scale": 2,
+      "sha256": "aa06ac2011c3e880b7220691effb64b5868d72a25f48b6a8bbd7131e1fcb8c26",
+      "bytes": 16570,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/GraphDocument.m",
+          "line": 651,
+          "text": "[item setImage:[NSImage imageNamed:@\"opaqueWindowIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/scaleDownIcon.tiff",
+      "family": "Toolbar",
+      "name": "scaleDownIcon",
+      "scale": 1,
+      "sha256": "6ebb2e32b929bae2a80019b047870e6860d64985114b7d111a0b5f3a708b2b55",
+      "bytes": 4282,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 78,
+          "text": "imageName = scaleDownIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/scaleDownIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "scaleDownIcon",
+      "scale": 2,
+      "sha256": "3c43bb72451c6139f68333264eb0e38ce7ff45596349cf48842c0fa50072bc0d",
+      "bytes": 16570,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 78,
+          "text": "imageName = scaleDownIcon;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/showGridIcon.tiff",
+      "family": "Toolbar",
+      "name": "showGridIcon",
+      "scale": 1,
+      "sha256": "8cb7a17aec6ab8111452a9559f4912664319477cf176be271734a1cf8bdab777",
+      "bytes": 4282,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 73,
+          "text": "imageName = showGridIcon;"
+        },
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3059,
+          "text": "[item setImage:[NSImage imageNamed:@\"showGridIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/showGridIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "showGridIcon",
+      "scale": 2,
+      "sha256": "8e2b5f80fa54a5a70dba06c4ee8c57d4bbbd7a9b6183403d4dec00dc8a41fd5e",
+      "bytes": 16570,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 73,
+          "text": "imageName = showGridIcon;"
+        },
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3059,
+          "text": "[item setImage:[NSImage imageNamed:@\"showGridIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/textTool.png",
+      "family": "Toolbar",
+      "name": "textTool",
+      "scale": 1,
+      "sha256": "abb68faff2da2cf61d9d5b73d89391a601ecf1281fe9bb3a3ac13bf4f86aba9c",
+      "bytes": 3804,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.h",
+          "line": 73,
+          "text": "- (IBAction)textTool:(id)sender;"
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 479,
+          "text": "- (IBAction)textTool:(id)sender {"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/MainMenu.xib",
+          "line": 646,
+          "text": "<action selector=\"textTool:\" target=\"205\" id=\"427\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 53,
+          "text": "imageName = textTool;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": []
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/textTool@2x.png",
+      "family": "Toolbar",
+      "name": "textTool",
+      "scale": 2,
+      "sha256": "d0048e7bb934d368c10b2b1c74d95ffc9eaab66dabcf048bc224c5ce2fd83038",
+      "bytes": 5230,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.h",
+          "line": 73,
+          "text": "- (IBAction)textTool:(id)sender;"
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 479,
+          "text": "- (IBAction)textTool:(id)sender {"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/MainMenu.xib",
+          "line": 646,
+          "text": "<action selector=\"textTool:\" target=\"205\" id=\"427\"/>"
+        },
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 53,
+          "text": "imageName = textTool;"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": []
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/transparentWindowIcon.tiff",
+      "family": "Toolbar",
+      "name": "transparentWindowIcon",
+      "scale": 1,
+      "sha256": "af44b7282165e785acf019b0d6bb052bb3a03eb26da4b6cb2c67b75acd15a144",
+      "bytes": 4282,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 93,
+          "text": "imageName = transparentWindowIcon;"
+        },
+        {
+          "path": "GraphSketcher/App/GraphDocument.m",
+          "line": 647,
+          "text": "[item setImage:[NSImage imageNamed:@\"transparentWindowIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/transparentWindowIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "transparentWindowIcon",
+      "scale": 2,
+      "sha256": "0f61d604822f9e55e678aa867d950e9b7c7a0f7800866cf72701741508788554",
+      "bytes": 16570,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/Graph.toolbar",
+          "line": 93,
+          "text": "imageName = transparentWindowIcon;"
+        },
+        {
+          "path": "GraphSketcher/App/GraphDocument.m",
+          "line": 647,
+          "text": "[item setImage:[NSImage imageNamed:@\"transparentWindowIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/ungroupIcon.tiff",
+      "family": "Toolbar",
+      "name": "ungroupIcon",
+      "scale": 1,
+      "sha256": "14fb62cdd549c5c0903293273bf01e98bdcc68e1ea0ebd3e51f759babd87fa2f",
+      "bytes": 6868,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3024,
+          "text": "[item setImage:[NSImage imageNamed:@\"ungroupIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/ungroupIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "ungroupIcon",
+      "scale": 2,
+      "sha256": "d55bb766e545ecdfb153e00581befe33f442daafe44e2d5d71d1658c2251c8a8",
+      "bytes": 26068,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3024,
+          "text": "[item setImage:[NSImage imageNamed:@\"ungroupIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            48,
+            48
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/unlockIcon.tiff",
+      "family": "Toolbar",
+      "name": "unlockIcon",
+      "scale": 1,
+      "sha256": "6f26d666e5350ca1259a489e0ee72fc3fc76b56db59c102070a165622ace6fd0",
+      "bytes": 6868,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3010,
+          "text": "[item setImage:[NSImage imageNamed:@\"unlockIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            24,
+            24
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            32,
+            32
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/Toolbar/unlockIcon@2x.tiff",
+      "family": "Toolbar",
+      "name": "unlockIcon",
+      "scale": 2,
+      "sha256": "94213396f6e8c3b848948dfa95fb54b41abeecfcafb6769835e32c2f0b997c68",
+      "bytes": 26068,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/RSGraphView.m",
+          "line": 3010,
+          "text": "[item setImage:[NSImage imageNamed:@\"unlockIcon\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            48,
+            48
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        },
+        {
+          "pixels": [
+            64,
+            64
+          ],
+          "dpi": [
+            72.0,
+            72.0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/errorbar-for-sheet.pdf",
+      "family": "Images",
+      "name": "errorbar-for-sheet",
+      "scale": 1,
+      "sha256": "4177d85880578edf9596b5c69903d42e00b7ab88438d5c1dcab339e10f3fca10",
+      "bytes": 4401,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/English.lproj/ErrorBarSheet.xib",
+          "line": 223,
+          "text": "<string key=\"NSResourceName\">errorbar-for-sheet</string>"
+        },
+        {
+          "path": "GraphSketcher/App/English.lproj/ErrorBarSheet.xib",
+          "line": 1644,
+          "text": "<string key=\"NS.key.0\">errorbar-for-sheet</string>"
+        }
+      ],
+      "pdf_page_points": [
+        12.0,
+        51.0
+      ]
+    },
+    {
+      "path": "GraphSketcher/App/Images/experimental.png",
+      "family": "Images",
+      "name": "experimental",
+      "scale": 1,
+      "sha256": "4bdf8074bba244a9264b14d86e942fa0301f0effcfcd5365680eea17c3ebcce8",
+      "bytes": 6318,
+      "in_resources_build_phase": true,
+      "callers": [
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 180,
+          "text": "// Add a menu of experimental features if the preference for it is turned on."
+        },
+        {
+          "path": "GraphSketcher/App/AppController.m",
+          "line": 206,
+          "text": "[experimentalMenuItem setImage:[NSImage imageNamed:@\"experimental\"]];"
+        }
+      ],
+      "frames": [
+        {
+          "pixels": [
+            22,
+            20
+          ],
+          "dpi": [
+            72.009,
+            72.009
+          ]
+        }
+      ]
+    }
+  ]
+}

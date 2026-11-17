@@ -1,0 +1,1280 @@
+{
+  "icc_profile_sha256": "2b3aa1645779a9e634744faf9b01e9102b0c9b88fd6deced7934df86b949af7e",
+  "selection": "B1",
+  "integration": "not performed",
+  "icns_round_trips": [
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_32x32@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_32x32@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_128x128.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_128x128.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_256x256@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_256x256@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_32x32.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_32x32.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_512x512.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_512x512.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_16x16.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_16x16.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_16x16@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_16x16@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_128x128@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_128x128@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_512x512@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_512x512@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_256x256.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSAppIcon",
+      "slot": "icon_256x256.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_32x32@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_32x32@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_128x128.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_128x128.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_256x256@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_256x256@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_32x32.png",
+      "background": "#ffffff",
+      "max_channel_difference": 43
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_32x32.png",
+      "background": "#171c22",
+      "max_channel_difference": 43
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_512x512.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_512x512.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_16x16.png",
+      "background": "#ffffff",
+      "max_channel_difference": 22
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_16x16.png",
+      "background": "#171c22",
+      "max_channel_difference": 22
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_16x16@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_16x16@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_128x128@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_128x128@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_512x512@2x.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_512x512@2x.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_256x256.png",
+      "background": "#ffffff",
+      "max_channel_difference": 0
+    },
+    {
+      "icon": "GSDocIcon",
+      "slot": "icon_256x256.png",
+      "background": "#171c22",
+      "max_channel_difference": 0
+    }
+  ],
+  "pngs": {
+    "Branding/bezier-g-nodes-medium-lockup-dark.png": {
+      "size": [
+        340,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        12,
+        12,
+        289,
+        52
+      ]
+    },
+    "Branding/bezier-g-nodes-medium-lockup-dark@2x.png": {
+      "size": [
+        680,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        25,
+        25,
+        577,
+        103
+      ]
+    },
+    "Branding/bezier-g-nodes-medium-lockup-light.png": {
+      "size": [
+        340,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        12,
+        12,
+        289,
+        52
+      ]
+    },
+    "Branding/bezier-g-nodes-medium-lockup-light@2x.png": {
+      "size": [
+        680,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        25,
+        25,
+        577,
+        103
+      ]
+    },
+    "Branding/bezier-g-nodes-medium-symbol-dark.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        3,
+        3,
+        28,
+        29
+      ]
+    },
+    "Branding/bezier-g-nodes-medium-symbol-dark@2x.png": {
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        6,
+        6,
+        56,
+        58
+      ]
+    },
+    "Branding/bezier-g-nodes-medium-symbol-light.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        3,
+        3,
+        28,
+        29
+      ]
+    },
+    "Branding/bezier-g-nodes-medium-symbol-light@2x.png": {
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        6,
+        6,
+        56,
+        58
+      ]
+    },
+    "Sources/app-dark-preview.png": {
+      "size": [
+        192,
+        192
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        192,
+        192
+      ]
+    },
+    "Sources/app-light-preview.png": {
+      "size": [
+        288,
+        288
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        0,
+        288,
+        288
+      ]
+    },
+    "Sources/app-macos-preview.png": {
+      "size": [
+        288,
+        288
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        28,
+        28,
+        260,
+        260
+      ]
+    },
+    "Sources/document-preview.png": {
+      "size": [
+        288,
+        288
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        61,
+        25,
+        227,
+        263
+      ]
+    },
+    "iPad/Assets.xcassets/AppIcon.appiconset/AppIcon-any-1024.png": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        1024,
+        1024
+      ]
+    },
+    "iPad/Assets.xcassets/AppIcon.appiconset/AppIcon-dark-1024.png": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        186,
+        186,
+        812,
+        838
+      ]
+    },
+    "iPad/Assets.xcassets/AppIcon.appiconset/AppIcon-tinted-1024.png": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "L",
+      "alpha_bounds": [
+        0,
+        0,
+        1024,
+        1024
+      ]
+    },
+    "iPad/Documents/Document-ograph-128.png": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        27,
+        11,
+        101,
+        117
+      ]
+    },
+    "iPad/Documents/Document-ograph-128@2x.png": {
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        54,
+        22,
+        202,
+        234
+      ]
+    },
+    "iPad/Documents/Document-ograph-32.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        6,
+        2,
+        26,
+        30
+      ]
+    },
+    "iPad/Documents/Document-ograph-320.png": {
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        68,
+        28,
+        252,
+        292
+      ]
+    },
+    "iPad/Documents/Document-ograph-320@2x.png": {
+      "size": [
+        640,
+        640
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        136,
+        56,
+        504,
+        584
+      ]
+    },
+    "iPad/Documents/Document-ograph-32@2x.png": {
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        13,
+        5,
+        51,
+        59
+      ]
+    },
+    "iPad/Documents/Document-ograph-64.png": {
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        13,
+        5,
+        51,
+        59
+      ]
+    },
+    "iPad/Documents/Document-ograph-640.png": {
+      "size": [
+        640,
+        640
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        136,
+        56,
+        504,
+        584
+      ]
+    },
+    "iPad/Documents/Document-ograph-64@2x.png": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        27,
+        11,
+        101,
+        117
+      ]
+    },
+    "iPad/Documents/DocumentIconGraph-128.png": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        27,
+        11,
+        101,
+        117
+      ]
+    },
+    "iPad/Documents/DocumentIconGraph-128@2x.png": {
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        54,
+        22,
+        202,
+        234
+      ]
+    },
+    "iPad/Documents/DocumentIconGraph-32.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        6,
+        2,
+        26,
+        30
+      ]
+    },
+    "iPad/Documents/DocumentIconGraph-32@2x.png": {
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        13,
+        5,
+        51,
+        59
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-100.png": {
+      "size": [
+        100,
+        100
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        100,
+        100
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-1024.png": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        1024,
+        1024
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-144.png": {
+      "size": [
+        144,
+        144
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        144,
+        144
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-152.png": {
+      "size": [
+        152,
+        152
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        152,
+        152
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-167.png": {
+      "size": [
+        167,
+        167
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        167,
+        167
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-20.png": {
+      "size": [
+        20,
+        20
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        20,
+        20
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-29.png": {
+      "size": [
+        29,
+        29
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        29,
+        29
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-40.png": {
+      "size": [
+        40,
+        40
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        40,
+        40
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-50.png": {
+      "size": [
+        50,
+        50
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        50,
+        50
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-58.png": {
+      "size": [
+        58,
+        58
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        58,
+        58
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-72.png": {
+      "size": [
+        72,
+        72
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        72,
+        72
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-76.png": {
+      "size": [
+        76,
+        76
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        76,
+        76
+      ]
+    },
+    "iPad/Legacy/GraphSketcher-80.png": {
+      "size": [
+        80,
+        80
+      ],
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        80,
+        80
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_128x128.png": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        12,
+        12,
+        116,
+        116
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_128x128@2x.png": {
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        25,
+        25,
+        231,
+        231
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_16x16.png": {
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        1,
+        1,
+        15,
+        15
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_16x16@2x.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        3,
+        3,
+        29,
+        29
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_256x256.png": {
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        25,
+        25,
+        231,
+        231
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        50,
+        50,
+        462,
+        462
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_32x32.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        3,
+        3,
+        29,
+        29
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_32x32@2x.png": {
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        6,
+        6,
+        58,
+        58
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_512x512.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        50,
+        50,
+        462,
+        462
+      ]
+    },
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        100,
+        100,
+        924,
+        924
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_128x128.png": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        12,
+        12,
+        116,
+        116
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_128x128@2x.png": {
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        25,
+        25,
+        231,
+        231
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_16x16.png": {
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        1,
+        1,
+        15,
+        15
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_16x16@2x.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        3,
+        3,
+        29,
+        29
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_256x256.png": {
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        25,
+        25,
+        231,
+        231
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_256x256@2x.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        50,
+        50,
+        462,
+        462
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_32x32.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        3,
+        3,
+        29,
+        29
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_32x32@2x.png": {
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        6,
+        6,
+        58,
+        58
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_512x512.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        50,
+        50,
+        462,
+        462
+      ]
+    },
+    "macOS/GraphSketcher.iconset/icon_512x512@2x.png": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        100,
+        100,
+        924,
+        924
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_128x128.png": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        27,
+        11,
+        101,
+        117
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_128x128@2x.png": {
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        54,
+        22,
+        202,
+        234
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_16x16.png": {
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        3,
+        1,
+        13,
+        15
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_16x16@2x.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        6,
+        2,
+        26,
+        30
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_256x256.png": {
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        54,
+        22,
+        202,
+        234
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_256x256@2x.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        109,
+        45,
+        403,
+        467
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_32x32.png": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        6,
+        2,
+        26,
+        30
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_32x32@2x.png": {
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        13,
+        5,
+        51,
+        59
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_512x512.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        109,
+        45,
+        403,
+        467
+      ]
+    },
+    "macOS/GraphSketcherDocument.iconset/icon_512x512@2x.png": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_bounds": [
+        218,
+        90,
+        806,
+        934
+      ]
+    }
+  },
+  "source_sha256": {
+    "Masters/bezier-g-nodes-medium-lockup-dark.svg": "d4eabf4f8e01086783dce15418503682aed2c8d6597ad76f266669c2edbad147",
+    "Masters/bezier-g-nodes-medium-lockup-light.svg": "b3b7d88b916a308515f9964f61ebb909a9dc195f61dcc8c841070969abc8593a",
+    "Masters/bezier-g-nodes-medium-symbol-dark.svg": "3e104b40c3d863ec8675d50e289dce8a6273ad37acea2f68ae1787486ac510cc",
+    "Masters/bezier-g-nodes-medium-symbol-light.svg": "b78e2fcf33231933181c2ef48f71fa25d6c2e6ae36f21d3c4fc21ae1235d9e99"
+  },
+  "files": {
+    "Branding/bezier-g-nodes-medium-lockup-dark.pdf": "5e6155ebef17aba9435042f2e9bfa0a972806323e0df030db1954444d2e3c5f7",
+    "Branding/bezier-g-nodes-medium-lockup-dark.png": "cb047046fa056da4f74a86e16fe065a1a28444c216af3f44c95aa07d17fd1641",
+    "Branding/bezier-g-nodes-medium-lockup-dark.svg": "d4eabf4f8e01086783dce15418503682aed2c8d6597ad76f266669c2edbad147",
+    "Branding/bezier-g-nodes-medium-lockup-dark@2x.png": "7ff39054d62253423e93fcdd0e58e26a0099a43b4dd58815eb1a83938a7e9483",
+    "Branding/bezier-g-nodes-medium-lockup-light.pdf": "2898db6b3b9347f602b59aee7be74923f7bfb81cd358ca20f3f5f15324462b11",
+    "Branding/bezier-g-nodes-medium-lockup-light.png": "94cd3522c38ccb93cc6e2589838c4f070577850ba8c4ea866954c0ed23ce248d",
+    "Branding/bezier-g-nodes-medium-lockup-light.svg": "b3b7d88b916a308515f9964f61ebb909a9dc195f61dcc8c841070969abc8593a",
+    "Branding/bezier-g-nodes-medium-lockup-light@2x.png": "c9df44896545f6e626c9bc0b5946c21efad302de17ad1c81aaa106901a8fa7be",
+    "Branding/bezier-g-nodes-medium-symbol-dark.pdf": "3f1fe4b5586db0e542d33fa3eccd5357a9f92409111249634b0d1a5f2610d869",
+    "Branding/bezier-g-nodes-medium-symbol-dark.png": "c140672a555f46480857c0d9673bd16d2c0be34aebb1fdc1ef611b601ec7d71e",
+    "Branding/bezier-g-nodes-medium-symbol-dark.svg": "3e104b40c3d863ec8675d50e289dce8a6273ad37acea2f68ae1787486ac510cc",
+    "Branding/bezier-g-nodes-medium-symbol-dark@2x.png": "cfbe5295cf34ab60ea2ed6c329b7568d11a9d316c9e330b0552ae8499842ce4b",
+    "Branding/bezier-g-nodes-medium-symbol-light.pdf": "6da3a8f9761831c3a57b535670ad6d5c4e3e4816a1f63081b000ea3978d82a21",
+    "Branding/bezier-g-nodes-medium-symbol-light.png": "d226e80b3c29b308c5bb7c0657340dc748cc63f6dd7737e900eafa6268a7495d",
+    "Branding/bezier-g-nodes-medium-symbol-light.svg": "b78e2fcf33231933181c2ef48f71fa25d6c2e6ae36f21d3c4fc21ae1235d9e99",
+    "Branding/bezier-g-nodes-medium-symbol-light@2x.png": "6d0c80471f1b5ac41b00e2be153b4ba60c72ad20d33a615658bc5b2bece54019",
+    "GraphSketcher.icon/Assets/01-curve.svg": "a82a5a755da0230aed4e838faaf5fe5dfd0db56ed08556f47c7602b6979599c6",
+    "GraphSketcher.icon/Assets/02-nodes.svg": "efd7a1e4d7b4141aaea4f1e4d1cb3f18ce6a555b7cac7fecdbef6836cff19e22",
+    "GraphSketcher.icon/icon.json": "4e20ffb54c77208f9ddafc2c4ba962d26d7ac231ad23caee3d792da6b6280bb6",
+    "Sources/01-curve.svg": "a82a5a755da0230aed4e838faaf5fe5dfd0db56ed08556f47c7602b6979599c6",
+    "Sources/02-nodes.svg": "efd7a1e4d7b4141aaea4f1e4d1cb3f18ce6a555b7cac7fecdbef6836cff19e22",
+    "Sources/app-dark-preview.png": "a3dad8045a22b21371d69325d01cb6df471059d6261494ae6a69685aee4a8cac",
+    "Sources/app-dark-transparent.svg": "bf5e86b2c921ab90c66cebf85ac8b298eb7d4160e8cfd415726486f2598ed41f",
+    "Sources/app-dark.svg": "d66ac99ee95bddbf2e0a2edcf53f83e593ea00dc2dda977929048f472c036aa3",
+    "Sources/app-light-preview.png": "4e4152f821e79121522be493d4227eda9b0e8f19105c8da1dc88ba1667e1620c",
+    "Sources/app-light.svg": "060d8dab7769dd4b684ab458f6fdd3b795fe3da5ef9ccb13351dc37673e97756",
+    "Sources/app-macos-preview.png": "631addf559f4ae49b9df30ffe0310f05dcd5c93c1efdb2977d4397b2795ec77c",
+    "Sources/app-macos.svg": "71fe784a2b937a1e1e2eef04b2c38e65c57d8dd57601a9a12361f579176bdff9",
+    "Sources/app-tinted.svg": "76a9768f29bf13b9d8f8165ddf355252586e456da214ba92f549c3b824ebdf92",
+    "Sources/document-preview.png": "762651932eb63237a95078ce6558b326933def1b15850ff11f91348c95d66250",
+    "Sources/document.svg": "c6788b521e13c4ff2e71f09c7bbf250dcf0cafeadd400bbef8509145af345349",
+    "build-assets.py": "3547a11ebd0896e98862b98915fa7019c40c3bac1428b67bea92e611d9354e82",
+    "iPad/Assets.xcassets/AppIcon.appiconset/AppIcon-any-1024.png": "bd98b0e1fa6a686966119e0a5ffe3b32f5883127f58e6150bb84d3cabd3eab56",
+    "iPad/Assets.xcassets/AppIcon.appiconset/AppIcon-dark-1024.png": "d7f474ed0b65d599e9cbc6071ce1116ea932af9247039ad6ec85a7dc05e8b8c0",
+    "iPad/Assets.xcassets/AppIcon.appiconset/AppIcon-tinted-1024.png": "d08b9aa013078339bee3f753d66f6c69817008afe8b27a3041279eb1617d11d1",
+    "iPad/Assets.xcassets/AppIcon.appiconset/Contents.json": "1aa8e49cfe2dfc1a1cfd8dd3cb810798273791cd34e8515ede0946f826d38e2f",
+    "iPad/Assets.xcassets/Contents.json": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f",
+    "iPad/Documents/Document-ograph-128.png": "fa1bb1d599cc4b34b7a98a31dfab2a60a6f7a8ead5aed2a1b767fcbc631262f3",
+    "iPad/Documents/Document-ograph-128@2x.png": "ffbc8a10a632b260cbf59b5e124672af4a3412b1e0b3481f34a58120b99501d2",
+    "iPad/Documents/Document-ograph-32.png": "43145065f7bb0fa51885faa5578338957e7230c55a16aab727941e7fb7d5a338",
+    "iPad/Documents/Document-ograph-320.png": "97e1b141f7f2004bc50fc32c01d4bcfebd58b82ad9a54d85e931084deab39b68",
+    "iPad/Documents/Document-ograph-320@2x.png": "d777ad9277c848180bd34c6182c049a138ee96e446863a345a1fed9f2c5f10cc",
+    "iPad/Documents/Document-ograph-32@2x.png": "74b5efcac4319d8af3304af882129ac9812508e7ea4174dd63d5b59a50a8fdd8",
+    "iPad/Documents/Document-ograph-64.png": "74b5efcac4319d8af3304af882129ac9812508e7ea4174dd63d5b59a50a8fdd8",
+    "iPad/Documents/Document-ograph-640.png": "d777ad9277c848180bd34c6182c049a138ee96e446863a345a1fed9f2c5f10cc",
+    "iPad/Documents/Document-ograph-64@2x.png": "fa1bb1d599cc4b34b7a98a31dfab2a60a6f7a8ead5aed2a1b767fcbc631262f3",
+    "iPad/Documents/DocumentIconGraph-128.png": "fa1bb1d599cc4b34b7a98a31dfab2a60a6f7a8ead5aed2a1b767fcbc631262f3",
+    "iPad/Documents/DocumentIconGraph-128@2x.png": "ffbc8a10a632b260cbf59b5e124672af4a3412b1e0b3481f34a58120b99501d2",
+    "iPad/Documents/DocumentIconGraph-32.png": "43145065f7bb0fa51885faa5578338957e7230c55a16aab727941e7fb7d5a338",
+    "iPad/Documents/DocumentIconGraph-32@2x.png": "74b5efcac4319d8af3304af882129ac9812508e7ea4174dd63d5b59a50a8fdd8",
+    "iPad/Legacy/GraphSketcher-100.png": "8522c6dcb82538096e1a20a0ae716426127b7e56091b6eeae0e129a2e8e1751f",
+    "iPad/Legacy/GraphSketcher-1024.png": "bd98b0e1fa6a686966119e0a5ffe3b32f5883127f58e6150bb84d3cabd3eab56",
+    "iPad/Legacy/GraphSketcher-144.png": "fcdfbead687382f10ba4bd98c75e4cab4b4ab41cc453a12481e3c0ac8c299ed4",
+    "iPad/Legacy/GraphSketcher-152.png": "fe5d159810ab9065bdc0944ce2c28e2a72f99e1dcf63fb947a1ab1dfe7433ffc",
+    "iPad/Legacy/GraphSketcher-167.png": "bd99d9fcf0f918aa03b28ba8e72db8399071d371d2636715d42b5f9a8eaeac06",
+    "iPad/Legacy/GraphSketcher-20.png": "51962d619a8e471de5092b369c3fb7d8431728345e2337f5fb38daa6d1516689",
+    "iPad/Legacy/GraphSketcher-29.png": "281002060bc45670a64bb5417f0adc8e6fb75f98d1016c97f40238c11011cc4c",
+    "iPad/Legacy/GraphSketcher-40.png": "deed1f3e7c607cb7bb48269b51f9b124fe8ea3e3b3c784bac5caab539d02eb02",
+    "iPad/Legacy/GraphSketcher-50.png": "7eef1c0535d42da5317bd78b627f8a340b953bca664254311842a374d41b2e69",
+    "iPad/Legacy/GraphSketcher-58.png": "8450ee23ee493135971062248e3b68549f2f8269ec2abd4901eb1071d2e0922d",
+    "iPad/Legacy/GraphSketcher-72.png": "e7fc327aba57a167b731d56cb6377e2f809efec9817198866f82df6f2946f2ac",
+    "iPad/Legacy/GraphSketcher-76.png": "eed2fa1319e3f28eac7f6d7dd0e803ab5e2a31f7aee7d763380d1c7e57f48abc",
+    "iPad/Legacy/GraphSketcher-80.png": "c66145dc52552073421f221ed2a31e36a1c555c2d7c66c75bae01d4237d1bb8a",
+    "macOS/Assets.xcassets/AppIcon.appiconset/Contents.json": "7155e04b17691591a1f0b09c05b5280c670de80254d06e18bd204da67819db2f",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_128x128.png": "8e64687b6a2100661ee60653f26abc10a4bda229dd6e8b2a19eea3125678ee75",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_128x128@2x.png": "f03476e4183ec4281e208268180058269dda6b489c69f293ec4c8c70b371f51a",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_16x16.png": "ec83e5e8894cf9fda137c786c5730a7b2bf4712e7f7a4d8ff68046219674f858",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_16x16@2x.png": "6712f3013ea7aa0b9a0f894fd9c19db84f7b8efa0e91d2b17cf20f554397c0f1",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_256x256.png": "f03476e4183ec4281e208268180058269dda6b489c69f293ec4c8c70b371f51a",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png": "1a9946c30371d7338c2a1f8c02da236ecd580bd1b799014029d34525357de1f3",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_32x32.png": "6712f3013ea7aa0b9a0f894fd9c19db84f7b8efa0e91d2b17cf20f554397c0f1",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_32x32@2x.png": "04ddd3ffdf22d18f62e33eed94753ba294825aefa162a0a7aac4a4a1c30a7309",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_512x512.png": "1a9946c30371d7338c2a1f8c02da236ecd580bd1b799014029d34525357de1f3",
+    "macOS/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png": "e23559a24ed44a34008a1e4c121706f8033188259e5bd1b6c542a603f4c288b5",
+    "macOS/Assets.xcassets/Contents.json": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f",
+    "macOS/GSAppIcon.icns": "919613cc74014f9530f42674001c999539518567779c0998662371fbc6a16855",
+    "macOS/GSDocIcon.icns": "02e26b700061d5654a2ee84ad82f43616c380c89b04a5b34bde2c55726646e8e",
+    "macOS/GraphSketcher.iconset/icon_128x128.png": "8e64687b6a2100661ee60653f26abc10a4bda229dd6e8b2a19eea3125678ee75",
+    "macOS/GraphSketcher.iconset/icon_128x128@2x.png": "f03476e4183ec4281e208268180058269dda6b489c69f293ec4c8c70b371f51a",
+    "macOS/GraphSketcher.iconset/icon_16x16.png": "ec83e5e8894cf9fda137c786c5730a7b2bf4712e7f7a4d8ff68046219674f858",
+    "macOS/GraphSketcher.iconset/icon_16x16@2x.png": "6712f3013ea7aa0b9a0f894fd9c19db84f7b8efa0e91d2b17cf20f554397c0f1",
+    "macOS/GraphSketcher.iconset/icon_256x256.png": "f03476e4183ec4281e208268180058269dda6b489c69f293ec4c8c70b371f51a",
+    "macOS/GraphSketcher.iconset/icon_256x256@2x.png": "1a9946c30371d7338c2a1f8c02da236ecd580bd1b799014029d34525357de1f3",
+    "macOS/GraphSketcher.iconset/icon_32x32.png": "6712f3013ea7aa0b9a0f894fd9c19db84f7b8efa0e91d2b17cf20f554397c0f1",
+    "macOS/GraphSketcher.iconset/icon_32x32@2x.png": "04ddd3ffdf22d18f62e33eed94753ba294825aefa162a0a7aac4a4a1c30a7309",
+    "macOS/GraphSketcher.iconset/icon_512x512.png": "1a9946c30371d7338c2a1f8c02da236ecd580bd1b799014029d34525357de1f3",
+    "macOS/GraphSketcher.iconset/icon_512x512@2x.png": "e23559a24ed44a34008a1e4c121706f8033188259e5bd1b6c542a603f4c288b5",
+    "macOS/GraphSketcherDocument.iconset/icon_128x128.png": "fa1bb1d599cc4b34b7a98a31dfab2a60a6f7a8ead5aed2a1b767fcbc631262f3",
+    "macOS/GraphSketcherDocument.iconset/icon_128x128@2x.png": "ffbc8a10a632b260cbf59b5e124672af4a3412b1e0b3481f34a58120b99501d2",
+    "macOS/GraphSketcherDocument.iconset/icon_16x16.png": "c4e5220854071480491e643d049cef4a9053e554e1e7fe016d346b9a19ed068d",
+    "macOS/GraphSketcherDocument.iconset/icon_16x16@2x.png": "43145065f7bb0fa51885faa5578338957e7230c55a16aab727941e7fb7d5a338",
+    "macOS/GraphSketcherDocument.iconset/icon_256x256.png": "ffbc8a10a632b260cbf59b5e124672af4a3412b1e0b3481f34a58120b99501d2",
+    "macOS/GraphSketcherDocument.iconset/icon_256x256@2x.png": "8b9a48498c732dcf99610784638a4378567d41b0c97cf89021e46a06aaf7e2ab",
+    "macOS/GraphSketcherDocument.iconset/icon_32x32.png": "43145065f7bb0fa51885faa5578338957e7230c55a16aab727941e7fb7d5a338",
+    "macOS/GraphSketcherDocument.iconset/icon_32x32@2x.png": "74b5efcac4319d8af3304af882129ac9812508e7ea4174dd63d5b59a50a8fdd8",
+    "macOS/GraphSketcherDocument.iconset/icon_512x512.png": "8b9a48498c732dcf99610784638a4378567d41b0c97cf89021e46a06aaf7e2ab",
+    "macOS/GraphSketcherDocument.iconset/icon_512x512@2x.png": "d3a08fc1be5e1a254b2b659ffe663aa4319c55b716fd571314ff9be2a4021caf",
+    "preview-apple-appearances.png": "169bdb43f478f003967de4f7f85730cbfd4883aa5bd621f661e611a301c2093c",
+    "preview-delivery.png": "19d3d3792712d99000c125bd1fb89d89c7bf70738b58124e28ee90cfcf4aa057",
+    "verify-apple-assets.py": "d64c27e584210cf5ea736e6a6874b46d14fac493d6563ad616770fbec6dde550"
+  }
+}

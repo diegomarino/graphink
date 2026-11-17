@@ -1,0 +1,380 @@
+{
+  "arrowEndsDisabled": {
+    "source": "gs-arrowEndsDisabled.svg",
+    "width": 84.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Arrowhead placement preview when unavailable"
+  },
+  "arrowEndsEnabled": {
+    "source": "gs-arrowEndsEnabled.svg",
+    "width": 84.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Arrowhead placement preview for an eligible line"
+  },
+  "axisPlacementBothEdgesX": {
+    "source": "gs-axisPlacementBothEdgesX.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "X-axis placement: both graph edges"
+  },
+  "axisPlacementBothEdgesY": {
+    "source": "gs-axisPlacementBothEdgesY.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Y-axis placement: both graph edges"
+  },
+  "axisPlacementEdgeX": {
+    "source": "gs-axisPlacementEdgeX.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "X-axis placement: graph edge"
+  },
+  "axisPlacementEdgeY": {
+    "source": "gs-axisPlacementEdgeY.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Y-axis placement: graph edge"
+  },
+  "axisPlacementNoneX": {
+    "source": "gs-axisPlacementNoneX.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "X-axis placement: hidden"
+  },
+  "axisPlacementNoneY": {
+    "source": "gs-axisPlacementNoneY.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Y-axis placement: hidden"
+  },
+  "axisPlacementOriginX": {
+    "source": "gs-axisPlacementOriginX.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "X-axis placement: origin"
+  },
+  "axisPlacementOriginY": {
+    "source": "gs-axisPlacementOriginY.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Y-axis placement: origin"
+  },
+  "axisTickLabelsX": {
+    "source": "gs-axisTickLabelsX.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Show or hide X-axis tick labels"
+  },
+  "axisTickLabelsY": {
+    "source": "gs-axisTickLabelsY.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Show or hide Y-axis tick labels"
+  },
+  "axisTickMarksX": {
+    "source": "gs-axisTickMarksX.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Show or hide X-axis tick marks"
+  },
+  "axisTickMarksY": {
+    "source": "gs-axisTickMarksY.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Show or hide Y-axis tick marks"
+  },
+  "axisTitleX": {
+    "source": "gs-axisTitleX.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Show or hide X-axis title"
+  },
+  "axisTitleY": {
+    "source": "gs-axisTitleY.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Show or hide Y-axis title"
+  },
+  "canvasHeight": {
+    "source": "gs-canvasHeight.svg",
+    "width": 14.0,
+    "height": 18.0,
+    "template": true,
+    "meaning": "Canvas height indicator"
+  },
+  "canvasWidth": {
+    "source": "gs-canvasWidth.svg",
+    "width": 14.0,
+    "height": 18.0,
+    "template": true,
+    "meaning": "Canvas width indicator"
+  },
+  "copyAsImageIcon": {
+    "source": "gs-copyAsImageIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Copy the graph as a PDF image"
+  },
+  "detachIcon": {
+    "source": "gs-detachIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Detach selected objects from snapped relationships"
+  },
+  "drawTool": {
+    "source": "gs-drawTool.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Create connected points and lines"
+  },
+  "errorBarsIcon": {
+    "source": "gs-errorBarsIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Create error bars from selected points"
+  },
+  "errorbar-for-sheet": {
+    "source": "gs-errorbar-for-sheet.svg",
+    "width": 12.0,
+    "height": 51.0,
+    "template": true,
+    "meaning": "Error-bar sheet: upper and lower extent around the selected data value"
+  },
+  "fillTool": {
+    "source": "gs-fillTool.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Create a filled region bounded by points"
+  },
+  "gridDisplayHorizontal": {
+    "source": "gs-gridDisplayHorizontal.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Show or hide horizontal grid lines"
+  },
+  "gridDisplayVertical": {
+    "source": "gs-gridDisplayVertical.svg",
+    "width": 32.0,
+    "height": 32.0,
+    "template": true,
+    "meaning": "Show or hide vertical grid lines"
+  },
+  "groupIcon": {
+    "source": "gs-groupIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Group selected objects"
+  },
+  "hideGridIcon": {
+    "source": "gs-hideGridIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Hide graph grid"
+  },
+  "inspectorAxes": {
+    "source": "gs-inspectorAxes.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Axes inspector section"
+  },
+  "inspectorCanvas": {
+    "source": "gs-inspectorCanvas.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Canvas inspector section"
+  },
+  "inspectorData": {
+    "source": "gs-inspectorData.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Data points inspector section"
+  },
+  "inspectorIcon": {
+    "source": "gs-inspectorIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Show or hide the inspector"
+  },
+  "inspectorStyle": {
+    "source": "gs-inspectorStyle.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Style inspector section"
+  },
+  "interpolateIcon": {
+    "source": "gs-interpolateIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Redistribute points evenly along selected lines"
+  },
+  "lineTypeBestFit": {
+    "source": "gs-lineTypeBestFit.svg",
+    "width": 24.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Fit a regression line to points"
+  },
+  "lineTypeCurved": {
+    "source": "gs-lineTypeCurved.svg",
+    "width": 19.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Connect points with a curve"
+  },
+  "lineTypeNone": {
+    "source": "gs-lineTypeNone.svg",
+    "width": 19.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Do not connect points"
+  },
+  "lineTypeStraight": {
+    "source": "gs-lineTypeStraight.svg",
+    "width": 19.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Connect points with straight segments"
+  },
+  "lockIcon": {
+    "source": "gs-lockIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Lock selected objects in position"
+  },
+  "modifyTool": {
+    "source": "gs-modifyTool.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Select and edit graph objects"
+  },
+  "opaqueWindowIcon": {
+    "source": "gs-opaqueWindowIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Make the graph window opaque"
+  },
+  "pointTypeHorizontalBar": {
+    "source": "gs-pointTypeHorizontalBar.svg",
+    "width": 12.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Point type: horizontal bar"
+  },
+  "pointTypeNone": {
+    "source": "gs-pointTypeNone.svg",
+    "width": 12.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Point type: hidden"
+  },
+  "pointTypePoint": {
+    "source": "gs-pointTypePoint.svg",
+    "width": 12.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Point type: shape"
+  },
+  "pointTypeTick": {
+    "source": "gs-pointTypeTick.svg",
+    "width": 12.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Point type: tick mark"
+  },
+  "pointTypeVerticalBar": {
+    "source": "gs-pointTypeVerticalBar.svg",
+    "width": 12.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Point type: vertical bar"
+  },
+  "scaleDownIcon": {
+    "source": "gs-scaleDownIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Fit axis ranges to the data"
+  },
+  "shadowNone": {
+    "source": "gs-shadowNone.svg",
+    "width": 12.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Graph shadow: none"
+  },
+  "shadowStrong": {
+    "source": "gs-shadowStrong.svg",
+    "width": 12.0,
+    "height": 12.0,
+    "template": true,
+    "meaning": "Graph shadow: strong"
+  },
+  "showGridIcon": {
+    "source": "gs-showGridIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Show graph grid"
+  },
+  "textTool": {
+    "source": "gs-textTool.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Add a text label"
+  },
+  "transparentWindowIcon": {
+    "source": "gs-transparentWindowIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Make the graph window transparent"
+  },
+  "ungroupIcon": {
+    "source": "gs-ungroupIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Ungroup selected objects"
+  },
+  "unlockIcon": {
+    "source": "gs-unlockIcon.svg",
+    "width": 24.0,
+    "height": 24.0,
+    "template": true,
+    "meaning": "Unlock selected objects"
+  }
+}

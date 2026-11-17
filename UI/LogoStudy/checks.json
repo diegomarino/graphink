@@ -1,0 +1,1959 @@
+{
+  "status": "Study pending human choice",
+  "renderer": "rsvg-convert version 2.63.4",
+  "masters": {
+    "axes-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          15,
+          15,
+          289,
+          49
+        ],
+        "pdf_ink_bounds": [
+          16,
+          15,
+          288,
+          48
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          31,
+          31,
+          577,
+          97
+        ],
+        "pdf_ink_bounds": [
+          31,
+          31,
+          577,
+          97
+        ]
+      }
+    ],
+    "axes-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          15,
+          15,
+          289,
+          49
+        ],
+        "pdf_ink_bounds": [
+          16,
+          15,
+          288,
+          48
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          31,
+          31,
+          577,
+          97
+        ],
+        "pdf_ink_bounds": [
+          31,
+          31,
+          577,
+          97
+        ]
+      }
+    ],
+    "axes-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          5,
+          5,
+          28,
+          27
+        ],
+        "pdf_ink_bounds": [
+          5,
+          5,
+          28,
+          27
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          10,
+          10,
+          56,
+          54
+        ],
+        "pdf_ink_bounds": [
+          10,
+          10,
+          56,
+          54
+        ]
+      }
+    ],
+    "axes-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          5,
+          5,
+          28,
+          27
+        ],
+        "pdf_ink_bounds": [
+          5,
+          5,
+          28,
+          27
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          10,
+          10,
+          56,
+          54
+        ],
+        "pdf_ink_bounds": [
+          10,
+          10,
+          56,
+          54
+        ]
+      }
+    ],
+    "bezier-g-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          14,
+          14,
+          289,
+          51
+        ],
+        "pdf_ink_bounds": [
+          14,
+          14,
+          288,
+          51
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          29,
+          29,
+          577,
+          102
+        ],
+        "pdf_ink_bounds": [
+          29,
+          29,
+          577,
+          102
+        ]
+      }
+    ],
+    "bezier-g-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          14,
+          14,
+          289,
+          51
+        ],
+        "pdf_ink_bounds": [
+          14,
+          14,
+          288,
+          51
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          29,
+          29,
+          577,
+          102
+        ],
+        "pdf_ink_bounds": [
+          29,
+          29,
+          577,
+          102
+        ]
+      }
+    ],
+    "bezier-g-nodes-black-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          12,
+          289,
+          52
+        ],
+        "pdf_ink_bounds": [
+          14,
+          14,
+          288,
+          50
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          25,
+          577,
+          103
+        ],
+        "pdf_ink_bounds": [
+          28,
+          28,
+          577,
+          100
+        ]
+      }
+    ],
+    "bezier-g-nodes-black-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          12,
+          289,
+          52
+        ],
+        "pdf_ink_bounds": [
+          12,
+          12,
+          288,
+          52
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          25,
+          577,
+          103
+        ],
+        "pdf_ink_bounds": [
+          25,
+          25,
+          577,
+          104
+        ]
+      }
+    ],
+    "bezier-g-nodes-black-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          4,
+          4,
+          27,
+          28
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          6,
+          56,
+          58
+        ],
+        "pdf_ink_bounds": [
+          8,
+          8,
+          54,
+          56
+        ]
+      }
+    ],
+    "bezier-g-nodes-black-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          29,
+          30
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          6,
+          56,
+          58
+        ],
+        "pdf_ink_bounds": [
+          6,
+          6,
+          57,
+          59
+        ]
+      }
+    ],
+    "bezier-g-nodes-large-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          12,
+          289,
+          52
+        ],
+        "pdf_ink_bounds": [
+          12,
+          12,
+          288,
+          52
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          25,
+          577,
+          103
+        ],
+        "pdf_ink_bounds": [
+          25,
+          25,
+          577,
+          104
+        ]
+      }
+    ],
+    "bezier-g-nodes-large-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          12,
+          289,
+          52
+        ],
+        "pdf_ink_bounds": [
+          12,
+          12,
+          288,
+          52
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          25,
+          577,
+          103
+        ],
+        "pdf_ink_bounds": [
+          25,
+          25,
+          577,
+          104
+        ]
+      }
+    ],
+    "bezier-g-nodes-large-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          29,
+          30
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          6,
+          56,
+          58
+        ],
+        "pdf_ink_bounds": [
+          6,
+          6,
+          57,
+          59
+        ]
+      }
+    ],
+    "bezier-g-nodes-large-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          29,
+          30
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          6,
+          56,
+          58
+        ],
+        "pdf_ink_bounds": [
+          6,
+          6,
+          57,
+          59
+        ]
+      }
+    ],
+    "bezier-g-nodes-large-warm-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          12,
+          289,
+          52
+        ],
+        "pdf_ink_bounds": [
+          12,
+          12,
+          288,
+          52
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          25,
+          577,
+          103
+        ],
+        "pdf_ink_bounds": [
+          25,
+          25,
+          577,
+          104
+        ]
+      }
+    ],
+    "bezier-g-nodes-large-warm-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          12,
+          289,
+          52
+        ],
+        "pdf_ink_bounds": [
+          12,
+          12,
+          288,
+          52
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          25,
+          577,
+          103
+        ],
+        "pdf_ink_bounds": [
+          25,
+          25,
+          577,
+          104
+        ]
+      }
+    ],
+    "bezier-g-nodes-large-warm-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          29,
+          30
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          6,
+          56,
+          58
+        ],
+        "pdf_ink_bounds": [
+          6,
+          6,
+          57,
+          59
+        ]
+      }
+    ],
+    "bezier-g-nodes-large-warm-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          29,
+          30
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          6,
+          56,
+          58
+        ],
+        "pdf_ink_bounds": [
+          6,
+          6,
+          57,
+          59
+        ]
+      }
+    ],
+    "bezier-g-nodes-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          13,
+          13,
+          289,
+          51
+        ],
+        "pdf_ink_bounds": [
+          13,
+          13,
+          288,
+          51
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          26,
+          26,
+          577,
+          102
+        ],
+        "pdf_ink_bounds": [
+          26,
+          26,
+          577,
+          102
+        ]
+      }
+    ],
+    "bezier-g-nodes-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          13,
+          13,
+          289,
+          51
+        ],
+        "pdf_ink_bounds": [
+          13,
+          13,
+          288,
+          51
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          26,
+          26,
+          577,
+          102
+        ],
+        "pdf_ink_bounds": [
+          26,
+          26,
+          577,
+          102
+        ]
+      }
+    ],
+    "bezier-g-nodes-medium-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          12,
+          289,
+          52
+        ],
+        "pdf_ink_bounds": [
+          12,
+          12,
+          288,
+          52
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          25,
+          577,
+          103
+        ],
+        "pdf_ink_bounds": [
+          25,
+          25,
+          577,
+          103
+        ]
+      }
+    ],
+    "bezier-g-nodes-medium-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          12,
+          289,
+          52
+        ],
+        "pdf_ink_bounds": [
+          12,
+          12,
+          288,
+          52
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          25,
+          577,
+          103
+        ],
+        "pdf_ink_bounds": [
+          25,
+          25,
+          577,
+          103
+        ]
+      }
+    ],
+    "bezier-g-nodes-medium-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          28,
+          29
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          6,
+          56,
+          58
+        ],
+        "pdf_ink_bounds": [
+          6,
+          6,
+          56,
+          58
+        ]
+      }
+    ],
+    "bezier-g-nodes-medium-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          28,
+          29
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          6,
+          56,
+          58
+        ],
+        "pdf_ink_bounds": [
+          6,
+          6,
+          56,
+          58
+        ]
+      }
+    ],
+    "bezier-g-nodes-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          28,
+          29
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          7,
+          7,
+          55,
+          57
+        ],
+        "pdf_ink_bounds": [
+          7,
+          7,
+          55,
+          57
+        ]
+      }
+    ],
+    "bezier-g-nodes-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          28,
+          29
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          7,
+          7,
+          55,
+          57
+        ],
+        "pdf_ink_bounds": [
+          7,
+          7,
+          55,
+          57
+        ]
+      }
+    ],
+    "bezier-g-nodes-warm-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          13,
+          13,
+          289,
+          51
+        ],
+        "pdf_ink_bounds": [
+          13,
+          13,
+          288,
+          51
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          26,
+          26,
+          577,
+          102
+        ],
+        "pdf_ink_bounds": [
+          26,
+          26,
+          577,
+          102
+        ]
+      }
+    ],
+    "bezier-g-nodes-warm-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          13,
+          13,
+          289,
+          51
+        ],
+        "pdf_ink_bounds": [
+          13,
+          13,
+          288,
+          51
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          26,
+          26,
+          577,
+          102
+        ],
+        "pdf_ink_bounds": [
+          26,
+          26,
+          577,
+          102
+        ]
+      }
+    ],
+    "bezier-g-nodes-warm-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          28,
+          29
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          7,
+          7,
+          55,
+          57
+        ],
+        "pdf_ink_bounds": [
+          7,
+          7,
+          55,
+          57
+        ]
+      }
+    ],
+    "bezier-g-nodes-warm-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          3,
+          28,
+          29
+        ],
+        "pdf_ink_bounds": [
+          3,
+          3,
+          28,
+          29
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          7,
+          7,
+          55,
+          57
+        ],
+        "pdf_ink_bounds": [
+          7,
+          7,
+          55,
+          57
+        ]
+      }
+    ],
+    "bezier-g-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          4,
+          4,
+          27,
+          29
+        ],
+        "pdf_ink_bounds": [
+          4,
+          4,
+          28,
+          29
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          9,
+          8,
+          54,
+          58
+        ],
+        "pdf_ink_bounds": [
+          9,
+          9,
+          55,
+          58
+        ]
+      }
+    ],
+    "bezier-g-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          4,
+          4,
+          27,
+          29
+        ],
+        "pdf_ink_bounds": [
+          4,
+          4,
+          28,
+          29
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          9,
+          8,
+          54,
+          58
+        ],
+        "pdf_ink_bounds": [
+          9,
+          9,
+          55,
+          58
+        ]
+      }
+    ],
+    "bezier-gs-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          16,
+          289,
+          49
+        ],
+        "pdf_ink_bounds": [
+          12,
+          16,
+          288,
+          48
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          32,
+          577,
+          97
+        ],
+        "pdf_ink_bounds": [
+          25,
+          32,
+          577,
+          96
+        ]
+      }
+    ],
+    "bezier-gs-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          12,
+          16,
+          289,
+          49
+        ],
+        "pdf_ink_bounds": [
+          12,
+          16,
+          288,
+          48
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          25,
+          32,
+          577,
+          97
+        ],
+        "pdf_ink_bounds": [
+          25,
+          32,
+          577,
+          96
+        ]
+      }
+    ],
+    "bezier-gs-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          5,
+          29,
+          27
+        ],
+        "pdf_ink_bounds": [
+          3,
+          5,
+          29,
+          27
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          10,
+          58,
+          54
+        ],
+        "pdf_ink_bounds": [
+          6,
+          10,
+          58,
+          53
+        ]
+      }
+    ],
+    "bezier-gs-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          3,
+          5,
+          29,
+          27
+        ],
+        "pdf_ink_bounds": [
+          3,
+          5,
+          29,
+          27
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          6,
+          10,
+          58,
+          54
+        ],
+        "pdf_ink_bounds": [
+          6,
+          10,
+          58,
+          53
+        ]
+      }
+    ],
+    "curve-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          11,
+          16,
+          289,
+          49
+        ],
+        "pdf_ink_bounds": [
+          11,
+          16,
+          288,
+          48
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          23,
+          32,
+          577,
+          97
+        ],
+        "pdf_ink_bounds": [
+          23,
+          32,
+          577,
+          96
+        ]
+      }
+    ],
+    "curve-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          11,
+          16,
+          289,
+          49
+        ],
+        "pdf_ink_bounds": [
+          11,
+          16,
+          288,
+          48
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          23,
+          32,
+          577,
+          97
+        ],
+        "pdf_ink_bounds": [
+          23,
+          32,
+          577,
+          96
+        ]
+      }
+    ],
+    "curve-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          2,
+          5,
+          28,
+          27
+        ],
+        "pdf_ink_bounds": [
+          2,
+          5,
+          28,
+          27
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          5,
+          11,
+          55,
+          53
+        ],
+        "pdf_ink_bounds": [
+          5,
+          11,
+          56,
+          54
+        ]
+      }
+    ],
+    "curve-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          2,
+          5,
+          28,
+          27
+        ],
+        "pdf_ink_bounds": [
+          2,
+          5,
+          28,
+          27
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          5,
+          11,
+          55,
+          53
+        ],
+        "pdf_ink_bounds": [
+          5,
+          11,
+          56,
+          54
+        ]
+      }
+    ],
+    "heritage-lockup-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          14,
+          14,
+          289,
+          50
+        ],
+        "pdf_ink_bounds": [
+          15,
+          14,
+          288,
+          49
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          29,
+          29,
+          577,
+          99
+        ],
+        "pdf_ink_bounds": [
+          29,
+          29,
+          577,
+          99
+        ]
+      }
+    ],
+    "heritage-lockup-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          340,
+          64
+        ],
+        "alpha_bounds": [
+          14,
+          14,
+          289,
+          50
+        ],
+        "pdf_ink_bounds": [
+          15,
+          14,
+          288,
+          49
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          680,
+          128
+        ],
+        "alpha_bounds": [
+          29,
+          29,
+          577,
+          99
+        ],
+        "pdf_ink_bounds": [
+          29,
+          29,
+          577,
+          99
+        ]
+      }
+    ],
+    "heritage-symbol-dark.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          4,
+          4,
+          29,
+          28
+        ],
+        "pdf_ink_bounds": [
+          4,
+          4,
+          29,
+          28
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          8,
+          8,
+          58,
+          56
+        ],
+        "pdf_ink_bounds": [
+          9,
+          8,
+          58,
+          55
+        ]
+      }
+    ],
+    "heritage-symbol-light.svg": [
+      {
+        "scale": 1,
+        "pixels": [
+          32,
+          32
+        ],
+        "alpha_bounds": [
+          4,
+          4,
+          29,
+          28
+        ],
+        "pdf_ink_bounds": [
+          4,
+          4,
+          29,
+          28
+        ]
+      },
+      {
+        "scale": 2,
+        "pixels": [
+          64,
+          64
+        ],
+        "alpha_bounds": [
+          8,
+          8,
+          58,
+          56
+        ],
+        "pdf_ink_bounds": [
+          9,
+          8,
+          58,
+          55
+        ]
+      }
+    ]
+  },
+  "sha256": {
+    "Exports/axes-lockup-dark.pdf": "eb699251e4d79ec4765c18100ac44fc8ee6dcd87a093a733dcbd507625ed1859",
+    "Exports/axes-lockup-dark.png": "8d7ef4eeceea740781ab0f592a26f5eb67cdf943325be154713b05feca3dec05",
+    "Exports/axes-lockup-dark@2x.png": "1c30009c43931e34976ac6a92eed8b521240844df5150dc033375968a0ffda21",
+    "Exports/axes-lockup-light.pdf": "adf79a68b703da4ba90b1749f71d42d9368d45347c9be84cd4d24b7d01e575e6",
+    "Exports/axes-lockup-light.png": "baf1d8b022297c2824b12bd33a9f56cb3976b4ca5ce5cb039af8b8ab0bfec92c",
+    "Exports/axes-lockup-light@2x.png": "01d882c64334d55d2ad5bc80647cebf4eb1b701433f9d83bd74528204bdefbfa",
+    "Exports/axes-symbol-dark.pdf": "3a1f3a4fd7b5a108374ad7588d340c4a02f0c641a5ccfb4f2123382baf64860d",
+    "Exports/axes-symbol-dark.png": "f090ce30dfea3f7b109b6f39c5ca32698d4b648e8558f1339661a99f0d4154a8",
+    "Exports/axes-symbol-dark@2x.png": "ac0851567c205e8052572e8ec93db9654cad2d6f263e24e07ca16279157a4f8e",
+    "Exports/axes-symbol-light.pdf": "bb9dc737d92faa48559447998983109bd837929f8ca9164dcf348a537620fddd",
+    "Exports/axes-symbol-light.png": "a09fb25ad807d49e0e670d91540f40f2bd1448f7a9abe4a5f0b28a8ad24c4381",
+    "Exports/axes-symbol-light@2x.png": "465141ec5e4722df6ae807d3896fa76d529568d94802e45ba86311bc1dcb3945",
+    "Exports/bezier-g-lockup-dark.pdf": "e6d1af3dcdbf5d35b220c6065307c53c3cb430a0f1a39d051b9a4b5936e5788b",
+    "Exports/bezier-g-lockup-dark.png": "f4d7258537a9188b97221460199bf5b37743fa6e7ebd2bd6d60a05ea6553e40f",
+    "Exports/bezier-g-lockup-dark@2x.png": "cd8d2bce7be23820d44b32efe3a3f0e41abe8e33144e0d2dd6cded1b1c73c86e",
+    "Exports/bezier-g-lockup-light.pdf": "d52ecc9a311b6b96120c5101ea7603d65b1c2d37662644b6c501d1a02ea78d21",
+    "Exports/bezier-g-lockup-light.png": "d70e3cb4a6124c750d6f682a61cbe99dbfc1dac2e507b1cc34b81ed5a9dffc3c",
+    "Exports/bezier-g-lockup-light@2x.png": "49a47252e4b2674b2026b0bd1436ed2bf5dae62127e17c13a23f5a5e520882e1",
+    "Exports/bezier-g-nodes-black-lockup-dark.pdf": "a7a1e39750d9e63818dd45cfb7ca3717ea5f2b6a47ba0f220a3ba20c611533fe",
+    "Exports/bezier-g-nodes-black-lockup-dark.png": "77dae4826d1982127fc76aab471ece7af614bb1fe9fd3eedaa4a053886e40166",
+    "Exports/bezier-g-nodes-black-lockup-dark@2x.png": "2d6136bc6453c12bd3e2fce6f3f5a71f2a3d2b4fc45732a9d89304d7273be5f3",
+    "Exports/bezier-g-nodes-black-lockup-light.pdf": "5f5fa4ad50273e56fae1f1a67805617e3f40703ea6bc37ff55ccc844e0d3f754",
+    "Exports/bezier-g-nodes-black-lockup-light.png": "e8a873c525d5fce36bffbc039ba218c6eb73d17b0b8dee8dcaad21ad8922ef85",
+    "Exports/bezier-g-nodes-black-lockup-light@2x.png": "01a8dd11ec0742c72b033454d2d5d9561363b2e61cce23d861a111487c5f474a",
+    "Exports/bezier-g-nodes-black-symbol-dark.pdf": "3368fb54bb87c019ff73c4a58109cfc9b5470bd0160f39c60406cc519d1e17df",
+    "Exports/bezier-g-nodes-black-symbol-dark.png": "a63055a1cc37a1d400ec0dff5c25831b013f5bce907bd6ee67eaa981358f817d",
+    "Exports/bezier-g-nodes-black-symbol-dark@2x.png": "205a3bfab52cdbcd745f73533f2c65ae41ccda8d14e7d3b99bc4cf7f9a7ceb33",
+    "Exports/bezier-g-nodes-black-symbol-light.pdf": "63ebd6660cbd96db61a4e15c8c87bb7186059267ddcd3c61ec9959adb332f9c1",
+    "Exports/bezier-g-nodes-black-symbol-light.png": "db8e4075fe64424e2ac7295cd5c842eebc3074de8fb63aa0d5f57793752c0199",
+    "Exports/bezier-g-nodes-black-symbol-light@2x.png": "e86b1bf1497f12adabb7ca26c7cc7ffea8480d4b184912ced72e35f42b603616",
+    "Exports/bezier-g-nodes-large-lockup-dark.pdf": "937f7e675baf2441be7769110fc6cb3100c0a410e303cba2f615f4c21c06a44e",
+    "Exports/bezier-g-nodes-large-lockup-dark.png": "54b2b6a579a9c4abe29dac48480f6856932a0766f22fcc92678ab159f71a1c58",
+    "Exports/bezier-g-nodes-large-lockup-dark@2x.png": "04713c05b34000325b713358a9b15e27f6c1808fd583f777d271e74968dcb241",
+    "Exports/bezier-g-nodes-large-lockup-light.pdf": "2d72564886c4e03ecbad4e45ae7c1cc169c17d357d29f3251b9c982fb515fdd8",
+    "Exports/bezier-g-nodes-large-lockup-light.png": "55a311277a90a7d4dc34628437582fb2e08f254ea3f614bfd9a58bf13dc9aed4",
+    "Exports/bezier-g-nodes-large-lockup-light@2x.png": "a9edf6594011e4a5b9f2c3185183d65fca8ab5762fd93fee55dd750d84810824",
+    "Exports/bezier-g-nodes-large-symbol-dark.pdf": "34df55daf1a79099abfc8f85b52bb04cac9e14beea1a781788c53db17474accc",
+    "Exports/bezier-g-nodes-large-symbol-dark.png": "839fe481c4c170a2986b8f1feaedb93e554fec4b54a56ad8c3046757ac3db05f",
+    "Exports/bezier-g-nodes-large-symbol-dark@2x.png": "aa2f1ba9569ad2830720d672ffffbf06db459f598d8a59fdf66b74912461faf6",
+    "Exports/bezier-g-nodes-large-symbol-light.pdf": "80c6250f216cb0ca9f9c11e5192d3784e2f183855fd00787787105d8ba4d2a0e",
+    "Exports/bezier-g-nodes-large-symbol-light.png": "9411a4023bce95ffe3ad9eafe9c29d329e2894266ee0c6bb32410eb16ce0f631",
+    "Exports/bezier-g-nodes-large-symbol-light@2x.png": "161cd4767eac4f09315b14383650d8e3db833f1e8e6257818b4954ab629301eb",
+    "Exports/bezier-g-nodes-large-warm-lockup-dark.pdf": "e53c7ff2fc3b9ca5dad35d10fc2751b9753364679b224fd4d32facdd3279ff7c",
+    "Exports/bezier-g-nodes-large-warm-lockup-dark.png": "726f2f5807a371b8508058772c155c9aa6cfbe247719e5be135c5476ca56e059",
+    "Exports/bezier-g-nodes-large-warm-lockup-dark@2x.png": "3e73db33b210dc8b08f1eb7bf9d540391c038fca2ee8f1bc492782351bbcb37b",
+    "Exports/bezier-g-nodes-large-warm-lockup-light.pdf": "51e3ae413afe38fd8a0cd701506e824d2fa7f5592fab0ffd2a28cc247460d07f",
+    "Exports/bezier-g-nodes-large-warm-lockup-light.png": "24c341eab65642dafd8dcd0904e22b2e31d4bad4a4b2529451239925265102ec",
+    "Exports/bezier-g-nodes-large-warm-lockup-light@2x.png": "e73e97cc8016648a5eba3bb0ead17f5ff20d34c8fe96d482a0e7dd72c6b08e43",
+    "Exports/bezier-g-nodes-large-warm-symbol-dark.pdf": "f319d9f6e04388de790f8a89348d828faf61a9cfbeb22cb04952ec8f119cdbc1",
+    "Exports/bezier-g-nodes-large-warm-symbol-dark.png": "27652aee1a33ef212dcb0ed64d2b84fade23cd924c9c34a778e68c5b58163084",
+    "Exports/bezier-g-nodes-large-warm-symbol-dark@2x.png": "4584c8e661c66cfe7356688e380e0336b2eb10ad3afb05c227ff5612b1ef41e1",
+    "Exports/bezier-g-nodes-large-warm-symbol-light.pdf": "7c21eeabd058f6a18f8cea527e9fe70bde1f0f2254d14c93a9773f0c6d6c5344",
+    "Exports/bezier-g-nodes-large-warm-symbol-light.png": "b0b05b30f1ff92ab88b0ca77a1b688bc04a54a176ae194d67ce6703739e58971",
+    "Exports/bezier-g-nodes-large-warm-symbol-light@2x.png": "339d8c0dd1a9037d68af24f6bf6d4b27e80d02963018562374bdc57e88a66e87",
+    "Exports/bezier-g-nodes-lockup-dark.pdf": "37ce99d4aff4ddf37a508e212d911bf59646948b24a7262c9ddc81ff81018121",
+    "Exports/bezier-g-nodes-lockup-dark.png": "7acd412b63f4ae88d3184141f0bc5c13408afe3cd0bd1f131099046fd6b05bc8",
+    "Exports/bezier-g-nodes-lockup-dark@2x.png": "2d26625eda3739fba2cd01025066e998925d0f1495dff6995298ab7739f7be8c",
+    "Exports/bezier-g-nodes-lockup-light.pdf": "96a95b74f07b75c0daf3c83d6925ada147b3b22b48f5d2b3ab1b99b479685221",
+    "Exports/bezier-g-nodes-lockup-light.png": "bf694a5b9ee13809ddfbc153270002a6cb858518bba4fea85e3480d677845248",
+    "Exports/bezier-g-nodes-lockup-light@2x.png": "4fce0a62789641414ea71866bfb92f5bd9bd6490811f6b775b6abbbbd2433af5",
+    "Exports/bezier-g-nodes-medium-lockup-dark.pdf": "5e6155ebef17aba9435042f2e9bfa0a972806323e0df030db1954444d2e3c5f7",
+    "Exports/bezier-g-nodes-medium-lockup-dark.png": "cb047046fa056da4f74a86e16fe065a1a28444c216af3f44c95aa07d17fd1641",
+    "Exports/bezier-g-nodes-medium-lockup-dark@2x.png": "7ff39054d62253423e93fcdd0e58e26a0099a43b4dd58815eb1a83938a7e9483",
+    "Exports/bezier-g-nodes-medium-lockup-light.pdf": "2898db6b3b9347f602b59aee7be74923f7bfb81cd358ca20f3f5f15324462b11",
+    "Exports/bezier-g-nodes-medium-lockup-light.png": "94cd3522c38ccb93cc6e2589838c4f070577850ba8c4ea866954c0ed23ce248d",
+    "Exports/bezier-g-nodes-medium-lockup-light@2x.png": "c9df44896545f6e626c9bc0b5946c21efad302de17ad1c81aaa106901a8fa7be",
+    "Exports/bezier-g-nodes-medium-symbol-dark.pdf": "3f1fe4b5586db0e542d33fa3eccd5357a9f92409111249634b0d1a5f2610d869",
+    "Exports/bezier-g-nodes-medium-symbol-dark.png": "c140672a555f46480857c0d9673bd16d2c0be34aebb1fdc1ef611b601ec7d71e",
+    "Exports/bezier-g-nodes-medium-symbol-dark@2x.png": "cfbe5295cf34ab60ea2ed6c329b7568d11a9d316c9e330b0552ae8499842ce4b",
+    "Exports/bezier-g-nodes-medium-symbol-light.pdf": "6da3a8f9761831c3a57b535670ad6d5c4e3e4816a1f63081b000ea3978d82a21",
+    "Exports/bezier-g-nodes-medium-symbol-light.png": "d226e80b3c29b308c5bb7c0657340dc748cc63f6dd7737e900eafa6268a7495d",
+    "Exports/bezier-g-nodes-medium-symbol-light@2x.png": "6d0c80471f1b5ac41b00e2be153b4ba60c72ad20d33a615658bc5b2bece54019",
+    "Exports/bezier-g-nodes-symbol-dark.pdf": "ab85e6ede2092a99f28f86133fa30aae82f9b5f792a676122dfa997cb1d5dd00",
+    "Exports/bezier-g-nodes-symbol-dark.png": "646ae6524c7a5917bad356e00c8178e4103c5857e3e60f15f8691950ef3065b1",
+    "Exports/bezier-g-nodes-symbol-dark@2x.png": "782822046facc038c3de1525511aef667d6c6ee7f3ed239a4b71a128bd4da44e",
+    "Exports/bezier-g-nodes-symbol-light.pdf": "3d6b5eff68c1a8186b80c7d731b35a851f9073faf35188a04dc3256a0f491471",
+    "Exports/bezier-g-nodes-symbol-light.png": "4e7b64abd77cfd174b8e36dc621b958248d952a1a0aa9a3421e10ba4d5d2f6d3",
+    "Exports/bezier-g-nodes-symbol-light@2x.png": "436eb36ce20e68353328c436c81d306c0f8582be9fef0646b0fd64d4f2184efe",
+    "Exports/bezier-g-nodes-warm-lockup-dark.pdf": "95bc37d685e2b4ec193f849c3998a6c8a7a3c63683855e99c0115abf2890285d",
+    "Exports/bezier-g-nodes-warm-lockup-dark.png": "a9a43da826338332f14e980f57bd32fde793a3a9f1a87bccce6ec7df63cc8dfb",
+    "Exports/bezier-g-nodes-warm-lockup-dark@2x.png": "71d89eb037dbe88019098e743d257c4347b8d744edb431074e02b07f0477d817",
+    "Exports/bezier-g-nodes-warm-lockup-light.pdf": "fa3f2f0957ab62f0abd8b8bfb9cab1e2c4e06a15a2d6d5fead18990852b3a633",
+    "Exports/bezier-g-nodes-warm-lockup-light.png": "8e305ee5fe1c23a18ef967cc6e72ef65f358e1c03263466907fd1252f3d9e89f",
+    "Exports/bezier-g-nodes-warm-lockup-light@2x.png": "dbbb729a9b13425a52cff7f6fcb8e7c54ec4ad1ddd598eebd45a70ef0e539c98",
+    "Exports/bezier-g-nodes-warm-symbol-dark.pdf": "c99d7ae22aade67d7fb3cfb3dbee75424dadba24fedd690035789fecba542f95",
+    "Exports/bezier-g-nodes-warm-symbol-dark.png": "a8a2a6b4fbee624188e4b754612e9511d8d0ae0c074754e87b61784fea70802e",
+    "Exports/bezier-g-nodes-warm-symbol-dark@2x.png": "56ca25cf7d32e2563f67e917ad236df6f5f93e31fa319c82ea5dd2bb497a8247",
+    "Exports/bezier-g-nodes-warm-symbol-light.pdf": "7b0d7156f5f59dc1067c0f15a0a48743e882e8a66c049db1cdefd6b08de465be",
+    "Exports/bezier-g-nodes-warm-symbol-light.png": "772213976d6e70c80b0db49483b685b6216ffd0cfaf63b0933e0e7f85c4f2830",
+    "Exports/bezier-g-nodes-warm-symbol-light@2x.png": "f4fd13fa0a1c00c176790cffd6ecac43cb7d2d7addbe7e82ddee4f7e32cf8b2d",
+    "Exports/bezier-g-symbol-dark.pdf": "d3a3622cb278634322227093d7994c03a0f6a61e4f57957ce690fc964333604c",
+    "Exports/bezier-g-symbol-dark.png": "dc36e2c1fc4eb26115a01e31bfb6dbdf932f2622a4782c0f2e81938e55883513",
+    "Exports/bezier-g-symbol-dark@2x.png": "c8d2b0faffe1b3a5a5dbb9779dafbad945d98d83e5ca3c0ff778772db51be382",
+    "Exports/bezier-g-symbol-light.pdf": "916736506a20ecaee764cab0cf21a067a3239e80c1801978ae59acfb94df4c66",
+    "Exports/bezier-g-symbol-light.png": "bc3200c9e2f7e71b8bdbbbbdea9f50a499ce5aa35a9fc6ffa4d0f787b8d0b871",
+    "Exports/bezier-g-symbol-light@2x.png": "b119330525fe3b8022564236117e514cf96d506358b2278ed9fdac0fc6f17a1a",
+    "Exports/bezier-gs-lockup-dark.pdf": "9b75d2107dd18fc3b24e9c73e8b3377406351609e75279d78aa40d085d560ed0",
+    "Exports/bezier-gs-lockup-dark.png": "48c111e87b980ff7a4adafd9a6a21bb1e188c167f36690910c5a19d25fe72d26",
+    "Exports/bezier-gs-lockup-dark@2x.png": "e490730adc2eb38abef256304859c4dc80ef61db4c1dda647dac1b94b9611154",
+    "Exports/bezier-gs-lockup-light.pdf": "8c39f6ec657e1e1ec46fb805dce82bee1e86820f2f7c5a77565376ed648cc2b4",
+    "Exports/bezier-gs-lockup-light.png": "bcc9df4c5d9cf41c68e983d04aebe0036500b3c9f11261793b70697fcbaeda10",
+    "Exports/bezier-gs-lockup-light@2x.png": "11a4da095b1e506d6a6c0718b72dac208de6007260979ec5938f42cfce48c4c3",
+    "Exports/bezier-gs-symbol-dark.pdf": "1e29c98059e0feeffc734714c8986b08485ae3ae6194beb9b633cfc2c21fd03a",
+    "Exports/bezier-gs-symbol-dark.png": "ea92b3887fdd7780bbe31000213a46ac705ffb75b77371ad3151d3b780d8feb9",
+    "Exports/bezier-gs-symbol-dark@2x.png": "b8dbf3190ff996e9c5dbae52d0fea995cf9dce3bbd2c85035f50e3c9a50bf8de",
+    "Exports/bezier-gs-symbol-light.pdf": "eda3bbc196f3108a18ac74afad33fa72dd836047c22f3a9a6a3546bca85c8b8f",
+    "Exports/bezier-gs-symbol-light.png": "b46e00d6493a46200f81f04fbb6f1cbba1f3e995971171e7a4d3d5d79a101eb6",
+    "Exports/bezier-gs-symbol-light@2x.png": "4fc817c04c0a6048ba4a9dd42e11f2c72f0a7e165508cdaaadb7ee6470a02b50",
+    "Exports/curve-lockup-dark.pdf": "045662fd5ab7fb5850266bb849b577920e93fc0d8d9b2bc298b4ed472128a7b0",
+    "Exports/curve-lockup-dark.png": "c150d4dc0dcd193d13392b5e221aaaa1025c4ec4f06c0a1101b6709a1410a6c2",
+    "Exports/curve-lockup-dark@2x.png": "1bb2e2397a7a270803a4f54133f2f2187f2013dc60e5780a77c03bab8957910d",
+    "Exports/curve-lockup-light.pdf": "3550140921ce35096b853eda08429c2ebd914ba2260a4267f77e2cefb1590c6b",
+    "Exports/curve-lockup-light.png": "074e8f8b256e01ad5ea3e9b28e68b31aeb82ed7e3a0ac215896f958500de8e9f",
+    "Exports/curve-lockup-light@2x.png": "a5add9558595797f6ade8151ff5095c58273dd7bd69c32a167000b39145f58b5",
+    "Exports/curve-symbol-dark.pdf": "fec8f6c94123bbb387ea72b752dbf751d18242468effd26f5aa70a1cce915916",
+    "Exports/curve-symbol-dark.png": "a90e50f469f814d41019fb0caded2747a3bd6c27906748e3ab29038c90ebf66d",
+    "Exports/curve-symbol-dark@2x.png": "be6b244bac0e5b8bff3906e77ef0f2345a84f8d0525e829b82a2be0413087919",
+    "Exports/curve-symbol-light.pdf": "93e32bf136e9955aaaf8ecda6c82e4bf9b25b0b5f9c77eb3f79ef435b79108ed",
+    "Exports/curve-symbol-light.png": "685d7fa729b8bfc2c0ca0427438e7fba74515412ade693fa57c89fa5107f82cb",
+    "Exports/curve-symbol-light@2x.png": "762df1ddab60d858ae49a0038c5dabae65e7943495d6885266ea3974cefa71e2",
+    "Exports/heritage-lockup-dark.pdf": "56926955640eb1aaec65d123c3d3ab3181dfc464f098365bdacea5c8ad72a8ce",
+    "Exports/heritage-lockup-dark.png": "6ddaa77024d2dd95a2c78c977aab9750b0e6cdcf96a4384dd69920419ad9f60c",
+    "Exports/heritage-lockup-dark@2x.png": "5bc4a102c125e9d0307cd271cabcacd78975e798394e8353b42307b0e93ec58f",
+    "Exports/heritage-lockup-light.pdf": "8e4bade9ccb1f86520b4566f616dd78199c28d482cd931ce8954ea57c86ed3a9",
+    "Exports/heritage-lockup-light.png": "f886ac42fa41b04f3a01ddefaf82ada1e390ff259855841393a11a44bf65c209",
+    "Exports/heritage-lockup-light@2x.png": "3280977bf4a36cf9b317798858eb8bdd53c13226fa4e62e5ab0db0d8e62f7304",
+    "Exports/heritage-symbol-dark.pdf": "8fc1e30eb41d4a9c63109cc63d182dfbfd6640a095b1bd2132c1388d5bba5835",
+    "Exports/heritage-symbol-dark.png": "68190cf30fddeb3d017bdf952daa464adc59b205dd013e722e6744e6581c8913",
+    "Exports/heritage-symbol-dark@2x.png": "6bc60f7eac4795c5ffaad8444c22a4206fd9aa1f694b9eca4ff3b013a45092c8",
+    "Exports/heritage-symbol-light.pdf": "6c6727ca67a203bc924e5efbb9a719bc72f4b1393be279e031236dfa48dd4b02",
+    "Exports/heritage-symbol-light.png": "fcb3eab64a92b18797a6e05bfe2ab975ac48c2a91dfd72d88edeba5ed40b971f",
+    "Exports/heritage-symbol-light@2x.png": "a309620aa728dcac5207f1a7d11108495bff1e574b1cb1e723b0586d951d929d",
+    "Exports/preview-g-b-refinement.pdf": "2d88b5ed0dbb97fe43f4c7a47338b4c71cd5eb55eca8250bc98b7d0202a7b238",
+    "Exports/preview-g-nodes.pdf": "20d477e2a73c0b7360e61d37446c9e939ad991763525ddb478ee44f94aba7c18",
+    "Exports/preview-g-variants.pdf": "ca7d344c50947e33d1ac3d28f6d30a802f9a3a072b8ee1a7036f187b7619a0e1",
+    "Exports/preview-round-02.pdf": "8d05160aaa5978efe490a67cd9dc475baecfbc3f16a7e3b010a50526219e01ce",
+    "Exports/preview-sheet.pdf": "c1333acbd134a492999549999df9d430270c9a1ac8822ab7ccea675ce9c2720b",
+    "Masters/axes-lockup-dark.svg": "02c3e9a06f695840f88c27a5041836e13bc89052fe7b451af7100e7be65c4447",
+    "Masters/axes-lockup-light.svg": "6f3b11d3b2be164b992b01f0e0d0a70e74aa0a1bd27eeb3a0ea0c3d54f159e76",
+    "Masters/axes-symbol-dark.svg": "73e830a778625f9e693973b0e2679054df270beedf80bd3a18400f22eb503804",
+    "Masters/axes-symbol-light.svg": "854f788dffdb1821302bfc12205815be5c277119cb2210cc7105016c888b2363",
+    "Masters/bezier-g-lockup-dark.svg": "953af1b81b5c9ed70ce12e00253fd37f65e77706417f7ebe8eeda1ac6031da41",
+    "Masters/bezier-g-lockup-light.svg": "b9b9fabaee00a0f72227d61b5c0469a661f1e5917ef946b4e95696e5c9144cce",
+    "Masters/bezier-g-nodes-black-lockup-dark.svg": "5b1044b6d89f023c1200ba4c70d4b8888efb096070df3c3accbb984125f65e1e",
+    "Masters/bezier-g-nodes-black-lockup-light.svg": "fb26d120e951a5688fdb07eccfdd0cd5c22ca67b9de98d78b70369a343149f8a",
+    "Masters/bezier-g-nodes-black-symbol-dark.svg": "3ed3439f9b7f1411ab3c299f05554afd48f47662be41c3e4fcf6b689e84f8c7f",
+    "Masters/bezier-g-nodes-black-symbol-light.svg": "ae516d5ba2b1c2b9511e258c417140c7817bbbbceef00011acbe6a3615f6943a",
+    "Masters/bezier-g-nodes-large-lockup-dark.svg": "a792c8bd50b8a44be98693145fa81f47b3ac3b8db529fe65115536d313aa37d2",
+    "Masters/bezier-g-nodes-large-lockup-light.svg": "193cd080b8bfe51f901219bbabce4d8a6ae244e2afcd12209a50ceb76b9d7754",
+    "Masters/bezier-g-nodes-large-symbol-dark.svg": "fedf3f756dd0583f65e559c618a3cf680080a216cfaeaa9f10bc1c4377278d45",
+    "Masters/bezier-g-nodes-large-symbol-light.svg": "c846b21bfe6128a8962869bfdf3560c467b6f8f4a3557db45b78d648f190821e",
+    "Masters/bezier-g-nodes-large-warm-lockup-dark.svg": "e7294400c8439d92dfcbe05311e4a0892f5e8e4ddb5e870bd60e953950a4e4d0",
+    "Masters/bezier-g-nodes-large-warm-lockup-light.svg": "049b381d49f1e23c3c8c26aec3f2c8a8394c542a8abe8910213118e1579daaf9",
+    "Masters/bezier-g-nodes-large-warm-symbol-dark.svg": "81e7acd5523384b958c1caffe7c940c909c77b93956034dcc096d8eff07e9915",
+    "Masters/bezier-g-nodes-large-warm-symbol-light.svg": "63eef4dac46a9c78b14d5f43d72657456f075b168900776193f1a2388d76db60",
+    "Masters/bezier-g-nodes-lockup-dark.svg": "4c687239e4ab706dec2c0c91e30a9f484aaf0bdad25814850f34119232769385",
+    "Masters/bezier-g-nodes-lockup-light.svg": "f16bb7bc70fb6b92ec3d914ada9cd8496f8622250b3762559d6a339672264764",
+    "Masters/bezier-g-nodes-medium-lockup-dark.svg": "d4eabf4f8e01086783dce15418503682aed2c8d6597ad76f266669c2edbad147",
+    "Masters/bezier-g-nodes-medium-lockup-light.svg": "b3b7d88b916a308515f9964f61ebb909a9dc195f61dcc8c841070969abc8593a",
+    "Masters/bezier-g-nodes-medium-symbol-dark.svg": "3e104b40c3d863ec8675d50e289dce8a6273ad37acea2f68ae1787486ac510cc",
+    "Masters/bezier-g-nodes-medium-symbol-light.svg": "b78e2fcf33231933181c2ef48f71fa25d6c2e6ae36f21d3c4fc21ae1235d9e99",
+    "Masters/bezier-g-nodes-symbol-dark.svg": "1f04550dcdd7c1d8e0c83a9d3c73d1cc6ba793421d7f7f343eb0f3596c7cb8be",
+    "Masters/bezier-g-nodes-symbol-light.svg": "a334faeb0df2a4ecb5ac864d393accce7b9acea30baff33d499f059cb33ae5bd",
+    "Masters/bezier-g-nodes-warm-lockup-dark.svg": "a1923eb0c414c9a2f55ebe36498be319abc9ec9079d7981de651450f2a0e6822",
+    "Masters/bezier-g-nodes-warm-lockup-light.svg": "89f39dd6128f7565108bfbf3cfc241e72a4720ab07bf7059da3c85fcf6135725",
+    "Masters/bezier-g-nodes-warm-symbol-dark.svg": "0dc6b9b315d2f476611c29bb7463e2475a628a42eae264a7243d3a26fc32f4ee",
+    "Masters/bezier-g-nodes-warm-symbol-light.svg": "4e507efe2d5f2b13d518c1e8cabe9905154ebeebb44425e16cf25c06b00011f7",
+    "Masters/bezier-g-symbol-dark.svg": "66ba3ce1b3515c5eed2971c7c9c7ee82c94e785099f183dbc096a09d2b4a2148",
+    "Masters/bezier-g-symbol-light.svg": "019dc29118e28edb6842a2aa16d2bd1090f3d8d41d5f896dab260a7abe9f1a82",
+    "Masters/bezier-gs-lockup-dark.svg": "77b826da70b233c1d6b92edaa6913bfbe624bd93ab828ca43a7a44125a2b8ee6",
+    "Masters/bezier-gs-lockup-light.svg": "08fd4e1cbe7fb6aa1af999aa768ba30e632a8f114c86e919eb0d5a72f05c44c2",
+    "Masters/bezier-gs-symbol-dark.svg": "ecc0cf5f12f0b194a53b880def8d7a9ba3995761c2d389442d086ce98e73b130",
+    "Masters/bezier-gs-symbol-light.svg": "c52df6e2f4ace35d908e6d9dfe7fe053b5d9ae8f2579f8a9ba870f3cb86f74e7",
+    "Masters/curve-lockup-dark.svg": "a83e66093aeef37e734992bf5eab772977d9c9fb2f691caa4889d2467dcef858",
+    "Masters/curve-lockup-light.svg": "c73105cd3d84c7e282a58099ea3501dfe334ef5f21c9c0c2df13654b94b0b1a1",
+    "Masters/curve-symbol-dark.svg": "5e1b30604ecd6996c0574fd78c0a8f3cb7a7a280b5b76f50edfd60e9f80419a9",
+    "Masters/curve-symbol-light.svg": "84401de72c492a9cb63d998a7fd19e75e96f30db4dbfb375706613e41a5e8390",
+    "Masters/heritage-lockup-dark.svg": "0601ab05d1fcd988e313f36228decd0bd7ba2d4304b3f148d07b49571f5b5b49",
+    "Masters/heritage-lockup-light.svg": "966d70dabca81df865a3a6bb7c33707f0c76881ea6bc1d33ec0de342e0abf6b3",
+    "Masters/heritage-symbol-dark.svg": "a56b5bf06621593ce2a9102ccf5b5f4bf1394dd015772be9da05b9457bd9fee1",
+    "Masters/heritage-symbol-light.svg": "d1188cf1f5021e968f111ed9adc1c6c24f76f05e4bcdd6ca13641af404cb47e2",
+    "preview-g-b-refinement.png": "82a690ee868d8771452fbb634aef2777c52885c33de8481ec7dee8496c9042d9",
+    "preview-g-b-refinement.svg": "dde3f0670fc86fb37e76ece936a096a53deae75b55ab3b3ad088e86c2abe1799",
+    "preview-g-nodes.png": "a1c55c49b1026f3e509169331861a697e0eb8304dc6b6375495ebc012c3b934e",
+    "preview-g-nodes.svg": "330aaff91cd09efb186a7b1e172850ecf8730e350a973748c315337466008e78",
+    "preview-g-variants.png": "fff63dcb59641fb5a24cc0143df207e4281034f83814a0e36d475e19aa1e1449",
+    "preview-g-variants.svg": "4beed24d9ab3ca7a69cf13e34e78e48d065ae93dc8fee6529ba377f0e686f5c5",
+    "preview-round-02.png": "a13a935704999c1c9cb2672d1353ef262914194eaec4f77abdeaeeb85dcbf1ac",
+    "preview-round-02.svg": "5382eebdc8ae7b1c3750806c3b1c012fb44360ff5e114cc86368eccc06d34a37",
+    "preview-sheet.png": "04123e86af128a61b01605beb76771f511f6802f2b934a7f22e375fd269ecdc7",
+    "preview-sheet.svg": "da46fbc570f7ca30856e39d8ab0a577252427632cc7567c390de488e0546deee"
+  }
+}

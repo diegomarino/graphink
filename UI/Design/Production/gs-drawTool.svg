@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24pt" height="24pt" viewBox="0 0 24 24" color="#000000" role="img" aria-labelledby="title">
+<title id="title">Create connected points and lines</title>
+<desc>Original GraphSketcher vector family. Geometry authored for this control; no legacy art embedded.</desc>
+<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M4.5 18.5C7 18.5 7 6 12 6S16 16.5 19.5 5" /><circle fill="currentColor" cx="4.5" cy="18.5" r="1.5" /><circle fill="currentColor" cx="12" cy="6" r="1.5" /><circle fill="currentColor" cx="19.5" cy="5" r="1.5" />
+</g>
+</svg>

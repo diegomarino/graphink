@@ -1,0 +1,445 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1680" height="940" viewBox="0 0 1680 940" role="img" aria-labelledby="title desc">
+<title id="title">GraphSketcher sidebar study — light and dark</title>
+<desc id="desc">Two 520 by 440 graph canvases with 280 point scrolling sidebars, four icon and label sections, existing Style controls, scroll continuation, and seven original glyphs. Design only.</desc>
+<defs xmlns="http://www.w3.org/2000/svg">
+<g id="icon-modify" data-label="Modify" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 3.5 7.5 20 11 13 18 9.5Z" /><path d="m11 13 3 4" /><circle fill="currentColor" cx="18.5" cy="19" r="1.5" /></g>
+<g id="icon-draw" data-label="Draw" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 18.5C7 18.5 7 6 12 6S16 16.5 19.5 5" /><circle fill="currentColor" cx="4.5" cy="18.5" r="1.5" /><circle fill="currentColor" cx="12" cy="6" r="1.5" /><circle fill="currentColor" cx="19.5" cy="5" r="1.5" /></g>
+<g id="icon-fill" data-label="Fill" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4 18 5-13 11 11Z" /><path d="m8 17 3-8m2 7 1.5-4" /><circle fill="currentColor" cx="4" cy="18" r="1.5" /><circle fill="currentColor" cx="9" cy="5" r="1.5" /><circle fill="currentColor" cx="20" cy="16" r="1.5" /></g>
+<g id="icon-text" data-label="Text" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7V4.5h15V7M11 4.5v15m-3 0h6" /><circle fill="currentColor" cx="19.5" cy="19.5" r="1.5" /></g>
+<g id="icon-lock" data-label="Lock" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10V8a5 5 0 0 1 10 0v2" /><rect x="4" y="10" width="16" height="11" rx="2" /><circle fill="currentColor" cx="12" cy="15" r="1.5" /><path d="M12 16.5V18" /></g>
+<g id="icon-group" data-label="Group" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M9 14l6-4" /><circle fill="currentColor" cx="7.5" cy="15" r="2" /><circle fill="currentColor" cx="16.5" cy="9" r="2" /></g>
+<g id="icon-inspector" data-label="Inspector section" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18m3-12h6m-6 6h6" /><circle fill="currentColor" cx="14" cy="9" r="1.5" /><circle fill="currentColor" cx="16" cy="15" r="1.5" /></g>
+</defs>
+
+<style>text{font-family:Helvetica,Arial,sans-serif}path,line,rect,circle{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1680" height="940" fill="#e9edf1"/>
+<text x="32" y="32" fill="#526170" font-size="11" font-weight="500" text-anchor="start">GRAPHSKETCHER / SIDEBAR STUDY 02</text>
+<text x="32" y="65" fill="#202932" font-size="26" font-weight="500" text-anchor="start">A graph first. Its controls within reach.</text>
+<text x="1648" y="35" fill="#526170" font-size="12" font-weight="400" text-anchor="end">Design artifact · no product replacement</text>
+<text x="32" y="99" fill="#526170" font-size="11" font-weight="600" text-anchor="start">LIGHT</text>
+<text x="832" y="99" fill="#526170" font-size="11" font-weight="400" text-anchor="end">520 × 440pt canvas + 280pt sidebar</text>
+<rect x="32" y="104" width="800" height="24" rx="0" fill="#f4f5f7" stroke="#cbd2d9"/>
+<text x="46" y="120" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Untitled — GraphSketcher</text>
+<rect x="32" y="128" width="520" height="440" rx="0" fill="#ffffff" stroke="#cbd2d9"/>
+<path d="M112 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M162 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M212 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M262 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M312 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M362 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M412 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M462 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M512 176V498" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M96 198H512" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M96 248H512" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M96 298H512" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M96 348H512" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M96 398H512" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M96 448H512" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M96 498H512" stroke="#e8edf1" stroke-width="1" fill="none"/>
+<path d="M96 172V498H516" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="112" y="518" fill="#64717d" font-size="10" font-weight="400" text-anchor="middle">0</text>
+<text x="212" y="518" fill="#64717d" font-size="10" font-weight="400" text-anchor="middle">2</text>
+<text x="312" y="518" fill="#64717d" font-size="10" font-weight="400" text-anchor="middle">4</text>
+<text x="412" y="518" fill="#64717d" font-size="10" font-weight="400" text-anchor="middle">6</text>
+<text x="512" y="518" fill="#64717d" font-size="10" font-weight="400" text-anchor="middle">8</text>
+<text x="83" y="502" fill="#64717d" font-size="10" font-weight="400" text-anchor="end">0</text>
+<text x="83" y="402" fill="#64717d" font-size="10" font-weight="400" text-anchor="end">2</text>
+<text x="83" y="302" fill="#64717d" font-size="10" font-weight="400" text-anchor="end">4</text>
+<text x="83" y="202" fill="#64717d" font-size="10" font-weight="400" text-anchor="end">6</text>
+<text x="306" y="549" fill="#26313b" font-size="12" font-weight="400" text-anchor="middle">Time (s)</text>
+<text x="114" y="156" fill="#64717d" font-size="12" font-weight="400" text-anchor="start">Distance (m)</text>
+<path d="M112 473C187 453 222 368 272 338S417 278 482 203" stroke="#356b95" stroke-width="2" fill="none"/>
+<circle cx="112" cy="473" r="4" fill="#ffffff" stroke="#356b95" stroke-width="1.5"/>
+<circle cx="192" cy="421" r="4" fill="#ffffff" stroke="#356b95" stroke-width="1.5"/>
+<circle cx="272" cy="338" r="4" fill="#ffffff" stroke="#356b95" stroke-width="1.5"/>
+<circle cx="382" cy="285" r="4" fill="#ffffff" stroke="#356b95" stroke-width="1.5"/>
+<circle cx="482" cy="203" r="4" fill="#ffffff" stroke="#356b95" stroke-width="1.5"/>
+<text x="392" y="252" fill="#26313b" font-size="13" font-weight="400" text-anchor="start">Series A</text>
+<rect x="552" y="128" width="280" height="440" rx="0" fill="#f4f5f7" stroke="#cbd2d9"/>
+<rect x="566" y="140" width="63" height="48" rx="5" fill="#dce8f2" stroke="#cbd2d9"/>
+<g transform="translate(588 145)">
+<path d="M1 4h18M1 10h18M1 16h18" stroke="#26313b" stroke-width="1.5" fill="none"/>
+<circle cx="6" cy="4" r="2" fill="#f4f5f7" stroke="#26313b" stroke-width="1.5"/>
+<circle cx="14" cy="10" r="2" fill="#f4f5f7" stroke="#26313b" stroke-width="1.5"/>
+<circle cx="9" cy="16" r="2" fill="#f4f5f7" stroke="#26313b" stroke-width="1.5"/>
+</g>
+<text x="597.5" y="180" fill="#26313b" font-size="11" font-weight="500" text-anchor="middle">Style</text>
+<g transform="translate(651 145)">
+<path d="M2 1v17h17M5 13l5-6 6-3" stroke="#26313b" stroke-width="1.5" fill="none"/>
+</g>
+<text x="660.5" y="180" fill="#26313b" font-size="11" font-weight="500" text-anchor="middle">Axes</text>
+<g transform="translate(714 145)">
+<rect x="2" y="2" width="16" height="16" rx="1" fill="none" stroke="#26313b"/>
+<path d="M6 2v4M2 6h4m8 12v-4m4 0h-4" stroke="#26313b" stroke-width="1.5" fill="none"/>
+</g>
+<text x="723.5" y="180" fill="#26313b" font-size="11" font-weight="500" text-anchor="middle">Canvas</text>
+<g transform="translate(777 145)">
+<circle cx="3" cy="4" r="1.5" fill="#26313b"/>
+<path d="M8 4h10" stroke="#26313b" stroke-width="1.5" fill="none"/>
+<circle cx="3" cy="10" r="1.5" fill="#26313b"/>
+<path d="M8 10h10" stroke="#26313b" stroke-width="1.5" fill="none"/>
+<circle cx="3" cy="16" r="1.5" fill="#26313b"/>
+<path d="M8 16h10" stroke="#26313b" stroke-width="1.5" fill="none"/>
+</g>
+<text x="786.5" y="180" fill="#26313b" font-size="11" font-weight="500" text-anchor="middle">Data</text>
+<path d="M552 200h280" stroke="#cbd2d9" stroke-width="1" fill="none"/>
+<defs><clipPath id="style-light"><rect x="553" y="201" width="278" height="366"/></clipPath></defs>
+<g clip-path="url(#style-light)">
+<text x="568" y="224" fill="#26313b" font-size="14" font-weight="600" text-anchor="start">Style</text>
+<text x="816" y="224" fill="#64717d" font-size="10" font-weight="400" text-anchor="end">1 curve selected</text>
+<text x="568" y="256" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Width</text>
+<rect x="664" y="239" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="256" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">2.0 pt</text>
+<text x="568" y="288" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Color</text>
+<rect x="664" y="271" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="288" fill="#26313b" font-size="11" font-weight="400" text-anchor="start"></text>
+<rect x="670" y="276" width="20" height="14" rx="2" fill="#356b95" stroke="none"/>
+<text x="698" y="288" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Selected color</text>
+<text x="568" y="320" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Opacity</text>
+<path d="M668 316h80" stroke="#cbd2d9" stroke-width="3" fill="none"/>
+<path d="M668 316h64" stroke="#356b95" stroke-width="3" fill="none"/>
+<circle cx="732" cy="316" r="5" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="764" y="320" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">80%</text>
+<text x="568" y="352" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Point type</text>
+<rect x="664" y="335" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="352" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Shape</text>
+<path d="M788 347l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="384" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Point shape</text>
+<rect x="664" y="367" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="384" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Circle</text>
+<path d="M788 379l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="416" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Line type</text>
+<rect x="664" y="399" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="416" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Curved</text>
+<path d="M788 411l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="448" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Dash</text>
+<rect x="664" y="431" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="448" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Solid</text>
+<path d="M788 443l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="480" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Arrows</text>
+<rect x="664" y="468" width="13" height="13" rx="3" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="683" y="479" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Start</text>
+<rect x="736" y="468" width="13" height="13" rx="3" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="755" y="479" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">End</text>
+<text x="568" y="512" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Label</text>
+<rect x="664" y="495" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="512" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Series A</text>
+<text x="568" y="544" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Font</text>
+<rect x="664" y="527" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="544" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Helvetica…</text>
+<path d="M788 539l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="576" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Font size</text>
+<rect x="664" y="559" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="576" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">13 pt</text>
+<text x="568" y="608" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Label distance</text>
+<rect x="664" y="591" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="608" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">8 pt</text>
+<text x="568" y="640" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Position</text>
+<text x="664" y="640" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">X</text>
+<rect x="678" y="623" width="49" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="686" y="640" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">6.0</text>
+<text x="737" y="640" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Y</text>
+<rect x="751" y="623" width="53" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="759" y="640" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">4.2</text>
+</g>
+<rect x="822" y="212" width="4" height="344" rx="2" fill="#e8edf1" stroke="none"/>
+<rect x="822" y="212" width="4" height="250" rx="2" fill="#64717d" stroke="none"/>
+<text x="32" y="593" fill="#526170" font-size="11" font-weight="400" text-anchor="start">520 × 440pt graph area · sidebar scrolls independently</text>
+<text x="552" y="612" fill="#526170" font-size="10" font-weight="500" text-anchor="start">SCROLL CONTINUATION / SAME STYLE PANEL</text>
+<rect x="552" y="624" width="280" height="184" rx="6" fill="#f4f5f7" stroke="#cbd2d9"/>
+<defs><clipPath id="continuation-light"><rect x="553" y="625" width="278" height="182"/></clipPath></defs>
+<g clip-path="url(#continuation-light)">
+<text x="568" y="360" fill="#26313b" font-size="14" font-weight="600" text-anchor="start">Style</text>
+<text x="816" y="360" fill="#64717d" font-size="10" font-weight="400" text-anchor="end">1 curve selected</text>
+<text x="568" y="392" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Width</text>
+<rect x="664" y="375" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="392" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">2.0 pt</text>
+<text x="568" y="424" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Color</text>
+<rect x="664" y="407" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="424" fill="#26313b" font-size="11" font-weight="400" text-anchor="start"></text>
+<rect x="670" y="412" width="20" height="14" rx="2" fill="#356b95" stroke="none"/>
+<text x="698" y="424" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Selected color</text>
+<text x="568" y="456" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Opacity</text>
+<path d="M668 452h80" stroke="#cbd2d9" stroke-width="3" fill="none"/>
+<path d="M668 452h64" stroke="#356b95" stroke-width="3" fill="none"/>
+<circle cx="732" cy="452" r="5" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="764" y="456" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">80%</text>
+<text x="568" y="488" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Point type</text>
+<rect x="664" y="471" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="488" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Shape</text>
+<path d="M788 483l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="520" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Point shape</text>
+<rect x="664" y="503" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="520" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Circle</text>
+<path d="M788 515l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="552" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Line type</text>
+<rect x="664" y="535" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="552" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Curved</text>
+<path d="M788 547l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="584" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Dash</text>
+<rect x="664" y="567" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="584" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Solid</text>
+<path d="M788 579l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="616" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Arrows</text>
+<rect x="664" y="604" width="13" height="13" rx="3" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="683" y="615" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Start</text>
+<rect x="736" y="604" width="13" height="13" rx="3" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="755" y="615" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">End</text>
+<text x="568" y="648" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Label</text>
+<rect x="664" y="631" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="648" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Series A</text>
+<text x="568" y="680" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Font</text>
+<rect x="664" y="663" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="680" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Helvetica…</text>
+<path d="M788 675l3 3 3-3" stroke="#64717d" stroke-width="1" fill="none"/>
+<text x="568" y="712" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Font size</text>
+<rect x="664" y="695" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="712" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">13 pt</text>
+<text x="568" y="744" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Label distance</text>
+<rect x="664" y="727" width="140" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="672" y="744" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">8 pt</text>
+<text x="568" y="776" fill="#64717d" font-size="11" font-weight="400" text-anchor="start">Position</text>
+<text x="664" y="776" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">X</text>
+<rect x="678" y="759" width="49" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="686" y="776" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">6.0</text>
+<text x="737" y="776" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">Y</text>
+<rect x="751" y="759" width="53" height="24" rx="4" fill="#ffffff" stroke="#cbd2d9"/>
+<text x="759" y="776" fill="#26313b" font-size="11" font-weight="400" text-anchor="start">4.2</text>
+</g>
+<rect x="822" y="636" width="4" height="160" rx="2" fill="#e8edf1" stroke="none"/>
+<rect x="822" y="680" width="4" height="114" rx="2" fill="#64717d" stroke="none"/>
+<text x="32" y="639" fill="#26313b" font-size="14" font-weight="500" text-anchor="start">Existing controls, reorganized for legibility.</text>
+<text x="32" y="665" fill="#526170" font-size="12" font-weight="400" text-anchor="start">14–16pt padding; fixed icon + label section selector.</text>
+<text x="32" y="690" fill="#526170" font-size="12" font-weight="400" text-anchor="start">Style nib: 240 × 449pt · Axes nib: 240 × 559pt.</text>
+<text x="32" y="715" fill="#526170" font-size="12" font-weight="400" text-anchor="start">Both need vertical scrolling below the section selector.</text>
+<text x="32" y="740" fill="#526170" font-size="11" font-weight="400" text-anchor="start">Control appearance is illustrative; native semantics follow integration.</text>
+<rect x="32" y="828" width="800" height="88" rx="8" fill="#f4f5f7" stroke="#cbd2d9"/>
+<use xlink:href="#icon-modify" transform="translate(74 842) scale(1)" color="#26313b"/>
+<text x="86" y="891" fill="#64717d" font-size="11" font-weight="400" text-anchor="middle">Modify</text>
+<use xlink:href="#icon-draw" transform="translate(188 842) scale(1)" color="#26313b"/>
+<text x="200" y="891" fill="#64717d" font-size="11" font-weight="400" text-anchor="middle">Draw</text>
+<use xlink:href="#icon-fill" transform="translate(302 842) scale(1)" color="#26313b"/>
+<text x="314" y="891" fill="#64717d" font-size="11" font-weight="400" text-anchor="middle">Fill</text>
+<use xlink:href="#icon-text" transform="translate(416 842) scale(1)" color="#26313b"/>
+<text x="428" y="891" fill="#64717d" font-size="11" font-weight="400" text-anchor="middle">Text</text>
+<use xlink:href="#icon-lock" transform="translate(530 842) scale(1)" color="#26313b"/>
+<text x="542" y="891" fill="#64717d" font-size="11" font-weight="400" text-anchor="middle">Lock</text>
+<use xlink:href="#icon-group" transform="translate(644 842) scale(1)" color="#26313b"/>
+<text x="656" y="891" fill="#64717d" font-size="11" font-weight="400" text-anchor="middle">Group</text>
+<use xlink:href="#icon-inspector" transform="translate(758 842) scale(1)" color="#26313b"/>
+<text x="770" y="891" fill="#64717d" font-size="11" font-weight="400" text-anchor="middle">Inspector</text>
+<text x="848" y="99" fill="#526170" font-size="11" font-weight="600" text-anchor="start">DARK</text>
+<text x="1648" y="99" fill="#526170" font-size="11" font-weight="400" text-anchor="end">520 × 440pt canvas + 280pt sidebar</text>
+<rect x="848" y="104" width="800" height="24" rx="0" fill="#1e2329" stroke="#414b56"/>
+<text x="862" y="120" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Untitled — GraphSketcher</text>
+<rect x="848" y="128" width="520" height="440" rx="0" fill="#161b20" stroke="#414b56"/>
+<path d="M928 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M978 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M1028 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M1078 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M1128 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M1178 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M1228 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M1278 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M1328 176V498" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M912 198H1328" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M912 248H1328" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M912 298H1328" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M912 348H1328" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M912 398H1328" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M912 448H1328" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M912 498H1328" stroke="#2c343d" stroke-width="1" fill="none"/>
+<path d="M912 172V498H1332" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="928" y="518" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="middle">0</text>
+<text x="1028" y="518" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="middle">2</text>
+<text x="1128" y="518" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="middle">4</text>
+<text x="1228" y="518" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="middle">6</text>
+<text x="1328" y="518" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="middle">8</text>
+<text x="899" y="502" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="end">0</text>
+<text x="899" y="402" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="end">2</text>
+<text x="899" y="302" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="end">4</text>
+<text x="899" y="202" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="end">6</text>
+<text x="1122" y="549" fill="#e8edf2" font-size="12" font-weight="400" text-anchor="middle">Time (s)</text>
+<text x="930" y="156" fill="#a6b0bb" font-size="12" font-weight="400" text-anchor="start">Distance (m)</text>
+<path d="M928 473C1003 453 1038 368 1088 338S1233 278 1298 203" stroke="#8eb7d9" stroke-width="2" fill="none"/>
+<circle cx="928" cy="473" r="4" fill="#161b20" stroke="#8eb7d9" stroke-width="1.5"/>
+<circle cx="1008" cy="421" r="4" fill="#161b20" stroke="#8eb7d9" stroke-width="1.5"/>
+<circle cx="1088" cy="338" r="4" fill="#161b20" stroke="#8eb7d9" stroke-width="1.5"/>
+<circle cx="1198" cy="285" r="4" fill="#161b20" stroke="#8eb7d9" stroke-width="1.5"/>
+<circle cx="1298" cy="203" r="4" fill="#161b20" stroke="#8eb7d9" stroke-width="1.5"/>
+<text x="1208" y="252" fill="#e8edf2" font-size="13" font-weight="400" text-anchor="start">Series A</text>
+<rect x="1368" y="128" width="280" height="440" rx="0" fill="#1e2329" stroke="#414b56"/>
+<rect x="1382" y="140" width="63" height="48" rx="5" fill="#344b5e" stroke="#414b56"/>
+<g transform="translate(1404 145)">
+<path d="M1 4h18M1 10h18M1 16h18" stroke="#e8edf2" stroke-width="1.5" fill="none"/>
+<circle cx="6" cy="4" r="2" fill="#1e2329" stroke="#e8edf2" stroke-width="1.5"/>
+<circle cx="14" cy="10" r="2" fill="#1e2329" stroke="#e8edf2" stroke-width="1.5"/>
+<circle cx="9" cy="16" r="2" fill="#1e2329" stroke="#e8edf2" stroke-width="1.5"/>
+</g>
+<text x="1413.5" y="180" fill="#e8edf2" font-size="11" font-weight="500" text-anchor="middle">Style</text>
+<g transform="translate(1467 145)">
+<path d="M2 1v17h17M5 13l5-6 6-3" stroke="#e8edf2" stroke-width="1.5" fill="none"/>
+</g>
+<text x="1476.5" y="180" fill="#e8edf2" font-size="11" font-weight="500" text-anchor="middle">Axes</text>
+<g transform="translate(1530 145)">
+<rect x="2" y="2" width="16" height="16" rx="1" fill="none" stroke="#e8edf2"/>
+<path d="M6 2v4M2 6h4m8 12v-4m4 0h-4" stroke="#e8edf2" stroke-width="1.5" fill="none"/>
+</g>
+<text x="1539.5" y="180" fill="#e8edf2" font-size="11" font-weight="500" text-anchor="middle">Canvas</text>
+<g transform="translate(1593 145)">
+<circle cx="3" cy="4" r="1.5" fill="#e8edf2"/>
+<path d="M8 4h10" stroke="#e8edf2" stroke-width="1.5" fill="none"/>
+<circle cx="3" cy="10" r="1.5" fill="#e8edf2"/>
+<path d="M8 10h10" stroke="#e8edf2" stroke-width="1.5" fill="none"/>
+<circle cx="3" cy="16" r="1.5" fill="#e8edf2"/>
+<path d="M8 16h10" stroke="#e8edf2" stroke-width="1.5" fill="none"/>
+</g>
+<text x="1602.5" y="180" fill="#e8edf2" font-size="11" font-weight="500" text-anchor="middle">Data</text>
+<path d="M1368 200h280" stroke="#414b56" stroke-width="1" fill="none"/>
+<defs><clipPath id="style-dark"><rect x="1369" y="201" width="278" height="366"/></clipPath></defs>
+<g clip-path="url(#style-dark)">
+<text x="1384" y="224" fill="#e8edf2" font-size="14" font-weight="600" text-anchor="start">Style</text>
+<text x="1632" y="224" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="end">1 curve selected</text>
+<text x="1384" y="256" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Width</text>
+<rect x="1480" y="239" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="256" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">2.0 pt</text>
+<text x="1384" y="288" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Color</text>
+<rect x="1480" y="271" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="288" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start"></text>
+<rect x="1486" y="276" width="20" height="14" rx="2" fill="#8eb7d9" stroke="none"/>
+<text x="1514" y="288" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Selected color</text>
+<text x="1384" y="320" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Opacity</text>
+<path d="M1484 316h80" stroke="#414b56" stroke-width="3" fill="none"/>
+<path d="M1484 316h64" stroke="#8eb7d9" stroke-width="3" fill="none"/>
+<circle cx="1548" cy="316" r="5" fill="#2a3139" stroke="#414b56"/>
+<text x="1580" y="320" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">80%</text>
+<text x="1384" y="352" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Point type</text>
+<rect x="1480" y="335" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="352" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Shape</text>
+<path d="M1604 347l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="384" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Point shape</text>
+<rect x="1480" y="367" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="384" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Circle</text>
+<path d="M1604 379l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="416" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Line type</text>
+<rect x="1480" y="399" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="416" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Curved</text>
+<path d="M1604 411l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="448" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Dash</text>
+<rect x="1480" y="431" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="448" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Solid</text>
+<path d="M1604 443l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="480" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Arrows</text>
+<rect x="1480" y="468" width="13" height="13" rx="3" fill="#2a3139" stroke="#414b56"/>
+<text x="1499" y="479" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Start</text>
+<rect x="1552" y="468" width="13" height="13" rx="3" fill="#2a3139" stroke="#414b56"/>
+<text x="1571" y="479" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">End</text>
+<text x="1384" y="512" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Label</text>
+<rect x="1480" y="495" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="512" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Series A</text>
+<text x="1384" y="544" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Font</text>
+<rect x="1480" y="527" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="544" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Helvetica…</text>
+<path d="M1604 539l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="576" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Font size</text>
+<rect x="1480" y="559" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="576" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">13 pt</text>
+<text x="1384" y="608" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Label distance</text>
+<rect x="1480" y="591" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="608" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">8 pt</text>
+<text x="1384" y="640" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Position</text>
+<text x="1480" y="640" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">X</text>
+<rect x="1494" y="623" width="49" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1502" y="640" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">6.0</text>
+<text x="1553" y="640" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Y</text>
+<rect x="1567" y="623" width="53" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1575" y="640" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">4.2</text>
+</g>
+<rect x="1638" y="212" width="4" height="344" rx="2" fill="#2c343d" stroke="none"/>
+<rect x="1638" y="212" width="4" height="250" rx="2" fill="#a6b0bb" stroke="none"/>
+<text x="848" y="593" fill="#526170" font-size="11" font-weight="400" text-anchor="start">520 × 440pt graph area · sidebar scrolls independently</text>
+<text x="1368" y="612" fill="#526170" font-size="10" font-weight="500" text-anchor="start">SCROLL CONTINUATION / SAME STYLE PANEL</text>
+<rect x="1368" y="624" width="280" height="184" rx="6" fill="#1e2329" stroke="#414b56"/>
+<defs><clipPath id="continuation-dark"><rect x="1369" y="625" width="278" height="182"/></clipPath></defs>
+<g clip-path="url(#continuation-dark)">
+<text x="1384" y="360" fill="#e8edf2" font-size="14" font-weight="600" text-anchor="start">Style</text>
+<text x="1632" y="360" fill="#a6b0bb" font-size="10" font-weight="400" text-anchor="end">1 curve selected</text>
+<text x="1384" y="392" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Width</text>
+<rect x="1480" y="375" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="392" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">2.0 pt</text>
+<text x="1384" y="424" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Color</text>
+<rect x="1480" y="407" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="424" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start"></text>
+<rect x="1486" y="412" width="20" height="14" rx="2" fill="#8eb7d9" stroke="none"/>
+<text x="1514" y="424" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Selected color</text>
+<text x="1384" y="456" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Opacity</text>
+<path d="M1484 452h80" stroke="#414b56" stroke-width="3" fill="none"/>
+<path d="M1484 452h64" stroke="#8eb7d9" stroke-width="3" fill="none"/>
+<circle cx="1548" cy="452" r="5" fill="#2a3139" stroke="#414b56"/>
+<text x="1580" y="456" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">80%</text>
+<text x="1384" y="488" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Point type</text>
+<rect x="1480" y="471" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="488" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Shape</text>
+<path d="M1604 483l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="520" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Point shape</text>
+<rect x="1480" y="503" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="520" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Circle</text>
+<path d="M1604 515l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="552" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Line type</text>
+<rect x="1480" y="535" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="552" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Curved</text>
+<path d="M1604 547l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="584" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Dash</text>
+<rect x="1480" y="567" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="584" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Solid</text>
+<path d="M1604 579l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="616" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Arrows</text>
+<rect x="1480" y="604" width="13" height="13" rx="3" fill="#2a3139" stroke="#414b56"/>
+<text x="1499" y="615" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Start</text>
+<rect x="1552" y="604" width="13" height="13" rx="3" fill="#2a3139" stroke="#414b56"/>
+<text x="1571" y="615" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">End</text>
+<text x="1384" y="648" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Label</text>
+<rect x="1480" y="631" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="648" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Series A</text>
+<text x="1384" y="680" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Font</text>
+<rect x="1480" y="663" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="680" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Helvetica…</text>
+<path d="M1604 675l3 3 3-3" stroke="#a6b0bb" stroke-width="1" fill="none"/>
+<text x="1384" y="712" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Font size</text>
+<rect x="1480" y="695" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="712" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">13 pt</text>
+<text x="1384" y="744" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Label distance</text>
+<rect x="1480" y="727" width="140" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1488" y="744" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">8 pt</text>
+<text x="1384" y="776" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="start">Position</text>
+<text x="1480" y="776" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">X</text>
+<rect x="1494" y="759" width="49" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1502" y="776" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">6.0</text>
+<text x="1553" y="776" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">Y</text>
+<rect x="1567" y="759" width="53" height="24" rx="4" fill="#2a3139" stroke="#414b56"/>
+<text x="1575" y="776" fill="#e8edf2" font-size="11" font-weight="400" text-anchor="start">4.2</text>
+</g>
+<rect x="1638" y="636" width="4" height="160" rx="2" fill="#2c343d" stroke="none"/>
+<rect x="1638" y="680" width="4" height="114" rx="2" fill="#a6b0bb" stroke="none"/>
+<text x="848" y="639" fill="#26313b" font-size="14" font-weight="500" text-anchor="start">Existing controls, reorganized for legibility.</text>
+<text x="848" y="665" fill="#526170" font-size="12" font-weight="400" text-anchor="start">14–16pt padding; fixed icon + label section selector.</text>
+<text x="848" y="690" fill="#526170" font-size="12" font-weight="400" text-anchor="start">Style nib: 240 × 449pt · Axes nib: 240 × 559pt.</text>
+<text x="848" y="715" fill="#526170" font-size="12" font-weight="400" text-anchor="start">Both need vertical scrolling below the section selector.</text>
+<text x="848" y="740" fill="#526170" font-size="11" font-weight="400" text-anchor="start">Control appearance is illustrative; native semantics follow integration.</text>
+<rect x="848" y="828" width="800" height="88" rx="8" fill="#1e2329" stroke="#414b56"/>
+<use xlink:href="#icon-modify" transform="translate(890 842) scale(1)" color="#e8edf2"/>
+<text x="902" y="891" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="middle">Modify</text>
+<use xlink:href="#icon-draw" transform="translate(1004 842) scale(1)" color="#e8edf2"/>
+<text x="1016" y="891" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="middle">Draw</text>
+<use xlink:href="#icon-fill" transform="translate(1118 842) scale(1)" color="#e8edf2"/>
+<text x="1130" y="891" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="middle">Fill</text>
+<use xlink:href="#icon-text" transform="translate(1232 842) scale(1)" color="#e8edf2"/>
+<text x="1244" y="891" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="middle">Text</text>
+<use xlink:href="#icon-lock" transform="translate(1346 842) scale(1)" color="#e8edf2"/>
+<text x="1358" y="891" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="middle">Lock</text>
+<use xlink:href="#icon-group" transform="translate(1460 842) scale(1)" color="#e8edf2"/>
+<text x="1472" y="891" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="middle">Group</text>
+<use xlink:href="#icon-inspector" transform="translate(1574 842) scale(1)" color="#e8edf2"/>
+<text x="1586" y="891" fill="#a6b0bb" font-size="11" font-weight="400" text-anchor="middle">Inspector</text>
+</svg>

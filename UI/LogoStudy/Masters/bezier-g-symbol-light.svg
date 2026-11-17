@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" role="img" aria-labelledby="title description">
+<title id="title">GraphSketcher bezier-g symbol, light - study pending human choice</title>
+<desc id="description">GraphSketcher logo study, round 02. Hand-authored geometry. Helvetica Neue is system typography, not original lettering. Pending human choice.</desc>
+<g fill="none" stroke="#27769a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M25 9 C21 5 14 4 9 8 C5 11 4 20 9 25 C14 30 23 27 26 22 L26 17 L18 17"/>
+<circle cx="25" cy="9" r="2" fill="#27769a" stroke="none"/>
+<circle cx="9" cy="25" r="2" fill="#27769a" stroke="none"/>
+<circle cx="18" cy="17" r="2" fill="#27769a" stroke="none"/>
+</g>
+</svg>

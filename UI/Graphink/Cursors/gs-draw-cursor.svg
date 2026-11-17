@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20pt" height="20pt" viewBox="0 0 20 20" role="img" aria-labelledby="title">
+<title id="title">Graphink Draw pointer: fine pen, tip at 2,18 logical points</title>
+<desc>Original rounded black and white artwork. No template tint. The white keyline keeps the precise black tip visible on dark or colored canvases.</desc>
+<path d="M2 18 4 12 13.5 2.5Q14.5 1.5 15.5 2.5L17.5 4.5Q18.5 5.5 17.5 6.5L8 16Z" fill="white" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+<path d="M2 18 4 12 13.5 2.5Q14.5 1.5 15.5 2.5L17.5 4.5Q18.5 5.5 17.5 6.5L8 16Z" fill="white" stroke="black" stroke-width="1.25" stroke-linejoin="round"/>
+<path d="m4 12 4 4m4-12 4 4M2 18l4-1.3L3.3 14Z" fill="black" stroke="black" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

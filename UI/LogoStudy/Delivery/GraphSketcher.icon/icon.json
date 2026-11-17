@@ -1,0 +1,72 @@
+{
+  "fill-specializations": [
+    {
+      "value": {
+        "solid": "srgb:1,1,1,1"
+      }
+    },
+    {
+      "appearance": "dark",
+      "value": {
+        "solid": "srgb:0.090196,0.109804,0.133333,1"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "B1 - unchanged curve and actual anchors",
+      "lighting": "combined",
+      "specular": false,
+      "blur-material": 0,
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0
+      },
+      "translucency": {
+        "enabled": false,
+        "value": 0
+      },
+      "layers": [
+        {
+          "name": "01 Curve",
+          "image-name": "01-curve.svg",
+          "fill-specializations": [
+            {
+              "value": {
+                "solid": "srgb:0.152941,0.462745,0.603922,1"
+              }
+            },
+            {
+              "appearance": "dark",
+              "value": {
+                "solid": "srgb:0.501961,0.784314,0.909804,1"
+              }
+            }
+          ],
+          "glass": false
+        },
+        {
+          "name": "02 Nodes",
+          "image-name": "02-nodes.svg",
+          "fill-specializations": [
+            {
+              "value": {
+                "solid": "srgb:0.152941,0.462745,0.603922,1"
+              }
+            },
+            {
+              "appearance": "dark",
+              "value": {
+                "solid": "srgb:0.501961,0.784314,0.909804,1"
+              }
+            }
+          ],
+          "glass": false
+        }
+      ]
+    }
+  ],
+  "supported-platforms": {
+    "squares": "shared"
+  }
+}
