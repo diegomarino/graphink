@@ -149,7 +149,7 @@ static NSUInteger modeFromChar(unichar theChar)
 {
     NSString *chars = [event charactersIgnoringModifiers];
     
-    if (![chars length] || ([event modifierFlags] & (NSCommandKeyMask|NSAlternateKeyMask|NSControlKeyMask)))
+    if (![chars length] || ([event modifierFlags] & (NSEventModifierFlagCommand|NSEventModifierFlagOption|NSEventModifierFlagControl)))
         return NO;
     
     unichar theChar = [chars characterAtIndex:0];
@@ -239,13 +239,13 @@ static NSUInteger modeFromChar(unichar theChar)
 
 - (BOOL)commandKeyIsDown;
 {
-    if (_modifierFlags & NSCommandKeyMask) // apple key is down
+    if (_modifierFlags & NSEventModifierFlagCommand) // apple key is down
 	return YES;
     return NO;
 }
 - (BOOL)optionKeyIsDown;
 {
-    if (_modifierFlags & NSAlternateKeyMask)
+    if (_modifierFlags & NSEventModifierFlagOption)
 	return YES;
     return NO;
 }

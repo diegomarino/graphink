@@ -769,9 +769,9 @@ static void RSHandleSystemFrameworkAssertion(NSString *location, NSString *descr
     }
     else if (action == @selector(demoPenMode:)) {
 	if ( [[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"DrawCurvedLines"] ) {
-	    [menuItem setState:NSOnState];
+	    [menuItem setState:NSControlStateValueOn];
 	} else {
-	    [menuItem setState:NSOffState];
+	    [menuItem setState:NSControlStateValueOff];
 	}
 	
 	return YES;
