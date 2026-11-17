@@ -1,0 +1,13 @@
+# Actions only: the OmniGroup submodule is a reviewed pin plus patches and is
+# never bumped automatically.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
+    commit-message:
+      prefix: Bump

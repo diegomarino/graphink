@@ -1,0 +1,29 @@
+# Tool configuration only: this repository is not a Python package.
+
+[tool.ruff]
+# CI (actions/setup-python) and the Mac mini both run Python 3.15.
+target-version = "py315"
+# Examples/ has its own generators and checks; OmniGroup/ is the pinned submodule.
+extend-exclude = ["Examples", "OmniGroup"]
+
+[tool.ruff.lint]
+# Rules that find bugs, not style: pyflakes (unused imports and variables, undefined names),
+# pycodestyle errors and warnings (bare except, invalid escapes, syntax), bugbear (mutable
+# defaults, loop-variable closures, assert False, ...), and shebang/executable-bit consistency (EXE).
+select = ["F", "E", "W", "B", "EXE"]
+ignore = [
+  # The scripts keep long lines on purpose (several hundred lines over 120 columns, up to ~580).
+  "E501",
+  # Compact style used throughout: `if x: y`, `a; b`, small named lambdas, imports after the
+  # sys.path setup that makes sibling modules importable.
+  "E701", "E702", "E731", "E402",
+  # zip() over sequences whose lengths are checked or intentionally different (pairwise).
+  "B905",
+  # SystemExit from an except block: the traceback chain is never shown.
+  "B904",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# The nested drawing helpers close over the loop's theme colours and are only called inside
+# the same iteration, so late binding cannot pick up a later value.
+"UI/Design/build-sidebar-mockup.py" = ["B023"]

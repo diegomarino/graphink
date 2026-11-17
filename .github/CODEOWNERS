@@ -1,0 +1,5 @@
+# Every path needs owner review once branch protection requires it.
+*           @diegomarino
+/.github/   @diegomarino
+/OmniGroup  @diegomarino
+/Patches/   @diegomarino

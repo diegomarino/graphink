@@ -1,0 +1,137 @@
+name: Release build
+
+# The tag pipeline. A release is an annotated tag vYYYY.M.n, created by the "Release" workflow
+# (release-tag.yml) or locally with scripts/release.sh; the version comes from the tag, never
+# from a committed file. This builds and checks the exact tagged source with
+# MARKETING_VERSION=YYYY.M.n injected, packages the Release app as Graphink.dmg plus
+# Graphink.dmg.sha256, and writes the notes (release-notes/<version>.md or git-cliff). Publishing
+# is a separate job gated by the `release` environment (required reviewers): after approval it
+# creates a normal (not draft, not prerelease) Release marked latest, so
+# /releases/latest/download/Graphink.dmg resolves. Debug is never packaged.
+#
+# A tag pushed with the workflow token does not start push workflows, so release-tag.yml
+# dispatches this one on the tag ref. To rebuild an existing tag: run it on that tag ref
+# (gh workflow run release.yml --ref v2026.11.0). There is no version input.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Also publish it as a GitHub Release (still needs environment approval). Run on a tag ref.
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build, check and package
+    runs-on: ${{ vars.MACOS_RUNNER || 'xcode-27' }}
+    timeout-minutes: 120
+    # No reviewers needed here; holds the Developer ID secrets once
+    # SIGNING_MODE=developer-id (restrict it to v* tags).
+    environment: release-build
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref }}
+          persist-credentials: false
+          fetch-depth: 0  # every tag and commit: the notes cover the range since the previous tag
+      - name: Load CI settings
+        run: cat .github/ci.env >> "$GITHUB_ENV"
+      - name: The ref must be a release tag vYYYY.M.n; its version is injected into the builds
+        run: |
+          if [ "$GITHUB_REF_TYPE" != tag ]; then
+            echo "::error::Run this workflow on a release tag ref, not on $GITHUB_REF"; exit 1
+          fi
+          echo "MARKETING_VERSION=$(.github/scripts/version.sh check-tag "$TAG")" >> "$GITHUB_ENV"
+      - name: Install git-cliff (release notes)
+        run: .github/scripts/install-git-cliff.sh "$RUNNER_TEMP/bin"
+      - run: .github/scripts/bootstrap-omnigroup.sh
+      - run: .github/scripts/checks-toolchain.sh "$RUNNER_TEMP/logs/toolchain"
+      # Debug is built only so the qualified product checks run on this exact source.
+      - run: .github/scripts/build.sh Debug "$RUNNER_TEMP/build"
+      - run: .github/scripts/checks-products.sh "$RUNNER_TEMP/build" "$RUNNER_TEMP/logs/products"
+      - name: Build Release for distribution
+        run: |
+          if [ "$SIGNING_MODE" = adhoc ]; then
+            export EXTRA_BUILD_SETTINGS="$RELEASE_DISTRIBUTION_SETTINGS"
+          fi
+          BUILD_NUMBER=$((GITHUB_RUN_NUMBER + BUILD_NUMBER_BASE)) \
+            .github/scripts/build.sh Release "$RUNNER_TEMP/build"
+      - name: Package Graphink.dmg
+        env:
+          DEVELOPER_ID_P12_BASE64: ${{ secrets.DEVELOPER_ID_P12_BASE64 }}
+          DEVELOPER_ID_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+          NOTARY_KEY_P8_BASE64: ${{ secrets.NOTARY_KEY_P8_BASE64 }}
+          NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
+          NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
+        run: |
+          .github/scripts/package-release.sh "$RUNNER_TEMP/build" "$RUNNER_TEMP/dist" "$MARKETING_VERSION"
+          .github/scripts/release-notes.sh "$MARKETING_VERSION" "$RUNNER_TEMP/dist/BUILD-INFO.txt" "$RUNNER_TEMP/dist/RELEASE-NOTES.md"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-${{ env.TAG }}
+          path: ${{ runner.temp }}/dist
+          retention-days: 30
+          if-no-files-found: error
+      - name: Collect logs
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/logs"
+          for configuration in Debug Release; do
+            if [ -f "$RUNNER_TEMP/build/$configuration/build.log" ]; then
+              cp "$RUNNER_TEMP/build/$configuration/build.log" "$RUNNER_TEMP/logs/$configuration-build.log"
+            fi
+          done
+      - if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-${{ env.TAG }}-logs
+          path: ${{ runner.temp }}/logs
+          retention-days: 30
+          if-no-files-found: ignore
+
+  publish:
+    name: Publish GitHub Release (manual approval)
+    needs: build
+    if: github.event_name == 'push' || inputs.publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # Required reviewers on this environment are the manual gate before publishing.
+    environment: release
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-${{ env.TAG }}
+          path: dist
+      - name: Verify Graphink.dmg checksum
+        working-directory: dist
+        run: sha256sum -c Graphink.dmg.sha256
+      - name: Publish release (not draft, not prerelease, latest)
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "::error::Release $TAG already exists; delete it first to republish"
+            exit 1
+          fi
+          gh release create "$TAG" --verify-tag --latest \
+            --title "Graphink ${TAG#v}" --notes-file dist/RELEASE-NOTES.md \
+            dist/Graphink.dmg dist/Graphink.dmg.sha256 dist/BUILD-INFO.txt
+          gh release view "$TAG" --json isDraft,isPrerelease,assets \
+            --jq '"draft=\(.isDraft) prerelease=\(.isPrerelease) assets=\([.assets[].name] | join(","))"'

@@ -1,0 +1,51 @@
+#!/bin/bash
+# Lint what is being committed: the staged version of each added or changed file, with the pinned
+# linters checks-fast.sh uses (ruff on Python, shellcheck on the scripts it covers, actionlint on
+# workflows). Enabled by scripts/dev/setup-hooks.sh; `git commit --no-verify` skips it once.
+# Bash 3.2 compatible (macOS /bin/bash).
+set -euo pipefail
+
+tools=$(cd "$(git rev-parse --git-common-dir)" && pwd)/lint-tools
+ruff=${RUFF:-$tools/ruff} shellcheck=${SHELLCHECK:-$tools/shellcheck} actionlint=${ACTIONLINT:-$tools/actionlint}
+
+# staged PATHSPEC...: NUL-separated staged paths that still exist (added, copied, modified, renamed).
+staged() { git diff --cached --name-only -z --diff-filter=ACMR -- "$@"; }
+py=() sh=() workflows=()
+while IFS= read -r -d '' f; do py+=("$f"); done < <(staged '*.py')
+# The same scripts as checks-fast.sh.
+while IFS= read -r -d '' f; do sh+=("$f"); done < <(staged '.github/scripts/*.sh' 'scripts/*.sh' 'Checks/*.sh' '.githooks/*')
+while IFS= read -r -d '' f; do workflows+=("$f"); done < <(staged '.github/workflows/*.yml' '.github/workflows/*.yaml')
+(( ${#py[@]} + ${#sh[@]} + ${#workflows[@]} )) || exit 0
+
+for tool in "$ruff" "$shellcheck" "$actionlint"; do
+  command -v "$tool" > /dev/null || { echo "pre-commit: $tool not found; run scripts/dev/setup-hooks.sh" >&2; exit 1; }
+done
+# Absolute paths: the linters run from the copy below.
+ruff=$(command -v "$ruff") shellcheck=$(command -v "$shellcheck") actionlint=$(command -v "$actionlint")
+
+# Lint a copy of the index, not the working tree: unstaged edits must not hide or cause a finding.
+# With the files to lint go the ruff config, the files shellcheck follows (every script and
+# ci.env) and every workflow (reusable workflows refer to each other).
+index=$(mktemp -d)
+trap 'rm -rf "$index"' EXIT
+{
+  git ls-files -z -- pyproject.toml .github/ci.env '*.sh' '.githooks/*' '.github/workflows/*'
+  if (( ${#py[@]} )); then printf '%s\0' "${py[@]}"; fi
+} | git checkout-index -f -z --stdin --prefix="$index/"
+cd "$index"
+
+status=0
+if (( ${#py[@]} )); then
+  "$ruff" check --force-exclude --no-cache "${py[@]}" || status=1
+fi
+if (( ${#sh[@]} )); then
+  # SCRIPTDIR resolves the scripts' `. "$(dirname "$0")/common.sh"` sources.
+  "$shellcheck" -x -P SCRIPTDIR "${sh[@]}" || status=1
+fi
+if (( ${#workflows[@]} )); then
+  "$actionlint" -shellcheck "$shellcheck" -pyflakes= "${workflows[@]}" || status=1
+fi
+if (( status )); then
+  echo "pre-commit: lint failed on the staged files above (git commit --no-verify skips this check)" >&2
+fi
+exit "$status"

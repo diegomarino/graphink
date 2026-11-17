@@ -1,0 +1,49 @@
+name: PR title
+
+# Squash merges make the PR title the commit subject on main, and feat/fix/perf subjects become
+# user-facing release notes (cliff.toml). So only the title is linted, here, with commitlint.
+# Node is used by this job only; the app build never needs it. See docs/CONTRIBUTING-CI.md.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-title-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  COMMITLINT_VERSION: 21.2.4
+
+jobs:
+  commitlint:
+    name: PR title (Conventional Commits)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: .commitlintrc.json
+          sparse-checkout-cone-mode: false
+      - name: Install commitlint (pinned, into a temporary directory)
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/commitlint"
+          cd "$RUNNER_TEMP/commitlint"
+          npm install --no-save --no-package-lock --no-audit --no-fund --ignore-scripts \
+            "@commitlint/cli@$COMMITLINT_VERSION" "@commitlint/config-conventional@$COMMITLINT_VERSION"
+          cp "$GITHUB_WORKSPACE/.commitlintrc.json" .
+      - name: Lint the PR title
+        working-directory: ${{ runner.temp }}/commitlint
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+          if ! printf '%s\n' "$PR_TITLE" | npx --no-install commitlint --verbose; then
+            echo "::error::The PR title must be a Conventional Commit, for example 'feat: add A4 paper presets' or 'fix(export): keep the PNG resolution'. feat, fix and perf titles become release notes, so write them for users. See docs/CONTRIBUTING-CI.md."
+            exit 1
+          fi

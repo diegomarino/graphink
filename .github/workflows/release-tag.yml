@@ -1,0 +1,81 @@
+name: Release
+
+# Run from the Actions tab on main. No inputs: the version is computed, never typed.
+# scripts/release/version.py takes the latest vYYYY.M.n tag and today's date in Europe/Madrid
+# (same month: n + 1; otherwise YYYY.M.0; no tags: this month .0). The run refuses when there
+# are no feat/fix/perf commits since the last tag, unless release-notes/<version>.md exists.
+# It then pushes the annotated tag on main's HEAD and starts the tag pipeline (release.yml):
+# build with that version, Graphink.dmg, approval in the `release` environment, publish as
+# latest. scripts/release.sh is the local equivalent. See docs/CONTRIBUTING-CI.md.
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: release-tag
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: Compute the version, check the notes, tag main
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write  # push the tag
+      actions: write   # start release.yml on the tag
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0  # every tag: the version and the notes come from them
+      - name: Load CI settings
+        run: cat .github/ci.env >> "$GITHUB_ENV"
+      - name: Install git-cliff
+        run: .github/scripts/install-git-cliff.sh "$RUNNER_TEMP/bin"
+      - name: Compute the next version
+        id: version
+        run: |
+          set -euo pipefail
+          version=$(python3 scripts/release/version.py next)
+          latest=$(python3 scripts/release/version.py latest-tag)
+          if git rev-parse --verify --quiet "refs/tags/v$version" > /dev/null; then
+            echo "::error::Tag v$version already exists"; exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Next release v$version (latest tag: ${latest:-none})"
+      - name: Check the release notes
+        id: notes
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          status=0
+          python3 scripts/release/notes.py check-release --version "$VERSION" || status=$?
+          if [ "$status" = 3 ]; then
+            echo "::error::Nothing to release: no feat/fix/perf commits since the last tag and no release-notes/$VERSION.md"
+            exit 1
+          fi
+          [ "$status" = 0 ]
+          {
+            echo "## Graphink $VERSION"
+            echo
+            python3 scripts/release/notes.py version-notes --version "$VERSION"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Tag main and start the tag pipeline
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag --annotate "v$VERSION" --message "Graphink $VERSION" HEAD
+          git push origin "refs/tags/v$VERSION"
+          # A tag pushed with this token does not start push workflows; dispatch on the tag ref.
+          gh workflow run release.yml --ref "v$VERSION" -f publish=true
+          echo "Tagged v$VERSION on $(git rev-parse --short HEAD); the Release build workflow is running." >> "$GITHUB_STEP_SUMMARY"
