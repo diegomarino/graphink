@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<g:document xmlns:g="urn:graphink:document:1" version="1" required-features="creation-defaults-v1">
+  <g:payload format="native-graph-xml" version="1"/>
+  <g:creation-defaults version="1" font-name="HelveticaNeue">
+    <g:line-color><color space="srgb" r="0.1" g="0.2" b="0.3" a="0.8"/></g:line-color>
+    <g:fill-color><color space="srgb" r="0.1" g="0.2" b="0.3" a="0.25"/></g:fill-color>
+    <g:text-color><color space="srgb" r="0.1" g="0.2" b="0.3"/></g:text-color>
+  </g:creation-defaults>
+</g:document>

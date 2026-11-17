@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:g="urn:graphink:document:1"
+           targetNamespace="urn:graphink:document:1" elementFormDefault="qualified">
+  <!-- Graphink profile schema, not an ECMA or native-color schema. -->
+  <xs:simpleType name="features"><xs:list itemType="xs:token"/></xs:simpleType>
+  <xs:simpleType name="face"><xs:restriction base="xs:string"><xs:minLength value="1"/></xs:restriction></xs:simpleType>
+  <xs:complexType name="nativeColorWrapper">
+    <xs:sequence><xs:any namespace="##local" processContents="skip"/></xs:sequence>
+  </xs:complexType>
+  <xs:element name="document">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="payload">
+          <xs:complexType>
+            <xs:attribute name="format" type="xs:token" use="required"/>
+            <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="creation-defaults" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="line-color" type="g:nativeColorWrapper" minOccurs="0"/>
+              <xs:element name="fill-color" type="g:nativeColorWrapper" minOccurs="0"/>
+              <xs:element name="text-color" type="g:nativeColorWrapper" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="font-name" type="g:face"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
+      <xs:attribute name="required-features" type="g:features" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

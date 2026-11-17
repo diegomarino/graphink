@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://www.omnigroup.com/namespace/OmniGraphSketcher/v1" app-id="com.graphsketcher.format.fixture" app-version="11.0" os-name="macOS" os-version="27.2" machine-model="illustrative">
+  <graph>
+    <canvas w="520" h="420" auto-whitespace="false">
+      <whitespace top="20" right="20" bottom="40" left="40"/>
+      <edge-padding top="6" right="6" bottom="6" left="6"/>
+    </canvas>
+    <axis id="e1" dimension="x" min="0" max="10" placement="origin"/>
+    <axis id="e2" dimension="y" min="0" max="10" placement="origin"/>
+    <vertex id="e3" x="2" y="2" shape="circle"/>
+    <vertex id="e4" x="8" y="8" shape="circle"/>
+    <line id="e5" class="connect" method="straight"><vertices ids="e3 e4"/></line>
+    <label id="e6" x="2" y="3"><text><p><run><lit>Original format example</lit></run></p></text></label>
+    <group id="e7" elements="e3 e4 e5 e6"/>
+  </graph>
+</document>

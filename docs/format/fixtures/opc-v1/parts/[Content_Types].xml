@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Override PartName="/graphink/document.xml" ContentType="application/vnd.graphink.document+xml"/>
+  <Override PartName="/contents.xml" ContentType="application/vnd.graphink.native-graph+xml"/>
+</Types>
