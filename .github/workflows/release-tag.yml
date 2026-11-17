@@ -35,7 +35,7 @@ jobs:
           ref: main
           fetch-depth: 0  # every tag: the version and the notes come from them
       - name: Load CI settings
-        run: cat .github/ci.env >> "$GITHUB_ENV"
+        run: grep -Ev '^[[:space:]]*(#|$)' .github/ci.env >> "$GITHUB_ENV"
       - name: Install git-cliff
         run: .github/scripts/install-git-cliff.sh "$RUNNER_TEMP/bin"
       - name: Compute the next version
