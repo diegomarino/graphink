@@ -1,0 +1,448 @@
+[
+  {
+    "id": "A027",
+    "file": "GraphSketcher/Model/RSHitTester-Snapping.m",
+    "line": 349,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSHitTester-Snapping.plist",
+    "sha256": "78d920eb706940ee023bd2ce9d76d833eea8d84b0151445d30174b575a657a52",
+    "trace": [
+      {
+        "line": 349,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A028",
+    "file": "GraphSketcher/Model/RSHitTester-Snapping.m",
+    "line": 352,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSHitTester-Snapping.plist",
+    "sha256": "78d920eb706940ee023bd2ce9d76d833eea8d84b0151445d30174b575a657a52",
+    "trace": [
+      {
+        "line": 352,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A029",
+    "file": "GraphSketcher/Model/RSHitTester.m",
+    "line": 756,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSHitTester.plist",
+    "sha256": "85a7e3b124d7cfed74b5992318ccc60dfe53deb7b987f81660cbee952a511ff4",
+    "trace": [
+      {
+        "line": 756,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A030",
+    "file": "GraphSketcher/OmniStyle/Basic/OSURLStyleAttribute.m",
+    "line": 81,
+    "description": "nil passed to a callee that requires a non-null 1st parameter",
+    "plist": "/private/tmp/graphink-model-baseline-plists/OSURLStyleAttribute.plist",
+    "sha256": "f7f129ab48a86f6e5cc4e7afa4f3815cef6187e08cda54017ed0d7cac209d6de",
+    "trace": [
+      {
+        "line": 71,
+        "message": "Assuming 'plist' is nil"
+      },
+      {
+        "line": 76,
+        "message": "Assuming the condition is false"
+      },
+      {
+        "line": 81,
+        "message": "nil passed to a callee that requires a non-null 1st parameter"
+      }
+    ]
+  },
+  {
+    "id": "A031",
+    "file": "GraphSketcher/Model/XML/OFObject-XML.m",
+    "line": 103,
+    "description": "nil passed to a callee that requires a non-null 2nd parameter",
+    "plist": "/private/tmp/graphink-model-baseline-plists/OFObject-XML.plist",
+    "sha256": "0e57d7f9026d2117c574690e97ea0ea5dc12cb4bb86eea3c169fefd912631479",
+    "trace": [
+      {
+        "line": 100,
+        "message": "Assuming the condition is true"
+      },
+      {
+        "line": 101,
+        "message": "nil object reference stored to 'value'"
+      },
+      {
+        "line": 103,
+        "message": "'base64String' not called because the receiver is nil"
+      },
+      {
+        "line": 103,
+        "message": "nil passed to a callee that requires a non-null 2nd parameter"
+      }
+    ]
+  },
+  {
+    "id": "A032",
+    "file": "GraphSketcher/Model/XML/OFObject-XML.m",
+    "line": 197,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/OFObject-XML.plist",
+    "sha256": "0e57d7f9026d2117c574690e97ea0ea5dc12cb4bb86eea3c169fefd912631479",
+    "trace": [
+      {
+        "line": 197,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A033",
+    "file": "GraphSketcher/Model/XML/OFObject-XML.m",
+    "line": 208,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/OFObject-XML.plist",
+    "sha256": "0e57d7f9026d2117c574690e97ea0ea5dc12cb4bb86eea3c169fefd912631479",
+    "trace": [
+      {
+        "line": 208,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A034",
+    "file": "GraphSketcher/Model/RSGraph.m",
+    "line": 1205,
+    "description": "The '_idPasteMap' ivar in 'RSGraph' was retained by a synthesized property but not released before '[super dealloc]'",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSGraph.plist",
+    "sha256": "743338e22f9832b93328abba294eea77eca529a56e96f76c82ce26a24f4baf97",
+    "trace": [
+      {
+        "line": 1205,
+        "message": "The '_idPasteMap' ivar in 'RSGraph' was retained by a synthesized property but not released before '[super dealloc]'"
+      }
+    ]
+  },
+  {
+    "id": "A035",
+    "file": "GraphSketcher/Model/XML/RSText-XML.m",
+    "line": 39,
+    "description": "User-facing text should use localized string macro",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSText-XML.plist",
+    "sha256": "828e3b773758ca61daa314814e8276903ed4d18c33b4be9754d75a707d53481b",
+    "trace": [
+      {
+        "line": 22,
+        "message": "Assuming 'self' is non-nil"
+      },
+      {
+        "line": 25,
+        "message": "Assuming the condition is false"
+      },
+      {
+        "line": 39,
+        "message": "Non-localized string literal here"
+      },
+      {
+        "line": 39,
+        "message": "User-facing text should use localized string macro"
+      }
+    ]
+  },
+  {
+    "id": "A036",
+    "file": "GraphSketcher/Model/RSNumber.m",
+    "line": 461,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSNumber.plist",
+    "sha256": "1170595684c1a352121ed10fc9dc1f90964ccf90c6b8cf089a1ec8ee488d1838",
+    "trace": [
+      {
+        "line": 461,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A037",
+    "file": "GraphSketcher/OmniStyle/Text/NSAttributedString-OSExtensions.m",
+    "line": 417,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/NSAttributedString-OSExtensions.plist",
+    "sha256": "415f4dfdcbcf0357ad8f297c2e018321c0a458159c887521f814ddadc1c4ddfa",
+    "trace": [
+      {
+        "line": 417,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A038",
+    "file": "GraphSketcher/OmniStyle/Text/NSAttributedString-OSExtensions.m",
+    "line": 441,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/NSAttributedString-OSExtensions.plist",
+    "sha256": "415f4dfdcbcf0357ad8f297c2e018321c0a458159c887521f814ddadc1c4ddfa",
+    "trace": [
+      {
+        "line": 441,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A039",
+    "file": "GraphSketcher/OmniStyle/Text/NSAttributedString-OSExtensions.m",
+    "line": 470,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/NSAttributedString-OSExtensions.plist",
+    "sha256": "415f4dfdcbcf0357ad8f297c2e018321c0a458159c887521f814ddadc1c4ddfa",
+    "trace": [
+      {
+        "line": 470,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A040",
+    "file": "GraphSketcher/OmniStyle/Text/NSAttributedString-OSExtensions.m",
+    "line": 472,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/NSAttributedString-OSExtensions.plist",
+    "sha256": "415f4dfdcbcf0357ad8f297c2e018321c0a458159c887521f814ddadc1c4ddfa",
+    "trace": [
+      {
+        "line": 472,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A041",
+    "file": "GraphSketcher/OmniStyle/Text/NSAttributedString-OSExtensions.m",
+    "line": 478,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/NSAttributedString-OSExtensions.plist",
+    "sha256": "415f4dfdcbcf0357ad8f297c2e018321c0a458159c887521f814ddadc1c4ddfa",
+    "trace": [
+      {
+        "line": 478,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A042",
+    "file": "GraphSketcher/OmniStyle/Text/NSAttributedString-OSExtensions.m",
+    "line": 482,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/NSAttributedString-OSExtensions.plist",
+    "sha256": "415f4dfdcbcf0357ad8f297c2e018321c0a458159c887521f814ddadc1c4ddfa",
+    "trace": [
+      {
+        "line": 482,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A043",
+    "file": "GraphSketcher/OmniStyle/Text/NSAttributedString-OSExtensions.m",
+    "line": 513,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/NSAttributedString-OSExtensions.plist",
+    "sha256": "415f4dfdcbcf0357ad8f297c2e018321c0a458159c887521f814ddadc1c4ddfa",
+    "trace": [
+      {
+        "line": 513,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A044",
+    "file": "GraphSketcher/OmniStyle/Text/NSAttributedString-OSExtensions.m",
+    "line": 516,
+    "description": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue",
+    "plist": "/private/tmp/graphink-model-baseline-plists/NSAttributedString-OSExtensions.plist",
+    "sha256": "415f4dfdcbcf0357ad8f297c2e018321c0a458159c887521f814ddadc1c4ddfa",
+    "trace": [
+      {
+        "line": 516,
+        "message": "Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue"
+      }
+    ]
+  },
+  {
+    "id": "A045",
+    "file": "GraphSketcher/Model/RSLine.m",
+    "line": 300,
+    "description": "nil passed to a callee that requires a non-null 1st parameter",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSLine.plist",
+    "sha256": "9effe0a98b233eb9f4a20d7b880ed7e65c31a89ccaea62e47479dd31f03edb7b",
+    "trace": [
+      {
+        "line": 300,
+        "message": "Calling 'startVertex'"
+      },
+      {
+        "line": 403,
+        "message": "Entered call from 'connectedElements'"
+      },
+      {
+        "line": 404,
+        "message": "Calling '_setupVertices'"
+      },
+      {
+        "line": 93,
+        "message": "Entered call from 'startVertex'"
+      },
+      {
+        "line": 96,
+        "message": "Assuming the condition is false"
+      },
+      {
+        "line": 100,
+        "message": "Assuming the condition is true"
+      },
+      {
+        "line": 102,
+        "message": "Value assigned to '_v1'"
+      },
+      {
+        "line": 404,
+        "message": "Returning from '_setupVertices'"
+      },
+      {
+        "line": 405,
+        "message": "Returning pointer"
+      },
+      {
+        "line": 300,
+        "message": "Returning from 'startVertex'"
+      },
+      {
+        "line": 300,
+        "message": "nil passed to a callee that requires a non-null 1st parameter"
+      }
+    ]
+  },
+  {
+    "id": "A046",
+    "file": "GraphSketcher/Model/RSDataImporter.m",
+    "line": 58,
+    "description": "'RSDataImporter' lacks a 'dealloc' instance method but must release '_warning'",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSDataImporter.plist",
+    "sha256": "c924e12a2c2cc5a1cdb871d847d4061bad37b2b65ce03fedcb036423e426d99a",
+    "trace": [
+      {
+        "line": 58,
+        "message": "'RSDataImporter' lacks a 'dealloc' instance method but must release '_warning'"
+      }
+    ]
+  },
+  {
+    "id": "A047",
+    "file": "GraphSketcher/Model/RSDataImporter.m",
+    "line": 401,
+    "description": "Declared variable-length array (VLA) has zero size",
+    "plist": "/private/tmp/graphink-model-baseline-plists/RSDataImporter.plist",
+    "sha256": "c924e12a2c2cc5a1cdb871d847d4061bad37b2b65ce03fedcb036423e426d99a",
+    "trace": [
+      {
+        "line": 1359,
+        "message": "Calling 'graphElementsFromString:forGraph:prototypes:connectSeries:found:'"
+      },
+      {
+        "line": 1362,
+        "message": "Entered call from 'graphElementsFromString:forGraph:connectSeries:'"
+      },
+      {
+        "line": 1365,
+        "message": "Calling '_dataSeriesFromString:forGraph:'"
+      },
+      {
+        "line": 958,
+        "message": "Entered call from 'graphElementsFromString:forGraph:prototypes:connectSeries:found:'"
+      },
+      {
+        "line": 981,
+        "message": "Assuming 'table' is non-nil"
+      },
+      {
+        "line": 988,
+        "message": "Assuming 'nmofRows' is not equal to 0"
+      },
+      {
+        "line": 994,
+        "message": "Assuming 'nmofCols' is not equal to 0"
+      },
+      {
+        "line": 1001,
+        "message": "Assuming the condition is false"
+      },
+      {
+        "line": 1017,
+        "message": "Calling 'detectColumnTypes:intoArray:'"
+      },
+      {
+        "line": 395,
+        "message": "Entered call from '_dataSeriesFromString:forGraph:'"
+      },
+      {
+        "line": 397,
+        "message": "Calling 'numberOfColumnsInTable:'"
+      },
+      {
+        "line": 368,
+        "message": "Entered call from 'detectColumnTypes:intoArray:'"
+      },
+      {
+        "line": 370,
+        "message": "'cols' initialized to 0"
+      },
+      {
+        "line": 371,
+        "message": "Entering loop body"
+      },
+      {
+        "line": 372,
+        "message": "Assuming the condition is false"
+      },
+      {
+        "line": 371,
+        "message": "Looping back to the head of the loop"
+      },
+      {
+        "line": 371,
+        "message": "Loop body skipped when collection is empty"
+      },
+      {
+        "line": 376,
+        "message": "Returning zero (loaded from 'cols')"
+      },
+      {
+        "line": 397,
+        "message": "Returning from 'numberOfColumnsInTable:'"
+      },
+      {
+        "line": 397,
+        "message": "'nmofCols' initialized to 0"
+      },
+      {
+        "line": 401,
+        "message": "Declared variable-length array (VLA) has zero size"
+      }
+    ]
+  }
+]

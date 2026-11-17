@@ -1,0 +1,191 @@
+[
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/LinkBack/Source/LinkBackServer.m",
+    "line": 195,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil passed to a callee that requires a non-null 1st parameter",
+    "id": "A048",
+    "relative_file": "LinkBack/Source/LinkBackServer.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniInspector/OIScrollingTabbedInspector.m",
+    "line": 744,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil passed to a callee that requires a non-null 1st parameter",
+    "id": "A049",
+    "relative_file": "OmniGroup/Frameworks/OmniInspector/OIScrollingTabbedInspector.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniInspector/OIScrollingTabbedInspector.m",
+    "line": 752,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil passed to a callee that requires a non-null 1st parameter",
+    "id": "A050",
+    "relative_file": "OmniGroup/Frameworks/OmniInspector/OIScrollingTabbedInspector.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniInspector/OIInspectorRegistry.m",
+    "line": 1199,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a method that is expected to return a non-null value",
+    "id": "A051",
+    "relative_file": "OmniGroup/Frameworks/OmniInspector/OIInspectorRegistry.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniInspector/OIInspectorRegistry.m",
+    "line": 1207,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a method that is expected to return a non-null value",
+    "id": "A052",
+    "relative_file": "OmniGroup/Frameworks/OmniInspector/OIInspectorRegistry.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTableView-OAExtensions.m",
+    "line": 127,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil passed to a callee that requires a non-null 2nd parameter",
+    "id": "A053",
+    "relative_file": "OmniGroup/Frameworks/OmniAppKit/OpenStepExtensions.subproj/NSTableView-OAExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniAppKit/Appearance/OAColorCatalog.m",
+    "line": 219,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "Null returned from a function that is expected to return a non-null value",
+    "id": "A054",
+    "relative_file": "OmniGroup/Frameworks/OmniAppKit/Appearance/OAColorCatalog.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 454,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A055",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 460,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A056",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 466,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A057",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 471,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A058",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 493,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A059",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 498,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A060",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 502,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A061",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 509,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A062",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m",
+    "line": 515,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil returned from a function that is expected to return a non-null value",
+    "id": "A063",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSURL-OFExtensions.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/XML/OFXMLMaker.m",
+    "line": 435,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil passed to a callee that requires a non-null 1st parameter",
+    "id": "A064",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/XML/OFXMLMaker.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OFBundleRegistry.m",
+    "line": 673,
+    "type": "Nullability",
+    "category": "Memory error",
+    "description": "nil passed to a callee that requires a non-null 2nd parameter",
+    "id": "A065",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OFBundleRegistry.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/XML/OFXMLSignature.m",
+    "line": 541,
+    "type": "Use-after-free",
+    "category": "Memory error",
+    "description": "Use of memory after it is freed",
+    "id": "A066",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/XML/OFXMLSignature.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/XML/OFXMLSignature.m",
+    "line": 1889,
+    "type": "Called function pointer is null (null dereference)",
+    "category": "Logic error",
+    "description": "Called function pointer is null (null dereference)",
+    "id": "A067",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/XML/OFXMLSignature.m"
+  },
+  {
+    "file": "/tmp/graphink-issues3-6-merge-check/OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSObject-OFAppleScriptExtensions.m",
+    "line": 267,
+    "type": "Bad release",
+    "category": "Memory (Core Foundation/Objective-C/OSObject)",
+    "description": "Incorrect decrement of the reference count of an object that is not owned at this point by the caller",
+    "id": "A068",
+    "relative_file": "OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSObject-OFAppleScriptExtensions.m"
+  }
+]

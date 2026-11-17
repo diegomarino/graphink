@@ -1,0 +1,366 @@
+{
+  "model_diagnostics": [
+    {
+      "id": "A045",
+      "file": "GraphSketcher/Model/RSLine.m",
+      "line": 300,
+      "description": "nil passed to a callee that requires a non-null 1st parameter",
+      "plist": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSLine.plist",
+      "trace": [
+        {
+          "line": 300,
+          "message": "Calling 'startVertex'"
+        },
+        {
+          "line": 403,
+          "message": "Entered call from 'connectedElements'"
+        },
+        {
+          "line": 404,
+          "message": "Calling '_setupVertices'"
+        },
+        {
+          "line": 93,
+          "message": "Entered call from 'startVertex'"
+        },
+        {
+          "line": 96,
+          "message": "Assuming the condition is false"
+        },
+        {
+          "line": 100,
+          "message": "Assuming the condition is true"
+        },
+        {
+          "line": 102,
+          "message": "Value assigned to '_v1'"
+        },
+        {
+          "line": 404,
+          "message": "Returning from '_setupVertices'"
+        },
+        {
+          "line": 405,
+          "message": "Returning pointer"
+        },
+        {
+          "line": 300,
+          "message": "Returning from 'startVertex'"
+        },
+        {
+          "line": 300,
+          "message": "nil passed to a callee that requires a non-null 1st parameter"
+        }
+      ]
+    }
+  ],
+  "model_translation_units": 61,
+  "all_retained_diagnostics": 48,
+  "plists": [
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSUnknown.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSLine-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraphElement.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStyleAttribute.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSHitTester-Snapping.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraph-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/NSArray-RSExtensions.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStyleAttributeRegistry.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OFPreference-RSExtensions.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSFitLine.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSUndoer.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSTextLabel-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSAxis.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/GSMErrors.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSAxis-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStyledTextStorage-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSVertex.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSConnectLine.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSHitTester.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSFill.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraphArchive.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSURLStyleAttribute.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSBoolStyleAttribute.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStringStyleAttribute.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStyle.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraphElement-Rendering.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSFill-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraphElementSelector.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStyle-Attributes.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSImageExporter.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OFObject-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraph.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraphRenderer.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSEnumStyleAttribute.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSStrokePoint.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSDataMapper.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/NSBezierPath-RSExtensions.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSTextLabel.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGroup.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSText.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraphElement-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSText-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSNumber.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStyle-AttributeExtensions.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSNumberStyleAttribute.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStyleContext.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSStyleChange.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSEquationLine.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/BackwardsCompatibility.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSVertex-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGroup-XML.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/NSAttributedString-OSExtensions.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSColorStyleAttribute.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGraphEditor.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSGrid.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSErrors.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSFreehandStroke.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSLine.plist",
+      "sha256": "9effe0a98b233eb9f4a20d7b880ed7e65c31a89ccaea62e47479dd31f03edb7b",
+      "diagnostics": 1
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/RSDataImporter.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/OSVectorStyleAttribute.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    },
+    {
+      "path": "/private/tmp/graphink-analyzer-model/Intermediates/GraphSketcherModel.build/Debug/GraphSketcherModel.build/StaticAnalyzer/GraphSketcherModel/GraphSketcherModel/normal/arm64/NSFont-RSExtensions.plist",
+      "sha256": "0923bb57f6977a12a86088cbf2b47c2537efc3fe67bae846149d09ceb3cd080a",
+      "diagnostics": 0
+    }
+  ]
+}
