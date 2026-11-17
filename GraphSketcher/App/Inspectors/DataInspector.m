@@ -1,3 +1,4 @@
+#import "RSStylePresets.h"
 // Copyright 2003-2013 Omni Development, Inc.  All rights reserved.
 //
 // This software may only be used and reproduced according to the
@@ -8,6 +9,7 @@
 #import "DataInspector.h"
 
 #import <GraphSketcherModel/RSVertex.h>
+#import <GraphSketcherModel/RSTextLabel.h>
 #import <GraphSketcherModel/RSGroup.h>
 #import <GraphSketcherModel/RSGraph.h>
 #import <GraphSketcherModel/RSGraphEditor.h>
@@ -63,6 +65,7 @@
     RSVertex *V = [[[RSVertex alloc] initWithGraph:_graph] autorelease];
     [V setShape:[[OFPreferenceWrapper sharedPreferenceWrapper] integerForKey:@"DefaultVertexShape"]];
     [V setPosition:_unfinishedPoint];
+    RSAdaptNewObjectColor(V, NO);
     
     return V;
 }
@@ -228,6 +231,7 @@
 - (void)selectionChangedNotification:(NSNotification *)note
 // sent by selection object when any object modifies the selection in any way
 {
+    if (note.userInfo[@"document"] != [_s document]) return;
     // when the inspector is updating itself, ignore this notification
     if( _selfChanged )  return;
     
@@ -240,10 +244,12 @@
 }
 - (void)contextChangedNotification:(NSNotification *)note
 {
+    if (note.userInfo[@"document"] && note.userInfo[@"document"] != [_s document]) return;
     [self updateDisplay];
 }
 - (void)toolbarClickedNotification:(NSNotification *)note
 {
+    if (!self.view.window.isMainWindow) return;
     // deselect any selected fields (otherwise, a new unwanted (0,0) point could get created)
     [self.view.window makeFirstResponder:nil];
 }
@@ -278,6 +284,7 @@
     RSGraph *newGraph = [newDocument graph];
     if (newGraph == _graph)
         return;
+    [self _clearUnfinishedPoint];
     
     if (_graph) {
 	// stop observing changes to the old graph
@@ -385,7 +392,9 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
     // Set the value for the attribute named identifier:
     if ( [identifier isEqual:@"text"] ) {
 	if (!isBlank) {
-	    [_graph makeLabelForOwner:V];  // if the vertex doesn't already have a label, create one.
+	    BOOL creatingLabel=V.label==nil;
+            [_graph makeLabelForOwner:V];
+            if (creatingLabel) RSAdaptNewObjectColor(V.label, NO);
 	}
 	[V setText:anObject];
 	

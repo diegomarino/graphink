@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-// XML comment around #defines so this will validate with plutil before preprocessing.
-#include "../InfoPlist.h"
--->
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>graphink</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>GSDocIcon.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Graphink Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.diegomarino.graphink.document</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>GraphDocument</string>
+		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
@@ -21,6 +37,8 @@
 			<string>GraphSketcher Document</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>com.graphsketcher.graphdocument</string>
@@ -32,27 +50,29 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
-	<string>$(PRODUCT_NAME) MARKETING_VERSION, version FULL_BUNDLE_VERSION, © COPYRIGHT_YEARS The Omni Group</string>
+	<string>$(PRODUCT_NAME) $(MARKETING_VERSION), version $(CURRENT_PROJECT_VERSION), © 2003–2014 The Omni Group</string>
 	<key>CFBundleHelpBookFolder</key>
-	<string>$(PRODUCT_NAME) Help</string>
+	<string>GraphSketcher Help</string>
 	<key>CFBundleHelpBookName</key>
-	<string>$(PRODUCT_NAME) Help</string>
+	<string>GraphSketcher Help</string>
 	<key>CFBundleIconFile</key>
 	<string>GSAppIcon.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(OMNI_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleDisplayName</key>
+	<string>Graphink</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>MARKETING_VERSION</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>RSGS</string>
 	<key>CFBundleVersion</key>
-	<string>FULL_BUNDLE_VERSION</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://www.graphsketcher.com/</string>
 	<key>LinkBackServer</key>
@@ -64,13 +84,15 @@
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>© COPYRIGHT_YEARS The Omni Group</string>
+	<string>© 2003–2014 The Omni Group</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>OAApplication</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
+	<key>OAAboutPanelControllerClass</key>
+	<string>RSAboutPanelController</string>
 	<key>OFControllerClass</key>
 	<string>AppController</string>
 	<key>OFRegistrations</key>
@@ -85,6 +107,11 @@
 				
 				<key>GSFirstTimeUser</key>
 				<true/>
+				<!-- The Graphink first-launch example (replaces the GSFirstTimeUser auto-open) -->
+				<key>GraphinkInitialExampleShown</key>
+				<false/>
+				<key>OAShowMessageOfTheDayOnFirstLaunch</key>
+				<false/>
 				
 				<!-- default styles -->
 				<key>DefaultLineColor</key>
@@ -101,17 +128,37 @@
 				<string>0.9 0.9 0.9</string>
 				
 				<key>DefaultLabelFont</key>
-				<dict/>
+				<dict>
+					<key>NSFontNameAttribute</key>
+					<string>HelveticaNeue</string>
+					<key>NSFontSizeAttribute</key>
+					<real>13</real>
+				</dict>
 				<key>DefaultAxisTickLabelFont</key>
-				<dict/>
+				<dict>
+					<key>NSFontNameAttribute</key>
+					<string>HelveticaNeue</string>
+					<key>NSFontSizeAttribute</key>
+					<real>12</real>
+				</dict>
 				<key>DefaultXAxisTickLabelFont</key>
 				<dict/>
 				<key>DefaultYAxisTickLabelFont</key>
 				<dict/>
 				<key>DefaultXAxisTitleFont</key>
-				<dict/>
+				<dict>
+					<key>NSFontNameAttribute</key>
+					<string>HelveticaNeue-Medium</string>
+					<key>NSFontSizeAttribute</key>
+					<real>14</real>
+				</dict>
 				<key>DefaultYAxisTitleFont</key>
-				<dict/>
+				<dict>
+					<key>NSFontNameAttribute</key>
+					<string>HelveticaNeue-Medium</string>
+					<key>NSFontSizeAttribute</key>
+					<real>14</real>
+				</dict>
 				
 				<key>DefaultLineWidth</key>
 				<real>2.0</real>
@@ -233,10 +280,7 @@
 				<key>SnapToGridSensitivity</key>
 				<real>6</real>
 				
-				<key>AutosaveDelaySeconds</key>  <!-- You can turn off autosave by using the value 0 -->
-				<real>120</real>
-				
-				
+
 				<!-- stroke recognition -->
 				<key>DrawCurvedLines</key>
 				<true/>
@@ -272,6 +316,29 @@
 		</dict>
 	</dict>
 	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.composite-content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Graphink Document</string>
+			<key>UTTypeIconFile</key>
+			<string>GSDocIcon.icns</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.diegomarino.graphink.document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>graphink</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>

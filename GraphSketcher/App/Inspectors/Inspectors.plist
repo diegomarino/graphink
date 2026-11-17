@@ -7,14 +7,20 @@
 <plist version="1.0">
 	<dict>
 		<key>OIInspectorWidth</key>
-		<real>240</real>
+		<real>280</real>
 		<key>OIInspectors</key>
 		<array>
 			<dict>
 				<key>bundle</key>
 				<string>mainBundle</string>
 				<key>class</key>
-				<string>OITabbedInspector</string>
+				<string>RSInspectorSidebar</string>
+				<key>preferredInterfaceType</key>
+				<integer>1</integer>
+				<key>wantsHeader</key>
+				<false/>
+				<key>isCollapsible</key>
+				<false/>
 				<key>identifier</key>
 				<string>com.graphsketcher.GraphSketcher.inspector</string>
 				<key>single-selection</key>

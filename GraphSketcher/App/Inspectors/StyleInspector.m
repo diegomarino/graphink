@@ -1,3 +1,4 @@
+#import "RSStylePresets.h"
 // Copyright 2003-2013 Omni Development, Inc.  All rights reserved.
 //
 // This software may only be used and reproduced according to the
@@ -5,6 +6,7 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import "StyleInspector.h"
 
 #import <GraphSketcherModel/RSGraphElement.h>
@@ -20,7 +22,7 @@
 #import <GraphSketcherModel/NSBezierPath-RSExtensions.h>
 #import <GraphSketcherModel/OFPreference-RSExtensions.h>
 #import <GraphSketcherModel/RSLog.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 #import "GraphDocument.h"
 #import "RSSelector.h"
@@ -96,6 +98,7 @@
     }
     // stop drawing
     [dashImg unlockFocus];
+    [dashImg setTemplate:YES];
     
     // set popup menu item
     NSMenu *dashPopUpMenu = [_dashPopUp menu];
@@ -268,7 +271,7 @@
 	[P lineToPoint:NSMakePoint(p.x + c, p.y - b)];
 	[P closePath];
 	
-	NSRect r = NSMakeRect(0,0,b*2,b*2);
+	r = NSMakeRect(0,0,b*2,b*2);
 	r.origin = p;
 	[P rotateInFrame:r byDegrees:-10];
     }
@@ -279,6 +282,7 @@
     [[NSColor blackColor] set];
     [P fill];
     [img unlockFocus];
+    [img setTemplate:YES];
     
     // set popup menu item
     [[[_shapePopUp menu] itemWithTag:shape] setImage:img];
@@ -303,24 +307,25 @@
 
 - (void)updateColorControls:(RSGraphElement *)obj;
 {
-    OQColor *color = [obj color];
+    NSColor *color = [obj color];
     
     if (![_s selected] && [[RSMode sharedModeController] mode] == RS_fill) {
-	color = [OQColor colorForPreferenceKey:@"DefaultFillColor"];
+	color = self.graph.creationDefaults[@"fill-color"]?:[[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultFillColor"];
     }
     
+    if (![_s selected] && self.graph.creationDefaults) color=self.graph.creationDefaults[RSCreationColorKey(obj,[[RSMode sharedModeController] mode]==RS_fill,[[RSMode sharedModeController] mode]==RS_text)]?:color;
     if (!color || ![obj hasColor]) {
         return;
     }
         
-    CGFloat opacity = [obj opacity];
+    CGFloat opacity = ![_s selected] && self.graph.creationDefaults ? color.alphaComponent : [obj opacity];
 
-    [_colorWell setColor:color.toColor];
+    [_colorWell setColor:color];
     [_opacitySlider setDoubleValue:opacity];
     
-    [[_opacityButtonLeft cell] setColor:color.toColor];
+    [[_opacityButtonLeft cell] setColor:color];
     [_opacityButtonLeft setNeedsDisplay];
-    [[_opacityButtonRight cell] setColor:color.toColor];
+    [[_opacityButtonRight cell] setColor:color];
     [_opacityButtonRight setNeedsDisplay];
 }
 
@@ -486,6 +491,12 @@
 
 - (void)updateLabelFontControls:(RSGraphElement *)obj;
 {
+    [_fontButton setEnabled:[[_s selection] hasLabel] || (![_s selected] && self.graph.creationDefaults!=nil)];
+    if (![_s selected] && self.graph.creationDefaults) {
+        NSFont *font=[NSFont fontWithName:self.graph.creationDefaults[@"font-name"]?:@"" size:13]?:[[[OFPreferenceWrapper sharedPreferenceWrapper] fontDescriptorForKey:@"DefaultLabelFont"] font];
+        [_fontButton setTitle:[font.displayName stringByAppendingString:@"..."]];
+        [_fontSizeField setStringValue:@""]; return;
+    }
     if (![[_s selection] hasLabel]) {
 	// control is not enabled
 	[_fontButton setTitle:@""];
@@ -614,6 +625,7 @@
     // -setEnabled: should be now handled using bindings in the xib file.
     
     if (!_editor || !_s || ![_s document] || ![_s context]) {
+        [_fontButton setEnabled:NO];
 	
 	[_colorWell setColor:[NSColor blackColor]];
 	
@@ -759,6 +771,7 @@
 - (void)selectionChangedNotification:(NSNotification *)note;
 // sent by selection object when any object modifies the selection in any way
 {
+    if (note.userInfo[@"document"] != [_s document]) return;
     // if the inspector sent the change notification, ignore it
     if ([note object] == self)  return;
     
@@ -775,17 +788,20 @@
 }
 - (void)contextChangedNotification:(NSNotification *)note;
 {
+    if (note.userInfo[@"document"] && note.userInfo[@"document"] != [_s document]) return;
     [self updateSelection];
     [self updateDisplay];
 }
 - (void)toolbarClickedNotification:(NSNotification *)note;
 {
+    if (!self.view.window.isMainWindow) return;
     // deselect any selected fields (otherwise, a new unwanted (0,0) point could get created)
     [self.view.window makeFirstResponder:nil];
 }
 
 - (void)modeDidChangeNotification:(NSNotification *)note;
 {
+    if (!self.view.window.isMainWindow) return;
     [self updateDisplay];
 }
 
@@ -982,8 +998,23 @@
 
 - (IBAction)changeColor:(id)sender;
 {
-    // Just let the first responder get the -changeColor: message
-    //[_graph changeColor:sender];
+    // The well is an OAColorWell: while it is active the canvas leaves -changeColor: to it, so this
+    // document is the one that changes even when another document's window is key.
+    RSGraphElement *object=[_s selection];
+    NSColor *color=[sender color];
+    [object setColor:color];
+    if (self.graph.creationDefaults) {
+        RSSetSeriesCreationValue(self.graph,[_s undoer],RSCreationColorKey(object,[[RSMode sharedModeController] mode]==RS_fill,[[RSMode sharedModeController] mode]==RS_text),color);
+        [_s sendChange:nil]; return;
+    }
+    // Legacy documents keep the historical app-wide defaults (as -[RSGraphView changeColor:] does).
+    if ([object isKindOfClass:[RSUnknown class]])
+        [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:color forKey:[[RSMode sharedModeController] mode]==RS_fill?@"DefaultFillColor":@"DefaultLineColor"];
+    else if ([RSGraph isLine:object] || [object isKindOfClass:[RSVertex class]])
+        [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:color forKey:@"DefaultLineColor"];
+    else if ([object isKindOfClass:[RSFill class]])
+        [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:color forKey:@"DefaultFillColor"];
+    [_s sendChange:nil];
 }
 
 - (IBAction)changeOpacity:(id)sender;
@@ -1001,24 +1032,30 @@
     
     [self updateKeyWindowAndFirstResponder:sender];
     
-    // set the opacity
+    if (self.graph.creationDefaults) {
+        NSString *key=RSCreationColorKey(obj,[[RSMode sharedModeController] mode]==RS_fill,[[RSMode sharedModeController] mode]==RS_text);
+        NSColor *base=![_s selected]?(self.graph.creationDefaults[key]?:obj.color):obj.color;
+        NSColor *color=[base colorWithAlphaComponent:opacity];
+        if ([_s selected]) obj.color=color;
+        RSSetSeriesCreationValue(self.graph,[_s undoer],key,color); [_s sendChange:nil]; return;
+    }
     [obj setOpacity:opacity];
     
-    NSColor *newDefaultColor = [obj color].toColor;
+    NSColor *newDefaultColor = [obj color];
     if (newDefaultColor) {
         if ( [obj isKindOfClass:[RSUnknown class]] ) {
             if ([[RSMode sharedModeController] mode] == RS_fill) {
-                [[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newDefaultColor forKey:@"DefaultFillColor"];
+                [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:newDefaultColor forKey:@"DefaultFillColor"];
             }
             else {
-                [[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newDefaultColor forKey:@"DefaultLineColor"];	    
+                [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:newDefaultColor forKey:@"DefaultLineColor"];
             }
         }
         else if ([RSGraph isLine:obj] || [obj isKindOfClass:[RSVertex class]]) {
-            [[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newDefaultColor forKey:@"DefaultLineColor"];
+            [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:newDefaultColor forKey:@"DefaultLineColor"];
         }
         else if ([obj isKindOfClass:[RSFill class]]) {
-            [[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newDefaultColor forKey:@"DefaultFillColor"];
+            [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:newDefaultColor forKey:@"DefaultFillColor"];
         }
     }
     
@@ -1162,6 +1199,7 @@
 	TL = [L label];
 	if (!TL) {
 	    TL = [[RSTextLabel alloc] initWithGraph:self.graph];
+            RSAdaptNewObjectColor(TL, NO);
 	    [[[_s document] graph] addElement:[TL autorelease]];
 	    [TL setOwner:L];
 	}
@@ -1172,6 +1210,7 @@
 	TL = [obj label];
 	if (!TL) {
 	    TL = [[RSTextLabel alloc] initWithGraph:self.graph];
+            RSAdaptNewObjectColor(TL, NO);
 	    [[[_s document] graph] addElement:[TL autorelease]];
 	    [TL setOwner:obj];
 	}
@@ -1182,6 +1221,7 @@
 	TL = [obj label];
 	if (!TL) {
 	    TL = [[RSTextLabel alloc] initWithGraph:self.graph];
+            RSAdaptNewObjectColor(TL, NO);
 	    [[[_s document] graph] addElement:[TL autorelease]];
 	    [TL setOwner:obj];
 	}
@@ -1205,6 +1245,11 @@
 
 - (IBAction)showFontPicker:(id)sender;
 {
+    if (![self commitEditingForDocument:[_s document]]) return;
+    if (![_s selected] && self.graph.creationDefaults) {
+        NSFont *font=[NSFont fontWithName:self.graph.creationDefaults[@"font-name"]?:@"" size:13]?:[[[OFPreferenceWrapper sharedPreferenceWrapper] fontDescriptorForKey:@"DefaultLabelFont"] font];
+        [[NSFontManager sharedFontManager] setSelectedFont:font isMultiple:NO];
+    }
     [[NSFontManager sharedFontManager] orderFrontFontPanel:self];
 }
 
@@ -1240,7 +1285,7 @@
     } else if( [self.graph isAxisTitle:TL] ) {
 	;//[[OFPreferenceWrapper sharedPreferenceWrapper] setFontDescriptor:newFontDescriptor forKey:@"DefaultAxisTitleFont"];
     } else {
-	[[OFPreferenceWrapper sharedPreferenceWrapper] setFontDescriptor:newFontDescriptor forKey:@"DefaultLabelFont"];
+	if (!self.graph.creationDefaults) [[OFPreferenceWrapper sharedPreferenceWrapper] setFontDescriptor:newFontDescriptor forKey:@"DefaultLabelFont"];
     }
     
     [_s sendChange:nil];

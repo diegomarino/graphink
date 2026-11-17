@@ -6,6 +6,7 @@
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
 #import <AppKit/NSDocument.h>
+#import <GraphSketcherModel/RSGraphArchive.h>
 #import <GraphSketcherModel/RSGraphEditorDelegate.h>
 #import <GraphSketcherModel/RSUndoerOwner.h>
 
@@ -32,6 +33,11 @@ extern NSString *RSErrorDomain;
 
 @class RSGraphEditor, RSGraphView, RSGraph, RSSelector, RSUndoer, LinkBack;
 
+// Document types: .graphink (RSGraphFileType, Graphink's exported UTI) and .ograph (GraphSketcher's
+// type, imported) open through the same reader, which detects the container (OPC or XML) from the
+// bytes. New documents and Save As propose .graphink; a normal Save of an opened .ograph keeps its
+// path and container. -prepareSavePanel: sets the allowed extensions explicitly because another
+// installed copy that registers the same UTI would otherwise decide the proposed extension.
 @interface GraphDocument : OADocument <RSGraphEditorDelegate, RSUndoerOwner>
 {
     RSGraphEditor *_editor;
@@ -46,7 +52,11 @@ extern NSString *RSErrorDomain;
     
     BOOL _isFromFile;
     BOOL _isInAppBundle;
+    BOOL _isCatalogCopy;
     BOOL _isAutosaving;
+    RSGraphArchiveEncoding _archiveEncoding;
+    RSGraphArchiveEncoding _writeArchiveEncoding;
+    BOOL _hasWriteArchiveEncoding;
 }
 
 
@@ -63,6 +73,7 @@ extern NSString *RSErrorDomain;
 - (void)performMenuItem:(SEL)menuAction;
 - (void)performMenuItem:(SEL)menuAction withName:(NSString *)actionName;
 - (BOOL)validateToolbarItem:(NSToolbarItem *)item;
+- (IBAction)applyStylePreset:(id)sender;
 - (IBAction)makeCurrentSettingsDefault:(id)sender;
 - (IBAction)copyAsImage:(id)sender;
 
@@ -78,6 +89,12 @@ extern NSString *RSErrorDomain;
 - (RSUndoer *)undoer;
 @property(assign) RSGraphView *graphView;
 @property(readonly) BOOL isFromFile;
+@property(nonatomic,readonly) RSGraphArchiveEncoding archiveEncoding;
+- (BOOL)requiresCreationDefaultsSaveAs;
 @property(assign) BOOL isInAppBundle;
+// An untitled copy of a bundled New From item or the Welcome document (-openUntitledCopyOfURL:...).
+// Until the user saves it, it must not seed new documents (canvas size, window frame).
+@property(assign) BOOL isCatalogCopy;
+@property(nonatomic,readonly) BOOL isUnsavedCatalogCopy;
 
 @end

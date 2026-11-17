@@ -1,3 +1,4 @@
+#import "RSStylePresets.h"
 // Copyright 2003-2013 Omni Development, Inc.  All rights reserved.
 //
 // This software may only be used and reproduced according to the
@@ -45,6 +46,7 @@
 {
     // create a new fill to build:
     self.fillInProgress = [[[RSFill alloc] initWithGraph:_graph] autorelease];
+    RSAdaptNewObjectColor(_fillInProgress, YES);
     
     // clean vertex clusters
     [_persistentVertex clearSnappedTo];
@@ -118,6 +120,7 @@
 - (void)initState;
 {
     self.fillInProgress = [[[RSFill alloc] initWithGraph:_graph] autorelease];
+    RSAdaptNewObjectColor(_fillInProgress, YES);
     
     _persistentVertex = [[RSVertex alloc] initWithGraph:_graph];
     [_u addExemptObject:_persistentVertex];
@@ -157,7 +160,7 @@
     
     NSUInteger modiferFlags = [event modifierFlags];
     
-    [_fillInProgress acceptLatestDefaults];
+    RSAcceptStyleCreationDefaults(_fillInProgress, YES);
     OBASSERT(_fillInProgress.graph);
     
     /////////////
@@ -250,7 +253,7 @@
     
     [_view deselect];
     
-    [_fillInProgress acceptLatestDefaults];
+    RSAcceptStyleCreationDefaults(_fillInProgress, YES);
     OBASSERT(_fillInProgress.graph);
     
     // double-click

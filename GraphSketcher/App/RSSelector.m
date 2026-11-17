@@ -13,6 +13,7 @@
 #import <OmniInspector/OIInspectorRegistry.h>
 
 #import "AppController.h"
+#import "GraphWindowController.h"
 
 @implementation RSSelector
 
@@ -98,10 +99,10 @@
         _context = context;
         nc = [NSNotificationCenter defaultCenter];
         Log3(@"RSSelector sending notification RSContextChanged (to class %@)", _context);
-        [nc postNotificationName:@"RSContextChanged" object:nil];
+        [nc postNotificationName:@"RSContextChanged" object:nil userInfo:@{@"document": _document}];
     
-        NSWindow *window = [NSApp mainWindow];
-        [[[AppController sharedController] inspectorRegistry] updateInspectorForWindow:window];
+        for (GraphWindowController *controller in [_document windowControllers])
+            [controller refreshInspectors];
     }
 }
 - (Class)context {
@@ -124,20 +125,20 @@
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     Log3(@"Sending notification RSSelectionChanged");
     if ( object == nil )  object = [self selection];  // hahaha!
-    [nc postNotificationName:@"RSSelectionChanged" object:object];
+    [nc postNotificationName:@"RSSelectionChanged" object:object userInfo:@{@"document": _document}];
     
-    NSWindow *window = [NSApp mainWindow];
-    [[[AppController sharedController] inspectorRegistry] updateInspectorForWindow:window];
+    for (GraphWindowController *controller in [_document windowControllers])
+        [controller refreshInspectors];
 }
 
 - (void)autoScaleIfWanted {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:@"RSAutoScaleIfWanted" object:nil];
+    [nc postNotificationName:@"RSAutoScaleIfWanted" object:nil userInfo:@{@"document": _document}];
 }
 
 - (void)setStatusMessage:(NSString *)message;
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RSChangeToolbarMessage" object:message];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"RSChangeToolbarMessage" object:message userInfo:@{@"document": _document}];
 }
 
 - (id)document {

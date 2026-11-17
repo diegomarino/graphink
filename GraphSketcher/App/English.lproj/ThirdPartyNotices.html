@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>GraphSketcher — Licenses and acknowledgments</title>
+<style>body { font-family: system-ui, sans-serif; line-height: 1.5; margin: 2rem auto; padding: 0 1rem; max-width: 60rem; } pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .85rem; } a { overflow-wrap: anywhere; } details { margin: 1rem 0; padding: .75rem 1rem; border: 1px solid #bbb; border-radius: .5rem; } summary { cursor: pointer; font-weight: 600; }</style>
+</head><body>
+<h1>Licenses and acknowledgments</h1>
+<p>GraphSketcher was created by Robin Stewart and further developed by The Omni Group. This Mac migration modifies the original application and selected dependency code; it does not change their authorship. Original notices and license terms are reproduced below.</p>
+<p><a href="../OmniSourceLicense.html">Read the original Omni Source License 2007 (unmodified file)</a>. This document and the original license are bundled with the application and available offline.</p>
+<nav aria-label="Notice sections"><p><a href="#omni">GraphSketcher and Omni frameworks</a> · <a href="#linkback">LinkBack</a> · <a href="#sfmt">SFMT random number generator</a> · <a href="#unzip">minizip — unzip</a> · <a href="#zip">minizip — zip</a> · <a href="#apple">Apple reachability sample</a> · <a href="#mpack">mpack 1.5 — Base64 derivation</a> · <a href="#provenance">Source provenance and excluded code</a></p></nav>
+<h2 id="omni">GraphSketcher and Omni frameworks</h2>
+<p>This application includes software by Omni Development, Inc. (The Omni Group), distributed under the Omni Source License 2007.</p>
+<details>
+<summary>Original copyright notices and source details</summary>
+<p>Sources: <a href="https://github.com/graphsketcher/GraphSketcher">GraphSketcher</a> and <a href="https://github.com/omnigroup/OmniGroup/tree/2be207ce6f7b4f77498bb48dd5e27403fb689eb7">OmniGroup, public revision 2be207ce6f7b4f77498bb48dd5e27403fb689eb7</a>. Local migration patches are recorded in Patches/OmniGroup/README.md in the source checkout. The following original copyright lines retain their original wording and years.</p>
+<pre>// Copyright 1997-2005, 2007, 2009, 2011, 2013 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2007, 2010, 2014 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2007, 2010-2011, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007, 2011 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2010, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2010-2011 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2010-2011, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2010-2013 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2010-2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2011 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2011, 2013 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2011, 2013-2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2011-2012 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2007-2008, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2007-2011 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2007-2013 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2008 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2008, 2009-2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2010, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2005, 2011 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2005, 2012-2013 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2008, 2010, 2012, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2008, 2010, 2014 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2008, 2010, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2008, 2010-2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2009, 2013-2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2010 Omni Development, Inc.  All rights reserved.
+// Copyright 1997-2010, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2015 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2016 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2017 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2018 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2019 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2020 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2021 Omni Development, Inc. All rights reserved.
+// Copyright 1997-2022 Omni Development, Inc. All rights reserved.
+// Copyright 1998-2005 Omni Development, Inc.  All rights reserved.
+// Copyright 1998-2005, 2007 Omni Development, Inc.  All rights reserved.
+// Copyright 1998-2005, 2007, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 1998-2005, 2007, 2010-2011 Omni Development, Inc.  All rights reserved.
+// Copyright 1998-2005, 2007-2008, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 1998-2005, 2010, 2013 Omni Development, Inc. All rights reserved.
+// Copyright 1998-2005, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 1998-2015 Omni Development, Inc. All rights reserved.
+// Copyright 1998-2017 Omni Development, Inc. All rights reserved.
+// Copyright 1998-2018 Omni Development, Inc. All rights reserved.
+// Copyright 1998-2019 Omni Development, Inc. All rights reserved.
+// Copyright 1998-2020 Omni Development, Inc. All rights reserved.
+// Copyright 1998-2021 Omni Development, Inc. All rights reserved.
+// Copyright 1999-2005, 2007 Omni Development, Inc.  All rights reserved.
+// Copyright 1999-2015 Omni Development, Inc. All rights reserved.
+// Copyright 1999-2016 Omni Development, Inc. All rights reserved.
+// Copyright 1999-2017 Omni Development, Inc. All rights reserved.
+// Copyright 1999-2018 Omni Development, Inc. All rights reserved.
+// Copyright 1999-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2000-2005, 2010, 2014 Omni Development, Inc.  All rights reserved.
+// Copyright 2000-2007, 2010, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 2000-2010 Omni Development, Inc.  All rights reserved.
+// Copyright 2000-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2000-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2000-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2000-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2000-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2000-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2001-2005 Omni Development, Inc.  All rights reserved.
+// Copyright 2001-2005, 2007-2008, 2010-2011, 2014 Omni Development, Inc.  All rights reserved.
+// Copyright 2001-2005, 2007-2008, 2010-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2001-2005, 2008-2010, 2013 Omni Development, Inc. All rights reserved.
+// Copyright 2001-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2001-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2001-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2001-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2001-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2005, 2007, 2008, 2010-2012, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2005, 2007-2008, 2010, 2012 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2002-2022 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2005, 2007-2008, 2010-2011, 2013-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2005, 2007-2008, 2011, 2013 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2005, 2007-2008, 2011, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2005, 2007-2011, 2013 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2005, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 2003-2013 Omni Development, Inc.  All rights reserved.
+// Copyright 2003-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2017, 2021 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2003-2022 Omni Development, Inc. All rights reserved.
+// Copyright 2004-2005, 2007-2008, 2010-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2004-2005,2009-2011,2016 Omni Development, Inc. All rights reserved.
+// Copyright 2004-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2004-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2004-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2004-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2004-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2004-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2005, 2007-2008, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 2005-2006, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 2005-2011, 2013-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2005-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2005-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2005-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2005-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2005-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2005-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2005-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2008, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 2006-2008, 2010, 2012 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2008, 2010, 2014 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2006-2022 Omni Development, Inc. All rights reserved.
+// Copyright 2007 Omni Development, Inc.  All rights reserved.
+// Copyright 2007-2008, 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 2007-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2007-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2007-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2007-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2007-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2007-2019, 2021 Omni Development, Inc. All rights reserved.
+// Copyright 2007-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2007-2022 Omni Development, Inc. All rights reserved.
+// Copyright 2008, 2011-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2008-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2008-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2008-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2008-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2008-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2008-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2008-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2008-2022 Omni Development, Inc. All rights reserved.
+// Copyright 2009-2010 The Omni Group. All rights reserved.
+// Copyright 2009-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2009-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2009-2016,2019 Omni Development, Inc. All rights reserved.
+// Copyright 2009-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2009-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2009-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2009-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2010 Omni Development, Inc.  All rights reserved.
+// Copyright 2010, 2013-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2011, 2013 The Omni Group. All rights reserved.
+// Copyright 2010-2013 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2010-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2011-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2011-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2011-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2011-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2011-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2012-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2012-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2012-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2013-2014 Omni Development, Inc. All rights reserved.
+// Copyright 2013-2015 Omni Development, Inc. All rights reserved.
+// Copyright 2013-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2013-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2013-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2013-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2013-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2013-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2014 Omni Development, Inc. All rights reserved.
+// Copyright 2014 The Omni Group. All rights reserved.
+// Copyright 2014-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2014-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2014-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2014-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2014-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2014-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2015 Omni Development, Inc. All rights reserved.
+// Copyright 2015-2016 Omni Development, Inc. All rights reserved.
+// Copyright 2015-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2015-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2015-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2015-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2016 Omni Development, Inc.  All rights reserved.
+// Copyright 2016 Omni Development, Inc. All rights reserved.
+// Copyright 2016-2017 Omni Development, Inc. All rights reserved.
+// Copyright 2016-2017 The Omni Group. All rights reserved.
+// Copyright 2016-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2016-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2016-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2016-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2017-2018 Omni Development, Inc. All rights reserved.
+// Copyright 2017-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2017-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2017-2021 Omni Development. Inc. All rights reserved.
+// Copyright 2018 Omni Development, Inc. All rights reserved.
+// Copyright 2018-2019 Omni Development, Inc. All rights reserved.
+// Copyright 2018-2020 Omni Development, Inc. All rights reserved.
+// Copyright 2019 Omni Development, Inc. All rights reserved.
+// Copyright 2019-2021 Omni Development, Inc. All rights reserved.
+// Copyright 2020 Omni Development, Inc. All rights reserved.
+// Copyright 2021 Omni Development, Inc. All rights reserved.
+// Copyright 2022 Omni Development, Inc. All rights reserved.</pre>
+</details>
+<h3>Omni Source License 2007</h3>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>Any original copyright notices and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p><a href="../OmniSourceLicense.html">Original Omni Source License 2007 (unmodified file)</a></p>
+<h2 id="linkback">LinkBack</h2>
+<p>LinkBack/Source/LinkBack.h; upstream: https://github.com/omnigroup/LinkBack. The local migration includes build and source repairs.</p>
+<pre>//
+//  LinkBack.h
+//  LinkBack Project
+//
+//  Created by Charles Jolley on Tue Jun 15 2004.
+//  Copyright (c) 2004, Nisus Software, Inc.
+//  All rights reserved.
+
+//  Redistribution and use in source and binary forms, with or without 
+//  modification, are permitted provided that the following conditions are met:
+//
+//  Redistributions of source code must retain the above copyright notice, 
+//  this list of conditions and the following disclaimer.
+//
+//  Redistributions in binary form must reproduce the above copyright notice, 
+//  this list of conditions and the following disclaimer in the documentation 
+//  and/or other materials provided with the distribution.
+//
+//  Neither the name of the Nisus Software, Inc. nor the names of its 
+//  contributors may be used to endorse or promote products derived from this 
+//  software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS 
+//  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
+//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+//  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+//  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
+//  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+//  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+//  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+</pre>
+<h2 id="sfmt">SFMT random number generator</h2>
+<p>OmniGroup/Frameworks/OmniFoundation/SFMT/SFMT-LICENSE.txt; included by OFRandom.m.</p>
+<pre>Copyright (c) 2006,2007 Mutsuo Saito, Makoto Matsumoto and Hiroshima
+University. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of the Hiroshima University nor the names of
+      its contributors may be used to endorse or promote products
+      derived from this software without specific prior written
+      permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+&quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</pre>
+<h2 id="unzip">minizip — unzip</h2>
+<p>OmniGroup/Frameworks/OmniUnzip/unzip/unzip.h; Gilles Vollant minizip 1.01e.</p>
+<pre>/* unzip.h -- IO for uncompress .zip files using zlib
+   Version 1.01e, February 12th, 2005
+
+   Copyright (C) 1998-2005 Gilles Vollant
+
+   This unzip package allow extract file from .ZIP file, compatible with PKZip 2.04g
+     WinZip, InfoZip tools and compatible.
+
+   Multi volume ZipFile (span) are not supported.
+   Encryption compatible with pkzip 2.04g only supported
+   Old compressions used by old PKZip 1.x are not supported
+
+
+   I WAIT FEEDBACK at mail info@winimage.com
+   Visit also http://www.winimage.com/zLibDll/unzip.htm for evolution
+
+   Condition of use and distribution are the same than zlib :
+
+  This software is provided &#x27;as-is&#x27;, without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+
+*/
+</pre>
+<h2 id="zip">minizip — zip</h2>
+<p>OmniGroup/Frameworks/OmniUnzip/unzip/zip.h; Gilles Vollant minizip 1.01e.</p>
+<pre>/* zip.h -- IO for compress .zip files using zlib
+   Version 1.01e, February 12th, 2005
+
+   Copyright (C) 1998-2005 Gilles Vollant
+
+   This unzip package allow creates .ZIP file, compatible with PKZip 2.04g
+     WinZip, InfoZip tools and compatible.
+   Multi volume ZipFile (span) are not supported.
+   Encryption compatible with pkzip 2.04g only supported
+   Old compressions used by old PKZip 1.x are not supported
+
+  For uncompress .zip file, look at unzip.h
+
+
+   I WAIT FEEDBACK at mail info@winimage.com
+   Visit also http://www.winimage.com/zLibDll/unzip.html for evolution
+
+   Condition of use and distribution are the same than zlib :
+
+  This software is provided &#x27;as-is&#x27;, without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+
+*/
+</pre>
+<h2 id="apple">Apple reachability sample</h2>
+<p>OmniGroup/Frameworks/OmniFoundation/OFNetReachability.m; adapted from Apple NetReachability 1.1.</p>
+<pre>/*
+
+===== IMPORTANT =====
+
+This is sample code demonstrating API, technology or techniques in development.
+Although this sample code has been reviewed for technical accuracy, it is not
+final. Apple is supplying this information to help you plan for the adoption of
+the technologies and programming interfaces described herein. This information
+is subject to change, and software implemented based on this sample code should
+be tested with final operating system software and final documentation. Newer
+versions of this sample code may be provided with future seeds of the API or
+technology. For information about updates to this and other developer
+documentation, view the New &amp; Updated sidebars in subsequent documentation
+seeds.
+
+=====================
+
+File: NetReachability.m
+Abstract: Convenience class that wraps the SCNetworkReachability APIs from
+SystemConfiguration.
+
+Version: 1.1
+
+Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple Inc.
+(&quot;Apple&quot;) in consideration of your agreement to the following terms, and your
+use, installation, modification or redistribution of this Apple software
+constitutes acceptance of these terms.  If you do not agree with these terms,
+please do not use, install, modify or redistribute this Apple software.
+
+In consideration of your agreement to abide by the following terms, and subject
+to these terms, Apple grants you a personal, non-exclusive license, under
+Apple&#x27;s copyrights in this original Apple software (the &quot;Apple Software&quot;), to
+use, reproduce, modify and redistribute the Apple Software, with or without
+modifications, in source and/or binary forms; provided that if you redistribute
+the Apple Software in its entirety and without modifications, you must retain
+this notice and the following text and disclaimers in all such redistributions
+of the Apple Software.
+Neither the name, trademarks, service marks or logos of Apple Inc. may be used
+to endorse or promote products derived from the Apple Software without specific
+prior written permission from Apple.  Except as expressly stated in this notice,
+no other rights or licenses, express or implied, are granted by Apple herein,
+including but not limited to any patent rights that may be infringed by your
+derivative works or by other works in which the Apple Software may be
+incorporated.
+
+The Apple Software is provided by Apple on an &quot;AS IS&quot; basis.  APPLE MAKES NO
+WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED
+WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN
+COMBINATION WITH YOUR PRODUCTS.
+
+IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR
+DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF
+CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF
+APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Copyright (C) 2008 Apple Inc. All Rights Reserved.
+
+*/
+</pre>
+<h2 id="mpack">mpack 1.5 — Base64 derivation</h2>
+<p>OmniGroup/Frameworks/OmniFoundation/OpenStepExtensions.subproj/NSData-OFEncoding.m identifies mpack 1.5 as its Base64 source. Original codes.c: https://sources.debian.org/data/main/m/mpack/1.5-5/codes.c. Both original notice blocks follow.</p>
+<pre>/* (C) Copyright 1993,1994 by Carnegie Mellon University
+ * All Rights Reserved.
+ *
+ * Permission to use, copy, modify, distribute, and sell this software
+ * and its documentation for any purpose is hereby granted without
+ * fee, provided that the above copyright notice appear in all copies
+ * and that both that copyright notice and this permission notice
+ * appear in supporting documentation, and that the name of Carnegie
+ * Mellon University not be used in advertising or publicity
+ * pertaining to distribution of the software without specific,
+ * written prior permission.  Carnegie Mellon University makes no
+ * representations about the suitability of this software for any
+ * purpose.  It is provided &quot;as is&quot; without express or implied
+ * warranty.
+ *
+ * CARNEGIE MELLON UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO
+ * THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS, IN NO EVENT SHALL CARNEGIE MELLON UNIVERSITY BE LIABLE
+ * FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+ * AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+ * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+ * SOFTWARE.
+ */
+/*
+Copyright (c) 1991 Bell Communications Research, Inc. (Bellcore)
+
+Permission to use, copy, modify, and distribute this material 
+for any purpose and without fee is hereby granted, provided 
+that the above copyright notice and this permission notice 
+appear in all copies, and that the name of Bellcore not be 
+used in advertising or publicity pertaining to this 
+material without the specific, prior written permission 
+of an authorized representative of Bellcore.  BELLCORE 
+MAKES NO REPRESENTATIONS ABOUT THE ACCURACY OR SUITABILITY 
+OF THIS MATERIAL FOR ANY PURPOSE.  IT IS PROVIDED &quot;AS IS&quot;, 
+WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.  */
+</pre>
+<h2 id="provenance">Source provenance and excluded code</h2>
+<p>NSData-OFEncoding.m also identifies encode85.c and decode85.c as the basis of its adapted ASCII85 routines. These references describe derived routines, not separately linked tools.</p>
+<p>The vendored minizip unzip.c retains an Info-ZIP copyright notice (1990–2000) for optional encryption. This build defines NOUNCRYPT and does not include crypt.h; that optional encryption code is excluded from the shipped binary. The original vendored source notices remain unchanged. System frameworks and system libraries are supplied by macOS.</p>
+<section id="kalam"><h2>Kalam style annotation font</h2><p>Unmodified Kalam Regular by Indian Type Foundry. Copyright (c) 2014 Indian Type Foundry (info@indiantypefoundry.com). Bundled under the SIL Open Font License 1.1; registered only inside the app process.</p><details><summary>Complete Kalam license</summary><pre>Copyright (c) 2014, Indian Type Foundry (info@indiantypefoundry.com).
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+http://scripts.sil.org/OFL
+
+
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded,&#32;
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+&quot;Font Software&quot; refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+&quot;Reserved Font Name&quot; refers to any names specified as such after the
+copyright statement(s).
+
+&quot;Original Version&quot; refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+&quot;Modified Version&quot; refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+&quot;Author&quot; refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION &amp; CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.
+</pre></details></section>
+</body></html>

@@ -1,3 +1,4 @@
+#import "RSStylePresets.h"
 // Copyright 2003-2013 Omni Development, Inc.  All rights reserved.
 //
 // This software may only be used and reproduced according to the
@@ -75,22 +76,23 @@
 	[_view setSelection:[_s halfSelection]];
     }
     else if ( [[_s halfSelection] isKindOfClass:[RSVertex class]] ) {
-	[_renderer positionLabel:nil forOwner:[_s halfSelection]];
+	RSPositionNewLabel(_renderer, [_s halfSelection]);
 	[_view setSelection:[[_s halfSelection] label]];
     }
     else if ( (L = [RSGraph isLine:[_s halfSelection]]) ) {
 	[L setSlide:[_view.editor.hitTester timeOfClosestPointTo:_viewMouseDownPoint onLine:L]];
-	[_renderer positionLabel:nil forOwner:L];
+	RSPositionNewLabel(_renderer, L);
 	[_view setSelection:[L label]];
     }
     else if ( [[_s halfSelection] isKindOfClass:[RSFill class]] ) {
-	[_renderer positionLabel:nil forOwner:[_s halfSelection]];
+	RSPositionNewLabel(_renderer, [_s halfSelection]);
 	[_view setSelection:[[_s halfSelection] label]];
     }
     else {	// no halfSelection, or untextlabelable halfSelection
 	if ( ![_view wasEditingText] ) {	// only start a new label if it was not just editing
 	    // create new label to edit:
 	    RSTextLabel *TL = [[[RSTextLabel alloc] initWithGraph:_graph] autorelease];
+            RSAdaptNewObjectColor(TL, NO);
 	    NSPoint newPos = [_mapper convertToViewCoords:_mouseUpPoint];
 	    newPos.y -= 12;	// shift down 12 pixels
 	    [TL setPosition:[_mapper convertToDataCoords:newPos]];

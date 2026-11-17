@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/google/fonts",
+  "revision": "3e5667764ccfea32ce0c3d58a3a4756de890adc1",
+  "files": {
+    "Kalam-Regular.ttf": {
+      "url": "https://raw.githubusercontent.com/google/fonts/3e5667764ccfea32ce0c3d58a3a4756de890adc1/ofl/kalam/Kalam-Regular.ttf",
+      "sha256": "57cecb63d4608019371954274ae1d8c397764debd5b19d4a33c1efa4dc923c0b"
+    },
+    "OFL.txt": {
+      "url": "https://raw.githubusercontent.com/google/fonts/3e5667764ccfea32ce0c3d58a3a4756de890adc1/ofl/kalam/OFL.txt",
+      "sha256": "f62ef357d3a1c3d27edd35a6e1ba350e8a8d13499797964eeadefbf0b3b15d1f"
+    }
+  },
+  "copyright": "Copyright (c) 2014 Indian Type Foundry (info@indiantypefoundry.com)",
+  "license": "SIL Open Font License 1.1",
+  "modifications": "None",
+  "registration": "Process only; no installation",
+  "weight": 400,
+  "postscriptName": "Kalam-Regular"
+}

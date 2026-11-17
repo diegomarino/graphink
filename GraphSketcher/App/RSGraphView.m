@@ -1,3 +1,4 @@
+#import "RSStylePresets.h"
 // Copyright 2003-2013 Omni Development, Inc.  All rights reserved.
 //
 // This software may only be used and reproduced according to the
@@ -5,7 +6,12 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
+#import <AppKit/NSColorSpace.h>
 #import "RSGraphView.h"
+#import "RSPageGeometry.h"
+#import "RSModernImages.h"
+#import "RSLabelFinder.h"
 
 #import "RSSelector.h"
 #import "RSMode.h"
@@ -36,7 +42,8 @@
 #import <GraphSketcherModel/RSGraph-XML.h>  // for object copy/paste
 
 #import <OmniInspector/OIInspectorRegistry.h>
-#import <OmniQuartz/OQColor.h>
+#import <OmniInspector/OIInspectionSet.h>
+#import <AppKit/NSColor.h>
 #import <OmniAppKit/OAFontDescriptor.h>
 
 
@@ -58,7 +65,8 @@
 {
     [super updateTrackingAreas];
     
-    [self removeTrackingRect:_trackingRectTag];
+    if (_trackingRectTag)
+        [self removeTrackingRect:_trackingRectTag];
     _trackingRectTag = [self addTrackingRect:[self bounds] owner:self 
                                     userData:nil assumeInside:NO];
 }
@@ -90,7 +98,6 @@
     _discardingEditing = NO;
     
     _cursorMode = RS_none;
-    _trackingRectTag = 0;
     
     _wasEditingText = NO;
     _connectNextImport = NO;
@@ -99,8 +106,8 @@
     
     
     // Custom cursors
-    _penCursor = [[NSCursor alloc]  initWithImage:[NSImage imageNamed:@"DrawCursor"] hotSpot:NSMakePoint(0, 15)];
-    _fillCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"FillCursor"] hotSpot:NSMakePoint(0, 2)];
+    _penCursor = [RSGraphCursor(NO) retain];
+    _fillCursor = [RSGraphCursor(YES) retain];
     
     return self;
 }
@@ -119,6 +126,7 @@
     // release allocated objects
     [_penCursor release];
     [_fillCursor release];
+    [_textSnapshot release];
     
     self.editor = nil; // Unsubscribes KVO.
     
@@ -209,7 +217,7 @@
     
     [self updateTrackingAreas];
     
-    [[self window] makeFirstResponder:self];
+    // Resizing must preserve an active label or inspector field editor.
     
     //NSLog(@"hi: %f", [self bounds].size.width);
     //[_graph setCanvasSize:[self bounds].size];
@@ -236,7 +244,7 @@
         }
         [_s setHalfSelection:nil];
         
-        [[[AppController sharedController] inspectorRegistry] clearInspectionSet];
+        [[[AppController sharedController] inspectorRegistryForWindow:self.window] clearInspectionSet];
         
         [_tools release];
         
@@ -255,10 +263,47 @@
                   nil];
         
         [self updateTrackingAreas];
+        [self updateHitTesterScale];
     }
 }
 
 @synthesize editor = _editor;
+
+// Selection, snap-to-object and snap-to-grid sensitivities are screen points: the hit tester
+// divides them by its scale, which follows the scroll view's magnification (1 at 100%).
+// Not hit distances, so not scaled: a pasted label's offset and the widths used to draw one- and
+// two-point fills.
+- (void)updateHitTesterScale;
+{
+    CGFloat scale = [[self enclosingScrollView] magnification];
+    if (!(scale > 0) || !isfinite(scale))
+        scale = 1;
+    _editor.hitTester.scale = scale;
+}
+
+// Every magnification change (zoom popup, Fit, pinch) changes the clip view's bounds.
+- (void)clipViewBoundsDidChange:(NSNotification *)note;
+{
+    [self updateHitTesterScale];
+}
+
+- (void)viewWillMoveToSuperview:(NSView *)newSuperview;
+{
+    [super viewWillMoveToSuperview:newSuperview];
+    if ([self superview])
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:[self superview]];
+}
+
+- (void)viewDidMoveToSuperview;
+{
+    [super viewDidMoveToSuperview];
+    NSView *superview = [self superview];
+    if ([superview isKindOfClass:[NSClipView class]]) {
+        [superview setPostsBoundsChangedNotifications:YES];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:superview];
+    }
+    [self updateHitTesterScale];
+}
 
 - (RSGraph *)graph
 {
@@ -315,6 +360,7 @@
 - (void)selectionChangedNotification:(NSNotification *)note;
 // sent by selection object when any object modifies the selection in any way
 {
+    if (note.userInfo[@"document"] && note.userInfo[@"document"] != _document) return;
     Log2(@"GraphView received %@", note);
     
     // Ensure that these commands are only executed for the document window in focus
@@ -384,8 +430,7 @@
     [_s setStatusMessage:[[_s selection] infoString]];
     
     // update inspectors:
-    NSWindow *window = [NSApp mainWindow];
-    [[[AppController sharedController] inspectorRegistry] updateInspectorForWindow:window];
+    [[[AppController sharedController] inspectorRegistryForWindow:self.window] updateInspectorForWindow:self.window];
     
     [self setWasEditingText:NO];
     
@@ -405,6 +450,7 @@
 
 - (void)AutoScaleIfWantedNotification:(NSNotification *)note;
 {
+    if (note.userInfo[@"document"] && note.userInfo[@"document"] != _document) return;
     Log3(@"GraphView received notification: %@", note);
     
     [_editor.mapper scaleAxesToMakeVisible:[_editor.graph Vertices]];
@@ -496,22 +542,25 @@
     RSGraphElement *obj = [_s selection];
     NSColor *newColor = [sender color];
     
-    // set the color
-    [obj setColor:[OQColor colorWithPlatformColor:newColor]];
+    [obj setColor:newColor];
+    if (_editor.graph.creationDefaults) {
+        RSSetSeriesCreationValue(_editor.graph,_editor.undoer,RSCreationColorKey(obj,[_m mode]==RS_fill,[_m mode]==RS_text),newColor);
+        [_s sendChange:self]; return;
+    }
     
     if ( [obj isKindOfClass:[RSUnknown class]] ) {
 	if ([_m mode] == RS_fill) {
-	    [[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newColor forKey:@"DefaultFillColor"];
+	    [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:newColor forKey:@"DefaultFillColor"];
 	}
 	else {
-	    [[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newColor forKey:@"DefaultLineColor"];	    
+	    [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:newColor forKey:@"DefaultLineColor"];
 	}
     }
     else if ([RSGraph isLine:obj] || [obj isKindOfClass:[RSVertex class]]) {
-	[[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newColor forKey:@"DefaultLineColor"];
+	[[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:newColor forKey:@"DefaultLineColor"];
     }
     else if ([obj isKindOfClass:[RSFill class]]) {
-	[[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newColor forKey:@"DefaultFillColor"];
+	[[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:newColor forKey:@"DefaultFillColor"];
     }
     
     [_s sendChange:self];
@@ -664,11 +713,15 @@
     
     
     // Draw the graph background and grid lines
-    OQColor *backgroundColor = [[graph backgroundColor] colorUsingColorSpace:OQColorSpaceRGB];
+    NSColor *backgroundColor = [graph backgroundColor];
     if ([self isDrawingToScreen] && [graph windowAlpha] < 1) {
         backgroundColor = [backgroundColor colorWithAlphaComponent:[graph windowAlpha]];
     }
     [renderer drawBackgroundWithColor:backgroundColor];
+    
+    // Find bar matches, behind the labels they highlight
+    if ([self isDrawingToScreen])
+        [_labelFinder drawIncrementalMatchHighlights];
     
     
     // Give tools a chance to draw behind the graph elements
@@ -724,7 +777,7 @@
     Log3(@"drawRect finished");
 }
 
-- (void)mouseEntered:(NSEvent *)event
+- (void)mouseEntered:(NSEvent * _Nullable)event
 {
     if ( ![[self window] isMainWindow] )
 	return;
@@ -771,7 +824,7 @@
     
     [[self currentTool] mouseExited:event];
 }
-- (void)mouseMoved:(NSEvent *)event
+- (void)mouseMoved:(NSEvent * _Nullable)event
 // Called whenever the mouse is inside the RSGraphView
 // so we can check whether it's over something interesting
 {
@@ -1203,10 +1256,13 @@ BOOL showWhaBam = NO;
 - (void)insertTab:(id)sender;
 {
     DEBUG_RS(@"insertTab: called");
-    
-    RSTextLabel *next = [_editor.renderer nextLabel:[_s selection]];
+
+    // Tab walks the labels of a selection; with nothing to walk, it leaves the canvas like any key view.
+    RSTextLabel *next = [_s selected] ? [_editor.renderer nextLabel:[_s selection]] : nil;
     if (next) {
         [self setSelection:next];
+    } else {
+        [[self window] selectKeyViewFollowingView:self];
     }
 }
 
@@ -1214,9 +1270,11 @@ BOOL showWhaBam = NO;
 {
     DEBUG_RS(@"insertBacktab: called");
     
-    RSTextLabel *next = [_editor.renderer previousLabel:[_s selection]];
+    RSTextLabel *next = [_s selected] ? [_editor.renderer previousLabel:[_s selection]] : nil;
     if (next) {
         [self setSelection:next];
+    } else {
+        [[self window] selectKeyViewPrecedingView:self];
     }
 }
 
@@ -1315,6 +1373,7 @@ BOOL showWhaBam = NO;
     
     NSAttributedString *attributedString = [(NSTextView *)_textView textStorage];
     
+    if (![_graph axisOfElement:[_s selection]]) RSRememberTextFormatting(_graph,[[_s selection] attributedString],attributedString);
     // No need to update the frame if the string hasn't actually changed.
     if ([[[_s selection] attributedString] isEqual:attributedString])
         return;
@@ -1354,6 +1413,8 @@ BOOL showWhaBam = NO;
     // Delaying with [self queueSelectorOnce:@selector(processTextChange)]; results in a flicker as the tentative characters are displayed in their wrapped position before the frame change is called.
     
     _textViewNeedsUpdate = YES;
+    [self setNeedsDisplay:YES];
+    [_labelFinder contentDidChange];
 }
 
 //- (void)textDidChange:(NSNotification *)note;
@@ -1368,9 +1429,9 @@ BOOL showWhaBam = NO;
     RSTextLabel *TL = (RSTextLabel *)[_s selection];
     RSGraph *graph = _editor.graph;
     
-    if ( _textView && [graph isAxisEndLabel:TL] ) {
+    if ( _textView && !_discardingEditing && [graph isAxisEndLabel:TL] ) {
 	
-	NSString *stringValue = [(RSTextLabel *)[_s selection] text];
+	NSString *stringValue = [[[_textView string] copy] autorelease];
         [self stopEditingLabel];
         
         [_editor processText:stringValue forEditedLabel:TL];
@@ -1430,6 +1491,7 @@ BOOL showWhaBam = NO;
     [_textView selectAll:self];
     
     [self setNeedsDisplay:YES];
+    [_labelFinder contentDidChange];
 }
 
 - (RSTextLabel *)stopEditingLabel;
@@ -1447,7 +1509,11 @@ BOOL showWhaBam = NO;
     //new text editing//
     OBASSERT([_s selected] && [[_s selection] isKindOfClass:[RSTextLabel class]]);
     RSTextLabel *TL = (RSTextLabel *)[_s selection];
-    
+
+    // Commit outside text-storage processing, before the shared editor is detached.
+    if (!_discardingEditing)
+        [self processTextChange];
+
     // clear out undos related to the field editor
     [[_editor.undoer undoManager] removeAllActionsWithTarget:_textView];
     [[_editor.undoer undoManager] removeAllActionsWithTarget:[_textView textStorage]];
@@ -1456,10 +1522,12 @@ BOOL showWhaBam = NO;
     [[self window] endEditingFor:[_s selection]];
     
     _textView = nil;
+    _textViewNeedsUpdate = NO;
     [[self window] makeFirstResponder:self];
     
     [self setWasEditingText:YES];
     [self setNeedsDisplay:YES];
+    [_labelFinder contentDidChange];
     
     return TL;
 }
@@ -1492,6 +1560,13 @@ BOOL showWhaBam = NO;
     else  return NO;
 }
 
+- (NSTextView *)labelEditor;
+{
+    return _textView;
+}
+
+@synthesize labelFinder = _labelFinder;
+
 
 
 - (void)changeFont:(id)sender
@@ -1503,9 +1578,15 @@ BOOL showWhaBam = NO;
     
     //[self stopEditingLabel];  // because weird things can happen in editing mode
     
-    if( ![_s selected] )
-	return;
-    
+    if (![_s selected]) {
+        if (_editor.graph.creationDefaults) {
+            NSFont *base=[NSFont fontWithName:_editor.graph.creationDefaults[@"font-name"]?:@"" size:13]?:[[[OFPreferenceWrapper sharedPreferenceWrapper] fontDescriptorForKey:@"DefaultLabelFont"] font];
+            NSFont *chosen=[sender convertFont:base];
+            RSSetSeriesCreationValue(_editor.graph,_editor.undoer,@"font-name",chosen.fontName);
+            [_s sendChange:self];
+        }
+        return;
+    }
     RSGraphElement<RSFontAttributes> *obj = (RSGraphElement<RSFontAttributes> *)[RSGraph labelFromElement:[_s selection]];
     if (!obj)
 	return;
@@ -1532,7 +1613,8 @@ BOOL showWhaBam = NO;
 	    } else if( [_editor.graph isAxisTitle:TL] ) {
 		;//[[OFPreferenceWrapper sharedPreferenceWrapper] setFontDescriptor:newFontDescriptor forKey:@"DefaultAxisTitleFont"];
 	    } else {
-		[[OFPreferenceWrapper sharedPreferenceWrapper] setFontDescriptor:newFontDescriptor forKey:@"DefaultLabelFont"];
+		if (_editor.graph.creationDefaults) RSSetSeriesCreationValue(_editor.graph,_editor.undoer,@"font-name",newFont.fontName);
+                else [[OFPreferenceWrapper sharedPreferenceWrapper] setFontDescriptor:newFontDescriptor forKey:@"DefaultLabelFont"];
 	    }
 	}
 	else if( [obj isKindOfClass:[RSAxis class]] ) {
@@ -1552,8 +1634,11 @@ BOOL showWhaBam = NO;
     // make sure font panel exists
     [[NSFontManager sharedFontManager] fontPanel:YES];
     // use it to convert the font
-    [NSFont setUserFont:font];
-    [[NSFontManager sharedFontManager] setSelectedFont:[NSFont userFontOfSize:size] isMultiple:NO];
+    if (_graph.creationDefaults) [[NSFontManager sharedFontManager] setSelectedFont:[[NSFontManager sharedFontManager] convertFont:font toSize:size] isMultiple:NO];
+    else {
+        [NSFont setUserFont:font];
+        [[NSFontManager sharedFontManager] setSelectedFont:[NSFont userFontOfSize:size] isMultiple:NO];
+    }
     [[NSFontManager sharedFontManager] modifyFontViaPanel:self];
 }
 // this is a hack
@@ -1633,7 +1718,7 @@ BOOL showWhaBam = NO;
     if ( [GE isKindOfClass:[RSTextLabel class]] ) {
         // Rich text
         NSAttributedString *attrString = [(RSTextLabel *)GE attributedString];
-        NSData *rtfData = [attrString RTFFromRange:NSMakeRange(0, [attrString length]) documentAttributes:nil];
+        NSData *rtfData = [attrString RTFFromRange:NSMakeRange(0, [attrString length]) documentAttributes:@{}];
         [pb setData:rtfData forType:NSRTFPboardType];
         
         // Plain text
@@ -2288,7 +2373,9 @@ BOOL showWhaBam = NO;
     else if ( menuAction == @selector(fillArea:) ) {
 	if ([_s selected] && ![[_s selection] isKindOfClass:[RSFill class]] && [RSGraph hasAtLeastThreeVertices:[_s selection]]) {
             // else, make a fill
-            [_graph addFill: [[[RSFill alloc] initWithGraph:_graph vertexGroup:[(RSGroup *)[_s selection] groupWithClass:[RSVertex class]]] autorelease]];
+            RSFill *fill=[[[RSFill alloc] initWithGraph:_graph vertexGroup:[(RSGroup *)[_s selection] groupWithClass:[RSVertex class]]] autorelease];
+            RSAdaptNewObjectColor(fill, YES);
+            [_graph addFill:fill];
             [self setNeedsDisplay:YES];
         }
     }
@@ -2512,14 +2599,17 @@ BOOL showWhaBam = NO;
 	boolState = YES;
     }
     
-    // make the change:
+    // make the change (RSAxis registers the undo):
     [_editor.graph setDisplayGrid:boolState];
+    [_editor.undoer setActionName:boolState ? NSLocalizedString(@"Show Grid", @"Undo action name") : NSLocalizedString(@"Hide Grid", @"Undo action name")];
     
     // set user preference:
     //[[OFPreferenceWrapper sharedPreferenceWrapper] setBool:boolState forKey:@"DisplayVerticalGrid"];
     //[[OFPreferenceWrapper sharedPreferenceWrapper] setBool:boolState forKey:@"DisplayHorizontalGrid"];
     
+    [self setNeedsDisplay:YES];
     [_s sendChange:nil];
+    [[[self window] toolbar] validateVisibleItems];  // label and icon follow the new state
 }
 
 - (IBAction)changeScientificNotationX:(id)sender;
@@ -2639,7 +2729,7 @@ static ErrorBarSheet *errorBarSheet = nil;
         if ([sender respondsToSelector:@selector(title)])
             [contextInfo setValue:[sender title] forKey:@"undoActionName"];
 
-        [NSApp beginSheet:[errorBarSheet window] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(errorBarSheetDidEnd:returnCode:contextInfo:) contextInfo:contextInfo];
+        [[NSApplication sharedApplication] beginSheet:[errorBarSheet window] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(errorBarSheetDidEnd:returnCode:contextInfo:) contextInfo:contextInfo];
         return;
     }
     
@@ -2852,31 +2942,8 @@ static ErrorBarSheet *errorBarSheet = nil;
 
 - (IBAction)addEquationLine:(id)sender;
 {
-    //NSLog(@"addEquationLine");
-    
-    // x^2 function
-    RSEquation eq = { .type=RSEquationTypeSquare, .a=0, .b=0, .c=1 };
-    
-    // Cubic function
-    if ([[sender title] rangeOfString:@"x^3"].location != NSNotFound) {
-        eq.type = RSEquationTypeCube;
-    }
-    
-    // Sine function
-    if ([[sender title] rangeOfString:@"sin"].location != NSNotFound) {
-        eq.type = RSEquationTypeSine;
-    }
-    
-    // Bell curve (gaussian)
-    else if ([[sender title] rangeOfString:@"e^(-x"].location != NSNotFound) {
-        eq.type = RSEquationTypeGaussian;
-    }
-    
-    // Logistic function
-    else if ([[sender title] rangeOfString:@"/(1"].location != NSNotFound) {
-        eq.type = RSEquationTypeLogistic;
-    }
-    
+    RSEquation eq = { .type=(RSEquationType)[sender tag], .a=0, .b=0, .c=1 };
+
     RSEquationLine *EL = [[[RSEquationLine alloc] initWithGraph:_graph identifier:nil equation:eq] autorelease];
     [_graph addLine:EL];
     
@@ -2957,7 +3024,7 @@ static ErrorBarSheet *errorBarSheet = nil;
     if ([sender respondsToSelector:@selector(title)])
         [contextInfo setValue:[sender title] forKey:@"undoActionName"];
     
-    [NSApp beginSheet:[sheet window] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(dataImportOptionsSheetDidEnd:returnCode:contextInfo:) contextInfo:contextInfo];
+    [[NSApplication sharedApplication] beginSheet:[sheet window] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(dataImportOptionsSheetDidEnd:returnCode:contextInfo:) contextInfo:contextInfo];
     return;
 }
 
@@ -3070,7 +3137,7 @@ static ErrorBarSheet *errorBarSheet = nil;
     
     if (sel == @selector(copyAsImage:)) {
 	if (showWhaBam) {
-	    [item setLabel:@"Wha-BAM!"];
+	    [item setLabel:NSLocalizedString(@"Wha-BAM!", @"Copy as image toolbar alternate label")];
 	}
 	else {
 	    [item setLabel:NSLocalizedString(@"Copy As Image", @"Toolbar label")];
@@ -3105,6 +3172,24 @@ static ErrorBarSheet *errorBarSheet = nil;
     }
     [savePanel setNameFieldStringValue:suggestedFileName];
     
+    // Raster resolution belongs to PNG/JPEG/TIFF output only; PDF/EPS are vector pages at the canvas size.
+    NSBitmapImageFileType rasterType = 0;
+    BOOL isRaster = YES;
+    if ([fileType isEqual:@"png"])
+        rasterType = NSBitmapImageFileTypePNG;
+    else if ([fileType isEqual:@"jpg"])
+        rasterType = NSBitmapImageFileTypeJPEG;
+    else if ([fileType isEqual:@"tiff"])
+        rasterType = NSBitmapImageFileTypeTIFF;
+    else
+        isRaster = NO;
+
+    RSRasterExportAccessory *accessory = nil;
+    if (isRaster) {
+        accessory = [[[RSRasterExportAccessory alloc] initWithCanvasSize:[self bounds].size] autorelease];
+        [savePanel setAccessoryView:accessory.view];
+    }
+
     [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result)
     {
         if (result != NSFileHandlingPanelOKButton)
@@ -3116,30 +3201,97 @@ static ErrorBarSheet *errorBarSheet = nil;
         NSRect r = [self bounds];
         NSData *data = nil;
         
-        if ([fileType isEqual:@"png"]) {
-            data = [self dataWithPNGInsideRect: r];
-        }
-        else if ([fileType isEqual:@"jpg"]) {
-            data = [self dataWithJPGInsideRect: r];
+        if (isRaster) {
+            data = [self rasterDataOfType:rasterType resolution:accessory.resolution];
         }
         else if ([fileType isEqual:@"pdf"]) {
             data = [self dataWithPDFInsideRect: r];
-        }
-        else if ([fileType isEqual:@"tiff"]) {
-            data = [self dataWithTIFFInsideRect: r];
         }
         else if ([fileType isEqual:@"eps"]) {
             data = [self dataWithEPSInsideRect: r];
         }
         else {
             NSLog(@"Export failed; export type was not supported!");
+            [self setDrawingToScreen:YES];
             return;
         }
-        [data writeToURL:[savePanel URL] atomically:YES];
+
+        NSError *error = nil;
+        if (!data || ![data writeToURL:[savePanel URL] options:NSDataWritingAtomic error:&error]) {
+            if (!error)
+                error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileWriteUnknownError userInfo:nil];
+            [self presentError:error modalForWindow:[self window] delegate:nil didPresentSelector:NULL contextInfo:NULL];
+        }
         
         [self setDrawingToScreen:YES];
     }];
     
+}
+
+- (NSBitmapImageRep *)bitmapImageRepWithResolution:(CGFloat)dpi;
+// Renders the whole canvas offscreen: pixel size comes from the page size and dpi, never from screen scale or zoom.
+{
+    NSRect bounds = [self bounds];
+    NSSize pixels = RSRasterPixelSize(bounds.size, dpi);
+    NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:(NSInteger)pixels.width pixelsHigh:(NSInteger)pixels.height bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace bytesPerRow:0 bitsPerPixel:0] autorelease];
+    if (!rep)
+        return nil;
+
+    // The rep's point size records the resolution (pixels / points * 72) in exported metadata.
+    [rep setSize:bounds.size];
+
+    NSGraphicsContext *context = [NSGraphicsContext graphicsContextWithBitmapImageRep:rep];
+    if (!context)
+        return nil;
+
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:context];
+    CGContextRef ctx = [context CGContext];
+    CGContextScaleCTM(ctx, pixels.width / bounds.size.width, pixels.height / bounds.size.height);
+    CGContextTranslateCTM(ctx, -bounds.origin.x, -bounds.origin.y);
+    [self drawRect:bounds];
+    [context flushGraphics];
+    [NSGraphicsContext restoreGraphicsState];
+
+    [self setNeedsDisplay:YES];
+    return rep;
+}
+
+- (NSData *)rasterDataOfType:(NSBitmapImageFileType)type resolution:(CGFloat)dpi;
+// Encodes with ImageIO so every resolution, including 72 DPI, is recorded explicitly.
+{
+    NSBitmapImageRep *rep = [self bitmapImageRepWithResolution:dpi];
+    CGImageRef image = [rep CGImage];
+    if (!image)
+        return nil;
+
+    NSString *typeIdentifier = nil;
+    NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithDouble:dpi], (id)kCGImagePropertyDPIWidth,
+                                       [NSNumber numberWithDouble:dpi], (id)kCGImagePropertyDPIHeight, nil];
+    if (type == NSBitmapImageFileTypePNG) {
+        typeIdentifier = @"public.png";
+    }
+    else if (type == NSBitmapImageFileTypeJPEG) {
+        typeIdentifier = @"public.jpeg";
+        [properties setObject:[NSNumber numberWithDouble:1] forKey:(id)kCGImageDestinationLossyCompressionQuality];
+    }
+    else if (type == NSBitmapImageFileTypeTIFF) {
+        typeIdentifier = @"public.tiff";
+    }
+    else {
+        return nil;
+    }
+
+    NSMutableData *data = [NSMutableData data];
+    CGImageDestinationRef destination = CGImageDestinationCreateWithData((CFMutableDataRef)data, (CFStringRef)typeIdentifier, 1, NULL);
+    if (!destination)
+        return nil;
+    CGImageDestinationAddImage(destination, image, (CFDictionaryRef)properties);
+    BOOL finished = CGImageDestinationFinalize(destination);
+    CFRelease(destination);
+
+    return finished ? data : nil;
 }
 
 

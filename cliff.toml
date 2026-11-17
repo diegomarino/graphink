@@ -1,0 +1,40 @@
+# git-cliff configuration (https://git-cliff.org), pinned in CI to git-cliff 2.14.2.
+# Produces only the Added / Fixed / Improved groups of the next release; scripts/release/
+# changelog.py merges them with the hand-written "Unreleased" notes into CHANGELOG.md.
+#
+# Commit subjects are Conventional Commits (squash merges use the PR title):
+#   feat -> Added, fix -> Fixed, perf -> Improved (user-facing; write them for users)
+#   docs, test, ci, build, refactor, chore, style, revert -> hidden, unless the commit has a
+#   "Release-Note: notable" footer, which lists it under Improved.
+# Commits that are not conventional (the inherited GraphSketcher history) are skipped.
+
+[changelog]
+header = ""
+body = """
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | striptags | trim }}
+
+{% for commit in commits -%}
+- {{ commit.message | split(pat="\n") | first | trim | upper_first }}
+{% endfor %}
+{% endfor %}
+"""
+footer = ""
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+filter_commits = true
+split_commits = false
+protect_breaking_commits = false
+tag_pattern = "^v20[0-9]{2}\\.([1-9]|1[0-2])\\.(0|[1-9][0-9]*)$"
+topo_order = false
+sort_commits = "oldest"
+commit_parsers = [
+  { message = "^feat", group = "<!-- 0 -->Added" },
+  { message = "^fix", group = "<!-- 1 -->Fixed" },
+  { message = "^perf", group = "<!-- 2 -->Improved" },
+  { body = "(?m)^Release-Note: notable$", group = "<!-- 2 -->Improved" },
+  { message = ".*", skip = true },
+]

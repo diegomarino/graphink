@@ -5,14 +5,18 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import "DocumentInspector.h"
 
 #import <GraphSketcherModel/RSGraph.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 #import "GraphDocument.h"
 #import "RSSelector.h"
 #import "RSGraphView.h"
+#import "OIInspector-RSExtensions.h"
+#import "RSPageGeometry.h"
+#import <GraphSketcherModel/RSUndoer.h>
 
 @implementation DocumentInspector
 
@@ -21,7 +25,7 @@
 
 - (void)updateDisplay;
 {
-    if (!_s || ![_s document]) {
+    if (!_graph || !_s || ![_s document]) {
 	[_backgroundColorWell setColor:[NSColor whiteColor]];
 	[self setCanEditWhitespace:NO];
 	
@@ -31,7 +35,7 @@
     // Shadow strength is updated with cocoa bindings
     
     // Cocoa bindings caused some havoc with the background color well: <bug://bugs/52797> (Editing Text Just After Changing the Background Color Causes a Black canvas)
-    [_backgroundColorWell setColor:[_graph backgroundColor].toColor];
+    [_backgroundColorWell setColor:[_graph backgroundColor]];
     
     // Automatic margins checkbox is updated with cocoa bindings... to canEditWhitespace
     [self setCanEditWhitespace:![_graph autoMaintainsWhitespace]];
@@ -42,6 +46,11 @@
     [_canvasHeight setFloatValue:(float)canvasSize.height];
     [_canvasHeightStepper setFloatValue:(float)canvasSize.height];
     
+    // The preset is derived from the canvas size; any non-preset size shows Custom.
+    [_paperPresetPopUp selectItemWithTag:RSPaperPresetForSize(canvasSize)];
+    [_paperOrientationPopUp selectItemWithTag:RSPaperOrientationForSize(canvasSize)];
+    [_physicalSizeLabel setStringValue:RSPhysicalSizeDescription(canvasSize)];
+
     RSBorder whitespace = [_graph whitespace];
     [_marginTop setFloatValue:(float)whitespace.top];
     [_marginRight setFloatValue:(float)whitespace.right];
@@ -195,7 +204,7 @@
 - (IBAction)changeBackgroundColor:(id)sender;
 // called when color well updated
 {
-    if (![[[NSApp mainWindow] firstResponder] isKindOfClass:[RSGraphView class]]) {
+    if (![self commitEditingForDocument:_document]) {
         [_backgroundColorWell deactivate];
         return;
     }
@@ -206,7 +215,7 @@
     // set user preference:
     //[[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newColor forKey: @"DefaultBackgroundColor"];
     
-    [_graph setBackgroundColor:[OQColor colorWithPlatformColor:newColor]];
+    [_graph setBackgroundColor:newColor];
     [self updateDisplay];
 }
 
@@ -223,6 +232,37 @@
     }
     
     [_document.editor setCanvasSize:canvasSize];
+    [self updateDisplay];
+}
+
+- (IBAction)changePaperPreset:(id)sender;
+// Presets and orientation change only the canvas size, as one undoable step.
+{
+    if (![self commitEditingForDocument:_document]) {
+        [self updateDisplay];
+        return;
+    }
+
+    CGSize canvasSize = [_graph canvasSize];
+    RSPaperOrientation orientation = (RSPaperOrientation)[_paperOrientationPopUp selectedTag];
+
+    if (sender == _paperOrientationPopUp) {
+        if (orientation != RSPaperOrientationForSize(canvasSize))
+            canvasSize = CGSizeMake(canvasSize.height, canvasSize.width);
+    }
+    else {
+        RSPaperPreset preset = (RSPaperPreset)[_paperPresetPopUp selectedTag];
+        if (preset != RSPaperPresetCustom)
+            canvasSize = RSPaperPresetSize(preset, orientation);
+    }
+
+    if (!CGSizeEqualToSize(canvasSize, [_graph canvasSize])) {
+        RSUndoer *undoer = [_document.editor undoer];
+        [undoer endRepetitiveUndo];
+        [_document.editor setCanvasSize:canvasSize];
+        [undoer setActionName:NSLocalizedStringFromTable(@"Change Paper Size", @"UndoActions", @"Undo action name")];
+        [undoer endRepetitiveUndo];
+    }
     [self updateDisplay];
 }
 

@@ -1,0 +1,4 @@
+// Project-level base configuration for GraphSketcher.xcodeproj (Debug): the
+// inherited OmniGroup settings plus the Graphink version.
+#include "../../../OmniGroup/Configurations/Omni-Global-Debug.xcconfig"
+#include "Graphink-Version.xcconfig"

@@ -5,10 +5,15 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import "GraphDocument.h"
+#import "RSDocumentController.h"
+#import "RSStylePresets.h"
+#import "AppController.h"
 
 #import "GraphWindowController.h"
 #import "RSGraphView.h"
+#import "RSLabelFinder.h"
 #import "RSSelector.h"
 
 #import <LinkBack/LinkBack.h>
@@ -20,7 +25,7 @@
 #import <GraphSketcherModel/RSHitTester-Snapping.h>
 #import <GraphSketcherModel/RSTextLabel.h>
 #import <GraphSketcherModel/RSUndoer.h>
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 
@@ -59,7 +64,9 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
     
     _isFromFile = NO;
     _isInAppBundle = NO;
+    _isCatalogCopy = NO;
     _isAutosaving = NO;
+    _archiveEncoding = RSGraphArchiveOPC;
     _graphView = nil;  // this will be set by the windowController on awakeFromNib.
     
     _linkBack = nil;
@@ -76,10 +83,11 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
     // create selection object
     _s = [(RSSelector *)[RSSelector alloc] initWithDocument:self];
     
-    // Turn on autosaving by specifying the autosave delay in seconds
-    [[NSDocumentController sharedDocumentController] setAutosavingDelay:[[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"AutosaveDelaySeconds"]];
-    
-    
+    // Autosave timing is AppKit's (autosavesInPlace, autosavingDelay left at 0). The historical
+    // 120 s delay postponed the first autosave of an untitled document past a crash 30 s later.
+    // After a crash, window restoration reopens the autosaved untitled document, edited. (Restoring
+    // after Quit also needs macOS's "Close windows when quitting an application" off.)
+
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(undoManagerWillUndoOrRedo:) name:NSUndoManagerWillUndoChangeNotification object:[self undoManager]];
     [nc addObserver:self selector:@selector(undoManagerWillUndoOrRedo:) name:NSUndoManagerWillRedoChangeNotification object:[self undoManager]];
@@ -102,6 +110,7 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
     @try {
         graph = [[[RSGraph alloc] initWithIdentifier:nil undoer:_u] autorelease];
         [graph setupDefault];
+        graph.creationDefaults = @{};
     } @finally {
         [[_u undoManager] enableUndoRegistration];
     }
@@ -164,6 +173,54 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 #pragma mark NSDocument subclass
 ////////////////////////////////////////////////
 
+- (NSString *)fileNameExtensionForType:(NSString *)typeName saveOperation:(NSSaveOperationType)saveOperation;
+{
+    if (![RSDocumentController isGraphType:typeName])
+        return [super fileNameExtensionForType:typeName saveOperation:saveOperation];
+
+    // Save As adopts the new brand; existing documents keep their path on Save/autosave.
+    if (saveOperation == NSSaveOperation || saveOperation == NSAutosaveInPlaceOperation || saveOperation == NSAutosaveElsewhereOperation) {
+        NSString *extension = [[self fileURL] pathExtension];
+        if ([extension length] && ([extension caseInsensitiveCompare:@"ograph"] == NSOrderedSame || [extension caseInsensitiveCompare:@"graphink"] == NSOrderedSame))
+            return extension;
+    }
+    return @"graphink";
+}
+
+- (BOOL)prepareSavePanel:(NSSavePanel *)savePanel;
+{
+    if (![super prepareSavePanel:savePanel])
+        return NO;
+    if ([RSDocumentController isGraphType:[self fileType]]) {
+        // Use explicit tags because the system UTI may belong to an older app copy.
+        [savePanel setAllowedFileTypes:@[@"graphink", @"ograph"]];
+        NSString *name = [savePanel nameFieldStringValue];
+        if ([[name pathExtension] caseInsensitiveCompare:@"ograph"] == NSOrderedSame)
+            name = [name stringByDeletingPathExtension];
+        if (![[[name pathExtension] lowercaseString] isEqualToString:@"graphink"])
+            name = [name stringByAppendingPathExtension:@"graphink"];
+        [savePanel setNameFieldStringValue:name];
+        // Saving a legacy .ograph makes a Graphink copy: show the new extension (the panel hides
+        // extensions by default, which left only "Legacy" in the name field).
+        if ([[[[self fileURL] pathExtension] lowercaseString] isEqualToString:@"ograph"])
+            [savePanel setExtensionHidden:NO];
+    }
+    return YES;
+}
+
+- (BOOL)shouldRunSavePanelWithAccessoryView;
+{
+    // Both graph types are writable; the chosen extension picks the type, so no File Format popup.
+    return ![RSDocumentController isGraphType:[self fileType]] && [super shouldRunSavePanelWithAccessoryView];
+}
+
+- (NSString *)_typeForSaveToURL:(NSURL *)url ofType:(NSString *)typeName;
+{
+    // .graphink saves get Graphink's type and .ograph saves the original one, whatever type the caller passed.
+    NSString *extensionType = [RSDocumentController isGraphType:typeName] ? [RSDocumentController graphTypeForURL:url] : nil;
+    return extensionType ?: typeName;
+}
+
 + (BOOL)autosavesInPlace;
 {
     return YES;
@@ -171,7 +228,8 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 
 - (BOOL)canAsynchronouslyWriteToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation;
 {
-    return YES;
+    // Saving commits AppKit controls and renders the live graph view into a PDF preview.
+    return NO;
 }
 
 - (BOOL)isDocumentEdited;
@@ -225,8 +283,7 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
         [_editor prepareForSave];
     }
     
-    // If autosaving, don't waste time with a zip archive.
-    // Also don't use a zip archive if the relevant preference is set.
+    // Preview is derived; autosave retains the document container without generating it.
     NSData *previewPDFData = nil;
     if (!_isAutosaving && ![[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"SaveFilesAsPlainXML"]) {
         // Generate a Quicklook preview and add it to the zip archive
@@ -251,17 +308,31 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
         return NO;
     }
     
-    // Now that we have all the data ready for writing, we should do the rest off the main thread.
+    NSDictionary *creationDefaults=[[_editor.graph.creationDefaults copy] autorelease];
+    RSGraphArchiveEncoding encoding=_hasWriteArchiveEncoding?_writeArchiveEncoding:_archiveEncoding;
+    // The snapshot is complete before writing the archive.
 #if defined(MAC_OS_X_VERSION_10_7) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
     [self unblockUserInteraction];
 #endif
     
-    BOOL result = [_editor.graph writeToURL:absoluteURL generatedXMLData:xmlData previewPDFData:previewPDFData error:outError];
+    BOOL result = [RSGraphArchive writeXML:xmlData defaults:creationDefaults preview:previewPDFData encoding:encoding toURL:absoluteURL error:outError];
     
     //sleep(5);
     return result;
 }
 
+
+- (BOOL)writeToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)outError;
+{
+    // With autosavesInPlace AppKit never calls -autosaveDocumentWithDelegate:..., so every autosave
+    // (in place, elsewhere, as a draft) is recognized here: it writes no preview and does not end
+    // the editing in progress.
+    BOOL autosave = saveOperation == NSAutosaveInPlaceOperation || saveOperation == NSAutosaveElsewhereOperation || saveOperation == NSAutosaveAsOperation;
+    BOOL previous = _isAutosaving;
+    _isAutosaving = previous || autosave;
+    @try { return [super writeToURL:url ofType:typeName forSaveOperation:saveOperation originalContentsURL:absoluteOriginalContentsURL error:outError]; }
+    @finally { _isAutosaving = previous; }
+}
 
 - (void)autosaveDocumentWithDelegate:(id)delegate didAutosaveSelector:(SEL)didAutosaveSelector contextInfo:(void *)contextInfo;
 // Autosave documentation is at: http://developer.apple.com/documentation/Cocoa/Conceptual/Documents/Articles/Autosaving.html#//apple_ref/doc/uid/TP40003276
@@ -283,28 +354,54 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 }
 
 
-#if defined(MAC_OS_X_VERSION_10_7) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
-- (void)saveToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation completionHandler:(void (^)(NSError *))completionHandler;
+- (RSGraphArchiveEncoding)archiveEncoding { return _archiveEncoding; }
+- (BOOL)requiresCreationDefaultsSaveAs { return _archiveEncoding!=RSGraphArchiveOPC; }
+- (RSGraphArchiveEncoding)_encodingForSaveOperation:(NSSaveOperationType)operation URL:(NSURL *)url;
 {
-    if ([self isInAppBundle])
-        return;
-    
-    return [super saveToURL:url ofType:typeName forSaveOperation:saveOperation completionHandler:completionHandler];
+    return operation==NSSaveAsOperation && [url.pathExtension.lowercaseString isEqual:@"graphink"]?RSGraphArchiveOPC:_archiveEncoding;
 }
-#endif
-
-- (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError;
+- (NSError *)_bundledSaveError;
 {
-    if ([self isInAppBundle]) {
-	NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Cannot modify bundled example graphs.", @"error description"), NSLocalizedDescriptionKey, nil];
-        if (outError != NULL)
-            *outError = [NSError errorWithDomain:RSErrorDomain code:RSBundledGraphDocument userInfo:errorInfo];
-	return NO;
+    return [NSError errorWithDomain:RSErrorDomain code:RSBundledGraphDocument userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Cannot modify bundled example graphs.",@"error description")}];
+}
+- (void)saveToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)operation completionHandler:(void (^)(NSError *))completionHandler;
+{
+    if (self.isInAppBundle) { if (completionHandler) completionHandler([self _bundledSaveError]); return; }
+    typeName=[self _typeForSaveToURL:url ofType:typeName];
+    BOOL previousActive=_hasWriteArchiveEncoding; RSGraphArchiveEncoding previous=_writeArchiveEncoding;
+    RSGraphArchiveEncoding target=[self _encodingForSaveOperation:operation URL:url];
+    _hasWriteArchiveEncoding=YES; _writeArchiveEncoding=target;
+    [super saveToURL:url ofType:typeName forSaveOperation:operation completionHandler:^(NSError *error){
+        self->_hasWriteArchiveEncoding=previousActive; self->_writeArchiveEncoding=previous;
+        if (!error && (operation==NSSaveAsOperation || operation==NSSaveOperation)) {
+            self->_archiveEncoding=target;
+            if (target==RSGraphArchiveOPC && !self->_editor.graph.creationDefaults) {
+                NSUndoManager *manager=self.undoManager; [manager disableUndoRegistration];
+                @try { self->_editor.graph.creationDefaults=@{}; } @finally { [manager enableUndoRegistration]; }
+            }
+        }
+        if (completionHandler) completionHandler(error);
+    }];
+}
+- (BOOL)saveToURL:(NSURL *)url ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)operation error:(NSError **)outError;
+{
+    if (self.isInAppBundle) { if (outError) *outError=[self _bundledSaveError]; return NO; }
+    typeName=[self _typeForSaveToURL:url ofType:typeName];
+    BOOL previousActive=_hasWriteArchiveEncoding; RSGraphArchiveEncoding previous=_writeArchiveEncoding;
+    RSGraphArchiveEncoding target=previousActive?_writeArchiveEncoding:[self _encodingForSaveOperation:operation URL:url];
+    _hasWriteArchiveEncoding=YES; _writeArchiveEncoding=target;
+    BOOL saved=NO;
+    @try { saved=[super saveToURL:url ofType:typeName forSaveOperation:operation error:outError]; }
+    @finally { _hasWriteArchiveEncoding=previousActive; _writeArchiveEncoding=previous; }
+    if (saved && (operation==NSSaveAsOperation || operation==NSSaveOperation)) {
+        _archiveEncoding=target;
+        if (target==RSGraphArchiveOPC && !_editor.graph.creationDefaults) {
+            NSUndoManager *manager=self.undoManager; [manager disableUndoRegistration];
+            @try { _editor.graph.creationDefaults=@{}; } @finally { [manager enableUndoRegistration]; }
+        }
     }
-    
-    return [super saveToURL:absoluteURL ofType:typeName forSaveOperation:saveOperation error:outError];
+    return saved;
 }
-
 
 - (void)saveDocumentWithDelegate:(id)delegate didSaveSelector:(SEL)didSaveSelector contextInfo:(void *)contextInfo;
 {
@@ -332,64 +429,34 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 
 # pragma mark File reading/importing
 
+- (void)_adoptGraph:(RSGraph *)graph undoer:(RSUndoer *)undoer encoding:(RSGraphArchiveEncoding)encoding;
+{
+    // Only a fully parsed graph may replace the editor, undo history and origin mode.
+    _graphView.editor=nil;
+    [_s deselect];
+    [self.undoManager removeAllActions];
+    [_editor invalidate]; [_editor release]; _editor=nil;
+    [_u invalidate]; [_u release]; _u=[undoer retain];
+    _archiveEncoding=encoding; _isFromFile=YES;
+    _editor=[[RSGraphEditor alloc] initWithGraph:graph undoer:_u];
+    _editor.delegate=self; _graphView.editor=_editor;
+}
 - (BOOL)readOGSFileFromData:(NSData *)data fileName:(NSString *)fileName error:(NSError **)outError;
-// New file format XML importer
-// (See useful similar code in OmniOutliner/OOXMLImporter.m)
 {
-    RSGraph *graph = [RSGraph graphFromData:data fileName:fileName type:RSGraphFileType undoer:_u error:outError];
-    if (!graph)
-        return NO;
-
-    _isFromFile = YES;
-
-    [self _resetEditor];
-    assert(_editor == nil);
-    _editor = [[RSGraphEditor alloc] initWithGraph:graph undoer:_u];
-    _editor.delegate = self;
-    _graphView.editor = _editor;
-
-    return YES;
+    RSUndoer *pending=[[RSUndoer alloc] initWithOwner:self];
+    RSGraph *graph=[RSGraph graphFromData:data fileName:fileName type:RSGraphFileType undoer:pending error:outError];
+    if (graph) [self _adoptGraph:graph undoer:pending encoding:RSGraphArchiveLegacyXML];
+    else [pending invalidate];
+    [pending release]; return graph!=nil;
 }
-
-- (void)_resetEditor;
+- (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError;
 {
-    _graphView.editor = nil;
-
-    [[self undoManager] removeAllActions];
-    
-    [_u invalidate];
-    [_u release];
-    _u = nil;
-
-    [_editor invalidate];
-    [_editor release];
-    _editor = nil;
-
-    _u = [(RSUndoer *)[RSUndoer alloc] initWithOwner:self];
+    RSUndoer *pending=[[RSUndoer alloc] initWithOwner:self]; NSInteger encoding;
+    RSGraph *graph=[RSGraph graphFromURL:url type:typeName undoer:pending encoding:&encoding error:outError];
+    if (graph) [self _adoptGraph:graph undoer:pending encoding:encoding];
+    else [pending invalidate];
+    [pending release]; return graph!=nil;
 }
-
-- (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError;
-// This method also gets called on "revert to saved"
-{
-    [self _resetEditor];
-
-    assert(![typeName isEqual:@"com.robinstewart.graphdocument"]); // This type is no longer in our CFBundleDocumentTypes because it's not portable to 64-bit where @encode(NSPoint) is now "{CGPoint=dd}" rather than "{_NSPoint=ff}".
-
-    RSGraph *graph = [RSGraph graphFromURL:absoluteURL type:typeName undoer:_u error:outError];
-    if (!graph)
-        return NO;
-
-    _isFromFile = YES;
-
-    [self _resetEditor];
-    assert(_editor == nil);
-    _editor = [[RSGraphEditor alloc] initWithGraph:graph undoer:_u];
-    _editor.delegate = self;
-    _graphView.editor = _editor;
-    
-    return YES;
-}
-
 
 - (NSString *)displayName;
 {
@@ -495,7 +562,9 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 
 - (void)undoerPerformedChange:(RSUndoer *)undoer;
 {
-    [self updateChangeCount:NSChangeDone];
+    // RSUndoer registers on this document's undo manager, and NSDocument already counts each closed
+    // undo group as one change (and each undo/redo). Counting the registration again made one undo
+    // leave the document edited with nothing left to undo.
 }
 
 #pragma mark -
@@ -513,6 +582,7 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 {
     OBPRECONDITION(editor == _editor);
     [_graphView setNeedsDisplay:YES];
+    [[(RSGraphView *)_graphView labelFinder] contentDidChange];
 }
 
 - (void)graphEditorDeselect:(RSGraphEditor *)editor;
@@ -580,6 +650,7 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 {
     SEL menuAction = [menuItem action];
     
+    if (menuAction == @selector(applyStylePreset:)) return _editor != nil;
     if (menuAction == @selector(saveDocument:)) {
 	return !_isInAppBundle;
     }
@@ -633,6 +704,14 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
     [_graphView performMenuItem:menuAction withName:actionName];
 }
 
+// The toolbar's Show/Hide Grid item targets the first responder. The graph view is only in the
+// responder chain while the canvas has focus; the document always is, so it forwards the action
+// (as the menu's View > Show Grid does through AppController).
+- (IBAction)showHideGrid:(id)sender;
+{
+    [_graphView showHideGrid:sender];
+}
+
 - (BOOL)validateToolbarItem:(NSToolbarItem *)item;
 {
     SEL sel = [item action];
@@ -653,6 +732,22 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
     
     // pass request along to graphView
     return [_graphView validateToolbarItem:item];
+}
+
+- (IBAction)applyStylePreset:(id)sender
+{
+    if ([sender tag]<0 || (NSUInteger)[sender tag]>=RSStylePresetNames().count) return;
+    if ([self requiresCreationDefaultsSaveAs]) {
+        NSAlert *alert=[[[NSAlert alloc] init] autorelease];
+        alert.messageText=NSLocalizedString(@"Save a Graphink copy before applying a style",@"Legacy style adoption");
+        alert.informativeText=NSLocalizedString(@"This document uses a legacy format. Choose Save As and save a .graphink copy, then apply the style again. Cancel leaves the document unchanged.",@"Legacy style adoption explanation");
+        [alert addButtonWithTitle:NSLocalizedString(@"Save As…",@"Save As button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel",@"Cancel button")];
+        if ([alert runModal]==NSAlertFirstButtonReturn) [self saveDocumentAs:nil];
+        return;
+    }
+    if (![self.window makeFirstResponder:self.window]) return;
+    if ([_editor applyStylePreset:[sender tag]]) [_s sendChange:self];
 }
 
 - (IBAction)makeCurrentSettingsDefault:(id)sender;
@@ -681,16 +776,17 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
     [prefWrapper setBool:[[graph xAxis] shape] forKey:@"DefaultAxisShape"];
     
     // Axis style settings
-    [OQColor setColor:[[graph xAxis] color] forPreferenceKey:@"DefaultAxisColor"];
+    [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:[[graph xAxis] color] forKey:@"DefaultAxisColor"];
     [prefWrapper setDouble:[[graph xAxis] width] forKey:@"DefaultAxisWidth"];
-    [OQColor setColor:[[graph xGrid] color] forPreferenceKey:@"DefaultGridColor"];
+    [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:[[graph xGrid] color] forKey:@"DefaultGridColor"];
     [prefWrapper setDouble:[[graph xGrid] width] forKey:@"DefaultGridWidth"];
     [prefWrapper setDouble:[[graph xAxis] titlePlacement] forKey:@"DefaultXAxisTitlePlacement"];
     [prefWrapper setDouble:[[graph yAxis] titlePlacement] forKey:@"DefaultYAxisTitlePlacement"];
     [prefWrapper setObject:nameFromScientificNotationSetting([[graph xAxis] scientificNotationSetting]) forKey:@"ScientificNotationSetting"];
     
     // Canvas settings
-    [OQColor setColor:[graph backgroundColor] forPreferenceKey:@"DefaultBackgroundColor"];
+    [[OFPreferenceWrapper sharedPreferenceWrapper] setColorIfConvertible:[graph backgroundColor] forKey:@"DefaultBackgroundColor"];
+    // Written even for an unsaved New From copy: the user asked for these settings.
     [prefWrapper setObject:NSStringFromSize([graph canvasSize]) forKey:@"LastCanvasSize"];
 }
 
@@ -764,8 +860,10 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 
 
         // Even on error, we need to put something on the pasteboard for this type since we declared it.
-        [pb setPropertyList:documentXMLData ? [NSDictionary linkBackDataWithServerName:OGSLinkBackServerName appData:documentXMLData] : nil
-                    forType:LinkBackPboardType];
+        if (documentXMLData)
+            [pb setPropertyList:[NSDictionary linkBackDataWithServerName:OGSLinkBackServerName appData:documentXMLData] forType:LinkBackPboardType];
+        else
+            [pb setData:nil forType:LinkBackPboardType];
     }
     
     // And we're done
@@ -849,6 +947,8 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 
 @synthesize isFromFile = _isFromFile;
 @synthesize isInAppBundle = _isInAppBundle;
+@synthesize isCatalogCopy = _isCatalogCopy;
+- (BOOL)isUnsavedCatalogCopy { return _isCatalogCopy && ![self fileURL]; }
 
 
 /////////////////////////////////////////////

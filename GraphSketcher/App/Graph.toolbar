@@ -29,6 +29,7 @@
                 Detach,
                 NSToolbarFlexibleSpaceItem,
                 CopyAsImage,
+                WindowOpacity,
                 NSToolbarFlexibleSpaceItem,
                 ToggleInspector
 	);

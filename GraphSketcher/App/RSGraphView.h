@@ -14,10 +14,15 @@
 #import <GraphSketcherModel/RSGraph.h> // RSModelUpdateRequirement
 
 @class RSUndoer, RSDataMapper, RSGraphRenderer, RSTextLabel, RSGraphElement, RSGraphEditor;
-@class RSMode, RSSelector, RSTool;
+@class RSMode, RSSelector, RSTool, RSLabelFinder;
 
 #define RS_NUDGE_DISTANCE_SHORT 1.0f  // pixels
 #define RS_NUDGE_DISTANCE_LONG 20.0f  // pixels
+
+// Only the two refresh methods below are annotated (they accept nil); the 2014 declarations
+// predate nullability and are left as they are.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullability-completeness"
 
 
 @interface RSGraphView : NSView <OIInspectableController
@@ -48,6 +53,7 @@
     BOOL _mouseIsDown;
     
     NSTextView *_textView;
+    RSLabelFinder *_labelFinder;  // not retained; owned by the window controller
     NSAttributedString *_textSnapshot;
     BOOL _discardingEditing;
     BOOL _textViewNeedsUpdate;
@@ -104,6 +110,8 @@
 @property(assign) BOOL wasEditingText;
 @property(retain) NSAttributedString *textSnapshot;
 - (BOOL)isEditingLabel;
+- (NSTextView *)labelEditor;  // the field editor while a label is edited in place
+@property(nonatomic, assign) RSLabelFinder *labelFinder;  // Edit ▸ Find for this window
 
 - (void)changeFont:(NSFont *)font toSize:(CGFloat)size;
 - (void)changeFontSizeBy:(NSInteger)delta;
@@ -143,6 +151,11 @@
 - (IBAction)addJitterToData:(id)sender;
 - (IBAction)swapAxes:(id)sender;
 - (IBAction)toggleTickLayoutAtData:(id)sender;
+- (IBAction)toggleAxesUseDataExtent:(id)sender;
+- (IBAction)toggleAxesUseDataQuartiles:(id)sender;
+- (IBAction)toggleDottedGrid:(id)sender;
+- (IBAction)addEquationLine:(id)sender;
+- (IBAction)importDataInRows:(id)sender;
 - (IBAction)importDataSeriesReplacingCurrent:(id)sender;
 
 
@@ -151,7 +164,13 @@
 - (NSData *)dataWithPNGInsideRect:(NSRect)r;
 - (NSData *)dataWithJPGInsideRect:(NSRect)r;
 - (NSData *)dataWithTIFFInsideRect:(NSRect)r;
+- (NSBitmapImageRep *)bitmapImageRepWithResolution:(CGFloat)dpi;
+- (NSData *)rasterDataOfType:(NSBitmapImageFileType)type resolution:(CGFloat)dpi;
 
+
+// Programmatic refreshes may omit a mouse event; tools then query the window.
+- (void)mouseEntered:(NSEvent * _Nullable)event;
+- (void)mouseMoved:(NSEvent * _Nullable)event;
 
 // Utility methods
 - (void)deselect;
@@ -173,3 +192,5 @@
 #endif
 
 @end
+
+#pragma clang diagnostic pop

@@ -1,0 +1,382 @@
+{
+  "images": [
+    {
+      "name": "arrowEndsDisabled",
+      "file": "gs-arrowEndsDisabled.pdf",
+      "width": 84.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "arrowEndsEnabled",
+      "file": "gs-arrowEndsEnabled.pdf",
+      "width": 84.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "axisPlacementBothEdgesX",
+      "file": "gs-axisPlacementBothEdgesX.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisPlacementBothEdgesY",
+      "file": "gs-axisPlacementBothEdgesY.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisPlacementEdgeX",
+      "file": "gs-axisPlacementEdgeX.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisPlacementEdgeY",
+      "file": "gs-axisPlacementEdgeY.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisPlacementNoneX",
+      "file": "gs-axisPlacementNoneX.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisPlacementNoneY",
+      "file": "gs-axisPlacementNoneY.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisPlacementOriginX",
+      "file": "gs-axisPlacementOriginX.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisPlacementOriginY",
+      "file": "gs-axisPlacementOriginY.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisTickLabelsX",
+      "file": "gs-axisTickLabelsX.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisTickLabelsY",
+      "file": "gs-axisTickLabelsY.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisTickMarksX",
+      "file": "gs-axisTickMarksX.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisTickMarksY",
+      "file": "gs-axisTickMarksY.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisTitleX",
+      "file": "gs-axisTitleX.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "axisTitleY",
+      "file": "gs-axisTitleY.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "canvasHeight",
+      "file": "gs-canvasHeight.pdf",
+      "width": 14.0,
+      "height": 18.0,
+      "template": true
+    },
+    {
+      "name": "canvasWidth",
+      "file": "gs-canvasWidth.pdf",
+      "width": 14.0,
+      "height": 18.0,
+      "template": true
+    },
+    {
+      "name": "copyAsImageIcon",
+      "file": "gs-copyAsImageIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "detachIcon",
+      "file": "gs-detachIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "drawTool",
+      "file": "gs-drawTool.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "errorBarsIcon",
+      "file": "gs-errorBarsIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "errorbar-for-sheet",
+      "file": "gs-errorbar-for-sheet.pdf",
+      "width": 12.0,
+      "height": 51.0,
+      "template": true
+    },
+    {
+      "name": "fillTool",
+      "file": "gs-fillTool.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "gridDisplayHorizontal",
+      "file": "gs-gridDisplayHorizontal.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "gridDisplayVertical",
+      "file": "gs-gridDisplayVertical.pdf",
+      "width": 32.0,
+      "height": 32.0,
+      "template": true
+    },
+    {
+      "name": "groupIcon",
+      "file": "gs-groupIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "hideGridIcon",
+      "file": "gs-hideGridIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "inspectorAxes",
+      "file": "gs-inspectorAxes.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "inspectorCanvas",
+      "file": "gs-inspectorCanvas.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "inspectorData",
+      "file": "gs-inspectorData.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "inspectorIcon",
+      "file": "gs-inspectorIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "inspectorStyle",
+      "file": "gs-inspectorStyle.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "interpolateIcon",
+      "file": "gs-interpolateIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "lineTypeBestFit",
+      "file": "gs-lineTypeBestFit.pdf",
+      "width": 24.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "lineTypeCurved",
+      "file": "gs-lineTypeCurved.pdf",
+      "width": 19.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "lineTypeNone",
+      "file": "gs-lineTypeNone.pdf",
+      "width": 19.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "lineTypeStraight",
+      "file": "gs-lineTypeStraight.pdf",
+      "width": 19.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "lockIcon",
+      "file": "gs-lockIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "modifyTool",
+      "file": "gs-modifyTool.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "opaqueWindowIcon",
+      "file": "gs-opaqueWindowIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "pointTypeHorizontalBar",
+      "file": "gs-pointTypeHorizontalBar.pdf",
+      "width": 12.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "pointTypeNone",
+      "file": "gs-pointTypeNone.pdf",
+      "width": 12.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "pointTypePoint",
+      "file": "gs-pointTypePoint.pdf",
+      "width": 12.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "pointTypeTick",
+      "file": "gs-pointTypeTick.pdf",
+      "width": 12.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "pointTypeVerticalBar",
+      "file": "gs-pointTypeVerticalBar.pdf",
+      "width": 12.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "scaleDownIcon",
+      "file": "gs-scaleDownIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "shadowNone",
+      "file": "gs-shadowNone.pdf",
+      "width": 12.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "shadowStrong",
+      "file": "gs-shadowStrong.pdf",
+      "width": 12.0,
+      "height": 12.0,
+      "template": true
+    },
+    {
+      "name": "showGridIcon",
+      "file": "gs-showGridIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "textTool",
+      "file": "gs-textTool.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "transparentWindowIcon",
+      "file": "gs-transparentWindowIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "ungroupIcon",
+      "file": "gs-ungroupIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    },
+    {
+      "name": "unlockIcon",
+      "file": "gs-unlockIcon.pdf",
+      "width": 24.0,
+      "height": 24.0,
+      "template": true
+    }
+  ]
+}

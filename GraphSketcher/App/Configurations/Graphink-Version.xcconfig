@@ -1,0 +1,22 @@
+// Graphink's version comes from git tags; it is never committed here.
+//
+// Calendar versioning YYYY.M.n: no zero padding, M = month of publication, n = release
+// counter within that month starting at 0 (2026.11.0, 2026.11.1, 2026.12.0). A release is
+// the annotated tag vYYYY.M.n created by the "Release" workflow or scripts/release.sh.
+//
+// Every scripted build injects MARKETING_VERSION on the xcodebuild command line:
+// - release builds: the version of the tag being built;
+// - all other builds (main, PRs, local builds with .github/scripts/build.sh or the
+//   docs/BUILDING.md command): `python3 scripts/release/version.py current`, the latest
+//   vYYYY.M.n tag reachable from HEAD, or YYYY.M.0 for this month (Europe/Madrid) without tags.
+// The version stays purely numeric; development builds differ only by CFBundleVersion.
+//
+// The fallback below is only for builds that bypass those scripts (e.g. plain Xcode).
+// The app version is independent of the .graphink document format version
+// (OPC profile opc-v1, document version="1"); see docs/format/.
+MARKETING_VERSION = 0.0.0
+
+// CFBundleVersion: a monotonically increasing integer. Release CI overrides it
+// with its run number plus BUILD_NUMBER_BASE (.github/ci.env); local and PR
+// builds use this placeholder, which is lower than any CI release build.
+CURRENT_PROJECT_VERSION = 1

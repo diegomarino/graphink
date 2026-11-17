@@ -5,6 +5,7 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import "AxisInspector.h"
 
 #import <GraphSketcherModel/RSAxis.h>
@@ -12,7 +13,7 @@
 #import <GraphSketcherModel/RSUndoer.h>
 #import <GraphSketcherModel/RSGraphEditor.h>
 
-#import <OmniQuartz/OQColor.h>
+#import <AppKit/NSColor.h>
 
 #import "GraphDocument.h"
 #import "RSSelector.h"
@@ -128,7 +129,7 @@ static BOOL boolFromState(NSInteger state)
 {
     // -setEnabled: is now handled using bindings in the xib file.
     
-    if (!_s || ![_s document]) {
+    if (!_graph || !_s || ![_s document]) {
 	
 	[_axisPlacementXMatrix selectCellAtRow:-1 column:-1]; // clears the selection
 	[_axisPlacementYMatrix selectCellAtRow:-1 column:-1];
@@ -214,7 +215,7 @@ static BOOL boolFromState(NSInteger state)
     [_gridWidthField setDoubleValue:[_graph gridWidth]];
     [_gridWidthStepper setDoubleValue:[_graph gridWidth]];
     
-    [_gridColorWell setColor:[_graph gridColor].toColor];
+    [_gridColorWell setColor:[_graph gridColor]];
     
     
 // For future reference if we decide to go back to this type of behavior
@@ -313,6 +314,7 @@ static BOOL boolFromState(NSInteger state)
 - (void)selectionChangedNotification:(NSNotification *)note
 // sent by selection object when any object modifies the selection in any way
 {
+    if (note.userInfo[@"document"] != [_s document]) return;
     // if the inspector sent the change notification, ignore it
     if ([note object] == self)  return;
     
@@ -327,10 +329,12 @@ static BOOL boolFromState(NSInteger state)
 }
 - (void)contextChangedNotification:(NSNotification *)note
 {
+    if (note.userInfo[@"document"] && note.userInfo[@"document"] != [_s document]) return;
     [self updateDisplay];
 }
 - (void)toolbarClickedNotification:(NSNotification *)note
 {
+    if (!self.view.window.isMainWindow) return;
     // deselect any selected fields (otherwise, a new unwanted (0,0) point could get created)
     [self.view.window makeFirstResponder:nil];
 }
@@ -428,10 +432,19 @@ static BOOL boolFromState(NSInteger state)
 }
 
 
+// The range fields send their action whenever editing ends, Tab included. Text that still shows the
+// current value must not fix the range (setMin:/setMax: mark it user-modified, ending autoscaling).
+static BOOL RangeFieldChanged(id sender, RSAxis *axis, data_p current)
+{
+    return ![[sender stringValue] isEqualToString:[axis formattedDataValue:current]];
+}
+
 - (IBAction)changeXMin:(id)sender;
 {
     RSGraph *graph = [_document graph];
     RSAxis *axis = [graph xAxis];
+    if (!RangeFieldChanged(sender, axis, [axis min]))
+        return;
     data_p value = [axis dataValueFromFormat:[sender stringValue]];
     
     [graph setMin:value forAxis:axis];
@@ -443,6 +456,8 @@ static BOOL boolFromState(NSInteger state)
 {
     RSGraph *graph = [_document graph];
     RSAxis *axis = [graph xAxis];
+    if (!RangeFieldChanged(sender, axis, [axis max]))
+        return;
     data_p value = [axis dataValueFromFormat:[sender stringValue]];
     
     [graph setMax:value forAxis:axis];
@@ -454,6 +469,8 @@ static BOOL boolFromState(NSInteger state)
 {
     RSGraph *graph = [_document graph];
     RSAxis *axis = [graph yAxis];
+    if (!RangeFieldChanged(sender, axis, [axis min]))
+        return;
     data_p value = [axis dataValueFromFormat:[sender stringValue]];
     
     [graph setMin:value forAxis:axis];
@@ -465,6 +482,8 @@ static BOOL boolFromState(NSInteger state)
 {
     RSGraph *graph = [_document graph];
     RSAxis *axis = [graph yAxis];
+    if (!RangeFieldChanged(sender, axis, [axis max]))
+        return;
     data_p value = [axis dataValueFromFormat:[sender stringValue]];
     
     [graph setMax:value forAxis:axis];
@@ -619,14 +638,12 @@ static BOOL boolFromState(NSInteger state)
 
 - (IBAction)changeGridColor:(id)sender;
 {
-    if (![[[NSApp mainWindow] firstResponder] isKindOfClass:[RSGraphView class]]) {
+    if (![self commitEditingForDocument:_document]) {
         [_gridColorWell deactivate];
         return;
     }
     
     NSColor *newColor = [sender color];
-    
-    [self updateKeyWindowAndFirstResponder:sender];
     
     // Set up Undo:
     [[_s undoer] registerRepetitiveUndoWithObject:_graph
@@ -636,7 +653,7 @@ static BOOL boolFromState(NSInteger state)
     // set user preference:
     //[[OFPreferenceWrapper sharedPreferenceWrapper] setColor:newColor forKey: @"DefaultGridColor"];
     
-    [_graph setGridColor:[OQColor colorWithPlatformColor:newColor]];
+    [_graph setGridColor:newColor];
     
     // also, turn on the grid if it's currently off!
     [_graph displayGridIfNotAlready];

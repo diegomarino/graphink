@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8D15AC270486D014006FF6A4"
-            BuildableName = "GraphSketcher.app"
+            BuildableName = "Graphink.app"
             BlueprintName = "GraphSketcher"
             ReferencedContainer = "container:GraphSketcher/App/GraphSketcher.xcodeproj">
          </BuildableReference>
@@ -94,7 +94,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8D15AC270486D014006FF6A4"
-            BuildableName = "GraphSketcher.app"
+            BuildableName = "Graphink.app"
             BlueprintName = "GraphSketcher"
             ReferencedContainer = "container:GraphSketcher/App/GraphSketcher.xcodeproj">
          </BuildableReference>

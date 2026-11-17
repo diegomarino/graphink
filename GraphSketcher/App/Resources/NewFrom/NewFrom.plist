@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FormatVersion</key>
+	<integer>1</integer>
+	<key>InitialExample</key>
+	<dict>
+		<key>File</key>
+		<string>Initial/welcome-to-graphink.graphink</string>
+		<key>Title</key>
+		<string>Welcome to Graphink</string>
+		<key>SHA256</key>
+		<string>20854f08b4da992d10d8c8249737d92278c5a8f04190789462ea3e548998e7fb</string>
+	</dict>
+	<key>Groups</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>examples</string>
+			<key>Title</key>
+			<string>Examples</string>
+			<key>Items</key>
+			<array>
+				<dict>
+					<key>File</key>
+					<string>Examples/01-market-equilibrium.graphink</string>
+					<key>Title</key>
+					<string>Market Equilibrium</string>
+					<key>SHA256</key>
+					<string>e7333922e79a08ab5f03a3e1c580577d9546d917b14cc513e0437ec2fc4415a5</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/02-demand-and-supply-shifts.graphink</string>
+					<key>Title</key>
+					<string>Demand and Supply Shifts</string>
+					<key>SHA256</key>
+					<string>1b9e593eb519d459d7fac6cefdaeec116da49756ba0638cc07ebe21bca2b1163</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/03-tax-incidence-and-welfare.graphink</string>
+					<key>Title</key>
+					<string>Tax Incidence and Welfare</string>
+					<key>SHA256</key>
+					<string>fc967eced1a86e899fe18880edcad448086f0084377e2c4f3e004455c7ce290c</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/04-binding-price-ceiling.graphink</string>
+					<key>Title</key>
+					<string>Binding Price Ceiling</string>
+					<key>SHA256</key>
+					<string>7118160bb467d6dad633c917f8c11eb5515f16a55ede3fe25b7ddab5ca5b5cf5</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/05-binding-price-floor.graphink</string>
+					<key>Title</key>
+					<string>Binding Price Floor</string>
+					<key>SHA256</key>
+					<string>408d3183a23c262a7f4904d0d96a0a9880c079245f0681cab062e0342c1e0f7a</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/06-monopoly.graphink</string>
+					<key>Title</key>
+					<string>Monopoly Output and Price</string>
+					<key>SHA256</key>
+					<string>ae94836ee064f19e9ed57572bdfa93f1dc9559d553414a170e687ab8daf712dc</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/07-cost-curves.graphink</string>
+					<key>Title</key>
+					<string>Marginal and Average Cost</string>
+					<key>SHA256</key>
+					<string>41d12d1c19f1215de81781176afb4288101ea8b31b0a025ec30bcd1bd96620f1</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/08-budget-and-indifference.graphink</string>
+					<key>Title</key>
+					<string>Budget Line and Indifference Curves</string>
+					<key>SHA256</key>
+					<string>b5d1270a7c834f8b57bdac8d1dbd096a3361801bb218019b843e0001a7123569</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/09-elasticity-along-demand.graphink</string>
+					<key>Title</key>
+					<string>Elasticity Along a Linear Demand</string>
+					<key>SHA256</key>
+					<string>ba00b56fe7cb5f27148f00a23ea8477720cc4f40244e6e8c28f603eefc451682</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/10-income-and-substitution-effects.graphink</string>
+					<key>Title</key>
+					<string>Income and Substitution Effects</string>
+					<key>SHA256</key>
+					<string>3bfe509efbbc63820aa211a6858d15908933143538d7b930007fa749120dc66c</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/11-isoquants-and-isocost.graphink</string>
+					<key>Title</key>
+					<string>Isoquants and Isocost Lines</string>
+					<key>SHA256</key>
+					<string>e95e48bcc9b3c8a4ba28d9c412f543b52656ea21715ee245fdba2801021d7a3b</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/12-competitive-firm-short-run.graphink</string>
+					<key>Title</key>
+					<string>A Competitive Firm in the Short Run</string>
+					<key>SHA256</key>
+					<string>a25fd83ee798700ff7c1a0175f6211614caa29066b24e8915bb3ae2d68f48770</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/13-import-tariff.graphink</string>
+					<key>Title</key>
+					<string>An Import Tariff</string>
+					<key>SHA256</key>
+					<string>4192d74949d07a01313dc62470e5e5d2e2e573ce8c7ed532240d3e7abd3353e0</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/14-monopsony.graphink</string>
+					<key>Title</key>
+					<string>The Monopsonist Buyer</string>
+					<key>SHA256</key>
+					<string>e76e01de01c3f8cb8e7fbdd129c8ffca32dd15191ccbed2679d19072c5c4d41e</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/15-third-degree-price-discrimination.graphink</string>
+					<key>Title</key>
+					<string>Third-Degree Price Discrimination</string>
+					<key>SHA256</key>
+					<string>cc49507407590016bdc584545098d405164e12f16e629431dbab251e7b1887b7</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/16-cournot-duopoly.graphink</string>
+					<key>Title</key>
+					<string>Cournot Duopoly</string>
+					<key>SHA256</key>
+					<string>ab0ade3558f35fdd8f9c296aa234add91f1f7a78610abf9b0e4e56faaf5424ea</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/17-gains-from-trade.graphink</string>
+					<key>Title</key>
+					<string>The Gains from Trade</string>
+					<key>SHA256</key>
+					<string>a7a04684fe035b650bce7f5e5fd6b680e842255fedcc63695db94fd5ba89406b</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/18-negative-externality.graphink</string>
+					<key>Title</key>
+					<string>A Negative Externality</string>
+					<key>SHA256</key>
+					<string>d931b3bc7d21b1d256675e719289a064246d0d06620c809065f89c655a17314b</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>data</string>
+			<key>Title</key>
+			<string>Data Charts</string>
+			<key>Items</key>
+			<array>
+				<dict>
+					<key>File</key>
+					<string>Examples/irpf-concentration-2024.graphink</string>
+					<key>Title</key>
+					<string>Income Tax Concentration in Spain, 2024</string>
+					<key>SHA256</key>
+					<string>014942f25f3ffd1efd06cd077ac9e78a83bb74d552b51759e78da993feb42adc</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/tax-revenue-share-of-gdp.graphink</string>
+					<key>Title</key>
+					<string>Tax Revenue as a Share of GDP, Spain</string>
+					<key>SHA256</key>
+					<string>37dbff16060f47bf41ea120c8c767fbb1d51e676294780fb829d6050e26b4639</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Examples/house-prices-and-wages.graphink</string>
+					<key>Title</key>
+					<string>House Prices and Wages in Real Terms, Spain</string>
+					<key>SHA256</key>
+					<string>fd776c8f1fc2c343761beb1909ca8b5ff42729ab3ff8821e469e7ff6c1bb3bb8</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>templates</string>
+			<key>Title</key>
+			<string>Templates</string>
+			<key>Items</key>
+			<array>
+				<dict>
+					<key>File</key>
+					<string>Templates/function-plot.graphink</string>
+					<key>Title</key>
+					<string>Function Plot</string>
+					<key>SHA256</key>
+					<string>2275a65b5eff182172726738cf2d6302ad77b2ddb4fc675e915240899885be96</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Templates/time-series.graphink</string>
+					<key>Title</key>
+					<string>Time Series</string>
+					<key>SHA256</key>
+					<string>491cd05fb3b22a3cd672d0cceb773198e873eb5103a6736a7f9314ab1c26e3be</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Templates/scatter-plot.graphink</string>
+					<key>Title</key>
+					<string>Scatter Plot</string>
+					<key>SHA256</key>
+					<string>aa16014bc49b55581cde71c95d81daa64e326c23baf657d7746ec98f2de601f9</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Templates/bar-chart.graphink</string>
+					<key>Title</key>
+					<string>Bar Chart</string>
+					<key>SHA256</key>
+					<string>2c52f529b3aefa90f340fc5e7f00b44cfaca8bc3404e73a33eff35e9d50f6d55</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Templates/log-scale.graphink</string>
+					<key>Title</key>
+					<string>Logarithmic Scale</string>
+					<key>SHA256</key>
+					<string>12d54ebbbc9b77c380d0137525f3ecd40dc180e8f77fffd6f3d5e8c4c4a87b1e</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Templates/number-line.graphink</string>
+					<key>Title</key>
+					<string>Number Line</string>
+					<key>SHA256</key>
+					<string>e2ab0c7a05151bf903e5acab183db7f9a13faa8e0720bbef68471f53e3190970</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Templates/market-equilibrium.graphink</string>
+					<key>Title</key>
+					<string>Supply and Demand</string>
+					<key>SHA256</key>
+					<string>042d5b00129b471b2e71d8c31df926677e76d30c4f131e771192b0672ca476a9</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Templates/lorenz-curve.graphink</string>
+					<key>Title</key>
+					<string>Lorenz Curve</string>
+					<key>SHA256</key>
+					<string>efa24e1c555619ee8232dbfc4dcd8e5eb3e895b1562839d5190349b13213191e</string>
+				</dict>
+				<dict>
+					<key>File</key>
+					<string>Templates/production-possibilities.graphink</string>
+					<key>Title</key>
+					<string>Production Possibilities Frontier</string>
+					<key>SHA256</key>
+					<string>7f56d1db476ac7f6792ebf845df3fbbcd4dc79254b8cf1c701cbed46dc5fb400</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

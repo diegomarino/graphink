@@ -6,9 +6,11 @@
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
 #import <OmniInspector/OIInspector.h>
+@class GraphDocument;
 
 @interface OIInspector (RSExtensions)
 
 - (void)updateKeyWindowAndFirstResponder:(id)sender;
+- (BOOL)commitEditingForDocument:(GraphDocument *)document;
 
 @end

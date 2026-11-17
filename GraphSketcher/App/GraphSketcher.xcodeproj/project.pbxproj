@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        E40000000000000000000001 /* RSPageGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = E40000000000000000000002 /* RSPageGeometry.m */; };
+        D50000000000000000000001 /* RSStylePresets.m in Sources */ = {isa = PBXBuildFile; fileRef = D50000000000000000000002 /* RSStylePresets.m */; };
+        D50000000000000000000004 /* StyleFonts in Resources */ = {isa = PBXBuildFile; fileRef = D50000000000000000000005 /* StyleFonts */; };
+        B20000000000000000000006 /* RSInspectorSidebar.m in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000007 /* RSInspectorSidebar.m */; };
+        F20000000000000000000001 /* RSLabelFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = F20000000000000000000002 /* RSLabelFinder.m */; };
+        B20000000000000000000001 /* RSModernImages.m in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000002 /* RSModernImages.m */; };
+        C30000000000000000000001 /* RSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = C30000000000000000000002 /* RSDocumentController.m */; };
+        E50000000000000000000001 /* RSNewFromCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = E50000000000000000000002 /* RSNewFromCatalog.m */; };
+        E50000000000000000000004 /* NewFrom in Resources */ = {isa = PBXBuildFile; fileRef = E50000000000000000000005 /* NewFrom */; };
+        B20000000000000000000004 /* Modern in Resources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000005 /* Modern */; };
+        C40000000000000000000004 /* ModernCursors in Resources */ = {isa = PBXBuildFile; fileRef = C40000000000000000000005 /* ModernCursors */; };
+		A10000000000000000000001 /* RSAboutPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* RSAboutPanelController.m */; };
+		590000000000000000000001 /* ThirdPartyNotices.html in Resources */ = {isa = PBXBuildFile; fileRef = 590000000000000000000002 /* ThirdPartyNotices.html */; };
+		590000000000000000000004 /* OmniSourceLicense.html in Resources */ = {isa = PBXBuildFile; fileRef = 590000000000000000000005 /* OmniSourceLicense.html */; };
 		0007DF8F0F990C770074EDCD /* copyAsImageIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0007DF8E0F990C770074EDCD /* copyAsImageIcon.tiff */; };
 		0007DFA00F990D3D0074EDCD /* groupIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0007DF9F0F990D3D0074EDCD /* groupIcon.tiff */; };
 		0007DFA20F990D440074EDCD /* ungroupIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0007DFA10F990D440074EDCD /* ungroupIcon.tiff */; };
@@ -54,7 +68,6 @@
 		004755460EF09A2A00024793 /* Inspectors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 004755450EF09A2A00024793 /* Inspectors.plist */; };
 		004755500EF09CDD00024793 /* AxisInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 0047554F0EF09CDD00024793 /* AxisInspector.m */; };
 		0047556F0EF09EA600024793 /* OIInspectors.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0047556D0EF09EA600024793 /* OIInspectors.strings */; };
-		0047D75C0FCCA36300659F6D /* GSQuickLookPlugin.qlgenerator in Copy QuickLook */ = {isa = PBXBuildFile; fileRef = 00DD9B890FCCA2E100CAC55C /* GSQuickLookPlugin.qlgenerator */; };
 		005117D1146083D300175446 /* interpolateIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 005117D0146083D300175446 /* interpolateIcon.tiff */; };
 		005654240FE1807D003C0E58 /* GraphDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005654220FE1807D003C0E58 /* GraphDocument.xib */; };
 		0057399C0F7013F2005011F9 /* DrawCursor.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0057399A0F7013F2005011F9 /* DrawCursor.tiff */; };
@@ -67,7 +80,6 @@
 		0085278410C71B5B00CD8FCD /* UndoActions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0085278210C71B5B00CD8FCD /* UndoActions.strings */; };
 		009094E80EF096FA00350081 /* OmniInspector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009094E70EF096FA00350081 /* OmniInspector.framework */; };
 		0097A8520ED4C01000413A12 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0097A8510ED4C01000413A12 /* Carbon.framework */; };
-		0097A9DF0ED4C88200413A12 /* MessageOfTheDay.html in Resources */ = {isa = PBXBuildFile; fileRef = 0097A9DD0ED4C88200413A12 /* MessageOfTheDay.html */; };
 		009C8A1010B1D82300393DFA /* opaqueWindowIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 009C8A0E10B1D82300393DFA /* opaqueWindowIcon.tiff */; };
 		009C8A1110B1D82300393DFA /* transparentWindowIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 009C8A0F10B1D82300393DFA /* transparentWindowIcon.tiff */; };
 		00A29B981051BA170082356A /* ErrorBarSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A29B971051BA170082356A /* ErrorBarSheet.m */; };
@@ -91,7 +103,6 @@
 		00AD9BAB0A599F3500C1434A /* MarkerCursor.tif in Resources */ = {isa = PBXBuildFile; fileRef = 00AD9B9E0A599F3500C1434A /* MarkerCursor.tif */; };
 		00AD9BAD0A599F3500C1434A /* arrow16.tif in Resources */ = {isa = PBXBuildFile; fileRef = 00AD9BA00A599F3500C1434A /* arrow16.tif */; };
 		00AD9BAE0A599F3500C1434A /* ibeam16.tif in Resources */ = {isa = PBXBuildFile; fileRef = 00AD9BA10A599F3500C1434A /* ibeam16.tif */; };
-		00AEE1C80F703E0C00393926 /* Getting Started.ograph in Resources */ = {isa = PBXBuildFile; fileRef = 00AEE1C60F703E0C00393926 /* Getting Started.ograph */; };
 		00BB75500F715A7100BD4775 /* modifyTool.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB754F0F715A7100BD4775 /* modifyTool.png */; };
 		00BB75520F715A7800BD4775 /* drawTool.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB75510F715A7800BD4775 /* drawTool.png */; };
 		00BB75540F715A7E00BD4775 /* fillTool.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB75530F715A7E00BD4775 /* fillTool.png */; };
@@ -127,7 +138,6 @@
 		34874C260EA7D5380012BB56 /* OmniAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34874C210EA7D5380012BB56 /* OmniAppKit.framework */; };
 		34874C270EA7D5380012BB56 /* OmniBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34874C220EA7D5380012BB56 /* OmniBase.framework */; };
 		34874C290EA7D5380012BB56 /* OmniFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34874C240EA7D5380012BB56 /* OmniFoundation.framework */; };
-		34C767AF0FCF3B4E00D33716 /* GSSpotlightPlugin.mdimporter in Copy Spotlight */ = {isa = PBXBuildFile; fileRef = 347A99320FCF3B0E00599384 /* GSSpotlightPlugin.mdimporter */; };
 		4A09E5BA0F785DB100C2301B /* GraphSketcher Help in Resources */ = {isa = PBXBuildFile; fileRef = 4A09E5B50F785DB100C2301B /* GraphSketcher Help */; };
 		4A09E6050F78607F00C2301B /* HelpImages in Resources */ = {isa = PBXBuildFile; fileRef = 4A09E6020F78607F00C2301B /* HelpImages */; };
 		4AAD543C1743FE7F001441F2 /* inspectorAxes@2x.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4AAD54381743FE7F001441F2 /* inspectorAxes@2x.tiff */; };
@@ -192,45 +202,9 @@
 			remoteGlobalIDString = 8D576316048677EA00EA77CD;
 			remoteInfo = GSSpotlightPlugin;
 		};
-		5F1A940E18579C06009A1111 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5F1A940018579BE7009A1111 /* GSQuickLookPlugin.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8D57630D048677EA00EA77CD;
-			remoteInfo = GSQuickLookPlugin;
-		};
-		5F1A941018579C06009A1111 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5F1A940718579BF5009A1111 /* GSSpotlightPlugin.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8D57630D048677EA00EA77CD;
-			remoteInfo = GSSpotlightPlugin;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		0047D76B0FCCA36700659F6D /* Copy QuickLook */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Contents/Library/QuickLook;
-			dstSubfolderSpec = 1;
-			files = (
-				0047D75C0FCCA36300659F6D /* GSQuickLookPlugin.qlgenerator in Copy QuickLook */,
-			);
-			name = "Copy QuickLook";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0047D7950FCCA51900659F6D /* Copy Spotlight */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Contents/Library/Spotlight;
-			dstSubfolderSpec = 1;
-			files = (
-				34C767AF0FCF3B4E00D33716 /* GSSpotlightPlugin.mdimporter in Copy Spotlight */,
-			);
-			name = "Copy Spotlight";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		5F1A94271857AE4A009A1111 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -252,6 +226,27 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+        E40000000000000000000002 /* RSPageGeometry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSPageGeometry.m; sourceTree = "<group>"; };
+        E40000000000000000000003 /* RSPageGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSPageGeometry.h; sourceTree = "<group>"; };
+        D50000000000000000000002 /* RSStylePresets.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSStylePresets.m; sourceTree = "<group>"; };
+        D50000000000000000000003 /* RSStylePresets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSStylePresets.h; sourceTree = "<group>"; };
+        D50000000000000000000005 /* StyleFonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/StyleFonts; sourceTree = "<group>"; };
+        B20000000000000000000007 /* RSInspectorSidebar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSInspectorSidebar.m; sourceTree = "<group>"; };
+        B20000000000000000000008 /* RSInspectorSidebar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSInspectorSidebar.h; sourceTree = "<group>"; };
+        F20000000000000000000002 /* RSLabelFinder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSLabelFinder.m; sourceTree = "<group>"; };
+        F20000000000000000000003 /* RSLabelFinder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSLabelFinder.h; sourceTree = "<group>"; };
+        B20000000000000000000002 /* RSModernImages.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSModernImages.m; sourceTree = "<group>"; };
+        C30000000000000000000002 /* RSDocumentController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSDocumentController.m; sourceTree = "<group>"; };
+        B20000000000000000000003 /* RSModernImages.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSModernImages.h; sourceTree = "<group>"; };
+        C30000000000000000000003 /* RSDocumentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSDocumentController.h; sourceTree = "<group>"; };
+        E50000000000000000000002 /* RSNewFromCatalog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSNewFromCatalog.m; sourceTree = "<group>"; };
+        E50000000000000000000003 /* RSNewFromCatalog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSNewFromCatalog.h; sourceTree = "<group>"; };
+        E50000000000000000000005 /* NewFrom */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/NewFrom; sourceTree = "<group>"; };
+        B20000000000000000000005 /* Modern */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Modern; sourceTree = "<group>"; };
+        C40000000000000000000005 /* ModernCursors */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ModernCursors; sourceTree = "<group>"; };
+		A10000000000000000000002 /* RSAboutPanelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSAboutPanelController.m; sourceTree = "<group>"; };
+		590000000000000000000003 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = English; path = English.lproj/ThirdPartyNotices.html; sourceTree = "<group>"; };
+		590000000000000000000005 /* OmniSourceLicense.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = OmniSourceLicense.html; path = ../../OmniSourceLicense.html; sourceTree = "<group>"; };
 		0007DF8E0F990C770074EDCD /* copyAsImageIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = copyAsImageIcon.tiff; sourceTree = "<group>"; };
 		0007DF9F0F990D3D0074EDCD /* groupIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = groupIcon.tiff; sourceTree = "<group>"; };
 		0007DFA10F990D440074EDCD /* ungroupIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ungroupIcon.tiff; sourceTree = "<group>"; };
@@ -386,6 +381,9 @@
 		00BB84170EA7C66800A9D91D /* Omni-Tool-Coverage.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Omni-Tool-Coverage.xcconfig"; sourceTree = "<group>"; };
 		00BB84180EA7C66800A9D91D /* Omni-Tool-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Omni-Tool-Debug.xcconfig"; sourceTree = "<group>"; };
 		00BB84190EA7C66800A9D91D /* Omni-Tool-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Omni-Tool-Release.xcconfig"; sourceTree = "<group>"; };
+		F10000000000000000000001 /* Graphink-Version.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Graphink-Version.xcconfig"; path = "Configurations/Graphink-Version.xcconfig"; sourceTree = SOURCE_ROOT; };
+		F10000000000000000000002 /* Graphink-Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Graphink-Project-Debug.xcconfig"; path = "Configurations/Graphink-Project-Debug.xcconfig"; sourceTree = SOURCE_ROOT; };
+		F10000000000000000000003 /* Graphink-Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Graphink-Project-Release.xcconfig"; path = "Configurations/Graphink-Project-Release.xcconfig"; sourceTree = SOURCE_ROOT; };
 		00BE09C10EBA5F9900FDF260 /* RSTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTool.h; sourceTree = "<group>"; };
 		00BE09C20EBA5F9900FDF260 /* RSTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTool.m; sourceTree = "<group>"; };
 		00C142090F72B15700B18CC2 /* arrowEndsDisabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowEndsDisabled.png; sourceTree = "<group>"; };
@@ -433,7 +431,7 @@
 		34874C240EA7D5380012BB56 /* OmniFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OmniFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A09E5B60F785DB100C2301B /* English */ = {isa = PBXFileReference; lastKnownFileType = folder; name = English; path = "English.lproj/GraphSketcher Help"; sourceTree = "<group>"; };
 		4A09E6020F78607F00C2301B /* HelpImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HelpImages; sourceTree = "<group>"; };
-		4A16916A17403D2500EBFE93 /* com.graphsketcher.GraphSketcher.entitlements */ = {isa = PBXFileReference; explicitFileType = text.xml; indentWidth = 8; path = com.graphsketcher.GraphSketcher.entitlements; sourceTree = "<group>"; usesTabs = 1; };
+		4A16916A17403D2500EBFE93 /* com.diegomarino.Graphink.entitlements */ = {isa = PBXFileReference; explicitFileType = text.xml; indentWidth = 8; path = com.diegomarino.Graphink.entitlements; sourceTree = "<group>"; usesTabs = 1; };
 		4AAD54381743FE7F001441F2 /* inspectorAxes@2x.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "inspectorAxes@2x.tiff"; sourceTree = "<group>"; };
 		4AAD54391743FE7F001441F2 /* inspectorCanvas@2x.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "inspectorCanvas@2x.tiff"; sourceTree = "<group>"; };
 		4AAD543A1743FE7F001441F2 /* inspectorData@2x.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "inspectorData@2x.tiff"; sourceTree = "<group>"; };
@@ -459,7 +457,7 @@
 		5F1A940018579BE7009A1111 /* GSQuickLookPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GSQuickLookPlugin.xcodeproj; path = ../QuickLook/GSQuickLookPlugin.xcodeproj; sourceTree = "<group>"; };
 		5F1A940718579BF5009A1111 /* GSSpotlightPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GSSpotlightPlugin.xcodeproj; path = ../Spotlight/GSSpotlightPlugin.xcodeproj; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; explicitFileType = text.xml; fileEncoding = 4; path = Info.plist; sourceTree = "<group>"; };
-		8D15AC370486D014006FF6A4 /* GraphSketcher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GraphSketcher.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D15AC370486D014006FF6A4 /* Graphink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Graphink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -711,6 +709,9 @@
 				00BB84170EA7C66800A9D91D /* Omni-Tool-Coverage.xcconfig */,
 				00BB84180EA7C66800A9D91D /* Omni-Tool-Debug.xcconfig */,
 				00BB84190EA7C66800A9D91D /* Omni-Tool-Release.xcconfig */,
+				F10000000000000000000001 /* Graphink-Version.xcconfig */,
+				F10000000000000000000002 /* Graphink-Project-Debug.xcconfig */,
+				F10000000000000000000003 /* Graphink-Project-Release.xcconfig */,
 			);
 			name = Configurations;
 			path = ../../OmniGroup/Configurations;
@@ -760,6 +761,8 @@
 		00EB9A410C23599B009FF4E1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B20000000000000000000005 /* Modern */,
+				C40000000000000000000005 /* ModernCursors */,
 				00EB9A400C235984009FF4E1 /* Cursors */,
 				0038F1540F61B1C000911329 /* Inspectors */,
 				0038F1CD0F61BF4000911329 /* Toolbar */,
@@ -801,7 +804,7 @@
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D15AC370486D014006FF6A4 /* GraphSketcher.app */,
+				8D15AC370486D014006FF6A4 /* Graphink.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -825,6 +828,23 @@
 			children = (
 				00AD9B3B0A599E8C00C1434A /* AppController.h */,
 				00AD9B3C0A599E8C00C1434A /* AppController.m */,
+				A10000000000000000000002 /* RSAboutPanelController.m */,
+				D50000000000000000000002 /* RSStylePresets.m */,
+				E40000000000000000000002 /* RSPageGeometry.m */,
+				E40000000000000000000003 /* RSPageGeometry.h */,
+                D50000000000000000000003 /* RSStylePresets.h */,
+                D50000000000000000000005 /* StyleFonts */,
+                B20000000000000000000002 /* RSModernImages.m */,
+				C30000000000000000000002 /* RSDocumentController.m */,
+				B20000000000000000000007 /* RSInspectorSidebar.m */,
+				B20000000000000000000008 /* RSInspectorSidebar.h */,
+				F20000000000000000000002 /* RSLabelFinder.m */,
+				F20000000000000000000003 /* RSLabelFinder.h */,
+				B20000000000000000000003 /* RSModernImages.h */,
+				C30000000000000000000003 /* RSDocumentController.h */,
+				E50000000000000000000002 /* RSNewFromCatalog.m */,
+				E50000000000000000000003 /* RSNewFromCatalog.h */,
+				E50000000000000000000005 /* NewFrom */,
 				00A7DF1E0FE3171E007547F5 /* MainMenu.xib */,
 				003CD1AA0EBB796900E0B9A8 /* App Windows */,
 				00AD9B380A599E8C00C1434A /* Controller */,
@@ -839,7 +859,7 @@
 				3452B17F0EACF9C800488283 /* InfoPlist.h */,
 				32DBCF750370BD2300C91783 /* GraphSketcher_Prefix.h */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
-				4A16916A17403D2500EBFE93 /* com.graphsketcher.GraphSketcher.entitlements */,
+				4A16916A17403D2500EBFE93 /* com.diegomarino.Graphink.entitlements */,
 				0097A9570ED4C31400413A12 /* Make IB Happy */,
 			);
 			name = "Other Sources";
@@ -856,6 +876,8 @@
 				4A09E6020F78607F00C2301B /* HelpImages */,
 				0097A9DD0ED4C88200413A12 /* MessageOfTheDay.html */,
 				000F12600F6AD171001BBCEB /* Credits.html */,
+				590000000000000000000002 /* ThirdPartyNotices.html */,
+				590000000000000000000005 /* OmniSourceLicense.html */,
 				00AEE1C60F703E0C00393926 /* Getting Started.ograph */,
 				00CCE735106804BD008F6101 /* GraphSketcher Keyboard Shortcuts.pdf */,
 				0085276210C703F400CD8FCD /* Localizable.strings */,
@@ -919,23 +941,20 @@
 			buildPhases = (
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				4D16A75F1742C9AD00960CFB /* Copy Library Resources */,
+				F1E0A0010000000000000001 /* Generate Release Notes */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
-				0047D76B0FCCA36700659F6D /* Copy QuickLook */,
-				0047D7950FCCA51900659F6D /* Copy Spotlight */,
 				5F1A94271857AE4A009A1111 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				5F1A93FF18579BA3009A1111 /* PBXTargetDependency */,
-				5F1A940F18579C06009A1111 /* PBXTargetDependency */,
-				5F1A941118579C06009A1111 /* PBXTargetDependency */,
 			);
 			name = GraphSketcher;
 			productInstallPath = "$(HOME)/Applications";
 			productName = OmniGraphSketcher;
-			productReference = 8D15AC370486D014006FF6A4 /* GraphSketcher.app */;
+			productReference = 8D15AC370486D014006FF6A4 /* Graphink.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1012,7 +1031,6 @@
 				00AD9BAB0A599F3500C1434A /* MarkerCursor.tif in Resources */,
 				00AD9BAD0A599F3500C1434A /* arrow16.tif in Resources */,
 				00AD9BAE0A599F3500C1434A /* ibeam16.tif in Resources */,
-				0097A9DF0ED4C88200413A12 /* MessageOfTheDay.html in Resources */,
 				004755460EF09A2A00024793 /* Inspectors.plist in Resources */,
 				0047556F0EF09EA600024793 /* OIInspectors.strings in Resources */,
 				00A81C9F0EF2D99B00F531A0 /* StyleInspector.xib in Resources */,
@@ -1047,10 +1065,15 @@
 				001672D50F67299A00B7DD42 /* pointTypeTick.pdf in Resources */,
 				001672D60F67299A00B7DD42 /* pointTypeVerticalBar.pdf in Resources */,
 				000F12620F6AD171001BBCEB /* Credits.html in Resources */,
+				590000000000000000000001 /* ThirdPartyNotices.html in Resources */,
+				B20000000000000000000004 /* Modern in Resources */,
+				D50000000000000000000004 /* StyleFonts in Resources */,
+				E50000000000000000000004 /* NewFrom in Resources */,
+                C40000000000000000000004 /* ModernCursors in Resources */,
+				590000000000000000000004 /* OmniSourceLicense.html in Resources */,
 				000F14130F6B2481001BBCEB /* inspectorIcon.tiff in Resources */,
 				0057399C0F7013F2005011F9 /* DrawCursor.tiff in Resources */,
 				0057399D0F7013F2005011F9 /* FillCursor.tiff in Resources */,
-				00AEE1C80F703E0C00393926 /* Getting Started.ograph in Resources */,
 				00BB75500F715A7100BD4775 /* modifyTool.png in Resources */,
 				00BB75520F715A7800BD4775 /* drawTool.png in Resources */,
 				00BB75540F715A7E00BD4775 /* fillTool.png in Resources */,
@@ -1135,6 +1158,23 @@
 			shellScript = ../../OmniGroup/Scripts/CopyLibraryResources;
 			showEnvVarsInLog = 0;
 		};
+		F1E0A0010000000000000001 /* Generate Release Notes */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Release Notes";
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/MessageOfTheDay.html",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# In-app release notes (Help > Release Notes) for the published versions reachable from HEAD:\n# git tags plus release-notes/*.md, rendered by scripts/release/notes.py. Runs every build (tags are not files).\nexec /usr/bin/python3 \"$SRCROOT/../../scripts/release/notes.py\" html --output \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MessageOfTheDay.html\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1143,7 +1183,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
+				D50000000000000000000001 /* RSStylePresets.m in Sources */,
+				E40000000000000000000001 /* RSPageGeometry.m in Sources */,
+                B20000000000000000000001 /* RSModernImages.m in Sources */,
+				C30000000000000000000001 /* RSDocumentController.m in Sources */,
+				E50000000000000000000001 /* RSNewFromCatalog.m in Sources */,
+				B20000000000000000000006 /* RSInspectorSidebar.m in Sources */,
+				F20000000000000000000001 /* RSLabelFinder.m in Sources */,
 				00AD9B4A0A599E8D00C1434A /* AppController.m in Sources */,
+				A10000000000000000000001 /* RSAboutPanelController.m in Sources */,
 				00AD9B4B0A599E8D00C1434A /* GraphDocument.m in Sources */,
 				00AD9B4C0A599E8D00C1434A /* RSSelector.m in Sources */,
 				00AD9B4F0A599E8D00C1434A /* RSMode.m in Sources */,
@@ -1179,19 +1227,10 @@
 			name = GraphSketcherModel;
 			targetProxy = 5F1A93FE18579BA3009A1111 /* PBXContainerItemProxy */;
 		};
-		5F1A940F18579C06009A1111 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GSQuickLookPlugin;
-			targetProxy = 5F1A940E18579C06009A1111 /* PBXContainerItemProxy */;
-		};
-		5F1A941118579C06009A1111 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GSSpotlightPlugin;
-			targetProxy = 5F1A941018579C06009A1111 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		590000000000000000000002 /* ThirdPartyNotices.html */ = {isa = PBXVariantGroup; children = (590000000000000000000003 /* English */,); name = ThirdPartyNotices.html; sourceTree = "<group>"; };
 		000F12600F6AD171001BBCEB /* Credits.html */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1311,7 +1350,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 00BB84050EA7C66800A9D91D /* Omni-Application-Debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "$(OMNI_BUNDLE_IDENTIFIER).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "com.diegomarino.Graphink-Development.entitlements";
+				ENABLE_DEBUG_DYLIB = NO;
 				HEADER_SEARCH_PATHS = (
 					$PROJECT_DERIVED_FILE_DIR,
 					/usr/include/libxml2,
@@ -1319,13 +1359,13 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
-				OMNI_BUNDLE_IDENTIFIER = "com.graphsketcher.GraphSketcher$(OMNI_STORE_BUNDLE_IDENTIFIER_SUFFIX)";
+				OMNI_BUNDLE_IDENTIFIER = "com.diegomarino.Graphink$(OMNI_STORE_BUNDLE_IDENTIFIER_SUFFIX)";
 				OMNI_STORE_OTHER_LDFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-lxml2",
 					"$(OMNI_STORE_OTHER_LDFLAGS)",
 				);
-				PRODUCT_NAME = GraphSketcher;
+				PRODUCT_NAME = Graphink;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1342,27 +1382,27 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
-				OMNI_BUNDLE_IDENTIFIER = "com.graphsketcher.GraphSketcher$(OMNI_STORE_BUNDLE_IDENTIFIER_SUFFIX)";
+				OMNI_BUNDLE_IDENTIFIER = "com.diegomarino.Graphink$(OMNI_STORE_BUNDLE_IDENTIFIER_SUFFIX)";
 				OMNI_STORE_OTHER_LDFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-lxml2",
 					"$(OMNI_STORE_OTHER_LDFLAGS)",
 				);
-				PRODUCT_NAME = GraphSketcher;
+				PRODUCT_NAME = Graphink;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
 		};
 		C05733CC08A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 00BB84140EA7C66800A9D91D /* Omni-Global-Debug.xcconfig */;
+			baseConfigurationReference = F10000000000000000000002 /* Graphink-Project-Debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		C05733CD08A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 00BB84150EA7C66800A9D91D /* Omni-Global-Release.xcconfig */;
+			baseConfigurationReference = F10000000000000000000003 /* Graphink-Project-Release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;

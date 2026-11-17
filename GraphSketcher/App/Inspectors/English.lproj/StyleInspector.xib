@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1050" defaultVersion="1080" identifier="macosx"/>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
     </dependencies>
     <objects>
@@ -418,7 +418,6 @@
                     </buttonCell>
                     <connections>
                         <action selector="showFontPicker:" target="-2" id="160"/>
-                        <binding destination="217" name="enabled" keyPath="selection.hasLabel" id="257"/>
                     </connections>
                 </button>
                 <popUpButton toolTip="Choose the shape of the selected points." verticalHuggingPriority="750" id="21">
@@ -479,7 +478,7 @@
                         <binding destination="217" name="enabled" keyPath="selection.hasConnectMethod" id="387"/>
                     </connections>
                 </popUpButton>
-                <colorWell toolTip="Click to choose a color for the selected objects." id="19">
+                <colorWell toolTip="Click to choose a color for the selected objects." id="19" customClass="OAColorWell">
                     <rect key="frame" x="100" y="382" width="42" height="26"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <color key="color" red="0.058130499000000002" green="0.055541898999999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>

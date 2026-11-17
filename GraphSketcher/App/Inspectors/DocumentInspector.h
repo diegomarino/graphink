@@ -27,6 +27,9 @@
 @property (nonatomic, assign) IBOutlet id canvasWidthStepper;
 @property (nonatomic, assign) IBOutlet id canvasHeight;
 @property (nonatomic, assign) IBOutlet id canvasHeightStepper;
+@property (nonatomic, assign) IBOutlet id paperPresetPopUp;
+@property (nonatomic, assign) IBOutlet id paperOrientationPopUp;
+@property (nonatomic, assign) IBOutlet id physicalSizeLabel;
 
 @property (nonatomic, assign) IBOutlet id automaticMarginCheckBox;
 @property (nonatomic, assign) IBOutlet id marginLeft;
@@ -47,6 +50,7 @@
 - (IBAction)changeShadowStrength:(id)sender;
 
 - (IBAction)changeCanvasSize:(id)sender;
+- (IBAction)changePaperPreset:(id)sender;
 - (IBAction)changeMarginBorder:(id)sender;
 
 - (IBAction)changeWindowTranslucency:(id)sender;

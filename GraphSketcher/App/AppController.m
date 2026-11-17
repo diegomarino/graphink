@@ -5,6 +5,7 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <GraphSketcherModel/RSEquationLine.h>
 #import "AppController.h"
 
 #import <GraphSketcherModel/OFPreference-RSExtensions.h>
@@ -17,6 +18,13 @@
 #import "InfoPlist.h"
 #import "RSMode.h"
 #import "RSSelector.h"
+#import "RSGraphView.h"
+#import "RSNewFromCatalog.h"
+#import <OmniAppKit/OAApplication.h>
+#import <OmniAppKit/OAWebPageViewer.h>
+#import <dlfcn.h>
+#import <execinfo.h>
+#import <objc/runtime.h>
 
 // Cause our mdimporter to get run if it has been updated.  Note that we won't "downgrade" the index if you run an app with an older importer.
 //static void RebuildSpotlightIndexIfNewerMetadataImporter(void)
@@ -80,30 +88,6 @@
 
 ///////////////////////////////
 #pragma mark -
-#pragma mark NSInputContext hack
-// (copied from OmniOutliner 4/trunk)
-// We're hoping that this will fix a crasher in NSInputContext: <bug://bugs/53268>
-
-static id (*_original_keyBindingState)(id self, SEL _cmd) = NULL;
-static id _replacement_keyBindingState(id self, SEL _cmd)
-{
-    id result = _original_keyBindingState(self, _cmd);
-    return [[result retain] autorelease];
-}
-
-+ (void)performPosing;
-{
-    Class NSTSMInputContext = NSClassFromString(@"NSTSMInputContext");
-    if (NSTSMInputContext) {
-        SEL sel = @selector(keyBindingState);
-        if ([NSTSMInputContext instancesRespondToSelector:sel])
-            _original_keyBindingState = (typeof(_original_keyBindingState))OBReplaceMethodImplementation(NSTSMInputContext, sel, (IMP)_replacement_keyBindingState);
-    }
-}
-
-
-///////////////////////////////
-#pragma mark -
 #pragma mark Class methods
 ///////////////////////////////
 - (id)frontDocument
@@ -141,7 +125,7 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
     NSError *error = nil;
     GraphDocument *document = [self documentAtPath:documentPath load:YES error:&error];
     if (!document)
-	[NSApp presentError:error];
+	[[NSApplication sharedApplication] presentError:error];
     
     [document setIsInAppBundle:YES];
     DEBUG_RS(@"Loaded '%@' from app bundle.", documentName);
@@ -161,7 +145,7 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
     NSError *error = nil;
     GraphDocument *document = [[NSDocumentController sharedDocumentController] makeDocumentForURL:nil withContentsOfURL:documentURL ofType:RSGraphFileType error:&error];
     if (!document)
-	[NSApp presentError:error];
+	[[NSApplication sharedApplication] presentError:error];
 
     [document makeWindowControllers];
     [document showWindows];
@@ -182,8 +166,135 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
 - (void)dealloc
 {
     [_inspector release];
-    
+
     [super dealloc];
+}
+
+/////////////////////////////////
+#pragma mark -
+#pragma mark Assertion handling
+/////////////////////////////////
+
+// OFController crashes on every NSAssert routed to the NSAssertionHandler, AppKit's own included.
+// Graphink and Omni assertions keep that; assertions Apple's frameworks fail about their own objects
+// raise or are logged instead (below). "Apple's" is decided by image path (/System/, /usr/lib/),
+// never by class or symbol name, so it also holds in stripped Release builds. Only the main thread
+// goes through OFController; other threads already use Apple's handler.
+// AppKit opens a menu "for inspection" to answer an accessibility query on one of its items; if
+// the menu really opened meanwhile (a popup opened by AXPress while an accessibility client walks
+// the hierarchy), -[NSMenu _simulateClosed] fails an internal assertion and does nothing, as it
+// does in a build without assertions. Log that one and return, even where the rule below would
+// raise: the accessibility query then still gets its value.
+static BOOL RSIsHarmlessAppKitAssertion(SEL selector, id object, NSString *fileName)
+{
+    return selector == NSSelectorFromString(@"_simulateClosed") && [object isKindOfClass:[NSMenu class]] && [[fileName lastPathComponent] isEqualToString:@"NSMenu.m"];
+}
+
+// Apple's frameworks and libraries; the system volume holds nothing of ours.
+static BOOL RSIsSystemPath(const char *path)
+{
+    return path != NULL && (strncmp(path, "/System/", 8) == 0 || strncmp(path, "/usr/lib/", 9) == 0);
+}
+
+static BOOL RSIsSystemCode(const void *address)
+{
+    Dl_info info;
+    return address != NULL && dladdr(address, &info) && RSIsSystemPath(info.dli_fname);
+}
+
+// Decided by the bundle of the object's class: a Graphink or Omni subclass of an AppKit class is ours.
+static BOOL RSIsSystemFrameworkObject(id object)
+{
+    return object != nil && RSIsSystemPath([[[NSBundle bundleForClass:[object class]] bundlePath] fileSystemRepresentation]);
+}
+
+// AppKit's accessibility entry points, called by HIServices for each accessibility request, catch
+// exceptions and return an accessibility error. Elsewhere on the main thread the innermost catcher
+// is OAApplication's -sendEvent: (or -[NSApplication run] around -[OAApplication nextEventMatchingMask:...],
+// which every event loop goes through, menu tracking included); both pass the exception to
+// OFController, which crashes. So a raise is safe only if AppKit called from HIServices comes
+// before any OmniAppKit frame. Checks/check-assertion-policy.py checks both sides.
+static BOOL RSInnermostCatcherIsAccessibilityEntryPoint(void)
+{
+    static const char *appKitImage, *omniAppKitImage, *hiServicesImage;
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        appKitImage = class_getImageName([NSApplication class]);
+        omniAppKitImage = class_getImageName([OAApplication class]);
+        Dl_info info;
+        if (dladdr((const void *)AXUIElementCopyAttributeValue, &info))
+            hiServicesImage = info.dli_fname;
+    });
+    if (!appKitImage || !omniAppKitImage || !hiServicesImage)
+        return NO;
+
+    void *frames[256];
+    int frameCount = backtrace(frames, 256);
+    const char *calleeImage = NULL;
+    for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
+        Dl_info info;
+        const char *image = dladdr(frames[frameIndex], &info) ? info.dli_fname : NULL;
+        if (image && strcmp(image, omniAppKitImage) == 0)
+            return NO;
+        if (image && strcmp(image, hiServicesImage) == 0)
+            return calleeImage && strcmp(calleeImage, appKitImage) == 0;
+        calleeImage = image;
+    }
+    return NO;
+}
+
+// Assertions failed by Apple's own code about Apple's own objects. Raise like Apple's default
+// NSAssertionHandler where AppKit catches it; where a raise would reach OFController and crash,
+// log and return, as a build without assertions would continue.
+static void RSHandleSystemFrameworkAssertion(NSString *location, NSString *description)
+{
+    if (RSInnermostCatcherIsAccessibilityEntryPoint()) {
+        NSLog(@"Raising system framework assertion in %@ as NSInternalInconsistencyException: %@", location, description);
+        [[NSException exceptionWithName:NSInternalInconsistencyException reason:description userInfo:nil] raise];
+    }
+    NSLog(@"Ignoring system framework assertion in %@ (a raise here would reach OFController's crash handler): %@", location, description);
+}
+
+// Apple's frameworks call these variadic entry points directly, so the return address is the
+// asserting code. Our own NSAsserts, and Apple's about objects of our classes, keep crashing.
+- (void)handleFailureInMethod:(SEL)selector object:(id)object file:(NSString *)fileName lineNumber:(int)line description:(NSString *)format, ...;
+{
+    va_list args;
+    va_start(args, format);
+    if (!RSIsHarmlessAppKitAssertion(selector, object, fileName) && RSIsSystemFrameworkObject(object) && RSIsSystemCode(__builtin_return_address(0))) {
+        NSString *description = [[[NSString alloc] initWithFormat:format arguments:args] autorelease];
+        va_end(args);
+        NSString *location = [NSString stringWithFormat:@"%c[%@ %@] (%@:%d)", class_isMetaClass(object_getClass(object)) ? '+' : '-', NSStringFromClass([object class]), NSStringFromSelector(selector), fileName, line];
+        RSHandleSystemFrameworkAssertion(location, description);
+        return;
+    }
+    [self handleFailureInMethod:selector object:object file:fileName lineNumber:line format:format arguments:args];
+    va_end(args);
+}
+
+// A function assertion has no object; the image of the asserting code decides.
+- (void)handleFailureInFunction:(NSString *)functionName file:(NSString *)fileName lineNumber:(int)line description:(NSString *)format, ...;
+{
+    va_list args;
+    va_start(args, format);
+    if (RSIsSystemCode(__builtin_return_address(0))) {
+        NSString *description = [[[NSString alloc] initWithFormat:format arguments:args] autorelease];
+        va_end(args);
+        RSHandleSystemFrameworkAssertion([NSString stringWithFormat:@"%@ (%@:%d)", functionName, fileName, line], description);
+        return;
+    }
+    [self handleFailureInFunction:functionName file:fileName lineNumber:line format:format arguments:args];
+    va_end(args);
+}
+
+- (void)handleFailureInMethod:(SEL)selector object:(id)object file:(NSString *)fileName lineNumber:(int)line format:(NSString *)format arguments:(va_list)args;
+{
+    if (!RSIsHarmlessAppKitAssertion(selector, object, fileName)) {
+        [super handleFailureInMethod:selector object:object file:fileName lineNumber:line format:format arguments:args];
+        return;
+    }
+    NSString *description = [[[NSString alloc] initWithFormat:format arguments:args] autorelease];
+    NSLog(@"Ignoring AppKit assertion in -[%@ %@] (%@:%d): %@", NSStringFromClass([object class]), NSStringFromSelector(selector), fileName, line, description);
 }
 
 /////////////////////////////////
@@ -195,37 +306,41 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
 {
     [NSColor setIgnoresAlpha:NO];
     
-    [[OFController sharedController] didInitialize];
+    // The shared release-notes viewer has no software-update news URL in this app.
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"OSUCurrentNewsURL": @""}];
+    [super applicationWillFinishLaunching:notification];
+    
+    [self _installNewFromMenu];
     
     // Add a menu of experimental features if the preference for it is turned on.
     if ([[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"ShowExperimentalFeaturesMenu"]) {
-        NSMenu *experimentalMenu = [[NSMenu alloc] initWithTitle:@"Experimental"];
+        NSMenu *experimentalMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Experimental", @"Experimental menu item")];
         NSInteger index = -1;
-        [experimentalMenu insertItemWithTitle:@"Generate Normal Data" action:@selector(generateStandardNormalData:) keyEquivalent:@"" atIndex:++index];
+        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Generate Normal Data", @"Experimental menu item") action:@selector(generateStandardNormalData:) keyEquivalent:@"" atIndex:++index];
         
         [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"Tufte Tick Marks" action:@selector(toggleTickLayoutAtData:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"Tufte Axis Extent" action:@selector(toggleAxesUseDataExtent:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"Show Data Quartiles" action:@selector(toggleAxesUseDataQuartiles:) keyEquivalent:@"" atIndex:++index];
+        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Tufte Tick Marks", @"Experimental menu item") action:@selector(toggleTickLayoutAtData:) keyEquivalent:@"" atIndex:++index];
+        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Tufte Axis Extent", @"Experimental menu item") action:@selector(toggleAxesUseDataExtent:) keyEquivalent:@"" atIndex:++index];
+        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Show Data Quartiles", @"Experimental menu item") action:@selector(toggleAxesUseDataQuartiles:) keyEquivalent:@"" atIndex:++index];
         
         [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"Dotted Grid Lines" action:@selector(toggleDottedGrid:) keyEquivalent:@"" atIndex:++index];
+        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Dotted Grid Lines", @"Experimental menu item") action:@selector(toggleDottedGrid:) keyEquivalent:@"" atIndex:++index];
         
         [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"y = x^2 + c" action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"y = x^3 + c" action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"y = sin(x) + c" action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"y = e^(-x^2) + c (Bell Curve)" action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"y = 1/(1 + e^-x) + c (Logistic)" action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index];
+        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = x^2 + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeSquare];
+        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = x^3 + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeCube];
+        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = sin(x) + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeSine];
+        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = e^(-x^2) + c (Bell Curve)", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeGaussian];
+        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = 1/(1 + e^-x) + c (Logistic)", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeLogistic];
         
         [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"Import and Replace Data" action:@selector(importDataSeriesReplacingCurrent:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:@"Import Data Series In Rows" action:@selector(importDataInRows:) keyEquivalent:@"" atIndex:++index];
+        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Import and Replace Data", @"Experimental menu item") action:@selector(importDataSeriesReplacingCurrent:) keyEquivalent:@"" atIndex:++index];
+        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Import Data Series In Rows", @"Experimental menu item") action:@selector(importDataInRows:) keyEquivalent:@"" atIndex:++index];
         
-        NSMenuItem *experimentalMenuItem = [[NSMenuItem alloc] initWithTitle:@"Experimental" action:NULL keyEquivalent:@""];
+        NSMenuItem *experimentalMenuItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Experimental", @"Experimental menu item") action:NULL keyEquivalent:@""];
         [experimentalMenuItem setImage:[NSImage imageNamed:@"experimental"]];
         [experimentalMenuItem setSubmenu:experimentalMenu];
-        [[NSApp mainMenu] insertItem:experimentalMenuItem atIndex:7];
+        [[[NSApplication sharedApplication] mainMenu] insertItem:experimentalMenuItem atIndex:7];
         
         [experimentalMenu release];
         [experimentalMenuItem release];
@@ -236,22 +351,17 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
 {
     DEBUG_RS(@"ApplicationDidFinishLaunching");
     
-    BOOL firstTimeUser = [[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"GSFirstTimeUser"];
-    if (firstTimeUser) {
-	
-	// Open up the bundled file "Getting Started.ograph"
-	[self showDocumentNamed:@"Getting Started"];
-	
-	[[OFPreferenceWrapper sharedPreferenceWrapper] setBool:NO forKey:@"GSFirstTimeUser"];
-    }
+    // Documents restored or opened from Finder use up the first launch; the example never joins them.
+    if ([self _initialExampleAction:RSInitialExampleHookDidFinishLaunching] == RSInitialExampleConsume)
+        [[OFPreferenceWrapper sharedPreferenceWrapper] setBool:YES forKey:RSInitialExampleShownKey];
     
     [self checkMessageOfTheDay];
     
-    [self startedRunning];
+    [super applicationDidFinishLaunching:note];
     
     if (LINKBACK_ENABLED) {
-        [LinkBack publishServerWithName:OGSLinkBackServerName bundleIdentifier:@"com.graphsketcher.GraphSketcher" delegate:self];
-        [LinkBack publishServerWithName:OGSLinkBackServerName bundleIdentifier:@"com.graphsketcher.GraphSketcher.MacAppStore" delegate:self];
+        [LinkBack publishServerWithName:OGSLinkBackServerName bundleIdentifier:@"com.diegomarino.Graphink" delegate:self];
+        [LinkBack publishServerWithName:OGSLinkBackServerName bundleIdentifier:@"com.diegomarino.Graphink.MacAppStore" delegate:self];
     }
     
     
@@ -259,24 +369,28 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
     //RebuildSpotlightIndexIfNewerMetadataImporter();
 }
 
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
+{
+    // AppKit asks only when nothing was restored or opened, so the example never joins other windows.
+    if ([self _initialExampleAction:RSInitialExampleHookShouldOpenUntitled] == RSInitialExampleOpen) {
+        // Marked first, so a failure is not retried on every launch.
+        [[OFPreferenceWrapper sharedPreferenceWrapper] setBool:YES forKey:RSInitialExampleShownKey];
+        if ([self _openInitialExample])
+            return NO;
+    }
+    return YES;
+}
+
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
 {
     // TODO: End editing in any open documents to commit any pending changes
 
-    switch ([self requestTermination]) {
-        case OFControllerTerminateCancel:
-            return NSTerminateCancel;
-        case OFControllerTerminateLater:
-            return NSTerminateLater;
-        case OFControllerTerminateNow:
-        default:
-	    return NSTerminateNow;
-    }
+    return [super applicationShouldTerminate:sender];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification;
 {
-    [self willTerminate];
+    [super applicationWillTerminate:notification];
 }
 
 
@@ -307,7 +421,7 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
         [document makeWindowControllers];
     [document showWindows];
     
-    [NSApp activateIgnoringOtherApps:YES];
+    [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 }
 
 - (void)linkBackDidClose:(LinkBack*)link ;
@@ -328,8 +442,50 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
 /////////////////////////////////////////
 - (IBAction)showGettingStarted:(id)sender;
 {
-    // Open up the bundled file "Getting Started.ograph"
-    [self showDocumentNamed:@"Getting Started"];
+    // Reuse an untouched copy rather than stacking duplicates.
+    RSNewFromItem *example = [[RSNewFromCatalog mainCatalog] initialExample];
+    for (NSDocument *document in [[NSDocumentController sharedDocumentController] documents]) {
+        if (example && ![document fileURL] && ![document isDocumentEdited] && [[document displayName] isEqualToString:example.title]) {
+            [document showWindows];
+            return;
+        }
+    }
+    if (![self _openInitialExample])
+        NSBeep();
+}
+
+- (RSInitialExampleAction)_initialExampleAction:(RSInitialExampleHook)hook;
+{
+    BOOL shown = [[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:RSInitialExampleShownKey];
+    return RSInitialExampleActionFor(shown, hook, [[[NSDocumentController sharedDocumentController] documents] count]);
+}
+
+- (BOOL)_openInitialExample;
+{
+    RSNewFromItem *example = [[RSNewFromCatalog mainCatalog] initialExample];
+    NSError *error = nil;
+    if (example && [[NSDocumentController sharedDocumentController] openUntitledCopyOfURL:example.fileURL displayName:example.title ofType:RSGraphFileType display:YES error:&error])
+        return YES;
+    NSLog(@"Could not open the initial example: %@", error);
+    return NO;
+}
+
+- (void)_installNewFromMenu;
+{
+    // File ▸ New From ▸ goes directly below File ▸ New; its contents come from the bundled manifest.
+    for (NSMenuItem *topItem in [[[NSApplication sharedApplication] mainMenu] itemArray]) {
+        NSMenu *menu = [topItem submenu];
+        NSInteger index = [menu indexOfItemWithTarget:nil andAction:@selector(newDocument:)];
+        if (index < 0)
+            continue;
+        NSMenu *submenu = [[[NSMenu alloc] initWithTitle:NSLocalizedString(@"New From", @"File menu item")] autorelease];
+        NSUInteger count = [[RSNewFromCatalog mainCatalog] populateMenu:submenu target:[NSDocumentController sharedDocumentController] action:@selector(newDocumentFromCatalogItem:)];
+        NSMenuItem *item = [[[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"New From", @"File menu item") action:NULL keyEquivalent:@""] autorelease];
+        if (count)
+            [item setSubmenu:submenu];  // without documents the item has no action, so it stays disabled
+        [menu insertItem:item atIndex:index + 1];
+        return;
+    }
 }
 
 
@@ -339,20 +495,25 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
 
 - (OIInspectorRegistry *)inspectorRegistry;
 {
-    static dispatch_once_t onceToken;
-    static OIInspectorRegistry *inspectorRegistry;
-    
-    dispatch_once(&onceToken, ^{
-        inspectorRegistry = [[OIInspectorRegistry alloc] init];
-    });
-    
-    return inspectorRegistry;
+    return [self inspectorRegistryForWindow:[[NSApplication sharedApplication] mainWindow]];
 }
 
 
 - (OIInspectorRegistry *)inspectorRegistryForWindow:(NSWindow *)window;
 {
-    return [self inspectorRegistry];
+    id controller = window.windowController;
+    return [controller isKindOfClass:[GraphWindowController class]] ? [controller inspectorRegistry] : nil;
+}
+
+- (NSWindow *)windowForInspectorRegistry:(OIInspectorRegistry *)registry;
+{
+    for (NSDocument *document in [[NSDocumentController sharedDocumentController] documents]) {
+        for (NSWindowController *controller in document.windowControllers) {
+            if ([controller isKindOfClass:[GraphWindowController class]] && [(GraphWindowController *)controller inspectorRegistry] == registry)
+                return controller.window;
+        }
+    }
+    return nil;
 }
 
 /////////////
@@ -466,6 +627,51 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
 #pragma mark Menu actions implemented in this class
 /////
 
+// OmniAppKit registers an empty OAMessageOfTheDaySignature default, so its own first-launch test
+// (no signature seen yet) never fires and a fresh preference domain would show the release notes
+// over the Welcome document. Here a launch without a *saved* signature is the first launch: record
+// the current notes silently. OAController then shows them once after any update that changes
+// them, and Help ▸ Release Notes (-showMessageOfTheDay:) shows them on demand.
+- (void)checkMessageOfTheDay;
+{
+    OFPreferenceWrapper *defaults = [OFPreferenceWrapper sharedPreferenceWrapper];
+    if ([[OFPreference preferenceForKey:@"OAMessageOfTheDaySignature"] hasPersistentValue] || [defaults boolForKey:@"OAShowMessageOfTheDayOnFirstLaunch"]) {
+        [super checkMessageOfTheDay];
+        return;
+    }
+    if (![defaults boolForKey:@"OAMessageOfTheDayCheckOnLaunch"])
+        return;
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"MessageOfTheDay" ofType:@"html"];
+    NSData *notes = path ? [NSData dataWithContentsOfFile:path] : nil;
+    if (!notes)
+        return;
+    NSData *signature = (NSData *)OFDataCreateSHA1Digest(kCFAllocatorDefault, (CFDataRef)notes);
+    [defaults setObject:signature forKey:@"OAMessageOfTheDaySignature"];
+    [signature release];
+}
+
+// OAController shows the notes with the CSS media type "release-notes". WebKit only applies the
+// dark appearance (prefers-color-scheme) to the "screen" media type, so the page stayed light in
+// Dark mode. Same viewer and window, default media type: the page follows Light/Dark, live.
+- (IBAction)showMessageOfTheDay:(id)sender;
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"MessageOfTheDay" ofType:@"html"];
+    if (path == nil)
+        return;
+
+    OAWebPageViewer *viewer = [OAWebPageViewer sharedViewerNamed:@"Release Notes" options:OAWebPageViewerOptionsStandardReleaseNotesOptions];
+
+    // don't go fullscreen
+    NSRect frame = [[viewer window] frame];
+    frame.size.width = 800;
+    [[viewer window] setFrame:frame display:NO];
+    [[viewer window] setMinSize:NSMakeSize(800, 400)];
+    [[viewer window] setMaxSize:NSMakeSize(800, FLT_MAX)];
+
+    [viewer setMediaStyle:nil];
+    [viewer loadPath:path];
+}
+
 - (IBAction)openProductPageInBrowser:(id)sender;
 {
     NSString *productPageURLString = [[OFPreferenceWrapper sharedPreferenceWrapper] stringForKey:@"ProductPageURL"];
@@ -529,7 +735,9 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
     [[NSNotificationCenter defaultCenter] 
      postNotificationName:@"RSContextChanged" object:nil];
 
-    [[self inspectorRegistry] updateInspectorForWindow:[NSApp mainWindow]];
+    for (NSDocument *document in [[NSDocumentController sharedDocumentController] documents])
+        for (id controller in document.windowControllers)
+            if ([controller isKindOfClass:[GraphWindowController class]]) [controller refreshInspectors];
 }
 
 
@@ -569,7 +777,7 @@ static id _replacement_keyBindingState(id self, SEL _cmd)
 	return YES;
     }
     // seems like there should be a better way, but this does the trick without requiring a major re-write.
-    else if ( action == @selector(showMessageOfTheDay:) || action == @selector(sendFeedback:) || action == @selector(openProductPageInBrowser:) || action == @selector(showAboutPanel:) || action == @selector(showPreferences:) || action == @selector(showGettingStarted:) || action == @selector(openKeyboardShortcuts:) )
+    else if ( action == @selector(showMessageOfTheDay:) || action == @selector(sendFeedback:) || action == @selector(openProductPageInBrowser:) || action == @selector(showAboutPanel:) || action == @selector(showPreferencesPanel:) || action == @selector(showGettingStarted:) || action == @selector(openKeyboardShortcuts:) )
     {
 	return YES;
     }

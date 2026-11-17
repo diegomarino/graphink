@@ -22,7 +22,7 @@
 "CopyAsImage" = "Copy As Image";
 "CopyAsImage.toolTip" = "Copy the whole graph as a PDF image that you can paste into other applications.";
 "ToggleInspector" = "Inspect";
-"ToggleInspector.toolTip" = "Show or hide the inspectors.";
+"ToggleInspector.toolTip" = "Show or hide this document’s inspector sidebar (⇧⌘I).";
 "OSAScriptTemplate.label" = "%@";
 "OSAScriptTemplate.paletteLabel" = "Script: %@";
 "OSAScriptTemplate.toolTip" = "Run AppleScript \"%@\".";

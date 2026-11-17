@@ -6,6 +6,9 @@
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
 #import <Cocoa/Cocoa.h>
+#import "RSModernImages.h"
+#import "RSStylePresets.h"
+#import "RSDocumentController.h"
 
 #import <OmniBase/OmniBase.h>
 
@@ -13,5 +16,14 @@ RCS_ID("$Header: svn+ssh://source.omnigroup.com/Source/svn/Omni/trunk/OmniGroup/
 
 int main(int argc, const char *argv[])
 {    
-    return NSApplicationMain(argc, argv);
+    @autoreleasepool {
+        // The first document controller becomes AppKit's shared controller.
+        [[[RSDocumentController alloc] init] autorelease];
+        NSError *error = nil;
+        if (!RSRegisterStyleFonts([NSBundle mainBundle], &error) || !RSRegisterModernImages([NSBundle mainBundle], &error) || !RSRegisterModernCursors([NSBundle mainBundle], &error)) {
+            NSLog(@"Unable to load application images: %@", error);
+            return EXIT_FAILURE;
+        }
+        return NSApplicationMain(argc, argv);
+    }
 }

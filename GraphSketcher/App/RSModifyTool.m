@@ -1,3 +1,4 @@
+#import "RSStylePresets.h"
 // Copyright 2003-2013 Omni Development, Inc.  All rights reserved.
 //
 // This software may only be used and reproduced according to the
@@ -234,6 +235,7 @@
     
     CGFloat hitOffset = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"SelectionSensitivity"];
     CGFloat popoutRatio = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"PopoutSensitivity"];
+    CGFloat popoutDistance = sqrt(hitOffset) * popoutRatio / [_view.editor.hitTester scale];  // screen distance
     
     //////
     // Text Label attached to a vertex:
@@ -255,7 +257,7 @@
 	s = NSMakeSize(o.x - vPoint.x, o.y - vPoint.y);
 	distance = sqrt(s.width*s.width + s.height*s.height);
 	//NSLog(@"DETACH? distance=%f", distance);
-	if ( distance > (sqrt(hitOffset)*popoutRatio + [[_s selection] size].width/4.0) + [V width]*3.0 ) {
+	if ( distance > (popoutDistance + [[_s selection] size].width/4.0) + [V width]*3.0 ) {
 	    // then detach...
 	    [_u setActionName:NSLocalizedStringFromTable(@"Detach Label From Point", @"UndoActions", @"Undo action name")];
 	    
@@ -294,7 +296,7 @@
 	
 	// check for pop-out detachment
         distance = distanceBetweenPoints(o, [_view.editor.hitTester closestPointTo:o onCurve:L]);
-	if ( distance > ( sqrt(hitOffset) * popoutRatio) ) {
+	if ( distance > popoutDistance ) {
 	    // then detach...
 	    [_u setActionName:NSLocalizedStringFromTable(@"Detach Label From Line", @"UndoActions", @"Undo action name")];
 	    
@@ -339,7 +341,7 @@
 	else {	// mouse not over the fill
             distance = [_view.editor.hitTester viewDistanceFromFill:F toPoint:o];
 	    //NSLog(@"DETACH? distance=%f", distance);
-	    if ( distance > ( sqrt(hitOffset) * popoutRatio) ) {
+	    if ( distance > popoutDistance ) {
 		//NSLog(@"DETACH DETACH DETACH");
 		// then detach...
 		[_u setActionName:NSLocalizedStringFromTable(@"Detach Label From Fill", @"UndoActions", @"Undo action name")];
@@ -545,6 +547,7 @@
 {
     [_movers release];
     [_vertexCluster release];
+    [_originalSelection release];
     
     [super dealloc];
 }
@@ -743,7 +746,7 @@
             }
             else if ( [GE isKindOfClass:[RSVertex class]] ) {
                 [_view.editor.hitTester autoSetLabelPositioningForVertex:(RSVertex *)GE];
-                [_renderer positionLabel:nil forOwner:GE];
+                RSPositionNewLabel(_renderer, GE);
                 [_view setSelection:[GE label]];
                 [_view startEditingLabel];
                 return;
@@ -768,14 +771,14 @@
                 }
                 else {  // not a connectLine; so, a best-fit line
                     [L setSlide:[_view.editor.hitTester timeOfClosestPointTo:_viewMouseDownPoint onLine:L]];
-                    [_renderer positionLabel:nil forOwner:L];
+                    RSPositionNewLabel(_renderer, L);
                     [_view setSelection:[L label]];
                     [_view startEditingLabel];
                     return;
                 }
             }
             else if ( [GE isKindOfClass:[RSFill class]] ) {
-                [_renderer positionLabel:nil forOwner:[_s halfSelection]];
+                RSPositionNewLabel(_renderer, [_s halfSelection]);
                 [_view setSelection:[GE label]];
                 [_view startEditingLabel];
                 return;
@@ -792,6 +795,7 @@
 	    
 	    // make a new text label and start editing:
 	    RSTextLabel *TL = [[[RSTextLabel alloc] initWithGraph:_graph] autorelease];
+            RSAdaptNewObjectColor(TL, NO);
 	    [_graph addLabel:TL];
 	    [TL setPosition:_mouseDownPoint];
 	    [_view setSelection:TL];
@@ -1173,7 +1177,7 @@
     
     if (_overAxisEnd != RSAxisEndNone) {
         RSAxis *axis = [_graph axisWithAxisEnd:_overAxisEnd];
-        [_renderer drawHalfSelectedPosition:_downTick onAxis:axis];
+        [_renderer drawHalfSelectedPosition:_downTick onAxis:axis sensitivity:[_view.editor.hitTester selectionSensitivity]];
     }
 }
 

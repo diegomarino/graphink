@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1050" defaultVersion="1080" identifier="macosx"/>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
     </dependencies>
     <objects>
@@ -14,10 +14,10 @@
         <customObject id="-3" userLabel="Application"/>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
-                <menuItem title="GraphSketcher" id="56">
-                    <menu key="submenu" title="GraphSketcher" systemMenu="apple" id="57">
+                <menuItem title="Graphink" id="56">
+                    <menu key="submenu" title="Graphink" systemMenu="apple" id="57">
                         <items>
-                            <menuItem title="About GraphSketcher" id="58">
+                            <menuItem title="About Graphink" id="58">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="showAboutPanel:" target="205" id="537"/>
@@ -32,7 +32,7 @@
                             <menuItem isSeparatorItem="YES" id="144">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Hide GraphSketcher" keyEquivalent="h" id="134">
+                            <menuItem title="Hide Graphink" keyEquivalent="h" id="134">
                                 <connections>
                                     <action selector="hide:" target="-2" id="152"/>
                                 </connections>
@@ -51,7 +51,7 @@
                             <menuItem isSeparatorItem="YES" id="149">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Quit GraphSketcher" keyEquivalent="q" id="136">
+                            <menuItem title="Quit Graphink" keyEquivalent="q" id="136">
                                 <connections>
                                     <action selector="terminate:" target="-2" id="139"/>
                                 </connections>
@@ -304,6 +304,39 @@ CA
                                     <action selector="deselect:" target="205" id="571"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="gs-find-separator"/>
+                            <menuItem title="Find" id="gs-find-menu">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Find" id="gs-find">
+                                    <items>
+                                        <menuItem title="Find…" tag="1" keyEquivalent="f" id="gs-find-show">
+                                            <connections>
+                                                <action selector="performGraphFindAction:" target="-1" id="gs-find-show-action"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Find Next" tag="2" keyEquivalent="g" id="gs-find-next">
+                                            <connections>
+                                                <action selector="performGraphFindAction:" target="-1" id="gs-find-next-action"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Find Previous" tag="3" keyEquivalent="G" id="gs-find-previous">
+                                            <connections>
+                                                <action selector="performGraphFindAction:" target="-1" id="gs-find-previous-action"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Use Selection for Find" tag="7" keyEquivalent="e" id="gs-find-selection">
+                                            <connections>
+                                                <action selector="performGraphFindAction:" target="-1" id="gs-find-selection-action"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Jump to Selection" keyEquivalent="j" id="gs-find-jump">
+                                            <connections>
+                                                <action selector="jumpToSelection:" target="-1" id="gs-find-jump-action"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="689"/>
                             <menuItem title="Line" id="691">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -504,6 +537,25 @@ CA
                 <menuItem title="Arrange" id="246">
                     <menu key="submenu" title="Arrange" id="248">
                         <items>
+                            <menuItem title="Apply Style Preset" id="gs-preset-menu">
+                                <menu key="submenu" title="Apply Style Preset" id="gs-presets">
+                                    <items>
+                                        <menuItem title="Paper" tag="0" id="gs-preset-0">
+                                            <connections><action selector="applyStylePreset:" target="-1" id="gs-preset-action-0"/></connections>
+                                        </menuItem>
+                                        <menuItem title="Sketch" tag="1" id="gs-preset-1">
+                                            <connections><action selector="applyStylePreset:" target="-1" id="gs-preset-action-1"/></connections>
+                                        </menuItem>
+                                        <menuItem title="Chalkboard" tag="2" id="gs-preset-2">
+                                            <connections><action selector="applyStylePreset:" target="-1" id="gs-preset-action-2"/></connections>
+                                        </menuItem>
+                                        <menuItem title="Studio" tag="3" id="gs-preset-3">
+                                            <connections><action selector="applyStylePreset:" target="-1" id="gs-preset-action-3"/></connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="gs-preset-separator"/>
                             <menuItem title="Swap Axes" keyEquivalent="X" id="758">
                                 <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                 <connections>
@@ -535,6 +587,7 @@ CA
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="598"/>
                             <menuItem title="Group" keyEquivalent="g" id="401">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="groupUngroup:" target="-1" id="769"/>
                                 </connections>
@@ -556,13 +609,13 @@ CA
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="View" id="575">
                         <items>
-                            <menuItem title="Show Grid" keyEquivalent="G" id="393">
+                            <menuItem title="Show Grid" keyEquivalent="'" id="393">
                                 <connections>
                                     <action selector="displayGrid:" target="205" id="394"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Snap to Grid" keyEquivalent="g" id="756">
-                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                            <menuItem title="Snap to Grid" keyEquivalent="'" id="756">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                 <connections>
                                     <action selector="snapToGrid:" target="205" id="757"/>
                                 </connections>
@@ -593,12 +646,31 @@ CA
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Inspectors" id="607">
                         <items>
-                            <menuItem title="Show/Hide Inspectors DON'T LOCALIZE" keyEquivalent="I" id="680">
+                            <menuItem title="Show Inspector" keyEquivalent="I" id="680">
                                 <connections>
-                                    <action selector="toggleInspectorPanel:" target="-2" id="682"/>
+                                    <action selector="toggleInspectorPanel:" target="-1" id="682"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="**Placeholder for dynamic tool panels**  DON'T LOCALIZE" id="681" customClass="OIDynamicInspectorMenuItem"/>
+                            <menuItem title="Style" tag="0" keyEquivalent="1" id="gs-section-0">
+                                <connections>
+                                    <action selector="selectInspectorSection:" target="-1" id="gs-section-action-0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Axes" tag="1" keyEquivalent="2" id="gs-section-1">
+                                <connections>
+                                    <action selector="selectInspectorSection:" target="-1" id="gs-section-action-1"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Canvas" tag="2" keyEquivalent="3" id="gs-section-2">
+                                <connections>
+                                    <action selector="selectInspectorSection:" target="-1" id="gs-section-action-2"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Data" tag="3" keyEquivalent="4" id="gs-section-3">
+                                <connections>
+                                    <action selector="selectInspectorSection:" target="-1" id="gs-section-action-3"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="775"/>
                             <menuItem title="Colors" keyEquivalent="C" id="776">
                                 <connections>
@@ -663,7 +735,7 @@ CA
                 <menuItem title="Help" id="103">
                     <menu key="submenu" title="Help" id="106">
                         <items>
-                            <menuItem title="GraphSketcher Help" keyEquivalent="?" id="352">
+                            <menuItem title="Graphink Help" keyEquivalent="?" id="352">
                                 <connections>
                                     <action selector="showHelp:" target="-1" id="708"/>
                                 </connections>

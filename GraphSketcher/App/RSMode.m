@@ -18,8 +18,8 @@
 static NSUInteger modeFromChar(unichar theChar)
 {
     // If shift key is down, event characters are in uppercase.  Convert to lowercase for proper comparison.  <bug://bugs/56347>
-    if (!islower(theChar)) {
-        theChar = tolower(theChar);
+    if (theChar >= 'A' && theChar <= 'Z') {
+        theChar += 'a' - 'A';
     }
     
     switch (theChar) {

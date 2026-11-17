@@ -32,7 +32,7 @@
     [P lineToPoint: NSMakePoint(bounds.size.width, y)];
     
     [P setLineWidth:1];
-    [[NSColor colorWithCalibratedWhite:0.7f alpha:1] set];
+    [[NSColor separatorColor] set];
     [P stroke];
 }
 

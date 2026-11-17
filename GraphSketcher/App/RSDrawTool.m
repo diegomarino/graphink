@@ -1,3 +1,4 @@
+#import "RSStylePresets.h"
 // Copyright 2003-2013 Omni Development, Inc.  All rights reserved.
 //
 // This software may only be used and reproduced according to the
@@ -5,6 +6,7 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
+#import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import "RSDrawTool.h"
 
 #import <GraphSketcherModel/RSGraphElement.h>
@@ -62,7 +64,7 @@
 
     // Create a line, but only if the stroke is big enough (otherwise, just use the original point created on mouseDown)
     CGRect strokeBounds = [_freehand boundingRect];
-    CGFloat hitOffset = [[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"SelectionSensitivity"];
+    CGFloat hitOffset = [_view.editor.hitTester selectionSensitivity];
 
     if( CGRectGetWidth(strokeBounds) > hitOffset || CGRectGetHeight(strokeBounds) > hitOffset ) {
         // Add the line segments just created:
@@ -140,6 +142,7 @@
 	    if (!prevEndUsed) {
 		NSPoint midp = [RSFreehandStroke midPointForSegment:segment];
 		V = [[RSVertex alloc] initWithGraph:_graph];
+        RSAdaptNewObjectColor(V, NO);
 		[V setPosition:[_mapper convertToDataCoords:midp]];
 		[G addElement:V];
 		[V release];
@@ -160,6 +163,7 @@
 	else {
 	    //NSLog(@"curved");
 	    V = [[RSVertex alloc] initWithGraph:_graph];
+        RSAdaptNewObjectColor(V, NO);
 	    [V setPosition:[_mapper convertToDataCoords:cp]];
 	    [G addElement:V];
 	    [V release];
@@ -170,6 +174,7 @@
     // make end vertex if necessary
     if (!prevEndUsed) {
 	V = [[RSVertex alloc] initWithGraph:_graph];
+        RSAdaptNewObjectColor(V, NO);
 	[V setPosition:[_mapper convertToDataCoords:endp]];
 	[G addElement:V];
 	[V release];
@@ -257,6 +262,7 @@
 {
     // create a new line to build:
     self.lineInProgress = [[[RSConnectLine alloc] initWithGraph:_graph] autorelease];
+    RSAdaptNewObjectColor(_lineInProgress, NO);
     
     // Clean vertex clusters.  We have to be really careful to always do this before the model is saved to file, because the _newDrawVertex is never itself actually saved to file, but will show up in the snapped-to array of other vertices in a cluster that it is temporarily in.
     [_newDrawVertex clearSnappedTo];
@@ -337,7 +343,9 @@
 - (void)initState;
 {
     self.lineInProgress = [[[RSConnectLine alloc] initWithGraph:_graph] autorelease];
+    RSAdaptNewObjectColor(_lineInProgress, NO);
     _newDrawVertex = [[RSVertex alloc] initWithGraph:_graph];
+    RSAdaptNewObjectColor(_newDrawVertex, NO);
     [_u addExemptObject:_newDrawVertex];
     
     _prevDrawVertex = nil;
@@ -390,6 +398,7 @@
     //
     RSGraphElement *GE = [_view.editor.hitTester elementUnderPoint:_viewMouseMovedPoint extraElement:_lineInProgress];
     
+    RSAcceptStyleCreationDefaults(_newDrawVertex, NO);
     // freshen the persistent _newDrawVertex object
     [_newDrawVertex clearSnappedTo];
     
@@ -473,7 +482,7 @@
 	//[[_u undoManager] beginUndoGrouping];  // ??
 	
 	// make sure we have the latest changes from the inspector
-	[_lineInProgress acceptLatestDefaults];
+	RSAcceptStyleCreationDefaults(_lineInProgress, NO);
 	
 	// Just in case mouseMoved didn't do its job:
 	//no, this messes with snapping done in mouseMoved//[_newDrawVertex setPosition:_mouseDownPoint];
@@ -485,7 +494,7 @@
 	
 	if( _newDrawObject == _newDrawVertex ) {  // adding a new point to the line
 	    RSVertex *V = [[_newDrawVertex parentlessCopy] autorelease];
-	    [V acceptLatestDefaults];
+	    RSAcceptStyleCreationDefaults(V, NO);
             
 	    // copy over the snappedTo info
 	    [V setSnappedTo:[_newDrawVertex snappedTo] withParams:[_newDrawVertex snappedToParams]];
@@ -673,7 +682,7 @@
 	    }
             NSColor *lineColor = [[[OFPreferenceWrapper sharedPreferenceWrapper] colorForKey:@"DefaultLineColor"] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 	    [self drawRawStrokeUsingWidth:[[OFPreferenceWrapper sharedPreferenceWrapper] floatForKey:@"DefaultLineWidth"]
-                                    color:[lineColor colorWithAlphaComponent:0.618f]];
+                                    color:[RSStyleCreationColor(lineColor, _graph, NO) colorWithAlphaComponent:0.618f]];
 	}
     }
 }
