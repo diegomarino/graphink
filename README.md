@@ -1,77 +1,78 @@
-# GraphSketcher
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="UI/Graphink/graphink-lockup-dark@2x.png">
+    <img src="UI/Graphink/graphink-lockup-light@2x.png" alt="Graphink" width="224">
+  </picture>
+</p>
 
-A fast, simple graph drawing and data plotting app for OS X and iPad. 
+<p align="center"><strong>Sketch clean, editable graphs on your Mac.</strong><br>
+Draw a graph without any data, or paste a table and plot it. Export sharp PDF and images.</p>
 
-## Download 
+<p align="center">
+  <a href="https://github.com/diegomarino/graphink/releases/latest">Download</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#examples">Examples</a> ·
+  <a href="#build-from-source">Build</a>
+</p>
 
-If you aren't interested in building from source and contributing to the project, head over to the [The Releases Page](https://github.com/graphsketcher/GraphSketcher/releases) to download GraphSketcher for Mac.
+![The Graphink window with the Tax Incidence and Welfare example and the inspector sidebar](docs/images/graphink-window.png)
 
-## Introduction
+## Features
 
-GraphSketcher is a simple, elegant tool for quickly sketching graphs and plotting data — but you don’t even need data to get started. It’s perfect for reports, presentations, and problem sets where you need to produce sharp-looking graphs on the fly.
+- **Draw first, data optional.** Sketch lines, curves, points, fills and labels straight on the
+  axes. Everything stays editable and snaps to the grid and to what is already there.
+- **Plot real data.** Paste a table from a spreadsheet and it becomes points and lines you can
+  restyle like anything else.
+- **Start from an example.** File ▸ New From has 18 annotated microeconomics graphs, three
+  charts built from official data and nine templates, from a function plot to a Lorenz curve.
+- **Style presets.** Paper, Sketch, Chalkboard and Studio restyle the whole graph in one step.
+- **Paper sizes and zoom.** A4, A5 or US Letter in either orientation, zoom from 25% to 400%,
+  and the graph never moves when you resize the window.
+- **Find.** Search every label with the standard find bar (⌘F, ⌘G).
+- **Export.** PDF, or PNG, JPEG and TIFF at 72 to 300 DPI, with the exact pixel size shown first.
+- **An open format.** `.graphink` documents are a small, documented
+  [OPC package](docs/format/opc-v1.md). GraphSketcher's `.ograph` files still open and save.
 
-## Setting it Free
+## Examples
 
-Graph Sketcher was created by Robin Stewart in 2007. The Omni Group further developed OmniGraphSketcher for Mac and brought it to the iPad in 2010. All GraphSketcher-related source code was open-sourced in 2014.
+Every image below is a document from File ▸ New From, exported by Graphink.
 
-## What’s Inside
+| | |
+| --- | --- |
+| ![Income and substitution effects of a price fall](Examples/Microeconomics/Previews/10-income-and-substitution-effects.png) | ![Third-degree price discrimination with two demand curves and one marginal cost](Examples/Microeconomics/Previews/15-third-degree-price-discrimination.png) |
+| **Income and substitution effects**, a microeconomics lesson | **Third-degree price discrimination**, a microeconomics lesson |
+| ![A cubic function plotted on a grid](Examples/Templates/Previews/function-plot.png) | ![Income tax concentration in Spain, 2024](Examples/Data/Previews/irpf-concentration-2024.png) |
+| **Function plot**, a template | **Income tax concentration in Spain**, a chart from official data |
 
-The Mac app is located inside the `App` folder; the iPad source is in the `iPad` folder. Shared code exists in `Model` and `OmniStyle`.
+## Download
 
-## How to Build
+Get `Graphink.dmg` from [Releases](https://github.com/diegomarino/graphink/releases/latest).
+Graphink runs on Apple silicon Macs. The current build is not notarized yet, so the first time
+you open it, allow it in System Settings ▸ Privacy & Security.
 
-### Checking out the source
+## Build from source
 
-    git clone --recursive git://github.com/graphsketcher/GraphSketcher
+You need Xcode 27 on an Apple silicon Mac.
 
-### Supported Targets
+```bash
+git clone https://github.com/diegomarino/graphink.git
+cd graphink
+.github/scripts/bootstrap-omnigroup.sh
+.github/scripts/build.sh Debug /tmp/graphink-build
+open /tmp/graphink-build/Debug/Products/Debug/Graphink.app
+```
 
-GraphSketcher requires iOS 7 and Mac OS X 10.8.
+[docs/BUILDING.md](docs/BUILDING.md) explains the OmniGroup patches, Release builds and the
+document checks. To contribute, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-### Prerequisites
+## Credits and license
 
-Building GraphSketcher requires Xcode 5.1.
+Graph Sketcher was created by Robin Stewart in 2007 and developed further by The Omni Group as
+OmniGraphSketcher, which open-sourced it in 2014 as
+[GraphSketcher](https://github.com/graphsketcher/GraphSketcher). Graphink continues that code
+for current macOS; the first 26 commits of this repository are the original history.
 
-#### GraphSketch for Mac
-
-GraphSketcher for Mac is sandboxed, and thus must be signed when built. If you are enrolled in the Mac Developer Program, you may already have an appropriate code signing identity in your keychain. 
-
-If you do not have an appropriate Mac code signing identity, please refer to the [Code Signing Guide](https://developer.apple.com/library/mac/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html) for additional information.
-
-#### GraphSketch for iPad
-
-To build GraphSketcher for iPad, you need an appropriate iOS code signing identity in your keychain. If you are enrolled in the iOS Developer program, you should already have an code signing identity in your keychain.
-
-GraphSketcher depends on the OmniGroup frameworks (expressed as a submodule) and auxiliary build tools, and uses its build configurations, which sign all build products by default.
-
-If you are not interested in building the Mac application, and you do not have an appropriate Mac code signing identity in your keychain, you must edit your local copy of "Target-Mac-Common.xcconfig". Change the following line:
-
-    OMNI_MAC_CODE_SIGN_IDENTITY = Mac Developer:
-
-to
-
-    OMNI_MAC_CODE_SIGN_IDENTITY =
-
-### Building GraphSketcher-Mac
-
-Open “GraphSketcher-Mac.xcworkspace”.
-
-Build the “All” scheme.
-
-There is no step 3.
-
-### Building GraphSketcher-iPad
-
-Open “GraphSketcher-iPad.xcworkspace”.
-
-Build the “GraphSketcher-iPad” scheme.
-
-There is no step 3.
-
-## License
-
-MIT-style Omni Source License 2007.
-
-See OmniSourceLicense.html in this package.
-
-Enjoy!
+New work is under the [MIT License](LICENSE). The inherited GraphSketcher code stays under the
+[Omni Source License 2007](OmniSourceLicense.html), and third-party components keep their own
+terms: [NOTICE.md](NOTICE.md) lists which license covers which files. Graphink is not
+affiliated with or endorsed by The Omni Group.
