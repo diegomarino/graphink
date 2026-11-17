@@ -232,7 +232,7 @@ void RSAppendShapeToBezierPath(NSBezierPath *P, CGPoint p, NSInteger shape, CGFl
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
         P.usesEvenOddFillRule = YES;
 #else
-        [P setWindingRule:NSEvenOddWindingRule];
+        [P setWindingRule:NSWindingRuleEvenOdd];
 #endif
         
         // old method
@@ -1813,7 +1813,7 @@ void RSAppendShapeToBezierPath(NSBezierPath *P, CGPoint p, NSInteger shape, CGFl
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
     [P setLineJoinStyle:kCGLineJoinRound];
 #else
-    [P setLineJoinStyle:NSRoundLineJoinStyle];
+    [P setLineJoinStyle:NSLineJoinStyleRound];
 #endif
     
     return P;
@@ -1886,7 +1886,7 @@ void RSAppendShapeToBezierPath(NSBezierPath *P, CGPoint p, NSInteger shape, CGFl
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
             [P setLineJoinStyle:kCGLineJoinRound];
 #else
-            [P setLineJoinStyle:NSRoundLineJoinStyle];
+            [P setLineJoinStyle:NSLineJoinStyleRound];
 #endif
 	}
 	
@@ -1953,7 +1953,7 @@ void RSAppendShapeToBezierPath(NSBezierPath *P, CGPoint p, NSInteger shape, CGFl
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
         P.lineCapStyle = kCGLineCapRound;
 #else
-	[P setLineCapStyle:NSRoundLineCapStyle];  // new in OGS
+	[P setLineCapStyle:NSLineCapStyleRound];  // new in OGS
 #endif
     }
     
@@ -2844,7 +2844,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
         [P setLineCapStyle:kCGLineCapRound];
 #else
-	[P setLineCapStyle:NSRoundLineCapStyle];
+	[P setLineCapStyle:NSLineCapStyleRound];
 #endif
 	[P stroke];
     }
@@ -2864,7 +2864,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
             [P setLineCapStyle:kCGLineCapRound];
 #else
-            [P setLineCapStyle:NSRoundLineCapStyle];
+            [P setLineCapStyle:NSLineCapStyleRound];
 #endif
             [P stroke];
         } else {

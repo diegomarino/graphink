@@ -1946,7 +1946,7 @@ RSScientificNotationSetting scientificNotationSettingFromName(NSString *name)
         
         // Space by month
         [oneSpacingUnit setMonth:1];
-        unitFlags = NSEraCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit;
+        unitFlags = NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth;
     }
 //    else if( range > 35*24*60*60 ) {  // > 35 days
 //        //spacing = 7*24*60*60;  // weeks
@@ -1956,12 +1956,12 @@ RSScientificNotationSetting scientificNotationSettingFromName(NSString *name)
     else if( range > 3*24*60*60 ) {  // > 3 days
         //spacing = 24*60*60;  // days
         [oneSpacingUnit setDay:1];
-        unitFlags = NSEraCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
+        unitFlags = NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
     }
     else if( range > 12*60*60 ) {  // > 12 hours
         //spacing = 60*60;  // hours
         [oneSpacingUnit setHour:1];
-        unitFlags = NSEraCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit;
+        unitFlags = NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour;
     }
     else if( range > 10*60 ) {  // > 10 minutes
         //spacing = 60;  // minutes

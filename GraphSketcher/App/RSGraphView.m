@@ -923,7 +923,7 @@ BOOL showWhaBam = NO;
 {
     NSString *chars = [event charactersIgnoringModifiers];
     
-    if (![chars length] || ([event modifierFlags] & (NSCommandKeyMask|NSAlternateKeyMask|NSControlKeyMask)))
+    if (![chars length] || ([event modifierFlags] & (NSEventModifierFlagCommand|NSEventModifierFlagOption|NSEventModifierFlagControl)))
         return NO;
     
     unichar theChar = [chars characterAtIndex:0];
@@ -2119,19 +2119,19 @@ BOOL showWhaBam = NO;
     
     else if (menuAction == @selector(snapToGrid:)) {
 	if ( [[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"SnapToGrid"] ) {
-	    [menuItem setState:NSOnState];
+	    [menuItem setState:NSControlStateValueOn];
 	} else {
-	    [menuItem setState:NSOffState];
+	    [menuItem setState:NSControlStateValueOff];
 	}
 	return YES;
     }
     else if (menuAction == @selector(displayGrid:)) {
 	if ( [_graph displayGrid] ) {
 	    //[menuItem setTitle:@"Hide Grid"];
-	    [menuItem setState:NSOnState];
+	    [menuItem setState:NSControlStateValueOn];
 	} else {
 	    //[menuItem setTitle:@"Display Grid"];
-	    [menuItem setState:NSOffState];
+	    [menuItem setState:NSControlStateValueOff];
 	}
 	return YES;
     }
@@ -2140,10 +2140,10 @@ BOOL showWhaBam = NO;
         NSInteger tag = [menuItem tag];  // these should correspond with the enum RSScientificNotationSetting
         
         if (tag == (NSInteger)[[_graph xAxis] scientificNotationSetting]) {
-            [menuItem setState:NSOnState];
+            [menuItem setState:NSControlStateValueOn];
         }
         else {
-            [menuItem setState:NSOffState];
+            [menuItem setState:NSControlStateValueOff];
         }
         return YES;
     }
@@ -2151,10 +2151,10 @@ BOOL showWhaBam = NO;
         NSInteger tag = [menuItem tag];  // these should correspond with the enum RSScientificNotationSetting
         
         if (tag == (NSInteger)[[_graph yAxis] scientificNotationSetting]) {
-            [menuItem setState:NSOnState];
+            [menuItem setState:NSControlStateValueOn];
         }
         else {
-            [menuItem setState:NSOffState];
+            [menuItem setState:NSControlStateValueOff];
         }
         return YES;
     }
@@ -2239,10 +2239,10 @@ BOOL showWhaBam = NO;
 	    if( (isSuper > 0 && menuAction == @selector(toggleSuperscript:))
 	       || (isSuper < 0 && menuAction == @selector(toggleSubscript:)) ) {
 		// is superscripted or subscripted
-		[menuItem setState:NSOnState];
+		[menuItem setState:NSControlStateValueOn];
 	    }
 	    else {
-		[menuItem setState:NSOffState];
+		[menuItem setState:NSControlStateValueOff];
 	    }
 	    // either way, menu item is selectable
 	    return YES;
@@ -2274,17 +2274,17 @@ BOOL showWhaBam = NO;
     }
     else if (menuAction == @selector(toggleDottedGrid:)) {
         if ([_graph xGrid].dotted) {
-            [menuItem setState:NSOnState];
+            [menuItem setState:NSControlStateValueOn];
         } else {
-            [menuItem setState:NSOffState];
+            [menuItem setState:NSControlStateValueOff];
         }
         return YES;
     }
     else if (menuAction == @selector(importDataInRows:)) {
         if ([[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"ImportDataSeriesAsRows"]) {
-            [menuItem setState:NSOnState];
+            [menuItem setState:NSControlStateValueOn];
         } else {
-            [menuItem setState:NSOffState];
+            [menuItem setState:NSControlStateValueOff];
         }
         return YES;
     }
@@ -2746,7 +2746,7 @@ static ErrorBarSheet *errorBarSheet = nil;
 
     [(id)contextInfo autorelease];  // Was retained in makeErrorBars:
     
-    if (returnCode == NSCancelButton) {
+    if (returnCode == NSModalResponseCancel) {
         return;
     }
     //else (returnCode == NSOKButton)
@@ -3034,7 +3034,7 @@ static ErrorBarSheet *errorBarSheet = nil;
     
     [(id)contextInfo autorelease];  // Was retained in pasteWithOptions:
     
-    if (returnCode == NSCancelButton) {
+    if (returnCode == NSModalResponseCancel) {
         return;
     }
     //else (returnCode == NSOKButton)
@@ -3192,7 +3192,7 @@ static ErrorBarSheet *errorBarSheet = nil;
 
     [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result)
     {
-        if (result != NSFileHandlingPanelOKButton)
+        if (result != NSModalResponseOK)
             return;
         
         [self commitEditing];
@@ -3386,7 +3386,7 @@ static NSData *imageIOData(NSData *sourceData, NSString *type)
     NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:r];
     [self unlockFocus];
     
-    NSData *imgData = [rep representationUsingType:NSPNGFileType properties:
+    NSData *imgData = [rep representationUsingType:NSBitmapImageFileTypePNG properties:
 		       [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:NSImageInterlaced]];
     
     [rep release];
@@ -3406,7 +3406,7 @@ static NSData *imageIOData(NSData *sourceData, NSString *type)
     NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:r];
     [self unlockFocus];
     
-    NSData *jpegData = [rep representationUsingType:NSJPEGFileType properties:
+    NSData *jpegData = [rep representationUsingType:NSBitmapImageFileTypeJPEG properties:
 			[NSDictionary dictionaryWithObject:[NSNumber numberWithDouble:1] forKey:NSImageCompressionFactor]];
     
     [rep release];
