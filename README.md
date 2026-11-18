@@ -65,6 +65,14 @@ open /tmp/graphink-build/Debug/Products/Debug/Graphink.app
 [docs/BUILDING.md](docs/BUILDING.md) explains the OmniGroup patches, Release builds and the
 document checks. To contribute, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
+### Command line
+
+`tools/cli/build.sh` builds two tools on the same model code as the app:
+`graphink-render` exports any `.graphink` or `.ograph` to PDF, PNG, JPEG or TIFF, and
+`graphink-create` builds a `.graphink` from a short JSON description. See
+[tools/cli/README.md](tools/cli/README.md). The
+[graphink-documents skill](tools/skills/graphink-documents/SKILL.md) teaches Claude Code to use them.
+
 ## Credits and license
 
 Graph Sketcher was created by Robin Stewart in 2007 and developed further by The Omni Group as
