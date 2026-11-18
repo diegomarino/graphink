@@ -76,7 +76,7 @@ the ones on `PATH`.
   lambdas, imports after the `sys.path` setup; nor `zip(strict=)` (`B905`) and
   `raise SystemExit` without `from` (`B904`). Do not run `ruff format`.
 - **shellcheck** (`-x -P SCRIPTDIR`, default severity) on `.github/scripts/*.sh`,
-  `scripts/**/*.sh`, `Checks/*.sh` and `.githooks/*`. Disable a rule only inline, on the
+  `scripts/**/*.sh`, `Checks/*.sh`, `tools/**/*.sh` and `.githooks/*`. Disable a rule only inline, on the
   command it applies to, with the reason after it:
   `# shellcheck disable=SC2054 # -Wl,-rpath,DIR is one linker argument`.
 
@@ -114,6 +114,7 @@ changes. `git commit --no-verify` skips the hook once; CI still runs everything.
 | `Checks/check-width-defaults.py`, `check-about-links.py` | Debug products | products |
 | `UI/check-style-defaults.py`, `UI/StylePresets/check-presets.py`, `check-creation-defaults.py`, `check-package-documents.py` | Debug products | products |
 | `Checks/check-document-types.py`, `check-new-from.py`, `check-legacy-roundtrips.py` | Debug products | products |
+| `tools/cli/check-cli.py` (builds `graphink-render` and `graphink-create`; renders every example and historical sample read-only, compares with the previews, creates and validates the skill's example specs) | Debug products, xmllint | products |
 | `Checks/check-fixture-bundles.py` (no check fixture app can claim Graphink documents or ship with the products) | Debug products, the checks' evidence, read-only Launch Services database | products |
 | `Checks/check-sidebar.py`, `Checks/check-viewport.py`, `Checks/check-page-size.py`, `Checks/check-zoom-accessibility.py`, `Checks/check-assertion-policy.py`, `Checks/check-key-loop.py`, `Checks/check-snap-distance.py`, `Checks/check-native-qualification.py`, `Checks/check-find.py` | Debug products plus an Aqua session (offscreen `NSWindow`s; `check-assertion-policy.py` also runs an `NSApplication` event loop and accessibility requests; `check-native-qualification.py` emulates the key window and never shows the shared font and color panels; `check-find.py` uses the shared find pasteboard and restores it) | opt-in: `GUI_CHECKS=1` |
 | `UI/Graphink/Cursors/check-cursors.py`, `UI/Design/*`, `UI/LogoStudy/*` | Pillow, poppler (asset pipelines) | not in CI |
