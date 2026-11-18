@@ -25,7 +25,9 @@ Draw a graph without any data, or paste a table and plot it. Export sharp PDF an
   restyle like anything else.
 - **Start from an example.** File ▸ New From has 18 annotated microeconomics graphs, three
   charts built from official data and nine templates, from a function plot to a Lorenz curve.
-- **Style presets.** Paper, Sketch, Chalkboard and Studio restyle the whole graph in one step.
+- **Style presets.** Paper, Sketch, Chalkboard, Studio and Editorial restyle the whole graph in
+  one step. Editorial gives a news-chart look: horizontal rules only, no value-axis line and a
+  strong blue for new lines.
 - **Paper sizes and zoom.** A4, A5 or US Letter in either orientation, zoom from 25% to 400%,
   and the graph never moves when you resize the window.
 - **Find.** Search every label with the standard find bar (⌘F, ⌘G).

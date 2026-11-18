@@ -110,7 +110,7 @@ int main(void) { @autoreleasepool { @try {
     NSDictionary *persistent=[[NSUserDefaults.standardUserDefaults persistentDomainForName:NSBundle.mainBundle.bundleIdentifier] copy];
     NSDictionary *global=[[NSUserDefaults.standardUserDefaults persistentDomainForName:NSGlobalDomain] copy];
     NSString *userFont=[[NSFont userFontOfSize:0].fontName copy];
-    for (NSUInteger preset=0;preset<4;preset++) {
+    for (NSUInteger preset=0;preset<RSStylePresetNames().count;preset++) {
         GraphDocument *doc=Document(); MemoryView *view=View(doc),*secondView=View(doc);
         Check(!doc.graph.creationDefaults,@"Old/inactive graph has no local defaults");
         Check([doc.editor applyStylePreset:preset],@"Preset establishes concrete document values");

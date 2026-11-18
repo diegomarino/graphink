@@ -106,6 +106,10 @@ static NSString *ExpectedFace(NSUInteger preset, RSGraph *g, RSTextLabel *label,
     if ((preset==1 || preset==2) && !tick) return emphasis?@"Kalam-Bold":@"Kalam-Regular";
     return emphasis?(italic?@"HelveticaNeue-MediumItalic":@"HelveticaNeue-Medium"):(italic?@"HelveticaNeue-Italic":@"HelveticaNeue");
 }
+static NSArray *Layout(RSGraph *g) {
+    return @[@(g.xAxis.displayAxis),@(g.xAxis.displayTicks),@(g.xAxis.displayTickLabels),@(g.xAxis.displayGrid),
+             @(g.yAxis.displayAxis),@(g.yAxis.displayTicks),@(g.yAxis.displayTickLabels),@(g.yAxis.displayGrid)];
+}
 static NSDictionary *Geometry(RSGraph *g) {
     NSMutableArray *p=[NSMutableArray array]; for (RSVertex *v in g.Vertices) [p addObject:@[@(v.position.x),@(v.position.y),@(v.width),@(v.shape)]];
     NSMutableArray *labels=[NSMutableArray array]; for (RSTextLabel *l in g.allLabels) [labels addObject:@[l.identifier,l.text,@(l.position.x),@(l.position.y)]];
@@ -124,7 +128,7 @@ static NSDictionary *Geometry(RSGraph *g) {
 @end
 static BOOL ReviewRegressions(NSString *directory) {
     BOOL passed=YES;
-    for (NSUInteger preset=0;preset<4;preset++) {
+    for (NSUInteger preset=0;preset<RSStylePresetNames().count;preset++) {
         ReviewDocument *document=[[[ReviewDocument alloc] init] autorelease];
         document.undoManager.groupsByEvent=NO;
         RSGraphEditor *editor=Chart(document); RSGraph *g=editor.graph;
@@ -161,7 +165,7 @@ static BOOL ReviewRegressions(NSString *directory) {
         }
         [editor invalidate];
     }
-    for (NSUInteger preset=0;preset<4;preset++) {
+    for (NSUInteger preset=0;preset<RSStylePresetNames().count;preset++) {
         Owner *owner=[[[Owner alloc] init] autorelease]; RSGraphEditor *editor=Chart(owner);
         [owner.undoManager disableUndoRegistration];
         RSTextLabel *label=editor.graph.userLabels[0];
@@ -229,14 +233,17 @@ int main(int argc,const char **argv) { @autoreleasepool { @try {
         other.graph.backgroundColor=saved;
     }
     [otherOwner.undoManager enableUndoRegistration];
-    NSMutableData *sheet=[NSMutableData data]; NSRect media=NSMakeRect(0,0,1120,850);
+    NSMutableData *sheet=[NSMutableData data]; NSRect media=NSMakeRect(0,0,1670,850);
     CGDataConsumerRef consumer=CGDataConsumerCreateWithCFData((CFMutableDataRef)sheet);
     CGContextRef context=CGPDFContextCreate(consumer,&media,NULL); CGPDFContextBeginPage(context,NULL);
     NSGraphicsContext *old=[NSGraphicsContext currentContext]; [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithCGContext:context flipped:NO]];
-    for (NSUInteger i=0;i<4;i++) {
+    for (NSUInteger i=0;i<RSStylePresetNames().count;i++) {
         Owner *owner=[[[Owner alloc] init] autorelease]; RSGraphEditor *editor=Chart(owner); RSGraph *g=editor.graph;
-        NSData *before=XML(g); NSDictionary *geometry=Geometry(g); NSDictionary *beforeVisuals=Visuals(g);
+        NSData *before=XML(g); NSDictionary *geometry=Geometry(g); NSDictionary *beforeVisuals=Visuals(g); NSArray *layout=Layout(g);
         Check([editor applyStylePreset:i],@"First apply changes style"); NSData *after=XML(g);
+        // Only Editorial changes axis and grid visibility: x baseline, horizontal rules, no y line or ticks.
+        NSArray *editorial=@[@YES,layout[1],layout[2],@YES,@NO,@NO,layout[6],@NO];
+        Check([Layout(g) isEqual:i==4?editorial:layout],@"Axis and grid visibility follow the preset");
         for (RSTextLabel *label in g.allLabels) {
             NSArray *oldRuns=beforeVisuals[label.identifier][1];
             for (NSUInteger k=0;k<label.attributedString.length;k++) {
@@ -263,6 +270,7 @@ int main(int argc,const char **argv) { @autoreleasepool { @try {
         NSData *normalizedBefore=XML(reopened);
         Check([reopenEditor applyStylePreset:i] && [normalizedBefore isEqual:XML(reopened)] && RSCreationDefaultsEqual(reopened.creationDefaults,g.creationDefaults),@"Legacy model-level adoption adds only concrete defaults; native color normalization is stable");
         Check(![reopenEditor applyStylePreset:i],@"Reapplication after explicit defaults adoption is no-op");
+        Check([Layout(reopened) isEqual:Layout(g)],@"Save/reopen preserves axis and grid visibility");
         [reopenEditor invalidate];
         Check([preferences isEqual:[NSUserDefaults.standardUserDefaults dictionaryRepresentation]],@"No preference mutation");
         if (i==2) {
@@ -314,9 +322,9 @@ int main(int argc,const char **argv) { @autoreleasepool { @try {
         CTLineRef line=CTLineCreateWithAttributedString((CFAttributedStringRef)sample);
         for (id run in (NSArray *)CTLineGetGlyphRuns(line)) { CFIndex count=CTRunGetGlyphCount((CTRunRef)run); CGGlyph glyphs[count]; CTRunGetGlyphs((CTRunRef)run,CFRangeMake(0,0),glyphs); for(CFIndex k=0;k<count;k++) Check(glyphs[k]!=0,@"Numbers/signs/Greek resolve through native fallback"); }
         CFRelease(line);
-        [NSGraphicsContext saveGraphicsState]; CGFloat x=20+(i%2)*550,y=450-(i/2)*410; CGContextTranslateCTM(context,x,y);
+        [NSGraphicsContext saveGraphicsState]; CGFloat x=20+(i%3)*550,y=450-(i/3)*410; CGContextTranslateCTM(context,x,y);
         [name drawAtPoint:NSMakePoint(0,365) withAttributes:@{NSFontAttributeName:[NSFont boldSystemFontOfSize:18]}];
-        NSString *caption=@[@"Helvetica Neue/Medium · #FFFFFF / #30343B / #D8DCE2",@"Kalam Regular/Bold, Helvetica Neue ticks · #FBF5E9 / #443D35 / #DDD2BE",@"Kalam Regular/Bold, Helvetica Neue ticks · #263330 / #F3EEDC / #56665F",@"Helvetica Neue/Medium · #F8FAFD / #24374D / #D8E1ED"][i];
+        NSString *caption=@[@"Helvetica Neue/Medium · #FFFFFF / #30343B / #D8DCE2",@"Kalam Regular/Bold, Helvetica Neue ticks · #FBF5E9 / #443D35 / #DDD2BE",@"Kalam Regular/Bold, Helvetica Neue ticks · #263330 / #F3EEDC / #56665F",@"Helvetica Neue/Medium · #F8FAFD / #24374D / #D8E1ED",@"Helvetica Neue/Medium · #FAFAF8 / #1A1D21 / #C9CED4 · accent #1D5FA8 · horizontal rules"][i];
         [caption drawAtPoint:NSMakePoint(0,345) withAttributes:@{NSFontAttributeName:[NSFont systemFontOfSize:10]}];
         [view drawRect:view.bounds]; [NSGraphicsContext restoreGraphicsState];
         [editor invalidate]; printf("PASS %s apply undo redo no-op geometry isolation reopen PDF glyphs\n",name.UTF8String);

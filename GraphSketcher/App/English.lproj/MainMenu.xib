@@ -552,6 +552,9 @@ CA
                                         <menuItem title="Studio" tag="3" id="gs-preset-3">
                                             <connections><action selector="applyStylePreset:" target="-1" id="gs-preset-action-3"/></connections>
                                         </menuItem>
+                                        <menuItem title="Editorial" tag="4" id="gs-preset-4">
+                                            <connections><action selector="applyStylePreset:" target="-1" id="gs-preset-action-4"/></connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>

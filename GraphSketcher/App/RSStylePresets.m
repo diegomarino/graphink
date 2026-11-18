@@ -33,7 +33,7 @@ NSString *RSCreationColorKey(RSGraphElement *element, BOOL fillMode, BOOL textMo
     return @"line-color";
 }
 
-NSArray *RSStylePresetNames(void) { return @[@"Paper", @"Sketch", @"Chalkboard", @"Studio"]; }
+NSArray *RSStylePresetNames(void) { return @[@"Paper", @"Sketch", @"Chalkboard", @"Studio", @"Editorial"]; }
 
 BOOL RSRegisterStyleFonts(NSBundle *bundle, NSError **error)
 {
@@ -172,9 +172,9 @@ static void Edit(NSMutableArray *edits, id object, NSString *key, id value)
     if (![current isEqual:value]) [edits addObject:@[object, key, value?:NSNull.null]];
 }
 
-// Sketch and Chalkboard use Kalam Regular and Bold (Kalam has no italic); Paper and Studio Helvetica Neue
-// and its Medium, the catalog's bold. The model does not tell a title from a note, so free text keeps
-// only whether it was emphasized.
+// Sketch and Chalkboard use Kalam Regular and Bold (Kalam has no italic); Paper, Studio and Editorial
+// Helvetica Neue and its Medium, the catalog's bold. The model does not tell a title from a note, so
+// free text keeps only whether it was emphasized.
 NSFont *RSStyleFont(NSUInteger index, RSGraph *graph, RSTextLabel *label, NSFont *font)
 {
     NSFontManager *manager = [NSFontManager sharedFontManager];
@@ -206,17 +206,30 @@ NSFont *RSStyleFont(NSUInteger index, RSGraph *graph, RSTextLabel *label, NSFont
 - (BOOL)applyStylePreset:(NSUInteger)index
 {
     if (index >= RSStylePresetNames().count) return NO;
-    const unsigned backgrounds[] = {0xFFFFFF, 0xFBF5E9, 0x263330, 0xF8FAFD};
-    const unsigned inks[] = {0x30343B, 0x443D35, 0xF3EEDC, 0x24374D};
-    const unsigned grids[] = {0xD8DCE2, 0xDDD2BE, 0x56665F, 0xD8E1ED};
-    NSColor *background = Ink(backgrounds[index]), *ink = Ink(inks[index]);
+    const unsigned backgrounds[] = {0xFFFFFF, 0xFBF5E9, 0x263330, 0xF8FAFD, 0xFAFAF8};
+    const unsigned inks[] = {0x30343B, 0x443D35, 0xF3EEDC, 0x24374D, 0x1A1D21};
+    const unsigned grids[] = {0xD8DCE2, 0xDDD2BE, 0x56665F, 0xD8E1ED, 0xC9CED4};
+    // Editorial draws new lines and fills in its accent blue and tick numbers in a softer grey.
+    const unsigned accents[] = {0x30343B, 0x443D35, 0xF3EEDC, 0x24374D, 0x1D5FA8};
+    const unsigned ticks[] = {0x30343B, 0x443D35, 0xF3EEDC, 0x24374D, 0x4B5159};
+    const BOOL editorial = index == 4;
+    NSColor *background = Ink(backgrounds[index]), *ink = Ink(inks[index]), *accent = Ink(accents[index]), *tickInk = Ink(ticks[index]);
     RSGraph *graph = self.graph;
     NSMutableArray *edits = [NSMutableArray array];
-    Edit(edits, graph, @"creationDefaults", @{@"font-name":(index==1 || index==2)?@"Kalam-Regular":@"HelveticaNeue",@"line-color":ink,@"fill-color":[ink colorWithAlphaComponent:0.25],@"text-color":ink});
+    Edit(edits, graph, @"creationDefaults", @{@"font-name":(index==1 || index==2)?@"Kalam-Regular":@"HelveticaNeue",@"line-color":accent,@"fill-color":[accent colorWithAlphaComponent:editorial?0.3:0.25],@"text-color":ink});
     Edit(edits, graph, @"backgroundColor", background);
     for (RSAxis *axis in @[graph.xAxis, graph.yAxis]) {
         Edit(edits, axis, @"color", ink);
         Edit(edits, axis.grid, @"color", Ink(grids[index]));
+    }
+    if (editorial) {
+        // Horizontal rules only (the x axis owns the lines drawn at y ticks): a baseline under the
+        // data, no value-axis line or tick marks.
+        Edit(edits, graph.xAxis, @"displayAxis", @YES);
+        Edit(edits, graph.xAxis, @"displayGrid", @YES);
+        Edit(edits, graph.yAxis, @"displayAxis", @NO);
+        Edit(edits, graph.yAxis, @"displayTicks", @NO);
+        Edit(edits, graph.yAxis, @"displayGrid", @NO);
     }
     NSMutableSet *labels = [NSMutableSet setWithArray:graph.allLabels];
     [labels addObjectsFromArray:@[graph.xAxis.title, graph.yAxis.title, graph.xAxis.minLabel, graph.xAxis.maxLabel, graph.yAxis.minLabel, graph.yAxis.maxLabel]];
@@ -228,9 +241,9 @@ NSFont *RSStyleFont(NSUInteger index, RSGraph *graph, RSTextLabel *label, NSFont
         }];
         [label.attributedString enumerateAttribute:NSForegroundColorAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(NSColor *color, NSRange range, BOOL *stop) {
             BOOL neutral=Neutral(color);
-            NSColor *replacement=[graph isAxisLabel:label] || neutral || !color ? [ink colorWithAlphaComponent:color?color.alphaComponent:1] : Legible(color,background,ink,4.5);
+            NSColor *replacement=[graph isAxisLabel:label] || neutral || !color ? [(label.isAxisTickLabel?tickInk:ink) colorWithAlphaComponent:color?color.alphaComponent:1] : Legible(color,background,ink,4.5);
             // Finish neutral classification now so the mapped color is a fixed point.
-            if (Neutral(replacement)) replacement=[ink colorWithAlphaComponent:replacement.alphaComponent];
+            if (Neutral(replacement)) replacement=[(label.isAxisTickLabel?tickInk:ink) colorWithAlphaComponent:replacement.alphaComponent];
             if (!SameColor(color,replacement)) [text addAttribute:NSForegroundColorAttributeName value:replacement range:range];
         }];
         Edit(edits, label, @"attributedString", text);
