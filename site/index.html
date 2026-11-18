@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--
+  Site values that depend on the GitHub repository name/owner live only in the
+  <head> meta block below and in the REPO links (search for "diegomarino/graphink").
+  See site/README.md for the full list and a one-line grep to update them.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphink — clean and editable graphs and economics diagrams for the Mac</title>
+<meta name="description" content="Graphink is a free, open-source Mac app for clean and editable graphs: draw supply and demand, cost curves and welfare areas, or paste a table and plot it. Exports PDF and PNG. Comes with 18 annotated microeconomics lessons. The successor to GraphSketcher.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1a23" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://diegomarino.github.io/graphink/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/brand/app-icon-256.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Graphink">
+<meta property="og:title" content="Graphink — clean and editable graphs and economics diagrams for the Mac">
+<meta property="og:description" content="A free, open-source Mac app for teaching diagrams and data charts, with 18 annotated microeconomics lessons. The successor to GraphSketcher.">
+<meta property="og:url" content="https://diegomarino.github.io/graphink/">
+<meta property="og:image" content="https://diegomarino.github.io/graphink/assets/img/og-image-1200x630.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Graphink logo and the headline “Sketch clean and editable graphs on your Mac.” above the Graphink window editing a tax incidence and welfare diagram, with the Marginal and Average Cost and Budget Line and Indifference Curves lessons behind it, on graph paper.">
+<meta property="og:image" content="https://diegomarino.github.io/graphink/assets/img/og-image-1200x1200.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta property="og:image:alt" content="The Graphink logo, “Free and open source · for Mac” and the headline “Sketch clean and editable graphs on your Mac.” above the Graphink window editing a tax incidence and welfare diagram, with two lesson sheets behind it, on graph paper.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://diegomarino.github.io/graphink/assets/img/og-image-1200x630.jpg">
+<meta name="twitter:image:alt" content="The Graphink logo and the headline “Sketch clean and editable graphs on your Mac.” above the Graphink window editing a tax incidence and welfare diagram, with the Marginal and Average Cost and Budget Line and Indifference Curves lessons behind it, on graph paper.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="./" aria-label="Graphink home">
+      <picture>
+        <source srcset="assets/brand/graphink-lockup-dark.png 1x, assets/brand/graphink-lockup-dark@2x.png 2x" media="(prefers-color-scheme: dark)">
+        <img src="assets/brand/graphink-lockup-light.png" srcset="assets/brand/graphink-lockup-light.png 1x, assets/brand/graphink-lockup-light@2x.png 2x" width="168" height="48" alt="Graphink">
+      </picture>
+    </a>
+    <nav aria-label="Primary">
+      <ul class="nav-list">
+        <li><a href="#examples">Examples</a></li>
+        <li><a href="#download">Download</a></li>
+        <li><a href="https://github.com/diegomarino/graphink">GitHub</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">Free and open source · for Mac</p>
+        <h1 id="hero-title">Sketch <span class="ink">clean and editable</span> graphs on your Mac.</h1>
+        <p class="lede">Draw all kinds of graphs, from function plots, scatter plots and time series to supply and demand, cost curves and welfare areas. Sketch them without any data, or paste a table from a spreadsheet and plot it. Everything stays editable, and exports as a crisp PDF or PNG.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/diegomarino/graphink/releases/latest/download/Graphink.dmg">Download for Mac</a>
+          <a class="button" href="#examples">See the examples</a>
+        </div>
+        <p class="hero-meta"><span>For Macs with Apple silicon</span> <span>· no account needed</span> <span>· no data collected</span></p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="sheet sheet-left" aria-hidden="true">
+        <picture>
+          <source type="image/webp" srcset="assets/img/examples/07-cost-curves-540.webp">
+          <img src="assets/img/examples/07-cost-curves-540.png" width="540" height="400" alt="">
+        </picture>
+      </div>
+      <div class="sheet sheet-right" aria-hidden="true">
+        <picture>
+          <source type="image/webp" srcset="assets/img/examples/08-budget-and-indifference-540.webp">
+          <img src="assets/img/examples/08-budget-and-indifference-540.png" width="540" height="400" alt="">
+        </picture>
+      </div>
+      <figure class="hero-figure">
+        <picture>
+          <source type="image/webp" srcset="assets/img/graphink-window-1072.webp 1072w, assets/img/graphink-window-2144.webp 2144w" sizes="(min-width: 1120px) 900px, calc(100vw - 36px)">
+          <img class="app-shot" src="assets/img/graphink-window-720.png" width="1072" height="690" fetchpriority="high"
+               alt="Graphink window editing the Tax Incidence and Welfare example. The toolbar shows Scale to Fit, Modify, Draw, Fill, Text, Lock, Group, Detach, Copy As Image and Inspect. The canvas shows demand, supply and supply-plus-tax lines with shaded consumer surplus, producer surplus, tax revenue and deadweight loss. The inspector sidebar is open on the Style section with thickness, color, point type, line type and font controls.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section id="features" class="section points-section" aria-labelledby="features-title">
+    <div class="wrap">
+      <h2 id="features-title" class="visually-hidden">What it does</h2>
+      <ul class="points">
+        <li>
+          <svg class="glyph" viewBox="0 0 48 48" aria-hidden="true"><path class="ax" d="M6 6v36h36"/><path class="c1" d="M10 10 38 36"/><path class="c2" d="M10 36 38 12"/><circle class="dot" cx="24" cy="23.2" r="2.6"/></svg>
+          <h3>Draw without data</h3><p>Lines, points, shaded areas and labels on real axes.</p>
+        </li>
+        <li>
+          <svg class="glyph" viewBox="0 0 48 48" aria-hidden="true"><path class="ax" d="M6 6v36h36"/><circle class="dot" cx="13" cy="34" r="2.4"/><circle class="dot" cx="19" cy="29" r="2.4"/><circle class="dot" cx="24" cy="31" r="2.4"/><circle class="dot" cx="29" cy="22" r="2.4"/><circle class="dot" cx="34" cy="18" r="2.4"/><circle class="dot" cx="39" cy="12" r="2.4"/></svg>
+          <h3>Or plot your data</h3><p>Copy columns from a spreadsheet or a CSV file and paste them.</p>
+        </li>
+        <li>
+          <svg class="glyph" viewBox="0 0 48 48" aria-hidden="true"><path class="ax" d="M6 6v36h36"/><path class="c1 ghost" d="M10 34C18 30 22 16 38 12"/><path class="c1" d="M10 38C20 34 26 24 38 22"/><rect class="handle" x="21.5" y="27.5" width="5" height="5"/></svg>
+          <h3>Editable to the end</h3><p>Open it next term and move the curve.</p>
+        </li>
+        <li>
+          <svg class="glyph" viewBox="0 0 48 48" aria-hidden="true"><path class="ax" d="M12 5h17l9 9v29H12z"/><path class="ax" d="M29 5v9h9"/><path class="c2" d="M17 36 33 22"/><path class="c1" d="M17 22 33 36"/></svg>
+          <h3>Ready for slides and handouts</h3><p>PDF, or images at up to 300 DPI.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="examples" class="section" aria-labelledby="examples-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="examples-title">Start from an example</h2>
+        <p class="section-intro">File › New From opens any of these as an editable copy: 18 microeconomics lessons, nine templates and three charts built from official data.</p>
+      </div>
+      <h3 class="subhead">Lessons</h3>
+      <ul class="gallery">
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/01-market-equilibrium-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/01-market-equilibrium-540.webp 540w, assets/img/examples/01-market-equilibrium-1080.webp 1080w" sizes="(min-width: 1120px) 510px, (min-width: 700px) calc(50vw - 60px), calc(100vw - 60px)">
+                <img src="assets/img/examples/01-market-equilibrium-540.png" width="540" height="400" loading="lazy" alt="Market Equilibrium: demand P = 14 − Q meets supply P = 2 + Q/2 at Q0 = 8, P0 = $6.">
+              </picture>
+            </a>
+            <figcaption>Market Equilibrium</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/03-tax-incidence-and-welfare-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/03-tax-incidence-and-welfare-540.webp 540w, assets/img/examples/03-tax-incidence-and-welfare-1080.webp 1080w" sizes="(min-width: 1120px) 510px, (min-width: 700px) calc(50vw - 60px), calc(100vw - 60px)">
+                <img src="assets/img/examples/03-tax-incidence-and-welfare-540.png" width="540" height="400" loading="lazy" alt="Tax Incidence and Welfare: a $3 per-unit tax with shaded consumer surplus 18, producer surplus 9, tax revenue 18 and deadweight loss 3.">
+              </picture>
+            </a>
+            <figcaption>Tax Incidence and Welfare</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/04-binding-price-ceiling-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/04-binding-price-ceiling-540.webp 540w, assets/img/examples/04-binding-price-ceiling-1080.webp 1080w" sizes="(min-width: 1120px) 510px, (min-width: 700px) calc(50vw - 60px), calc(100vw - 60px)">
+                <img src="assets/img/examples/04-binding-price-ceiling-540.png" width="540" height="400" loading="lazy" alt="Binding Price Ceiling: Pmax = $5 with Q1 = 6 supplied, Q2 = 9 demanded, excess demand of 3 and deadweight loss 3.">
+              </picture>
+            </a>
+            <figcaption>Binding Price Ceiling</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/06-monopoly-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/06-monopoly-540.webp 540w, assets/img/examples/06-monopoly-1080.webp 1080w" sizes="(min-width: 1120px) 510px, (min-width: 700px) calc(50vw - 60px), calc(100vw - 60px)">
+                <img src="assets/img/examples/06-monopoly-540.png" width="540" height="400" loading="lazy" alt="Monopoly Output and Price: marginal revenue equals marginal cost at Q = 6, price $8 from demand, profit 36 and deadweight loss 18.">
+              </picture>
+            </a>
+            <figcaption>Monopoly Output and Price</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/07-cost-curves-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/07-cost-curves-540.webp 540w, assets/img/examples/07-cost-curves-1080.webp 1080w" sizes="(min-width: 1120px) 510px, (min-width: 700px) calc(50vw - 60px), calc(100vw - 60px)">
+                <img src="assets/img/examples/07-cost-curves-540.png" width="540" height="400" loading="lazy" alt="Marginal and Average Cost: MC, AVC and ATC from one total cost; MC crosses AVC at (3, 15) and ATC at (4, 24).">
+              </picture>
+            </a>
+            <figcaption>Marginal and Average Cost</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/08-budget-and-indifference-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/08-budget-and-indifference-540.webp 540w, assets/img/examples/08-budget-and-indifference-1080.webp 1080w" sizes="(min-width: 1120px) 510px, (min-width: 700px) calc(50vw - 60px), calc(100vw - 60px)">
+                <img src="assets/img/examples/08-budget-and-indifference-540.png" width="540" height="400" loading="lazy" alt="Budget Line and Indifference Curves: the budget 2F + 3C = 24 for food and clothing touches the indifference curve U2 = FC = 24 at the bundle (6, 4).">
+              </picture>
+            </a>
+            <figcaption>Budget Line and Indifference Curves</figcaption>
+          </figure>
+        </li>
+      </ul>
+
+      <h3 class="subhead">Templates</h3>
+      <ul class="gallery gallery-3">
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/function-plot-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/function-plot-540.webp 540w, assets/img/examples/function-plot-1080.webp 1080w" sizes="(min-width: 1120px) 330px, (min-width: 700px) calc(33vw - 44px), calc(100vw - 60px)">
+                <img src="assets/img/examples/function-plot-540.png" width="540" height="400" loading="lazy" alt="Function Plot template: axes crossing at the origin, symmetric ranges from −10 to 10, a grid and one placeholder cubic curve labelled f(x).">
+              </picture>
+            </a>
+            <figcaption>Function Plot</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/scatter-plot-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/scatter-plot-540.webp 540w, assets/img/examples/scatter-plot-1080.webp 1080w" sizes="(min-width: 1120px) 330px, (min-width: 700px) calc(33vw - 44px), calc(100vw - 60px)">
+                <img src="assets/img/examples/scatter-plot-540.png" width="540" height="400" loading="lazy" alt="Scatter Plot template: about twenty placeholder points labelled Series A with a dotted trend line drawn by hand, marked as not a computed fit.">
+              </picture>
+            </a>
+            <figcaption>Scatter Plot</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/time-series-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/time-series-540.webp 540w, assets/img/examples/time-series-1080.webp 1080w" sizes="(min-width: 1120px) 330px, (min-width: 700px) calc(33vw - 44px), calc(100vw - 60px)">
+                <img src="assets/img/examples/time-series-540.png" width="540" height="400" loading="lazy" alt="Time Series template: yearly values from 2010 to 2024 joined by a line with points, labelled Series A, with a dotted vertical marker for an event in 2020.">
+              </picture>
+            </a>
+            <figcaption>Time Series</figcaption>
+          </figure>
+        </li>
+      </ul>
+
+      <h3 class="subhead">Data charts</h3>
+      <ul class="gallery gallery-3">
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/irpf-concentration-2024-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/irpf-concentration-2024-540.webp 540w, assets/img/examples/irpf-concentration-2024-1080.webp 1080w" sizes="(min-width: 1120px) 330px, (min-width: 700px) calc(33vw - 44px), calc(100vw - 60px)">
+                <img src="assets/img/examples/irpf-concentration-2024-540.png" width="540" height="400" loading="lazy" alt="Income Tax Concentration in Spain, 2024: cumulative shares of taxable base and of tax due across income tax returns, below the equal-shares line. Returns with a base up to €21,000 are 51.5% of returns, 15.7% of the base and 5.7% of the tax.">
+              </picture>
+            </a>
+            <figcaption>Income Tax Concentration in Spain, 2024</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/tax-revenue-share-of-gdp-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/tax-revenue-share-of-gdp-540.webp 540w, assets/img/examples/tax-revenue-share-of-gdp-1080.webp 1080w" sizes="(min-width: 1120px) 330px, (min-width: 700px) calc(33vw - 44px), calc(100vw - 60px)">
+                <img src="assets/img/examples/tax-revenue-share-of-gdp-540.png" width="540" height="400" loading="lazy" alt="Tax Revenue as a Share of GDP, Spain 1965–2024: total tax revenue rises from 14.3% of GDP in 1965 to 36.7% in 2024, with a peak of 37.4% in 2021 and a fall from 36.3% in 2007 to 29.6% in 2009.">
+              </picture>
+            </a>
+            <figcaption>Tax Revenue as a Share of GDP, Spain</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a class="paper" href="assets/img/examples/house-prices-and-wages-1080.webp">
+              <picture>
+                <source type="image/webp" srcset="assets/img/examples/house-prices-and-wages-540.webp 540w, assets/img/examples/house-prices-and-wages-1080.webp 1080w" sizes="(min-width: 1120px) 330px, (min-width: 700px) calc(33vw - 44px), calc(100vw - 60px)">
+                <img src="assets/img/examples/house-prices-and-wages-540.png" width="540" height="400" loading="lazy" alt="House Prices and Wages in Real Terms, Spain: the INE house price index and wage cost per worker, deflated by the CPI, 2015 = 100, from 2008 to 2025.">
+              </picture>
+            </a>
+            <figcaption>House Prices and Wages in Real Terms, Spain</figcaption>
+          </figure>
+        </li>
+      </ul>
+
+      <p class="note"><a href="https://github.com/diegomarino/graphink/tree/main/Examples">All examples on GitHub</a></p>
+    </div>
+  </section>
+
+  <section id="download" class="section download" aria-labelledby="download-title">
+    <div class="wrap">
+      <div class="status-box">
+        <h2 id="download-title">Download</h2>
+        <p class="status-line">Free and open source. Runs on Macs with Apple silicon; tested on macOS 27.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/diegomarino/graphink/releases/latest/download/Graphink.dmg">Download Graphink.dmg</a>
+          <a class="button" href="https://github.com/diegomarino/graphink/releases">Release notes</a>
+        </div>
+        <h3 class="steps-title">First launch</h3>
+        <p class="small-print">Graphink isn't notarized by Apple yet, so macOS stops it the first time. You allow it once:</p>
+        <ol class="steps">
+          <li>Open <code>Graphink.dmg</code> and drag Graphink into <strong>Applications</strong>.</li>
+          <li>Open Graphink. macOS says it can't verify the app; click <strong>Done</strong>.</li>
+          <li>Open <strong>System Settings › Privacy &amp; Security</strong>, scroll down, click <strong>Open Anyway</strong> and confirm with your password.</li>
+        </ol>
+        <p class="small-print">Found a problem? <a href="https://github.com/diegomarino/graphink/issues">Report it on GitHub</a>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>Graphink continues <a href="https://github.com/graphsketcher/GraphSketcher">GraphSketcher</a>, created by Robin Stewart and developed by The Omni Group. Not affiliated with or endorsed by The Omni Group.</p>
+    <ul class="footer-links">
+      <li><a href="https://github.com/diegomarino/graphink">GitHub</a></li>
+      <li><a href="https://github.com/diegomarino/graphink/blob/main/LICENSE">MIT License</a></li>
+      <li><a href="OmniSourceLicense.html">Omni Source License</a></li>
+      <li><a href="legal/ThirdPartyNotices.html">Third-party notices</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>
