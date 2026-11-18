@@ -8,7 +8,9 @@
 // and 1.5:1 for fills after compositing onto the canvas. A color that cannot reach its target is
 // left unchanged, which keeps reapplication idempotent. The preset sets the face of all text and
 // keeps sizes and italics (-RSStyleFont). Kalam Regular and Bold are bundled and registered for the
-// process only.
+// process only. Editorial also sets axis and grid visibility (horizontal grid, x baseline, no y line
+// or tick marks) and draws new lines and fills in its accent blue; the other presets leave
+// visibility as it is, so applying one of them after Editorial keeps that layout.
 //
 // Creation defaults (font, line, fill and text colors) live in each OPC document's control part
 // and join the preset's undo step; color and font actions in such a document change it, not the
