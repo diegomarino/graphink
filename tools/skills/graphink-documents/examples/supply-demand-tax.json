@@ -1,0 +1,23 @@
+{
+  "graphink": 1,
+  "$comment": "Demand P = 14 - Q, supply P = 2 + Q/2, a $3 per-unit tax on sellers. Equilibrium (8, 6); with the tax Q = 6, buyers pay 8, sellers keep 5.",
+  "title": "A $3 Tax on Sellers",
+  "subtitle": "Buyers pay $8, sellers keep $5, and 2 units of trade are lost.",
+  "x": {"title": "Quantity Q (units per week)", "min": 0, "max": 14, "step": 2},
+  "y": {"title": "Price P (dollars per unit)", "min": 0, "max": 16, "step": 2},
+  "objects": [
+    {"type": "fill", "points": [[0, 14], [0, 8], [6, 8]], "color": "blue", "label": "CS"},
+    {"type": "fill", "points": [[0, 8], [6, 8], [6, 5], [0, 5]], "color": "orange", "label": "Tax revenue"},
+    {"type": "fill", "points": [[0, 5], [6, 5], [0, 2]], "color": "teal", "label": "PS"},
+    {"type": "fill", "points": [[6, 8], [8, 6], [6, 5]], "color": "purple", "opacity": 0.3, "label": "DWL"},
+    {"type": "line", "points": [[0, 14], [6, 8], [8, 6], [14, 0]], "color": "blue", "label": {"text": "D", "position": 0.92}},
+    {"type": "line", "points": [[0, 2], [6, 5], [8, 6], [14, 9]], "color": "teal", "label": {"text": "S", "position": 0.95}},
+    {"type": "line", "points": [[0, 5], [6, 8], [14, 12]], "color": "orange", "label": {"text": "S + t", "position": 0.95}},
+    {"type": "line", "points": [[6, 0], [6, 5], [6, 8]], "color": "guide", "width": 1, "dash": "dotted"},
+    {"type": "line", "points": [[0, 6], [8, 6]], "color": "guide", "width": 1, "dash": "dotted"},
+    {"type": "point", "at": [8, 6], "label": "E"},
+    {"type": "point", "at": [6, 8], "label": "Pb = 8"},
+    {"type": "point", "at": [6, 5], "label": "Ps = 5"},
+    {"type": "label", "text": "Q1 = 6", "at": [6.15, 0.35], "size": 13, "bold": true}
+  ]
+}

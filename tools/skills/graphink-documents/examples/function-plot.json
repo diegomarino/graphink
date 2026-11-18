@@ -1,0 +1,17 @@
+{
+  "graphink": 1,
+  "$comment": "f is sampled at 401 points and joined with straight segments. Axes cross at the origin; the axis names sit at the ends of the axes.",
+  "title": "f(x) = x³/20 − x and its derivative",
+  "x": {"min": -6, "max": 6, "step": 1, "grid": true},
+  "y": {"min": -6, "max": 6, "step": 1, "grid": true},
+  "objects": [
+    {"type": "function", "f": "x^3/20 - x", "from": -6, "to": 6, "samples": 401, "color": "blue",
+     "label": {"text": "f(x)", "position": 0.9}},
+    {"type": "function", "f": "3*x^2/20 - 1", "from": -6, "to": 6, "samples": 401, "color": "orange", "dash": "dashed", "width": 2,
+     "label": {"text": "f′(x)", "position": 0.15}},
+    {"type": "point", "at": [-2.582, 1.721], "color": "blue", "label": "max"},
+    {"type": "point", "at": [2.582, -1.721], "color": "blue", "label": "min"},
+    {"type": "label", "text": "x", "at": [6.15, -0.15], "size": 15, "bold": true},
+    {"type": "label", "text": "y", "at": [0, 6.25], "size": 15, "bold": true, "align": "center"}
+  ]
+}
