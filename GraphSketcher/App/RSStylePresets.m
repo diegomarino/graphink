@@ -37,17 +37,20 @@ NSArray *RSStylePresetNames(void) { return @[@"Paper", @"Sketch", @"Chalkboard",
 
 BOOL RSRegisterStyleFonts(NSBundle *bundle, NSError **error)
 {
-    NSURL *url = [bundle URLForResource:@"Kalam-Regular" withExtension:@"ttf" subdirectory:@"StyleFonts"];
-    if (!url) {
-        if (error) *error = [NSError errorWithDomain:@"GraphinkStyleFonts" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Missing bundled Kalam font"}];
-        return NO;
+    for (NSString *name in @[@"Kalam-Regular", @"Kalam-Bold"]) {
+        NSURL *url = [bundle URLForResource:name withExtension:@"ttf" subdirectory:@"StyleFonts"];
+        if (!url) {
+            if (error) *error = [NSError errorWithDomain:@"GraphinkStyleFonts" code:1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"Missing bundled font %@", name]}];
+            return NO;
+        }
+        CFErrorRef failure = NULL;
+        BOOL result = CTFontManagerRegisterFontsForURL((CFURLRef)url, kCTFontManagerScopeProcess, &failure);
+        if (!result && failure && CFErrorGetCode(failure) == kCTFontManagerErrorAlreadyRegistered) result = YES;
+        if (!result && error) *error = [[(NSError *)failure retain] autorelease];
+        if (failure) CFRelease(failure);
+        if (!result) return NO;
     }
-    CFErrorRef failure = NULL;
-    BOOL result = CTFontManagerRegisterFontsForURL((CFURLRef)url, kCTFontManagerScopeProcess, &failure);
-    if (!result && failure && CFErrorGetCode(failure) == kCTFontManagerErrorAlreadyRegistered) result = YES;
-    if (!result && error) *error = [[(NSError *)failure retain] autorelease];
-    if (failure) CFRelease(failure);
-    return result;
+    return YES;
 }
 
 static NSColor *Ink(unsigned rgb)
@@ -169,6 +172,21 @@ static void Edit(NSMutableArray *edits, id object, NSString *key, id value)
     if (![current isEqual:value]) [edits addObject:@[object, key, value?:NSNull.null]];
 }
 
+// Sketch and Chalkboard use Kalam Regular and Bold (Kalam has no italic); Paper and Studio Helvetica Neue
+// and its Medium, the catalog's bold. The model does not tell a title from a note, so free text keeps
+// only whether it was emphasized.
+NSFont *RSStyleFont(NSUInteger index, RSGraph *graph, RSTextLabel *label, NSFont *font)
+{
+    NSFontManager *manager = [NSFontManager sharedFontManager];
+    BOOL tick = label.isAxisTickLabel || [graph isAxisEndLabel:label];
+    BOOL emphasis = !tick && ([graph isAxisTitle:label] || label.owner || (font && ([manager weightOfFont:font] >= 6 || ([manager traitsOfFont:font] & NSBoldFontMask))));
+    BOOL italic = font && ([manager traitsOfFont:font] & NSItalicFontMask);
+    NSString *name;
+    if ((index == 1 || index == 2) && !tick) name = emphasis ? @"Kalam-Bold" : @"Kalam-Regular";
+    else name = emphasis ? (italic ? @"HelveticaNeue-MediumItalic" : @"HelveticaNeue-Medium") : (italic ? @"HelveticaNeue-Italic" : @"HelveticaNeue");
+    return [NSFont fontWithName:name size:font ? font.pointSize : 13] ?: font;
+}
+
 @implementation RSGraphEditor (RSStylePresets)
 
 - (void)restoreStyleProperties:(NSArray *)edits
@@ -204,16 +222,9 @@ static void Edit(NSMutableArray *edits, id object, NSString *key, id value)
     [labels addObjectsFromArray:@[graph.xAxis.title, graph.yAxis.title, graph.xAxis.minLabel, graph.xAxis.maxLabel, graph.yAxis.minLabel, graph.yAxis.maxLabel]];
     for (RSTextLabel *label in labels) {
         NSMutableAttributedString *text = [[[label attributedString] mutableCopy] autorelease];
-        NSString *face = (index == 1 || index == 2) && !label.isAxisTickLabel ? @"Kalam-Regular" : @"HelveticaNeue";
         [label.attributedString enumerateAttribute:NSFontAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(NSFont *font, NSRange range, BOOL *stop) {
-            NSFont *replacement = [NSFont fontWithName:face size:font ? font.pointSize : 13];
-            if (font) {
-                NSFontTraitMask traits=[[NSFontManager sharedFontManager] traitsOfFont:font];
-                replacement=[[NSFontManager sharedFontManager] convertFont:replacement toHaveTrait:traits];
-                // Keep the authored face when the target cannot preserve all native traits.
-                if ([[NSFontManager sharedFontManager] traitsOfFont:replacement]!=traits) replacement=font;
-            }
-            if (replacement) [text addAttribute:NSFontAttributeName value:replacement range:range];
+            NSFont *replacement = RSStyleFont(index, graph, label, font);
+            if (replacement && ![replacement isEqual:font]) [text addAttribute:NSFontAttributeName value:replacement range:range];
         }];
         [label.attributedString enumerateAttribute:NSForegroundColorAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(NSColor *color, NSRange range, BOOL *stop) {
             BOOL neutral=Neutral(color);

@@ -33,7 +33,7 @@ Omni Group.
 - **Notices shipped in the app** (`GraphSketcher/App/English.lproj/ThirdPartyNotices.html`):
   Nisus LinkBack, SFMT, minizip, Apple NetReachability and mpack (Carnegie Mellon University,
   Bellcore). Their provenance is in `Checks/THIRD-PARTY-PROVENANCE.md`.
-- **Kalam** font, Copyright (c) 2014 Indian Type Foundry, SIL Open Font License 1.1, bundled
+- **Kalam** font (Regular and Bold), Copyright (c) 2014 Indian Type Foundry, SIL Open Font License 1.1, bundled
   unmodified (`GraphSketcher/App/Resources/StyleFonts/OFL.txt`).
 
 ## Example data
