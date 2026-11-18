@@ -151,7 +151,36 @@ static NSDictionary *ImageProperties(NSData *data, CGImageRef *outImage) {
     CFRelease(source);
     return properties;
 }
+static NSString *EvidenceDirectory = nil;
+// Of the pixels drawn in either image (any channel below 128), the fraction that differ strongly (by more than
+// 96 in a channel), after drawing both into RGBA bitmaps the size of `reference`. A mean over the page would hide a
+// sparse drawing at the wrong scale; this counts only the marks.
+static double MarkMismatch(CGImageRef image, CGImageRef reference) {
+    size_t width = CGImageGetWidth(reference), height = CGImageGetHeight(reference);
+    CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+    NSMutableData *a = [NSMutableData dataWithLength:width * height * 4], *b = [NSMutableData dataWithLength:width * height * 4];
+    for (NSMutableData *pixels in @[a, b]) {
+        CGContextRef context = CGBitmapContextCreate(pixels.mutableBytes, width, height, 8, width * 4, space, kCGImageAlphaPremultipliedLast);
+        CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+        CGContextDrawImage(context, CGRectMake(0, 0, width, height), pixels == a ? image : reference);
+        CGContextRelease(context);
+    }
+    CGColorSpaceRelease(space);
+    const uint8_t *p = a.bytes, *q = b.bytes;
+    NSUInteger marks = 0, mismatched = 0;
+    for (size_t i = 0; i < width * height * 4; i += 4) {
+        BOOL mark = NO, differs = NO;
+        for (size_t c = 0; c < 3; c++) {
+            if (p[i + c] < 128 || q[i + c] < 128) mark = YES;
+            if (abs((int)p[i + c] - (int)q[i + c]) > 96) differs = YES;
+        }
+        marks += mark;
+        mismatched += mark && differs;
+    }
+    return marks ? (double)mismatched / marks : 0;
+}
 static void CheckRaster(RSGraphView *view, CGSize page, const NSUInteger pixels[4][2], NSString *name) {
+    CGImageRef unscaled = NULL;
     for (NSUInteger dpi = 0; dpi < 4; dpi++) {
         for (NSNumber *type in @[@(NSBitmapImageFileTypePNG), @(NSBitmapImageFileTypeJPEG)]) {
             [view setDrawingToScreen:NO];
@@ -172,9 +201,19 @@ static void CheckRaster(RSGraphView *view, CGSize page, const NSUInteger pixels[
                     for (NSUInteger x = 0; x < width; x += 7) [colors addObject:[[rep colorAtX:(NSInteger)x y:(NSInteger)y] description]];
                 Check(colors.count > 1, @"Raster export is blank");
             }
+            // Every resolution draws the whole page: halved, the 144 DPI PNG matches the 72 DPI one up to antialiasing.
+            if (type.unsignedIntegerValue == NSBitmapImageFileTypePNG && dpi < 2)
+                [data writeToFile:[EvidenceDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"export-%@-%.0f.png", name, Resolutions[dpi]]] atomically:YES];
+            if (type.unsignedIntegerValue == NSBitmapImageFileTypePNG && dpi == 0) unscaled = CGImageRetain(image);
+            if (type.unsignedIntegerValue == NSBitmapImageFileTypePNG && dpi == 1) {
+                double mismatch = MarkMismatch(image, unscaled);
+                NSLog(@"%@ PNG at 144 DPI, halved: %.1f%% of the drawn pixels differ from 72 DPI", name, mismatch * 100);
+                Check(mismatch < 0.2, [NSString stringWithFormat:@"%@ PNG at 144 DPI does not show the whole page: halved, %.0f%% of its drawn pixels differ from the 72 DPI export", name, mismatch * 100]);
+            }
             CGImageRelease(image);
         }
     }
+    CGImageRelease(unscaled);
     // PDF/EPS: vector page equal to the paper size, with text kept as text.
     NSData *pdf = [view dataWithPDFInsideRect:view.bounds];
     CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef)pdf);
@@ -198,7 +237,7 @@ static void CheckRaster(RSGraphView *view, CGSize page, const NSUInteger pixels[
     NSString *eps = [[[NSString alloc] initWithData:[view dataWithEPSInsideRect:view.bounds] encoding:NSISOLatin1StringEncoding] autorelease];
     NSString *box = [NSString stringWithFormat:@"%%%%BoundingBox: 0 0 %.0f %.0f", page.width, page.height];
     Check([eps rangeOfString:box].location != NSNotFound, [NSString stringWithFormat:@"%@ EPS bounding box is not %@", name, box]);
-    NSLog(@"PASS %@ %@ pt: PNG/JPEG pixels and DPI at 72/144/150/300, vector PDF page and EPS box", name, NSStringFromSize(page));
+    NSLog(@"PASS %@ %@ pt: PNG/JPEG pixels and DPI at 72/144/150/300, whole page at 144 DPI, vector PDF page and EPS box", name, NSStringFromSize(page));
 }
 
 int main(int argc, const char *argv[]) {
@@ -217,6 +256,7 @@ int main(int argc, const char *argv[]) {
         Check(NSApp.delegate == nil, @"Fixture must not install the application delegate");
         [NSUserDefaults.standardUserDefaults registerDefaults:@{@"SnapToGrid": @NO, @"UseStickyTools": @YES}];
         NSString *output = @(argv[1]);
+        EvidenceDirectory = output;
 
         CheckGeometry();
 

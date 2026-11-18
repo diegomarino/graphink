@@ -3247,7 +3247,7 @@ static ErrorBarSheet *errorBarSheet = nil;
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext setCurrentContext:context];
     CGContextRef ctx = [context CGContext];
-    CGContextScaleCTM(ctx, pixels.width / bounds.size.width, pixels.height / bounds.size.height);
+    // The context already maps the rep's point size onto its pixels, so drawing in points fills the whole bitmap.
     CGContextTranslateCTM(ctx, -bounds.origin.x, -bounds.origin.y);
     [self drawRect:bounds];
     [context flushGraphics];
