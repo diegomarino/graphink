@@ -43,6 +43,7 @@ static RSGraphEditor *Chart(id<RSUndoerOwner> owner) {
         NSColor *c=i?[NSColor colorWithSRGBRed:0.70 green:0.29 blue:0.08 alpha:1]:[NSColor colorWithSRGBRed:0.12 green:0.38 blue:0.70 alpha:1];
         a.shape=RS_CIRCLE; b.shape=RS_CIRCLE; a.width=3; b.width=3; a.color=c; b.color=c; [g addVertex:a]; [g addVertex:b];
         RSConnectLine *line=[[[RSConnectLine alloc] initWithGraph:g start:a end:b] autorelease]; line.color=c; [g addLine:line];
+        if (i==0) [g makeLabelForOwner:line].text=@"D";
     }
     NSMutableArray *polygon=[NSMutableArray array];
     for (NSArray *point in @[@[@3,@3],@[@5,@5],@[@7,@3]]) {
@@ -94,6 +95,16 @@ static NSDictionary *Visuals(RSGraph *g) {
     }
     for (NSArray *elements in @[g.Lines,g.Vertices,g.Fills]) for (RSGraphElement *e in elements) r[e.identifier]=Color(e.color);
     return r;
+}
+// The face a preset must give a run: Kalam in Sketch and Chalkboard except tick numbers, emphasis for axis
+// titles, object labels and free text that was Medium or heavier; italic kept in Helvetica Neue.
+static NSString *ExpectedFace(NSUInteger preset, RSGraph *g, RSTextLabel *label, NSFont *before) {
+    NSFontManager *m=[NSFontManager sharedFontManager];
+    BOOL tick=label.isAxisTickLabel || [g isAxisEndLabel:label];
+    BOOL emphasis=!tick && ([g isAxisTitle:label] || label.owner!=nil || [m weightOfFont:before]>=6 || ([m traitsOfFont:before]&NSBoldFontMask));
+    BOOL italic=([m traitsOfFont:before]&NSItalicFontMask)!=0;
+    if ((preset==1 || preset==2) && !tick) return emphasis?@"Kalam-Bold":@"Kalam-Regular";
+    return emphasis?(italic?@"HelveticaNeue-MediumItalic":@"HelveticaNeue-Medium"):(italic?@"HelveticaNeue-Italic":@"HelveticaNeue");
 }
 static NSDictionary *Geometry(RSGraph *g) {
     NSMutableArray *p=[NSMutableArray array]; for (RSVertex *v in g.Vertices) [p addObject:@[@(v.position.x),@(v.position.y),@(v.width),@(v.shape)]];
@@ -159,10 +170,10 @@ static BOOL ReviewRegressions(NSString *directory) {
         [text addAttribute:NSFontAttributeName value:font range:NSMakeRange(0,text.length)]; label.attributedString=text;
         [owner.undoManager enableUndoRegistration]; [editor applyStylePreset:preset];
         NSFont *after=[label.attributedString attribute:NSFontAttributeName atIndex:0 effectiveRange:NULL];
-        NSFontTraitMask beforeTraits=[[NSFontManager sharedFontManager] traitsOfFont:font],afterTraits=[[NSFontManager sharedFontManager] traitsOfFont:after];
-        BOOL preserved=beforeTraits==afterTraits && after.pointSize==15;
-        NSLog(@"%@ review condensed %@ traits %lu -> %lu",preserved?@"PASS":@"FAIL",RSStylePresetNames()[preset],(unsigned long)beforeTraits,(unsigned long)afterTraits);
-        passed &= preserved; [editor invalidate];
+        NSString *expected=(preset==1 || preset==2)?@"Kalam-Bold":@"HelveticaNeue-Medium";
+        BOOL styled=[after.fontName isEqual:expected] && after.pointSize==15;
+        NSLog(@"%@ review condensed black %@ -> %@ (expected %@)",styled?@"PASS":@"FAIL",RSStylePresetNames()[preset],after.fontName,expected);
+        passed &= styled; [editor invalidate];
     }
     for (NSNumber *dark in @[@NO,@YES]) {
         Owner *owner=[[[Owner alloc] init] autorelease]; RSGraphEditor *editor=Chart(owner);
@@ -196,7 +207,7 @@ int main(int argc,const char **argv) { @autoreleasepool { @try {
     Check(argc==2,@"Supply output directory");
     OFController *controller=[OFController sharedController]; [controller didInitialize]; [controller startedRunning];
     NSError *error=nil; Check(RSRegisterStyleFonts(NSBundle.mainBundle,&error),error.description);
-    Check([[NSFont fontWithName:@"Kalam-Regular" size:15].fontName isEqual:@"Kalam-Regular"],@"Exact Kalam face");
+    Check([[NSFont fontWithName:@"Kalam-Regular" size:15].fontName isEqual:@"Kalam-Regular"] && [[NSFont fontWithName:@"Kalam-Bold" size:15].fontName isEqual:@"Kalam-Bold"],@"Exact Kalam faces");
     Check(ReviewRegressions(@(argv[1])),@"Independent review adverse inputs");
     NSDictionary *preferences=[[NSUserDefaults.standardUserDefaults dictionaryRepresentation] copy];
     Owner *otherOwner=[[[Owner alloc] init] autorelease]; RSGraphEditor *other=Chart(otherOwner); NSData *otherXML=XML(other.graph);
@@ -232,8 +243,8 @@ int main(int argc,const char **argv) { @autoreleasepool { @try {
                 NSFont *f=[label.attributedString attribute:NSFontAttributeName atIndex:k effectiveRange:NULL];
                 Check(f.pointSize==[oldRuns[k][1] doubleValue],@"Run sizes preserved");
                 NSFont *oldFont=[NSFont fontWithName:oldRuns[k][0] size:f.pointSize];
-                NSFontTraitMask mask=NSBoldFontMask|NSItalicFontMask;
-                Check(([[NSFontManager sharedFontManager] traitsOfFont:f]&mask)==([[NSFontManager sharedFontManager] traitsOfFont:oldFont]&mask),@"Bold and native italic preserved");
+                NSString *expected=ExpectedFace(i,g,label,oldFont);
+                Check([f.fontName isEqual:expected],[NSString stringWithFormat:@"%@: \"%@\" run %lu is %@ (was %@), expected %@",RSStylePresetNames()[i],label.text,(unsigned long)k,f.fontName,oldRuns[k][0],expected]);
                 Check([[label.attributedString attribute:NSSuperscriptAttributeName atIndex:k effectiveRange:NULL]?:@0 isEqual:oldRuns[k][3]],@"Superscript preserved");
             }
         }
@@ -305,7 +316,7 @@ int main(int argc,const char **argv) { @autoreleasepool { @try {
         CFRelease(line);
         [NSGraphicsContext saveGraphicsState]; CGFloat x=20+(i%2)*550,y=450-(i/2)*410; CGContextTranslateCTM(context,x,y);
         [name drawAtPoint:NSMakePoint(0,365) withAttributes:@{NSFontAttributeName:[NSFont boldSystemFontOfSize:18]}];
-        NSString *caption=@[@"Helvetica Neue · #FFFFFF / #30343B / #D8DCE2",@"Kalam / Helvetica Neue ticks · #FBF5E9 / #443D35 / #DDD2BE",@"Kalam / Helvetica Neue ticks · #263330 / #F3EEDC / #56665F",@"Helvetica Neue · #F8FAFD / #24374D / #D8E1ED"][i];
+        NSString *caption=@[@"Helvetica Neue/Medium · #FFFFFF / #30343B / #D8DCE2",@"Kalam Regular/Bold, Helvetica Neue ticks · #FBF5E9 / #443D35 / #DDD2BE",@"Kalam Regular/Bold, Helvetica Neue ticks · #263330 / #F3EEDC / #56665F",@"Helvetica Neue/Medium · #F8FAFD / #24374D / #D8E1ED"][i];
         [caption drawAtPoint:NSMakePoint(0,345) withAttributes:@{NSFontAttributeName:[NSFont systemFontOfSize:10]}];
         [view drawRect:view.bounds]; [NSGraphicsContext restoreGraphicsState];
         [editor invalidate]; printf("PASS %s apply undo redo no-op geometry isolation reopen PDF glyphs\n",name.UTF8String);

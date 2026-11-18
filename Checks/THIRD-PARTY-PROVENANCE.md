@@ -88,14 +88,16 @@ changes require reassessing which code and notices are shipped.
 
 ## Bundled font
 
-Style presets use Kalam Regular (weight 400, PostScript name `Kalam-Regular`), unmodified, from
+Style presets use Kalam Regular and Kalam Bold (weights 400 and 700, PostScript names
+`Kalam-Regular` and `Kalam-Bold`), unmodified, from
 [google/fonts](https://github.com/google/fonts) revision `3e5667764ccfea32ce0c3d58a3a4756de890adc1`
 (`ofl/kalam/Kalam-Regular.ttf`, SHA-256
-`57cecb63d4608019371954274ae1d8c397764debd5b19d4a33c1efa4dc923c0b`). Copyright (c) 2014 Indian
+`57cecb63d4608019371954274ae1d8c397764debd5b19d4a33c1efa4dc923c0b`; `ofl/kalam/Kalam-Bold.ttf`,
+SHA-256 `2f6576601db015d4f6c08678120277fc8510b98c06e932ce7a6a9cbff4cbdded`). Copyright (c) 2014 Indian
 Type Foundry, SIL Open Font License 1.1. The complete licence and the file URLs and hashes are
 in `GraphSketcher/App/Resources/StyleFonts/{OFL.txt,PROVENANCE.json}`, and the licence is the
-eighth notice block of `ThirdPartyNotices.html`. The app registers the font for its own process
-with CoreText at startup; nothing is installed. PDF exports embed it; documents reopened
+eighth notice block of `ThirdPartyNotices.html`. The app registers both faces for its own process
+with CoreText at startup; nothing is installed. PDF exports embed them; documents reopened
 elsewhere follow that consumer's font fallback.
 
 ## Notices in the app
