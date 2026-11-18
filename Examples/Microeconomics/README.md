@@ -15,7 +15,7 @@ Lessons 01–03:
 Each document contains editable native vertices, lines, labels and fills. Demand
 is P = 14 − Q and baseline supply is P = 2 + Q/2, meeting at (8, 6). The shifts
 lesson compares two separate shocks from that baseline: demand gives (10, 7),
-supply gives (6, 8). A $3 seller-remitted tax gives Qt = 6, Pc = 8, Pp = 5;
+supply gives (6, 8). A $3 seller-remitted tax gives Q1 = 6, Pb = 8, Ps = 5;
 consumer surplus = 18, producer surplus = 9, revenue = 18 and deadweight loss = 3.
 Revenue is a transfer. These are manually authored teaching diagrams; edits do
 not recalculate economics. The models behind 01–08 are listed in
