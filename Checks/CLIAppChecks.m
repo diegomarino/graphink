@@ -70,7 +70,8 @@ int main(int argc, const char *argv[]) {
         // Install Command-Line Tool…: the command names this bundle's tool, and Copy puts exactly it on the pasteboard.
         RSCommandLineToolWindowController *installer = [[[RSCommandLineToolWindowController alloc] initWithBundle:NSBundle.mainBundle] autorelease];
         NSString *shown = installer.commandField.stringValue;
-        NSString *expected = [NSString stringWithFormat:@"sudo mkdir -p /usr/local/bin && sudo ln -sf \"%@/Contents/Helpers/graphink\" /usr/local/bin/graphink", NSBundle.mainBundle.bundlePath];
+        NSString *expected = [NSString stringWithFormat:@"sudo mkdir -p /usr/local/bin && sudo ln -sf '%@/Contents/Helpers/graphink' /usr/local/bin/graphink",
+                              [NSBundle.mainBundle.bundlePath stringByReplacingOccurrencesOfString:@"'" withString:@"'\\''"]];
         Check(installer.window != nil && [shown isEqual:expected], [NSString stringWithFormat:@"The window shows %@, expected %@", shown, expected]);
         NSPasteboard *pasteboard = [NSPasteboard pasteboardWithUniqueName];
         installer.pasteboard = pasteboard;
@@ -85,8 +86,8 @@ int main(int argc, const char *argv[]) {
         NSBitmapImageRep *snapshot = [content bitmapImageRepForCachingDisplayInRect:content.bounds];
         [content cacheDisplayInRect:content.bounds toBitmapImageRep:snapshot];
         Write([snapshot representationUsingType:NSBitmapImageFileTypePNG properties:@{}], [output stringByAppendingPathComponent:@"install-window.png"]);
-        // A bundle path with characters the shell would expand; check-cli-app.py parses it back with shlex.
-        NSString *odd = [output stringByAppendingPathComponent:@"Odd \"$HOME\" `x` \\ name.app"];
+        // A bundle path with characters the shell would expand; check-cli-app.py reads it back through sh, zsh and bash.
+        NSString *odd = [output stringByAppendingPathComponent:@"Odd \"$HOME\" `x` \\ it's !! name!x.app"];
         Check([NSFileManager.defaultManager createDirectoryAtPath:[odd stringByAppendingPathComponent:@"Contents"] withIntermediateDirectories:YES attributes:nil error:NULL], @"Cannot create the odd bundle");
         report[@"oddBundle"] = odd;
         report[@"oddCommand"] = RSCommandLineToolInstallCommand([NSBundle bundleWithPath:odd]);

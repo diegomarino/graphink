@@ -5,18 +5,11 @@ NSString *RSCommandLineToolPath(NSBundle *bundle)
     return [[[bundle bundlePath] stringByAppendingPathComponent:@"Contents/Helpers"] stringByAppendingPathComponent:@"graphink"];
 }
 
-// Double quotes keep spaces; \ " $ and ` are the only characters still special inside them.
+// Single quotes: nothing inside them is special, not even ! (history expansion in interactive zsh and
+// bash, which still applies inside double quotes). A ' itself is written as '\'' (close, escaped quote, reopen).
 static NSString *ShellQuoted(NSString *string)
 {
-    NSMutableString *quoted = [NSMutableString stringWithString:@"\""];
-    for (NSUInteger i = 0; i < string.length; i++) {
-        unichar c = [string characterAtIndex:i];
-        if (c == '\\' || c == '"' || c == '$' || c == '`')
-            [quoted appendString:@"\\"];
-        [quoted appendFormat:@"%C", c];
-    }
-    [quoted appendString:@"\""];
-    return quoted;
+    return [NSString stringWithFormat:@"'%@'", [string stringByReplacingOccurrencesOfString:@"'" withString:@"'\\''"]];
 }
 
 NSString *RSCommandLineToolInstallCommand(NSBundle *bundle)

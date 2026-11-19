@@ -7,7 +7,7 @@
 
 // <bundle>/Contents/Helpers/graphink
 NSString *RSCommandLineToolPath(NSBundle *bundle);
-// sudo mkdir -p /usr/local/bin && sudo ln -sf "<tool>" /usr/local/bin/graphink
+// sudo mkdir -p /usr/local/bin && sudo ln -sf '<tool>' /usr/local/bin/graphink (single-quoted, ' as '\'')
 NSString *RSCommandLineToolInstallCommand(NSBundle *bundle);
 // A note when the running copy is a poor link target (a disk image, or a translocated copy), else nil.
 NSString *RSCommandLineToolLocationWarning(NSBundle *bundle);

@@ -100,13 +100,29 @@ report = json.loads((exports / "fixture-report.json").read_text())
 
 # The command reads back, through the shell itself, as the running bundle's helper, even for a path the
 # shell would otherwise expand. Only printf runs: the command's own words are matched, not executed.
+# Besides sh -c, the words go to interactive zsh and bash on stdin, the way a line pasted into Terminal
+# is read: only there does history expansion (! in the odd path) apply; `zsh -i -c` would skip it.
+def read_back(shell, quoted):
+    words = f"printf '<<%s>>\\n' {quoted}\n"
+    if shell[0] == "/bin/sh":
+        proc = subprocess.run([*shell, words], capture_output=True, text=True, timeout=60)
+    else:
+        proc = subprocess.run(shell, input=words + "exit\n", capture_output=True, text=True, timeout=60,
+                              env={"PATH": "/usr/bin:/bin", "HOME": str(output), "HISTFILE": "/dev/null", "TERM": "dumb"})
+    found = re.findall(r"<<(.*?)>>\n", proc.stdout, re.S)
+    if proc.returncode or len(found) != 1 or "event not found" in proc.stderr:
+        fail(f"{shell[0]} did not read back {quoted}: {proc.returncode} {proc.stdout!r} {proc.stderr!r}")
+    return found[0]
+
+
 for bundle, command_line in ((contents.parent, report["installCommand"]), (Path(report["oddBundle"]), report["oddCommand"])):
-    match = re.fullmatch(r'sudo mkdir -p /usr/local/bin && sudo ln -sf (".*") /usr/local/bin/graphink', command_line, re.S)
+    match = re.fullmatch(r"sudo mkdir -p /usr/local/bin && sudo ln -sf ('[^']*'(?:\\''[^']*')*) /usr/local/bin/graphink", command_line, re.S)
     if not match:
         fail(f"unexpected install command {command_line}")
-    target = subprocess.run(["/bin/sh", "-c", "printf %s " + match.group(1)], capture_output=True, text=True, check=True).stdout
-    if Path(target).resolve() != (bundle / "Contents/Helpers/graphink").resolve():
-        fail(f"{command_line} links {target}, not {bundle}/Contents/Helpers/graphink")
+    for shell in (["/bin/sh", "-c"], ["/bin/zsh", "-f", "-i"], ["/bin/bash", "--norc", "--noprofile", "-i"]):
+        target = read_back(shell, match.group(1))
+        if Path(target).resolve() != (bundle / "Contents/Helpers/graphink").resolve():
+            fail(f"{command_line} read by {shell[0]} links {target}, not {bundle}/Contents/Helpers/graphink")
 
 # File ▸ Export and graphink render: same PNG bytes, same PDF pixels.
 renders = output / "renders"
