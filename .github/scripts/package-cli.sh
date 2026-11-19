@@ -49,7 +49,7 @@ codesign --verify --strict "$contents/Helpers/graphink"
 for framework in "$contents"/Frameworks/*.framework; do codesign --verify --strict "$framework"; done
 "$contents/Helpers/graphink" --version
 
-(cd "$work" && ditto -c -k --sequesterRsrc --keepParent graphink-cli "$zip")
+(cd "$work" && ditto -c -k --norsrc --noextattr --noqtn --noacl --keepParent graphink-cli "$zip")
 (cd "$out" && shasum -a 256 graphink-cli.zip > graphink-cli.zip.sha256)
 rm -rf "$work"
 echo "Packaged $zip with$copied"

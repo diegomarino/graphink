@@ -100,6 +100,12 @@ class Notes(unittest.TestCase):
         with self.assertRaises(notes.NotesError):
             notes.parse('### Changed\n\n- x\n', 'test')
 
+    def test_command_line_and_agent_skill_groups(self):
+        other, groups = notes.parse('### Command line\n\n- `graphink render` exports\n\n### Agent skill\n\n- Install steps\n', 'test')
+        self.assertEqual((other, groups['Command line'], groups['Agent skill']), ([], ['`graphink render` exports'], ['Install steps']))
+        self.repo.write('release-notes/2026.11.0.md', '### Agent skill\n\n- Only the skill changed\n')
+        self.assertEqual(notes.check_release('2026.11.0', [], Stub(''), self.repo.root), 'override')
+
 
 class Html(unittest.TestCase):
     def setUp(self):
@@ -126,6 +132,15 @@ class Html(unittest.TestCase):
         self.assertNotIn('2026.11.01', page)
         self.assertIn('<title>Graphink Release Notes</title>', page)
         self.assertNotIn('GraphSketcher', page)
+
+    def test_in_app_notes_show_command_line_but_not_agent_skill(self):
+        self.repo.git('tag', 'v2026.11.0')
+        stub = Stub('### Added\n\n- Presets\n\n### Command line\n\n- A `graphink` tool\n\n### Agent skill\n\n- A skill\n')
+        page = self.page(stub)
+        self.assertIn('<h3>Command line</h3>', page)
+        self.assertIn('A <code>graphink</code> tool', page)
+        self.assertNotIn('Agent skill', page)
+        self.assertNotIn('A skill', page)
 
     def test_deterministic(self):
         self.repo.git('tag', 'v2026.11.0')
@@ -187,8 +202,15 @@ class EndToEnd(unittest.TestCase):
         repo.git('tag', 'v2026.11.0')
         repo.commit('fix(export): keep PNG resolution')
         repo.commit('docs: hidden')
+        repo.commit('feat(cli): add graphink render')
+        repo.commit('fix(skill): find the tool in ~/Applications')
+        repo.commit('test(cli): hidden too')
+        repo.commit('docs(skill): hidden as well')
         cliff = lambda *args: notes.git_cliff(*args, root=repo.root)
-        self.assertEqual(notes.notes('2026.11.1', ['v2026.11.0'], cliff, repo.root)[1], '### Fixed\n\n- Keep PNG resolution')
+        other, groups = notes.parse(notes.notes('2026.11.1', ['v2026.11.0'], cliff, repo.root)[1], 'git-cliff')
+        self.assertEqual((other, {name: items for name, items in groups.items() if items}),
+                         ([], {'Fixed': ['Keep PNG resolution'], 'Command line': ['Add graphink render'],
+                               'Agent skill': ['Find the tool in ~/Applications']}))
         self.assertEqual(notes.notes('2026.11.0', ['v2026.11.0'], cliff, repo.root)[1], '### Added\n\n- Add A4 presets')
         self.assertIsNone(notes.check_release('2026.11.2', ['v2026.11.0'], lambda *a: '', repo.root))
 
