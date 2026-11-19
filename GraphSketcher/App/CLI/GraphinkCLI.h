@@ -39,7 +39,13 @@ NSString *GICContainingBundlePath(void);
 NSData *GICPDFData(GICDocument *document);
 NSData *GICRasterData(GICDocument *document, CGFloat dpi, NSString *typeIdentifier);
 
-// Writes without replacing an existing file unless overwrite is YES; never writes over input.
+// Refuses (GICFail) an output that is the input file, an existing directory, or an existing file
+// when overwrite is NO. The input is matched by file identity (device and inode, following symbolic
+// links), not by spelling, so a case-only different name, a hard link, a symbolic link or a
+// firmlink path of the input is refused too. input may be nil.
+void GICCheckOutput(NSString *path, BOOL overwrite, NSString *input);
+
+// GICCheckOutput, then writes atomically.
 void GICWrite(NSData *data, NSString *path, BOOL overwrite, NSString *input);
 
 // The subcommands (argv[0] is the subcommand's name).

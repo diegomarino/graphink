@@ -239,8 +239,44 @@ def main():
     disguised.write_bytes(first.read_bytes())
     run([helper, 'render', disguised, '-o', disguised, '--force'], logs / 'refuse-input.log', expect=1)
     assert disguised.read_bytes() == first.read_bytes(), 'graphink render wrote over its input'
+    # The input is matched by file identity, not by its spelling: another case (the default APFS ignores case),
+    # a hard link and a symbolic link all name the same file.
+    other_case = bad / 'DOCUMENT.pdf'
+    same_file = [bad / 'hard-link.pdf', bad / 'symbolic-link.pdf'] + ([other_case] if other_case.exists() else [])
+    (bad / 'hard-link.pdf').hardlink_to(disguised)
+    (bad / 'symbolic-link.pdf').symlink_to(disguised.name)
+    for alias in same_file:
+        proc = run([helper, 'render', disguised, '-o', alias, '--force'], logs / f'refuse-input-{alias.stem}.log', expect=1)
+        assert any('Refusing to write over the input' in line for line in messages(proc)), f'{alias.name}: {messages(proc)}'
+        assert disguised.read_bytes() == first.read_bytes(), f'graphink render wrote over its input through {alias.name}'
+    assert (bad / 'symbolic-link.pdf').is_symlink(), 'graphink render replaced the symbolic link to its input'
+    report['inputIdentity'] = [alias.name for alias in same_file]
+    # create never replaces its own spec (a JSON spec may be named .graphink) nor a directory, even with --force.
+    spec_copy = bad / 'spec.graphink'
+    spec_copy.write_bytes(specs[0].read_bytes())
+    for alias in [spec_copy] + ([bad / 'SPEC.graphink'] if (bad / 'SPEC.graphink').exists() else []):
+        run([helper, 'create', spec_copy, '-o', alias, '--force'], logs / f'refuse-create-over-spec-{alias.stem}.log', expect=1)
+        assert spec_copy.read_bytes() == specs[0].read_bytes(), f'graphink create wrote over its spec through {alias.name}'
+    folder = bad / 'folder.graphink'
+    folder.mkdir()
+    run([helper, 'create', specs[0], '-o', folder, '--force'], logs / 'refuse-create-directory.log', expect=1)
+    (bad / 'folder.png').mkdir()
+    run([helper, 'render', first, '-o', bad / 'folder.png', '--force'], logs / 'refuse-render-directory.log', expect=1)
+    assert folder.is_dir() and not any(folder.iterdir()) and (bad / 'folder.png').is_dir(), 'a directory output was replaced'
+    # --force does replace an ordinary existing file.
+    (bad / 'replaced.graphink').write_bytes(b'old')
+    run([helper, 'create', specs[0], '-o', bad / 'replaced.graphink', '--force'], logs / 'create-force.log')
+    run([sys.executable, ROOT / 'docs/format/check-opc.py', bad / 'replaced.graphink'], logs / 'create-force-opc.log')
     run([helper, 'render', first, '-o', out / 'x.svg'], logs / 'refuse-type.log', expect=2)
     run([helper, 'render', first, '-o', out / 'x.png', '--dpi', '5000'], logs / 'refuse-dpi.log', expect=2)
+    # --dpi and --scale take a positive number and nothing else.
+    for index, (option, value) in enumerate((('--dpi', 'abc'), ('--dpi', '0'), ('--dpi', '-72'), ('--dpi', '72abc'), ('--dpi', ''),
+                                             ('--dpi', 'inf'), ('--dpi', 'nan'), ('--scale', 'foo'), ('--scale', '0'), ('--scale', '-1'),
+                                             ('--scale', '2x'), ('--scale', '0.001'))):
+        proc = run([helper, 'render', first, '-o', out / 'x.png', option, value], logs / f'refuse-resolution-{index}.log', expect=2)
+        assert len(messages(proc)) == 1, f'{option} {value!r}: {messages(proc)}'
+        run([helper, 'render', first, '--info', option, value], logs / f'refuse-resolution-info-{index}.log', expect=2)
+    run([helper, 'render', first, '-o', out / 'x.png', '--dpi', '72', '--scale', '1'], logs / 'refuse-dpi-and-scale.log', expect=2)
     run([helper, 'render', out / 'missing.graphink', '-o', out / 'x.png'], logs / 'refuse-missing.log', expect=1)
     assert not (out / 'x.png').exists() and not (out / 'x.svg').exists()
     assert digest(first) == report['created'][specs[0].name]['sha256'], 'A refused overwrite changed the document'
@@ -266,7 +302,7 @@ def main():
     worst = max(c['png']['meanChannelDiff'] for c in comparisons.values())
     print(f'PASS graphink {version} from Graphink.app and graphink-cli.zip: rendered {len(inputs)} documents read-only '
           f'({len(comparisons)} examples match their previews; PNG mean channel difference at most {worst:.3f}), '
-          f'created {len(specs)} specs, {len(cases)} bad specs refused; evidence: {out}')
+          f'created {len(specs)} specs, {len(cases)} bad specs refused, the input refused as {", ".join(report["inputIdentity"])}; evidence: {out}')
 
 
 if __name__ == '__main__':

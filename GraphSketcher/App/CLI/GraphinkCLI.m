@@ -1,5 +1,6 @@
 #import "GraphinkCLI.h"
 #import <mach-o/dyld.h>
+#import <sys/stat.h>
 #import <OmniFoundation/OmniFoundation.h>
 #import <GraphSketcherModel/RSGraphArchive.h>
 #import <GraphSketcherModel/RSUndoer.h>
@@ -183,15 +184,23 @@ NSData *GICRasterData(GICDocument *document, CGFloat dpi, NSString *typeIdentifi
     return data;
 }
 
+void GICCheckOutput(NSString *path, BOOL overwrite, NSString *input)
+{
+    struct stat link, target, source;
+    if (lstat(path.fileSystemRepresentation, &link) != 0) return;  // nothing there yet
+    BOOL resolves = stat(path.fileSystemRepresentation, &target) == 0;
+    if (input && stat(input.fileSystemRepresentation, &source) == 0) {
+        BOOL same = (link.st_dev == source.st_dev && link.st_ino == source.st_ino) ||
+                    (resolves && target.st_dev == source.st_dev && target.st_ino == source.st_ino);
+        if (same) GICFail(@"Refusing to write over the input %@ (%@ is the same file)", input, path);
+    }
+    if (resolves && S_ISDIR(target.st_mode)) GICFail(@"%@ is a directory; it is never replaced", path);
+    if (!overwrite) GICFail(@"%@ already exists; pass --force to replace it", path);
+}
+
 void GICWrite(NSData *data, NSString *path, BOOL overwrite, NSString *input)
 {
-    NSString *target = path.stringByStandardizingPath.stringByResolvingSymlinksInPath;
-    if (input && [target isEqual:input.stringByStandardizingPath.stringByResolvingSymlinksInPath])
-        GICFail(@"Refusing to write over the input %@", input);
-    NSFileManager *files = [NSFileManager defaultManager];
-    BOOL directory = NO;
-    if ([files fileExistsAtPath:path isDirectory:&directory] && (directory || !overwrite))
-        GICFail(@"%@ already exists; pass --force to replace it", path);
+    GICCheckOutput(path, overwrite, input);
     NSError *error = nil;
     if (![data writeToFile:path options:NSDataWritingAtomic error:&error])
         GICFail(@"Cannot write %@: %@", path, error.localizedDescription);

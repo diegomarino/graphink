@@ -653,7 +653,7 @@ void GICCreateUsage(FILE *out)
           "described in the agent skill: https://github.com/diegomarino/graphink/tree/main/skills/graphink\n"
           "\n"
           "  -o, --output PATH  the .graphink file to write; an existing file is refused unless --force\n"
-          "  --force            replace OUTPUT if it exists\n"
+          "  --force            replace OUTPUT if it exists (never SPEC or a directory)\n"
           "\n"
           "Then: graphink render OUTPUT.graphink -o preview.png\n"
           "Exit status: 0 written and reopened, 1 invalid spec or failure (the message names the place in\n"
@@ -678,6 +678,7 @@ int GICCreateMain(int argc, const char *argv[])
         int status = GICExitOK;
         GICDocument *document = nil, *reopened = nil;
         @try {
+            GICCheckOutput(output, force, [input isEqual:@"-"] ? nil : input);  // never the spec, never a directory
             NSData *json = [input isEqual:@"-"] ? [[NSFileHandle fileHandleWithStandardInput] readDataToEndOfFile] : [NSData dataWithContentsOfFile:input];
             if (!json) GICFail(@"Cannot read %@", input);
             NSError *error = nil;
@@ -689,7 +690,6 @@ int GICCreateMain(int argc, const char *argv[])
             NSData *xml = [g generateXMLOfType:RSGraphFileType frame:CGRectZero error:&error];
             if (!xml) GICFail(@"Cannot generate the document XML: %@", error.localizedDescription);
             NSData *preview = GICPDFData(document);  // the Quick Look preview the app saves with each document
-            if ([NSFileManager.defaultManager fileExistsAtPath:output] && !force) GICFail(@"%@ already exists; pass --force to replace it", output);
             // Write next to the target, check it, then move it into place: a failed check leaves no document behind.
             NSString *temporary = [[output stringByDeletingLastPathComponent] stringByAppendingPathComponent:
                 [NSString stringWithFormat:@".%@.%@.graphink", output.lastPathComponent, NSUUID.UUID.UUIDString]];
