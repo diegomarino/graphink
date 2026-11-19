@@ -69,28 +69,40 @@ sign_app() {
   codesign --verify --deep --strict "$app"
 }
 
-notarize_dmg() {
-  local dmg=$1 id key="$RUNNER_TEMP/notary-key.p8"
+# Submit FILE to the notary service and wait. Only status Accepted passes: --wait returns once the
+# submission is processed, and a zip cannot be stapled, so this is the zip's only check. The API key
+# is written to RUNNER_TEMP (persistent on a self-hosted runner) and removed on any exit.
+submit() {
+  local file=$1 key="$RUNNER_TEMP/notary-key.p8" result status
   : "${NOTARY_KEY_P8_BASE64:?}" "${NOTARY_KEY_ID:?}" "${NOTARY_ISSUER_ID:?}"
+  trap 'rm -f "$RUNNER_TEMP/notary-key.p8"' EXIT
+  ( umask 077 && base64 --decode <<<"$NOTARY_KEY_P8_BASE64" > "$key" )
+  result=$(xcrun notarytool submit "$file" --key "$key" --key-id "$NOTARY_KEY_ID" \
+    --issuer "$NOTARY_ISSUER_ID" --wait --timeout 30m --output-format json) || {
+    echo "$result"; echo "::error::xcrun notarytool submit $file failed" >&2; exit 1
+  }
+  rm -f "$key"
+  echo "$result"
+  status=$(python3 -c 'import json, sys; print(json.loads(sys.stdin.read()).get("status", ""))' <<<"$result")
+  if [[ "$status" != Accepted ]]; then
+    echo "::error::Notarization of $file ended with status '$status', not Accepted (xcrun notarytool log ID for details)" >&2
+    exit 1
+  fi
+}
+
+notarize_dmg() {
+  local dmg=$1 id
   setup_keychain
   id=$(identity)
   codesign --force --timestamp --sign "$id" "$dmg"
-  base64 --decode <<<"$NOTARY_KEY_P8_BASE64" > "$key"
-  xcrun notarytool submit "$dmg" --key "$key" --key-id "$NOTARY_KEY_ID" \
-    --issuer "$NOTARY_ISSUER_ID" --wait --timeout 30m
-  rm -f "$key"
+  submit "$dmg"
   xcrun stapler staple "$dmg"
   xcrun stapler validate "$dmg"
   spctl --assess --type open --context context:primary-signature -vv "$dmg"
 }
 
 notarize_zip() {
-  local zip=$1 key="$RUNNER_TEMP/notary-key.p8"
-  : "${NOTARY_KEY_P8_BASE64:?}" "${NOTARY_KEY_ID:?}" "${NOTARY_ISSUER_ID:?}"
-  base64 --decode <<<"$NOTARY_KEY_P8_BASE64" > "$key"
-  xcrun notarytool submit "$zip" --key "$key" --key-id "$NOTARY_KEY_ID" \
-    --issuer "$NOTARY_ISSUER_ID" --wait --timeout 30m
-  rm -f "$key"
+  submit "$1"
 }
 
 case "${1:-}" in

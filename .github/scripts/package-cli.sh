@@ -20,6 +20,8 @@ out=$(cd "$out" && pwd)
 zip="$out/graphink-cli.zip"
 test ! -e "$zip" || { echo "::error::$zip already exists" >&2; exit 1; }
 work=$(mktemp -d /private/tmp/graphink-cli-zip.XXXXXX)
+# The staged copy holds every framework; never leave it behind, also when a step fails.
+trap 'rm -rf "$work"' EXIT
 contents="$work/graphink-cli/Contents"
 mkdir -p "$contents/Helpers" "$contents/Frameworks" "$contents/Resources/English.lproj"
 ditto "$tool" "$contents/Helpers/graphink"
@@ -51,6 +53,5 @@ for framework in "$contents"/Frameworks/*.framework; do codesign --verify --stri
 
 (cd "$work" && ditto -c -k --norsrc --noextattr --noqtn --noacl --keepParent graphink-cli "$zip")
 (cd "$out" && shasum -a 256 graphink-cli.zip > graphink-cli.zip.sha256)
-rm -rf "$work"
 echo "Packaged $zip with$copied"
 cat "$out/graphink-cli.zip.sha256"
