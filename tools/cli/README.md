@@ -73,4 +73,12 @@ Built against Debug products, the tool prints OmniBase's two-line assertions ban
   it in an offscreen window and takes File ▸ Export's data: `graphink render` must produce the
   same PNG bytes at 72 and 144 DPI and the same PDF pixels. It also checks the Install Command-Line
   Tool… menu item and window: the command names the running bundle's helper, survives a path with
-  shell-special characters, and Copy puts exactly it on the pasteboard.
+  shell-special characters (read back by sh, and by interactive zsh and bash, so `!` is covered),
+  and Copy puts exactly it on the pasteboard.
+- `Checks/check-export-paths.py` (`GUI_CHECKS=1`) covers the drawing paths that go through
+  `RSGraphView -drawRect:`: with everything selected, the view's PNG export must equal
+  `graphink render`'s, and the view's PDF, Copy as Image's PDF and the saved preview must equal its PDF
+  pixel for pixel (Copy's PNG and TIFF need an on-screen window, so offscreen their absence is
+  recorded). With `--base-root`, `--base-products` and `--base-objects` from a build of another
+  revision it also compares every one of these outputs with that revision's: against main before
+  `RSGraphExport` (401fa55), all 170 outputs of the 34 examples were identical.

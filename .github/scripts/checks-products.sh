@@ -60,8 +60,11 @@ if [[ "${GUI_CHECKS:-0}" == 1 ]]; then
   run_check cli-app "$logs" python3 Checks/check-cli-app.py --products "$products" \
     --objects "$build_root/Debug/Intermediates/GraphSketcher.build/Debug/GraphSketcher.build/Objects-normal/arm64/$APP_NAME.LinkFileList" \
     --output "$evidence/cli-app"
+  run_check export-paths "$logs" python3 Checks/check-export-paths.py --products "$products" \
+    --objects "$build_root/Debug/Intermediates/GraphSketcher.build/Debug/GraphSketcher.build/Objects-normal/arm64/$APP_NAME.LinkFileList" \
+    --output "$evidence/export-paths"
 else
-  echo "Window-creating checks (sidebar, viewport, page-size, zoom-accessibility, assertion-policy, key-loop, snap-distance, native-qualification, find, cli-app) skipped; set GUI_CHECKS=1 in a GUI session"
+  echo "Window-creating checks (sidebar, viewport, page-size, zoom-accessibility, assertion-policy, key-loop, snap-distance, native-qualification, find, cli-app, export-paths) skipped; set GUI_CHECKS=1 in a GUI session"
 fi
 # Last: every fixture the checks above wrote must not claim Graphink documents, and nothing but
 # Graphink.app may sit in the products directory that is zipped and delivered.

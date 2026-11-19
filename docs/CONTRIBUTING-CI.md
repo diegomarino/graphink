@@ -76,7 +76,7 @@ the ones on `PATH`.
   lambdas, imports after the `sys.path` setup; nor `zip(strict=)` (`B905`) and
   `raise SystemExit` without `from` (`B904`). Do not run `ruff format`.
 - **shellcheck** (`-x -P SCRIPTDIR`, default severity) on `.github/scripts/*.sh`,
-  `scripts/**/*.sh`, `Checks/*.sh` and `.githooks/*`. Disable a rule only inline, on the
+  `scripts/**/*.sh`, `Checks/*.sh`, `tools/**/*.sh`, `skills/**/*.sh` and `.githooks/*`. Disable a rule only inline, on the
   command it applies to, with the reason after it:
   `# shellcheck disable=SC2054 # -Wl,-rpath,DIR is one linker argument`.
 
@@ -102,6 +102,8 @@ changes. `git commit --no-verify` skips the hook once; CI still runs everything.
 | `docs/format/check-opc.py` (fixture, `--self-check`) | Python, xmllint | fast |
 | `Examples/Tools/manifest.py` (check mode, once present) | Python | fast |
 | `Examples/Tools/sync-new-from.py` (check mode: bundled New From copies equal the catalog) | Python | fast |
+| `scripts/release/tests` (release notes and their groups, `cli_zip.py`, `casks.py`, versions) | Python | fast |
+| `tools/skills/test_skill_scripts.py` (the agent skill's `find-graphink.sh` and `make-graph.sh`, with a simulated `uname` and a stand-in tool) | Python, `/bin/sh` | fast |
 | `Checks/check-documents.sh --self-check` | Bash | toolchain |
 | `Checks/Analyzer/dependencies/check-packaging.py` | git, OmniGroup clone, `/private/tmp` | toolchain |
 | `Checks/Analyzer/dependencies/check-regressions.py` | clang, patched OmniGroup | toolchain |
@@ -114,11 +116,13 @@ changes. `git commit --no-verify` skips the hook once; CI still runs everything.
 | `Checks/check-width-defaults.py`, `check-about-links.py` | Debug products | products |
 | `UI/check-style-defaults.py`, `UI/StylePresets/check-presets.py`, `check-creation-defaults.py`, `check-package-documents.py` | Debug products | products |
 | `Checks/check-document-types.py`, `check-new-from.py`, `check-legacy-roundtrips.py` | Debug products | products |
+| `tools/cli/check-cli.py` (the `graphink` helper in the app and in `graphink-cli.zip`, packaged by the check: signature and layout, every example and historical sample rendered read-only, PDFs equal to the previews, the skill's example specs created and validated, its scripts run with the tool, refusals) | Debug products, xmllint | products |
 | `Checks/check-fixture-bundles.py` (no check fixture app can claim Graphink documents or ship with the products) | Debug products, the checks' evidence, read-only Launch Services database | products |
-| `Checks/check-sidebar.py`, `Checks/check-viewport.py`, `Checks/check-page-size.py`, `Checks/check-zoom-accessibility.py`, `Checks/check-assertion-policy.py`, `Checks/check-key-loop.py`, `Checks/check-snap-distance.py`, `Checks/check-native-qualification.py`, `Checks/check-find.py` | Debug products plus an Aqua session (offscreen `NSWindow`s; `check-assertion-policy.py` also runs an `NSApplication` event loop and accessibility requests; `check-native-qualification.py` emulates the key window and never shows the shared font and color panels; `check-find.py` uses the shared find pasteboard and restores it) | opt-in: `GUI_CHECKS=1` |
+| `Checks/check-sidebar.py`, `Checks/check-viewport.py`, `Checks/check-page-size.py`, `Checks/check-zoom-accessibility.py`, `Checks/check-assertion-policy.py`, `Checks/check-key-loop.py`, `Checks/check-snap-distance.py`, `Checks/check-native-qualification.py`, `Checks/check-find.py`, `Checks/check-cli-app.py` (File ▸ Export's data equals `graphink render`'s for every example; the Install Command-Line Tool… window), `Checks/check-export-paths.py` (with everything selected, the graph view's PNG export, its PDF, Copy as Image's PDF and the saved preview equal `graphink render`'s) | Debug products plus an Aqua session (offscreen `NSWindow`s; `check-assertion-policy.py` also runs an `NSApplication` event loop and accessibility requests; `check-native-qualification.py` emulates the key window and never shows the shared font and color panels; `check-find.py` uses the shared find pasteboard and restores it) | opt-in: `GUI_CHECKS=1` |
 | `UI/Graphink/Cursors/check-cursors.py`, `UI/Design/*`, `UI/LogoStudy/*` | Pillow, poppler (asset pipelines) | not in CI |
 | `UI/StylePresets/check-archives.py` | a separately compiled fixture and a native package | not in CI |
 | `Examples/Microeconomics/validate.py` | rendered PDFs from a generate run | not in CI |
+| `Checks/check-export-paths.py --base-root SRC --base-products P --base-objects LIST` (the same outputs compared with a build of another revision, e.g. main before a change to the drawing code; the references are made at check time) | Debug products of both revisions, an Aqua session | not in CI: needs a second build |
 
 "Windowless" means no `NSWindow` is created. Several of those checks still
 call `+[NSApplication sharedApplication]`. Hosted macOS runners provide a
