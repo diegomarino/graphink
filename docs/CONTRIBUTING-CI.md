@@ -320,9 +320,11 @@ annotated tag on a clean `main` that matches `origin/main` and prints the
    its frameworks and fonts from the checked app into `graphink-cli.zip` (no
    re-signing; resource forks and extended attributes left out) and runs it once.
    The build job downloads the previous release's zip and compares the two by
-   content ([`cli_zip.py`](../scripts/release/cli_zip.py): signatures, UUIDs and
-   version numbers left out), writing `changed` or `unchanged` to
-   `CLI-CHANGE.txt` in the artifact.
+   content ([`cli_zip.py`](../scripts/release/cli_zip.py): UUIDs, version numbers
+   and signature hashes left out; each binary's signing identity, Team ID, flags
+   such as Hardened Runtime, requirements and entitlements kept), writing
+   `changed` or `unchanged` to `CLI-CHANGE.txt` in the artifact. That file is for
+   information only; a comparison that fails fails the build, before publishing.
    The release body comes from [`release-notes.sh`](../.github/scripts/release-notes.sh):
    the version's notes ("What's new"), the download and install notes, and
    `BUILD-INFO.txt`. The app inside the DMG bundles the same notes.
@@ -332,9 +334,12 @@ annotated tag on a clean `main` that matches `origin/main` and prints the
 4. Job **homebrew** (off for now) updates
    [diegomarino/homebrew-tap](https://github.com/diegomarino/homebrew-tap):
    `Casks/graphink-app.rb` gets the new version and DMG checksum every time;
-   `Casks/graphink-cli.rb` only when `CLI-CHANGE.txt` says `changed`, so
-   `brew upgrade` offers the tool only when it really changed
-   ([`casks.py`](../scripts/release/casks.py)). To turn it on: create the
+   `Casks/graphink-cli.rb` only when the new zip differs by content from the
+   release that cask points to now (its `version`; not necessarily the previous
+   release, since the job may have been off or failed), so `brew upgrade` offers
+   the tool only when it really changed
+   ([`casks.py`](../scripts/release/casks.py)). A version without a
+   `graphink-cli.zip` counts as changed. To turn it on: create the
    `homebrew-tap` environment (restricted to `v*` tags) with the secret
    `HOMEBREW_TAP_TOKEN`, a fine-grained token with *Contents: read and write*
    on `diegomarino/homebrew-tap` only, then set the repository variable

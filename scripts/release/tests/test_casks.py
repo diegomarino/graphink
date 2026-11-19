@@ -43,29 +43,36 @@ class Casks(unittest.TestCase):
         with self.assertRaises(casks.CaskError):
             casks.previous('2026.12.0', tags)
 
+    def test_cli_version(self):
+        self.assertEqual(casks.cli_version(self.tap), '2026.11.0')
+        self.assertEqual(casks.main(['cli-version', '--tap', str(self.tap)]), 0)
+        (self.tap / 'Casks/graphink-cli.rb').write_text(CLI.replace('"2026.11.0"', '"latest"'))
+        with self.assertRaises(casks.CaskError):
+            casks.cli_version(self.tap)
+        (self.tap / 'Casks/graphink-cli.rb').write_text(CLI + '  version "2026.12.0"\n')
+        with self.assertRaises(casks.CaskError):
+            casks.cli_version(self.tap)
+
     def test_changed_cli_moves_both_casks(self):
-        (self.dist / 'CLI-CHANGE.txt').write_text('changed since v2026.11.0\n')
-        self.assertEqual(casks.update(self.tap, '2026.11.1', self.dist), ['graphink-app 2026.11.1', 'graphink-cli 2026.11.1'])
+        self.assertEqual(casks.update(self.tap, '2026.11.1', self.dist, 'changed'), ['graphink-app 2026.11.1', 'graphink-cli 2026.11.1'])
         self.assertIn('version "2026.11.1"', self.cask('graphink-app'))
         self.assertIn('sha256 "' + 'a' * 64 + '"', self.cask('graphink-app'))
         self.assertIn('sha256 "' + 'b' * 64 + '"', self.cask('graphink-cli'))
         self.assertIn('download/v#{version}/graphink-cli.zip', self.cask('graphink-cli'))
 
     def test_unchanged_cli_keeps_its_cask(self):
-        (self.dist / 'CLI-CHANGE.txt').write_text('unchanged since v2026.11.0\n')
-        self.assertEqual(casks.update(self.tap, '2026.11.1', self.dist), ['graphink-app 2026.11.1'])
+        self.assertEqual(casks.update(self.tap, '2026.11.1', self.dist, 'unchanged'), ['graphink-app 2026.11.1'])
         self.assertEqual(self.cask('graphink-cli'), CLI)
 
     def test_malformed_inputs_are_refused(self):
-        (self.dist / 'CLI-CHANGE.txt').write_text('maybe\n')
-        with self.assertRaises(casks.CaskError):
-            casks.update(self.tap, '2026.11.1', self.dist)
+        for cli in ('maybe', '', ' since v2026.11.0'):
+            with self.subTest(cli=cli), self.assertRaises(casks.CaskError):
+                casks.update(self.tap, '2026.11.1', self.dist, cli)
         (self.tap / 'Casks/graphink-app.rb').write_text(APP + '  version "2"\n')
-        (self.dist / 'CLI-CHANGE.txt').write_text('changed\n')
         with self.assertRaises(casks.CaskError):
-            casks.update(self.tap, '2026.11.1', self.dist)
+            casks.update(self.tap, '2026.11.1', self.dist, 'changed')
         with self.assertRaises(casks.CaskError):
-            casks.update(self.tap, '2026.13.0', self.dist)
+            casks.update(self.tap, '2026.13.0', self.dist, 'changed')
 
 
 if __name__ == '__main__':

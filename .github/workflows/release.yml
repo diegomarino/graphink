@@ -10,10 +10,11 @@ name: Release build
 # creates a normal (not draft, not prerelease) Release marked latest, so
 # /releases/latest/download/Graphink.dmg resolves. Debug is never packaged.
 #
-# Homebrew (diegomarino/homebrew-tap): the build job compares graphink-cli.zip by content with the
-# previous release's (scripts/release/cli_zip.py; CLI-CHANGE.txt in the artifact). After publishing,
-# the `homebrew` job sets version and sha256 of Casks/graphink-app.rb, and of Casks/graphink-cli.rb
-# only when the tool changed (scripts/release/casks.py). It is off until the repository variable
+# Homebrew (diegomarino/homebrew-tap): after publishing, the `homebrew` job sets version and sha256
+# of Casks/graphink-app.rb, and of Casks/graphink-cli.rb only when graphink-cli.zip changed by content
+# (scripts/release/cli_zip.py) against the release that cask points to now, which is not always the
+# previous one (scripts/release/casks.py). The build job's CLI-CHANGE.txt compares with the previous
+# release only for information and to fail before publishing if the comparison breaks. It is off until the repository variable
 # HOMEBREW_TAP_UPDATE is "true" and the `homebrew-tap` environment holds HOMEBREW_TAP_TOKEN, a
 # fine-grained token with contents: write on diegomarino/homebrew-tap only.
 #
@@ -89,6 +90,8 @@ jobs:
           if [ "$SIGNING_MODE" = developer-id ]; then
             .github/scripts/sign-developer-id.sh notarize-zip "$RUNNER_TEMP/dist/graphink-cli.zip"
           fi
+      # Informational (the cask decision is the homebrew job's), but a comparison that fails fails here,
+      # before anything is published.
       - name: Compare graphink-cli.zip with the previous release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -98,8 +101,13 @@ jobs:
             --json tagName --jq '.[].tagName' | python3 scripts/release/casks.py previous "$TAG")
           if [ -n "$previous" ] && gh release download "$previous" --repo "$GITHUB_REPOSITORY" \
               --pattern graphink-cli.zip --dir "$RUNNER_TEMP/previous-cli"; then
-            echo "$(python3 scripts/release/cli_zip.py compare "$RUNNER_TEMP/dist/graphink-cli.zip" \
-              "$RUNNER_TEMP/previous-cli/graphink-cli.zip") since $previous" > "$change"
+            result=$(python3 scripts/release/cli_zip.py compare "$RUNNER_TEMP/dist/graphink-cli.zip" \
+              "$RUNNER_TEMP/previous-cli/graphink-cli.zip")
+            case "$result" in
+              changed | unchanged) ;;
+              *) echo "::error::cli_zip.py compare printed '$result', not changed or unchanged"; exit 1 ;;
+            esac
+            echo "$result since the previous release $previous (for information; the cask compares with its own version)" > "$change"
           else
             echo "changed: no graphink-cli.zip in an earlier release" > "$change"
           fi
@@ -189,11 +197,27 @@ jobs:
           repository: diegomarino/homebrew-tap
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
           path: tap
+      # graphink-cli.rb moves when the new zip differs from the one it points to now. A version
+      # without a graphink-cli.zip asset (or whose release cannot be read) counts as changed: moving
+      # the cask is the safe side. A failed download or comparison fails the job.
       - name: Set the casks' version and sha256
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
           cat dist/CLI-CHANGE.txt
-          python3 graphink/scripts/release/casks.py update --tap tap --version "${TAG#v}" --dist dist | tee "$RUNNER_TEMP/casks.txt"
+          cask=$(python3 graphink/scripts/release/casks.py cli-version --tap tap)
+          if gh release view "v$cask" --json assets --jq '.assets[].name' > "$RUNNER_TEMP/cask-assets.txt" &&
+              grep -qx graphink-cli.zip "$RUNNER_TEMP/cask-assets.txt"; then
+            gh release download "v$cask" --pattern graphink-cli.zip --dir "$RUNNER_TEMP/cask-cli"
+            cli=$(python3 graphink/scripts/release/cli_zip.py compare dist/graphink-cli.zip "$RUNNER_TEMP/cask-cli/graphink-cli.zip")
+          else
+            echo "v$cask has no graphink-cli.zip asset"
+            cli=changed
+          fi
+          echo "graphink-cli.zip $cli against v$cask, the version graphink-cli.rb points to"
+          python3 graphink/scripts/release/casks.py update --tap tap --version "${TAG#v}" --dist dist --cli "$cli" | tee "$RUNNER_TEMP/casks.txt"
           cd tap
           if git diff --quiet; then
             echo "No cask changed"; exit 0
