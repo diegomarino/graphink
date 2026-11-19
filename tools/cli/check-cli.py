@@ -11,9 +11,10 @@ With the app's helper: every example (Examples/**/*.graphink) and the 35 histori
 render to PNG and PDF read-only (every input is hashed before and after). Example renders are compared
 with their shipped previews: the PDF, rasterized the way Examples/Tools/GenerateCatalog.m made the
 previews, must match them pixel for pixel; the direct PNG (the app's raster export, drawn into a
-Generic RGB bitmap) may differ only by antialiasing and color rounding. The example specs are created,
-checked with docs/format/check-opc.py and the RELAX NG schema, reopened and rendered. Invalid specs and
-arguments must be refused with a message and write nothing.
+Generic RGB bitmap) may differ only by antialiasing and color rounding. The agent skill's example specs
+(skills/graphink/assets/examples) are created, checked with docs/format/check-opc.py and the RELAX NG
+schema, reopened and rendered, and the skill's make-graph.sh makes one of them with the helper found on
+PATH. Invalid specs and arguments must be refused with a message and write nothing.
 
 With the zip's copy: every PNG is byte-identical to the helper's and every created document has the
 same contents.xml.
@@ -31,7 +32,8 @@ import zipfile
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-SPECS = ROOT / 'tools/cli/examples'
+SPECS = ROOT / 'skills/graphink/assets/examples'
+SKILL_SCRIPTS = ROOT / 'skills/graphink/scripts'
 IDENTIFIER = 'com.diegomarino.Graphink.cli'
 CLAIMS = ('CFBundleDocumentTypes', 'UTExportedTypeDeclarations', 'UTImportedTypeDeclarations', 'CFBundleURLTypes', 'NSServices')
 NOISE = re.compile(r'^(\*\*\* Assertions are ON \*\*\*|    OBEnableExpensiveAssertions = NO|.* graphink\[\d+:\d+\] xml validates)$')
@@ -213,6 +215,23 @@ def main():
         run(['xmllint', '--noout', '--relaxng', ROOT / 'GraphSketcher/Model/XML/GraphSketcher.rng', created / (spec.stem + '-contents.xml')], logs / f'schema-{spec.stem}.log')
         run([helper, 'render', doc, '-o', created / (spec.stem + '.png')], logs / f'render-{spec.stem}.log')
         report['created'][spec.name] = {'document': str(doc), 'sha256': digest(doc), 'summary': proc.stdout.strip()}
+
+    # 4b. The skill's make-graph.sh, finding the helper through PATH as an agent would.
+    path = out / 'path'
+    path.mkdir()
+    (path / 'graphink').symlink_to(helper)
+    made = out / 'make-graph'
+    made.mkdir()
+    env = {'PATH': f'{path}:/usr/bin:/bin', 'HOME': str(out), 'GRAPHINK_APP_DIRS': ''}
+    proc = subprocess.run([SKILL_SCRIPTS / 'make-graph.sh', specs[0], made / specs[0].stem], capture_output=True, text=True, env=env, timeout=300)
+    (logs / 'make-graph.log').write_text(proc.stdout + proc.stderr)
+    outputs = [made / f'{specs[0].stem}.{ext}' for ext in ('graphink', 'png', 'pdf')]
+    assert proc.returncode == 0 and proc.stdout.split() == [str(p) for p in outputs], f'make-graph.sh: {proc.returncode} {proc.stdout} {proc.stderr}'
+    assert all(p.is_file() and p.stat().st_size for p in outputs), 'make-graph.sh did not write its three outputs'
+    run([sys.executable, ROOT / 'docs/format/check-opc.py', outputs[0]], logs / 'make-graph-opc.log')
+    assert png_width(outputs[1]) == png_width(created / f'{specs[0].stem}.png'), 'make-graph.sh rendered another size'
+    found = subprocess.run([SKILL_SCRIPTS / 'find-graphink.sh'], capture_output=True, text=True, env=env, timeout=60)
+    assert found.returncode == 0 and found.stdout.strip() == str(path / 'graphink'), f'find-graphink.sh: {found.returncode} {found.stdout} {found.stderr}'
 
     # 5. Refusals: each must exit 1 or 2 with one clear line and write nothing.
     bad = out / 'bad'

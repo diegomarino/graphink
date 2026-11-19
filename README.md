@@ -34,7 +34,7 @@ Draw a graph without any data, or paste a table and plot it. Export sharp PDF an
 - **Find.** Search every label with the standard find bar (⌘F, ⌘G).
 - **Export.** PDF, or PNG, JPEG and TIFF at 72 to 300 DPI, with the exact pixel size shown first.
 - **Command line and agents.** The `graphink` tool exports documents and builds them from a
-  short JSON spec.
+  short JSON spec, and an agent skill teaches coding agents to use it.
 - **An open format.** `.graphink` documents are a small, documented
   [OPC package](docs/format/opc-v1.md). GraphSketcher's `.ograph` files still open and save.
 
@@ -62,7 +62,14 @@ It ships inside the app: choose **Graphink ▸ Install Command-Line Tool…** an
 shows to put `graphink` on your `PATH`. Every release also attaches `graphink-cli.zip`, the same
 tool on its own. Details: [tools/cli/README.md](tools/cli/README.md).
 
-It needs a Mac: the tool draws with macOS's own frameworks.
+The [graphink agent skill](skills/graphink/SKILL.md) teaches Claude Code and other coding agents to
+plan a graph, write its spec, create it, render it and check the image before handing it over:
+
+```bash
+npx skills add diegomarino/graphink
+```
+
+Both need a Mac: the tool draws with macOS's own frameworks.
 
 ## Download
 

@@ -9,6 +9,8 @@ run_check opc-fixture "$logs" python3 docs/format/check-opc.py \
 run_check opc-self-check "$logs" python3 docs/format/check-opc.py --self-check
 run_check app-version "$logs" .github/scripts/version.sh check
 run_check release-scripts "$logs" env PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/release/tests -v
+# The agent skill's find-graphink.sh and make-graph.sh, with a simulated uname and a stand-in tool.
+run_check skill-scripts "$logs" env PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/skills -v
 
 # The Examples catalog checker lands with the example-models work; check its
 # manifest whenever the tool is present (default mode only verifies).
@@ -34,7 +36,7 @@ done
 # --force-exclude applies pyproject.toml's excludes to the files named here.
 git ls-files -z '*.py' > "$logs/ruff-files"
 run_check ruff "$logs" xargs -0 "$ruff" check --force-exclude --no-cache < "$logs/ruff-files"
-git ls-files -z '.github/scripts/*.sh' 'scripts/*.sh' 'Checks/*.sh' 'tools/*.sh' '.githooks/*' > "$logs/shellcheck-files"
+git ls-files -z '.github/scripts/*.sh' 'scripts/*.sh' 'Checks/*.sh' 'tools/*.sh' 'skills/*.sh' '.githooks/*' > "$logs/shellcheck-files"
 # SCRIPTDIR resolves the scripts' `. "$(dirname "$0")/common.sh"` sources.
 run_check shellcheck "$logs" xargs -0 "$shellcheck" -x -P SCRIPTDIR < "$logs/shellcheck-files"
 # actionlint checks every .github/workflows file, and their run: blocks with the same shellcheck.

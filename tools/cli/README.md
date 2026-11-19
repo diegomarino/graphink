@@ -66,8 +66,9 @@ Built against Debug products, the tool prints OmniBase's two-line assertions ban
   `otool -L`, an embedded `Info.plist` without document types. It renders every example and the 35
   historical samples to PNG and PDF read-only; each example's PDF, rasterized the way the previews
   were made, must equal its `Previews/*.png` pixel for pixel. It creates the example specs
-  (`tools/cli/examples` until the skill ships them), runs `docs/format/check-opc.py` and the RELAX NG
-  schema on them, and checks that bad specs and arguments are refused without writing anything.
+  (the agent skill's `skills/graphink/assets/examples`), runs `docs/format/check-opc.py` and the
+  RELAX NG schema on them, runs the skill's `make-graph.sh` on one with the helper on `PATH`, and
+  checks that bad specs and arguments are refused without writing anything.
   The zip's copy must render byte-identical PNGs and create identical documents.
 - `Checks/check-cli-app.py` (`GUI_CHECKS=1`) opens every example in production app objects, draws
   it in an offscreen window and takes File ▸ Export's data: `graphink render` must produce the
