@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1A00000000000000000000C /* RSGraphExport.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000002 /* RSGraphExport.m */; };
         E40000000000000000000001 /* RSPageGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = E40000000000000000000002 /* RSPageGeometry.m */; };
         D50000000000000000000001 /* RSStylePresets.m in Sources */ = {isa = PBXBuildFile; fileRef = D50000000000000000000002 /* RSStylePresets.m */; };
         D50000000000000000000004 /* StyleFonts in Resources */ = {isa = PBXBuildFile; fileRef = D50000000000000000000005 /* StyleFonts */; };
@@ -226,6 +227,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C1A000000000000000000001 /* RSGraphExport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSGraphExport.h; sourceTree = "<group>"; };
+		C1A000000000000000000002 /* RSGraphExport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSGraphExport.m; sourceTree = "<group>"; };
         E40000000000000000000002 /* RSPageGeometry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSPageGeometry.m; sourceTree = "<group>"; };
         E40000000000000000000003 /* RSPageGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSPageGeometry.h; sourceTree = "<group>"; };
         D50000000000000000000002 /* RSStylePresets.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSStylePresets.m; sourceTree = "<group>"; };
@@ -826,6 +829,8 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C1A000000000000000000001 /* RSGraphExport.h */,
+				C1A000000000000000000002 /* RSGraphExport.m */,
 				00AD9B3B0A599E8C00C1434A /* AppController.h */,
 				00AD9B3C0A599E8C00C1434A /* AppController.m */,
 				A10000000000000000000002 /* RSAboutPanelController.m */,
@@ -1182,6 +1187,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1A00000000000000000000C /* RSGraphExport.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				D50000000000000000000001 /* RSStylePresets.m in Sources */,
 				E40000000000000000000001 /* RSPageGeometry.m in Sources */,

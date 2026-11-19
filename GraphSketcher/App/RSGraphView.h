@@ -166,6 +166,8 @@
 - (NSData *)dataWithTIFFInsideRect:(NSRect)r;
 - (NSBitmapImageRep *)bitmapImageRepWithResolution:(CGFloat)dpi;
 - (NSData *)rasterDataOfType:(NSBitmapImageFileType)type resolution:(CGFloat)dpi;
+// png, jpg, tiff (at dpi), pdf or eps: the data File > Export writes; nil for any other type.
+- (NSData *)exportDataOfType:(NSString *)fileType resolution:(CGFloat)dpi;
 
 
 // Programmatic refreshes may omit a mouse event; tools then query the window.

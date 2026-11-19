@@ -10,6 +10,7 @@
 #import <AppKit/NSColorSpace.h>
 #import "RSGraphView.h"
 #import "RSPageGeometry.h"
+#import "RSGraphExport.h"
 #import "RSModernImages.h"
 #import "RSLabelFinder.h"
 
@@ -702,6 +703,12 @@
 {
     //DEBUG_RS(@"RSGraphView drawRect");
     
+    // Saved previews, copies, EPS and printing draw exactly what File > Export and `graphink render` draw.
+    if (![self isDrawingToScreen] && !_textView) {
+        RSDrawGraphForExport(_editor);
+        return;
+    }
+
     // OBFinishPorting: This seems like too many calls into the RSGraphEditor's guts (which need to be duplicated between the Mac and iPad).
     RSGraph *graph = _editor.graph;
     RSGraphRenderer *renderer = _editor.renderer;
@@ -3173,16 +3180,7 @@ static ErrorBarSheet *errorBarSheet = nil;
     [savePanel setNameFieldStringValue:suggestedFileName];
     
     // Raster resolution belongs to PNG/JPEG/TIFF output only; PDF/EPS are vector pages at the canvas size.
-    NSBitmapImageFileType rasterType = 0;
-    BOOL isRaster = YES;
-    if ([fileType isEqual:@"png"])
-        rasterType = NSBitmapImageFileTypePNG;
-    else if ([fileType isEqual:@"jpg"])
-        rasterType = NSBitmapImageFileTypeJPEG;
-    else if ([fileType isEqual:@"tiff"])
-        rasterType = NSBitmapImageFileTypeTIFF;
-    else
-        isRaster = NO;
+    BOOL isRaster = [@[@"png", @"jpg", @"tiff"] containsObject:fileType];
 
     RSRasterExportAccessory *accessory = nil;
     if (isRaster) {
@@ -3195,26 +3193,11 @@ static ErrorBarSheet *errorBarSheet = nil;
         if (result != NSModalResponseOK)
             return;
         
-        [self commitEditing];
-        [self setDrawingToScreen:NO];
-        
-        NSRect r = [self bounds];
-        NSData *data = nil;
-        
-        if (isRaster) {
-            data = [self rasterDataOfType:rasterType resolution:accessory.resolution];
-        }
-        else if ([fileType isEqual:@"pdf"]) {
-            data = [self dataWithPDFInsideRect: r];
-        }
-        else if ([fileType isEqual:@"eps"]) {
-            data = [self dataWithEPSInsideRect: r];
-        }
-        else {
+        if (![@[@"png", @"jpg", @"tiff", @"pdf", @"eps"] containsObject:fileType]) {
             NSLog(@"Export failed; export type was not supported!");
-            [self setDrawingToScreen:YES];
             return;
         }
+        NSData *data = [self exportDataOfType:fileType resolution:isRaster ? accessory.resolution : 72];
 
         NSError *error = nil;
         if (!data || ![data writeToURL:[savePanel URL] options:NSDataWritingAtomic error:&error]) {
@@ -3222,37 +3205,37 @@ static ErrorBarSheet *errorBarSheet = nil;
                 error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileWriteUnknownError userInfo:nil];
             [self presentError:error modalForWindow:[self window] delegate:nil didPresentSelector:NULL contextInfo:NULL];
         }
-        
-        [self setDrawingToScreen:YES];
     }];
     
+}
+
+- (NSData *)exportDataOfType:(NSString *)fileType resolution:(CGFloat)dpi;
+// What File > Export writes: the whole canvas through RSGraphExport, as `graphink render` does (EPS is app-only).
+{
+    [self commitEditing];
+    [self setDrawingToScreen:NO];
+
+    NSRect r = [self bounds];
+    NSData *data = nil;
+    if ([fileType isEqual:@"png"])
+        data = [self rasterDataOfType:NSBitmapImageFileTypePNG resolution:dpi];
+    else if ([fileType isEqual:@"jpg"])
+        data = [self rasterDataOfType:NSBitmapImageFileTypeJPEG resolution:dpi];
+    else if ([fileType isEqual:@"tiff"])
+        data = [self rasterDataOfType:NSBitmapImageFileTypeTIFF resolution:dpi];
+    else if ([fileType isEqual:@"pdf"])
+        data = RSGraphPDFData(_editor, r);
+    else if ([fileType isEqual:@"eps"])
+        data = [self dataWithEPSInsideRect:r];
+
+    [self setDrawingToScreen:YES];
+    return data;
 }
 
 - (NSBitmapImageRep *)bitmapImageRepWithResolution:(CGFloat)dpi;
 // Renders the whole canvas offscreen: pixel size comes from the page size and dpi, never from screen scale or zoom.
 {
-    NSRect bounds = [self bounds];
-    NSSize pixels = RSRasterPixelSize(bounds.size, dpi);
-    NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:(NSInteger)pixels.width pixelsHigh:(NSInteger)pixels.height bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace bytesPerRow:0 bitsPerPixel:0] autorelease];
-    if (!rep)
-        return nil;
-
-    // The rep's point size records the resolution (pixels / points * 72) in exported metadata.
-    [rep setSize:bounds.size];
-
-    NSGraphicsContext *context = [NSGraphicsContext graphicsContextWithBitmapImageRep:rep];
-    if (!context)
-        return nil;
-
-    [NSGraphicsContext saveGraphicsState];
-    [NSGraphicsContext setCurrentContext:context];
-    CGContextRef ctx = [context CGContext];
-    // The context already maps the rep's point size onto its pixels, so drawing in points fills the whole bitmap.
-    CGContextTranslateCTM(ctx, -bounds.origin.x, -bounds.origin.y);
-    [self drawRect:bounds];
-    [context flushGraphics];
-    [NSGraphicsContext restoreGraphicsState];
-
+    NSBitmapImageRep *rep = RSGraphBitmapImageRep(_editor, [self bounds], dpi);
     [self setNeedsDisplay:YES];
     return rep;
 }
@@ -3260,38 +3243,19 @@ static ErrorBarSheet *errorBarSheet = nil;
 - (NSData *)rasterDataOfType:(NSBitmapImageFileType)type resolution:(CGFloat)dpi;
 // Encodes with ImageIO so every resolution, including 72 DPI, is recorded explicitly.
 {
-    NSBitmapImageRep *rep = [self bitmapImageRepWithResolution:dpi];
-    CGImageRef image = [rep CGImage];
-    if (!image)
-        return nil;
-
     NSString *typeIdentifier = nil;
-    NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithDouble:dpi], (id)kCGImagePropertyDPIWidth,
-                                       [NSNumber numberWithDouble:dpi], (id)kCGImagePropertyDPIHeight, nil];
-    if (type == NSBitmapImageFileTypePNG) {
+    if (type == NSBitmapImageFileTypePNG)
         typeIdentifier = @"public.png";
-    }
-    else if (type == NSBitmapImageFileTypeJPEG) {
+    else if (type == NSBitmapImageFileTypeJPEG)
         typeIdentifier = @"public.jpeg";
-        [properties setObject:[NSNumber numberWithDouble:1] forKey:(id)kCGImageDestinationLossyCompressionQuality];
-    }
-    else if (type == NSBitmapImageFileTypeTIFF) {
+    else if (type == NSBitmapImageFileTypeTIFF)
         typeIdentifier = @"public.tiff";
-    }
-    else {
+    else
         return nil;
-    }
 
-    NSMutableData *data = [NSMutableData data];
-    CGImageDestinationRef destination = CGImageDestinationCreateWithData((CFMutableDataRef)data, (CFStringRef)typeIdentifier, 1, NULL);
-    if (!destination)
-        return nil;
-    CGImageDestinationAddImage(destination, image, (CFDictionaryRef)properties);
-    BOOL finished = CGImageDestinationFinalize(destination);
-    CFRelease(destination);
-
-    return finished ? data : nil;
+    NSData *data = RSGraphRasterData(_editor, [self bounds], typeIdentifier, dpi);
+    [self setNeedsDisplay:YES];
+    return data;
 }
 
 
