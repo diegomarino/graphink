@@ -42,6 +42,7 @@ Each configuration gets its own tree, so Debug and Release never share DerivedDa
 | Path | What |
 | --- | --- |
 | `$root/<Configuration>/Products/<Configuration>/Graphink.app` | the app |
+| `…/Graphink.app/Contents/Helpers/graphink` | the `graphink` command-line tool ([tools/cli](../tools/cli/README.md)), built by the `graphink` target the app depends on |
 | `$root/<Configuration>/build.log` | the full `xcodebuild` log |
 | `$root/<Configuration>/DerivedData`, `Intermediates` | build state |
 | `$root/source-sha.txt` | the commit that was built |
@@ -51,7 +52,14 @@ The app version (`2026.11.0` style) comes from the latest `vYYYY.M.n` tag throug
 call of scheme `ALL` in `GraphSketcher-Mac.xcworkspace` with ad-hoc signing
 (`CODE_SIGN_IDENTITY=-`); read it for the exact settings.
 
-To run the Debug app: `open "$root/Debug/Products/Debug/Graphink.app"`.
+To run the Debug app: `open "$root/Debug/Products/Debug/Graphink.app"`. To run its command-line
+tool: `"$root/Debug/Products/Debug/Graphink.app/Contents/Helpers/graphink" --version` (Debug
+builds print OmniBase's two-line assertions banner on stderr first).
+
+To package the tool the way a release does, from the Release build:
+`.github/scripts/package-cli.sh "$root/Release/Products/Release/Graphink.app" "$root/dist"`
+writes `graphink-cli.zip` and its `.sha256`. For a quick rebuild of only the tool against a Debug
+build there is `tools/cli/build.sh` (see its README).
 
 ## 3. Run the checks
 
@@ -110,6 +118,12 @@ Hardened Runtime is set in the project, but Xcode does not apply it to ad-hoc De
 Debug's code signature flags are `0x2(adhoc)`, Release's `0x10002(adhoc,runtime)`. Check the
 emitted signature (`codesign -dv`) rather than the build setting. Making a release DMG is in
 [CONTRIBUTING-CI.md](CONTRIBUTING-CI.md#running-the-checks-locally).
+
+The command-line tool in `Contents/Helpers/graphink` is signed as `com.diegomarino.Graphink.cli`
+with no entitlements: it is never sandboxed, because it reads and writes the files named on its
+command line. Like the app, an ad-hoc Release build with Hardened Runtime cannot load its ad-hoc
+frameworks; build Release with `EXTRA_BUILD_SETTINGS` set to `RELEASE_DISTRIBUTION_SETTINGS` from
+`.github/ci.env`, as `release.yml` does, to run it.
 
 ## Known limits
 

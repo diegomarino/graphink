@@ -7,6 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1A00000000000000000000C /* RSGraphExport.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000002 /* RSGraphExport.m */; };
+		C1A00000000000000000000D /* RSCommandLineTool.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000004 /* RSCommandLineTool.m */; };
+		C1A00000000000000000000E /* graphink in Copy Helpers */ = {isa = PBXBuildFile; fileRef = C1A00000000000000000000B /* graphink */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		C1A00000000000000000000F /* RSGraphExport.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000002 /* RSGraphExport.m */; };
+		C1A000000000000000000010 /* RSStylePresets.m in Sources */ = {isa = PBXBuildFile; fileRef = D50000000000000000000002 /* RSStylePresets.m */; };
+		C1A000000000000000000011 /* RSPageGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = E40000000000000000000002 /* RSPageGeometry.m */; };
+		C1A000000000000000000012 /* GraphinkCLI.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000006 /* GraphinkCLI.m */; };
+		C1A000000000000000000013 /* GraphinkCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000007 /* GraphinkCreate.m */; };
+		C1A000000000000000000014 /* GraphinkRender.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000008 /* GraphinkRender.m */; };
+		C1A000000000000000000015 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000009 /* main.m */; };
+		C1A000000000000000000016 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		C1A000000000000000000017 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00644C730FDF1F1B00F19586 /* QuartzCore.framework */; };
+		C1A000000000000000000018 /* GraphSketcherModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3402C1FB111A87370046638B /* GraphSketcherModel.framework */; };
+		C1A000000000000000000019 /* OmniBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34874C220EA7D5380012BB56 /* OmniBase.framework */; };
+		C1A00000000000000000001A /* OmniFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34874C240EA7D5380012BB56 /* OmniFoundation.framework */; };
+		C1A00000000000000000001B /* OmniAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34874C210EA7D5380012BB56 /* OmniAppKit.framework */; };
+		C1A00000000000000000001C /* OmniQuartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34830833111A7C54000BEB55 /* OmniQuartz.framework */; };
+		C1A00000000000000000001D /* OmniUnzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003A17910FC376DD0055EE51 /* OmniUnzip.framework */; };
         E40000000000000000000001 /* RSPageGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = E40000000000000000000002 /* RSPageGeometry.m */; };
         D50000000000000000000001 /* RSStylePresets.m in Sources */ = {isa = PBXBuildFile; fileRef = D50000000000000000000002 /* RSStylePresets.m */; };
         D50000000000000000000004 /* StyleFonts in Resources */ = {isa = PBXBuildFile; fileRef = D50000000000000000000005 /* StyleFonts */; };
@@ -174,6 +192,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		C1A000000000000000000021 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C1A000000000000000000022;
+			remoteInfo = graphink;
+		};
+		C1A000000000000000000023 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5F1A93F818579B9C009A1111 /* GraphSketcherModel.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = GraphSketcherModel;
+		};
 		5F1A93FC18579B9C009A1111 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5F1A93F818579B9C009A1111 /* GraphSketcherModel.xcodeproj */;
@@ -205,6 +237,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		C1A00000000000000000001F /* Copy Helpers */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Helpers;
+			dstSubfolderSpec = 1;
+			files = (
+				C1A00000000000000000000E /* graphink in Copy Helpers */,
+			);
+			name = "Copy Helpers";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5F1A94271857AE4A009A1111 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -226,6 +269,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C1A000000000000000000001 /* RSGraphExport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSGraphExport.h; sourceTree = "<group>"; };
+		C1A000000000000000000002 /* RSGraphExport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSGraphExport.m; sourceTree = "<group>"; };
+		C1A000000000000000000003 /* RSCommandLineTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSCommandLineTool.h; sourceTree = "<group>"; };
+		C1A000000000000000000004 /* RSCommandLineTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSCommandLineTool.m; sourceTree = "<group>"; };
+		C1A000000000000000000005 /* GraphinkCLI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphinkCLI.h; sourceTree = "<group>"; };
+		C1A000000000000000000006 /* GraphinkCLI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphinkCLI.m; sourceTree = "<group>"; };
+		C1A000000000000000000007 /* GraphinkCreate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphinkCreate.m; sourceTree = "<group>"; };
+		C1A000000000000000000008 /* GraphinkRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphinkRender.m; sourceTree = "<group>"; };
+		C1A000000000000000000009 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C1A00000000000000000000A /* make-info-plist.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = make-info-plist.py; sourceTree = "<group>"; };
+		C1A00000000000000000000B /* graphink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = graphink; sourceTree = BUILT_PRODUCTS_DIR; };
         E40000000000000000000002 /* RSPageGeometry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSPageGeometry.m; sourceTree = "<group>"; };
         E40000000000000000000003 /* RSPageGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSPageGeometry.h; sourceTree = "<group>"; };
         D50000000000000000000002 /* RSStylePresets.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSStylePresets.m; sourceTree = "<group>"; };
@@ -461,6 +515,21 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C1A000000000000000000027 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1A000000000000000000016 /* Cocoa.framework in Frameworks */,
+				C1A000000000000000000017 /* QuartzCore.framework in Frameworks */,
+				C1A000000000000000000018 /* GraphSketcherModel.framework in Frameworks */,
+				C1A000000000000000000019 /* OmniBase.framework in Frameworks */,
+				C1A00000000000000000001A /* OmniFoundation.framework in Frameworks */,
+				C1A00000000000000000001B /* OmniAppKit.framework in Frameworks */,
+				C1A00000000000000000001C /* OmniQuartz.framework in Frameworks */,
+				C1A00000000000000000001D /* OmniUnzip.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC330486D014006FF6A4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -483,6 +552,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C1A00000000000000000001E /* CLI */ = {
+			isa = PBXGroup;
+			children = (
+				C1A000000000000000000005 /* GraphinkCLI.h */,
+				C1A000000000000000000006 /* GraphinkCLI.m */,
+				C1A000000000000000000007 /* GraphinkCreate.m */,
+				C1A000000000000000000008 /* GraphinkRender.m */,
+				C1A000000000000000000009 /* main.m */,
+				C1A00000000000000000000A /* make-info-plist.py */,
+			);
+			path = CLI;
+			sourceTree = "<group>";
+		};
 		0038F1220F61ABB700911329 /* Custom Interface Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -804,6 +886,7 @@
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				C1A00000000000000000000B /* graphink */,
 				8D15AC370486D014006FF6A4 /* Graphink.app */,
 			);
 			name = Products;
@@ -826,6 +909,11 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C1A000000000000000000001 /* RSGraphExport.h */,
+				C1A000000000000000000002 /* RSGraphExport.m */,
+				C1A000000000000000000003 /* RSCommandLineTool.h */,
+				C1A000000000000000000004 /* RSCommandLineTool.m */,
+				C1A00000000000000000001E /* CLI */,
 				00AD9B3B0A599E8C00C1434A /* AppController.h */,
 				00AD9B3C0A599E8C00C1434A /* AppController.m */,
 				A10000000000000000000002 /* RSAboutPanelController.m */,
@@ -935,6 +1023,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C1A000000000000000000022 /* graphink */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C1A000000000000000000028 /* Build configuration list for PBXNativeTarget "graphink" */;
+			buildPhases = (
+				C1A000000000000000000025 /* Make Info.plist */,
+				C1A000000000000000000026 /* Sources */,
+				C1A000000000000000000027 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C1A000000000000000000024 /* PBXTargetDependency */,
+			);
+			name = graphink;
+			productName = graphink;
+			productReference = C1A00000000000000000000B /* graphink */;
+			productType = "com.apple.product-type.tool";
+		};
 		8D15AC270486D014006FF6A4 /* GraphSketcher */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "GraphSketcher" */;
@@ -945,10 +1051,12 @@
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
 				5F1A94271857AE4A009A1111 /* Copy Frameworks */,
+				C1A00000000000000000001F /* Copy Helpers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C1A000000000000000000020 /* PBXTargetDependency */,
 				5F1A93FF18579BA3009A1111 /* PBXTargetDependency */,
 			);
 			name = GraphSketcher;
@@ -993,6 +1101,7 @@
 			);
 			projectRoot = "";
 			targets = (
+				C1A000000000000000000022 /* graphink */,
 				8D15AC270486D014006FF6A4 /* GraphSketcher */,
 			);
 		};
@@ -1143,6 +1252,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		C1A000000000000000000025 /* Make Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Info.plist",
+				"$(SRCROOT)/CLI/make-info-plist.py",
+			);
+			name = "Make Info.plist";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/graphink-Info.plist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# The app's Info.plist minus everything but OmniFoundation's registrations (see the script).\nexec /usr/bin/python3 \"$SRCROOT/CLI/make-info-plist.py\" \"$SRCROOT/Info.plist\" \"$DERIVED_FILE_DIR/graphink-Info.plist\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4D16A75F1742C9AD00960CFB /* Copy Library Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1178,10 +1305,26 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C1A000000000000000000026 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1A00000000000000000000F /* RSGraphExport.m in Sources */,
+				C1A000000000000000000010 /* RSStylePresets.m in Sources */,
+				C1A000000000000000000011 /* RSPageGeometry.m in Sources */,
+				C1A000000000000000000012 /* GraphinkCLI.m in Sources */,
+				C1A000000000000000000013 /* GraphinkCreate.m in Sources */,
+				C1A000000000000000000014 /* GraphinkRender.m in Sources */,
+				C1A000000000000000000015 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC300486D014006FF6A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1A00000000000000000000C /* RSGraphExport.m in Sources */,
+				C1A00000000000000000000D /* RSCommandLineTool.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				D50000000000000000000001 /* RSStylePresets.m in Sources */,
 				E40000000000000000000001 /* RSPageGeometry.m in Sources */,
@@ -1222,6 +1365,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		C1A000000000000000000020 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C1A000000000000000000022 /* graphink */;
+			targetProxy = C1A000000000000000000021 /* PBXContainerItemProxy */;
+		};
+		C1A000000000000000000024 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GraphSketcherModel;
+			targetProxy = C1A000000000000000000023 /* PBXContainerItemProxy */;
+		};
 		5F1A93FF18579BA3009A1111 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GraphSketcherModel;
@@ -1346,6 +1499,48 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C1A000000000000000000029 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00BB84180EA7C66800A9D91D /* Omni-Tool-Debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)";
+				INFOPLIST_FILE = "$(DERIVED_FILE_DIR)/graphink-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					ImageIO,
+					"-framework",
+					CoreText,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.diegomarino.Graphink.cli;
+				PRODUCT_NAME = graphink;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		C1A00000000000000000002A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00BB84190EA7C66800A9D91D /* Omni-Tool-Release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)";
+				INFOPLIST_FILE = "$(DERIVED_FILE_DIR)/graphink-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					ImageIO,
+					"-framework",
+					CoreText,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.diegomarino.Graphink.cli;
+				PRODUCT_NAME = graphink;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 00BB84050EA7C66800A9D91D /* Omni-Application-Debug.xcconfig */;
@@ -1410,6 +1605,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C1A000000000000000000028 /* Build configuration list for PBXNativeTarget "graphink" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1A000000000000000000029 /* Debug */,
+				C1A00000000000000000002A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "GraphSketcher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

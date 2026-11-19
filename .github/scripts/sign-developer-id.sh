@@ -6,6 +6,8 @@
 #
 #   sign-developer-id.sh sign APP        re-sign frameworks and app (Hardened Runtime)
 #   sign-developer-id.sh notarize DMG    sign the DMG, notarize, staple, assess
+#   sign-developer-id.sh notarize-zip ZIP  notarize graphink-cli.zip (a zip cannot be stapled;
+#                                        Gatekeeper finds the ticket online)
 #
 # Required environment (repository or `release` environment secrets):
 #   DEVELOPER_ID_P12_BASE64     base64 of the Developer ID Application .p12
@@ -60,27 +62,52 @@ sign_app() {
     while IFS= read -r -d '' nested; do
       codesign --force --timestamp --options runtime --sign "$id" "$nested"
     done
+  # The command-line tool: no entitlements (never sandboxed), its own identifier.
+  codesign --force --timestamp --options runtime --identifier com.diegomarino.Graphink.cli \
+    --sign "$id" "$app/Contents/Helpers/graphink"
   codesign --force --timestamp --options runtime --entitlements "$entitlements" --sign "$id" "$app"
   codesign --verify --deep --strict "$app"
 }
 
-notarize_dmg() {
-  local dmg=$1 id key="$RUNNER_TEMP/notary-key.p8"
+# Submit FILE to the notary service and wait. Only status Accepted passes: --wait returns once the
+# submission is processed, and a zip cannot be stapled, so this is the zip's only check. The API key
+# is written to RUNNER_TEMP (persistent on a self-hosted runner) and removed on any exit.
+submit() {
+  local file=$1 key="$RUNNER_TEMP/notary-key.p8" result status
   : "${NOTARY_KEY_P8_BASE64:?}" "${NOTARY_KEY_ID:?}" "${NOTARY_ISSUER_ID:?}"
+  trap 'rm -f "$RUNNER_TEMP/notary-key.p8"' EXIT
+  ( umask 077 && base64 --decode <<<"$NOTARY_KEY_P8_BASE64" > "$key" )
+  result=$(xcrun notarytool submit "$file" --key "$key" --key-id "$NOTARY_KEY_ID" \
+    --issuer "$NOTARY_ISSUER_ID" --wait --timeout 30m --output-format json) || {
+    echo "$result"; echo "::error::xcrun notarytool submit $file failed" >&2; exit 1
+  }
+  rm -f "$key"
+  echo "$result"
+  status=$(python3 -c 'import json, sys; print(json.loads(sys.stdin.read()).get("status", ""))' <<<"$result")
+  if [[ "$status" != Accepted ]]; then
+    echo "::error::Notarization of $file ended with status '$status', not Accepted (xcrun notarytool log ID for details)" >&2
+    exit 1
+  fi
+}
+
+notarize_dmg() {
+  local dmg=$1 id
   setup_keychain
   id=$(identity)
   codesign --force --timestamp --sign "$id" "$dmg"
-  base64 --decode <<<"$NOTARY_KEY_P8_BASE64" > "$key"
-  xcrun notarytool submit "$dmg" --key "$key" --key-id "$NOTARY_KEY_ID" \
-    --issuer "$NOTARY_ISSUER_ID" --wait --timeout 30m
-  rm -f "$key"
+  submit "$dmg"
   xcrun stapler staple "$dmg"
   xcrun stapler validate "$dmg"
   spctl --assess --type open --context context:primary-signature -vv "$dmg"
 }
 
+notarize_zip() {
+  submit "$1"
+}
+
 case "${1:-}" in
   sign) sign_app "${2:?app}" ;;
   notarize) notarize_dmg "${2:?dmg}" ;;
-  *) echo "usage: sign-developer-id.sh sign APP | notarize DMG" >&2; exit 2 ;;
+  notarize-zip) notarize_zip "${2:?zip}" ;;
+  *) echo "usage: sign-developer-id.sh sign APP | notarize DMG | notarize-zip ZIP" >&2; exit 2 ;;
 esac

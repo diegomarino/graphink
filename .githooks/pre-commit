@@ -13,7 +13,7 @@ staged() { git diff --cached --name-only -z --diff-filter=ACMR -- "$@"; }
 py=() sh=() workflows=()
 while IFS= read -r -d '' f; do py+=("$f"); done < <(staged '*.py')
 # The same scripts as checks-fast.sh.
-while IFS= read -r -d '' f; do sh+=("$f"); done < <(staged '.github/scripts/*.sh' 'scripts/*.sh' 'Checks/*.sh' '.githooks/*')
+while IFS= read -r -d '' f; do sh+=("$f"); done < <(staged '.github/scripts/*.sh' 'scripts/*.sh' 'Checks/*.sh' 'tools/*.sh' '.githooks/*')
 while IFS= read -r -d '' f; do workflows+=("$f"); done < <(staged '.github/workflows/*.yml' '.github/workflows/*.yaml')
 (( ${#py[@]} + ${#sh[@]} + ${#workflows[@]} )) || exit 0
 

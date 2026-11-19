@@ -18,6 +18,10 @@ whats_new=$(python3 scripts/release/notes.py version-notes --version "$version")
   echo "**Download:** \`$APP_NAME.dmg\` below. Open it and drag $APP_NAME to Applications."
   echo "Check the download with \`shasum -a 256 -c $APP_NAME.dmg.sha256\` in the folder holding both files."
   echo
+  echo "**Command line:** the \`graphink\` tool is inside the app (Graphink > Install Command-Line Tool…)."
+  echo "\`graphink-cli.zip\` holds the same tool on its own, for scripts and machines without the app:"
+  echo "unzip it and run \`graphink-cli/Contents/Helpers/graphink\` (check it with \`graphink-cli.zip.sha256\`)."
+  echo
   if [[ "$SIGNING_MODE" == developer-id ]]; then
     echo "This build is signed with a Developer ID and notarized by Apple."
   else
@@ -34,6 +38,9 @@ first launch with a message that it "cannot verify" the app. To open it:
    is shown, and click **Open Anyway**.
 4. Confirm with **Open Anyway** again and your password. Later launches open
    normally.
+
+The \`graphink\` command from graphink-cli.zip is blocked the same way the first
+time it runs; allow it in the same place.
 EOF
   fi
   echo

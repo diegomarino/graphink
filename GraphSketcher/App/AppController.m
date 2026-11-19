@@ -20,6 +20,7 @@
 #import "RSSelector.h"
 #import "RSGraphView.h"
 #import "RSNewFromCatalog.h"
+#import "RSCommandLineTool.h"
 #import <OmniAppKit/OAApplication.h>
 #import <OmniAppKit/OAWebPageViewer.h>
 #import <dlfcn.h>
@@ -678,6 +679,14 @@ static void RSHandleSystemFrameworkAssertion(NSString *location, NSString *descr
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:productPageURLString]];
 }
 
+- (IBAction)showCommandLineToolInstaller:(id)sender;
+{
+    static RSCommandLineToolWindowController *controller = nil;
+    if (!controller)
+        controller = [[RSCommandLineToolWindowController alloc] initWithBundle:[NSBundle mainBundle]];
+    [controller showWindow:sender];
+}
+
 - (IBAction)openKeyboardShortcuts:(id)sender;
 {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"GraphSketcher Keyboard Shortcuts" ofType:@"pdf"];
@@ -777,7 +786,7 @@ static void RSHandleSystemFrameworkAssertion(NSString *location, NSString *descr
 	return YES;
     }
     // seems like there should be a better way, but this does the trick without requiring a major re-write.
-    else if ( action == @selector(showMessageOfTheDay:) || action == @selector(sendFeedback:) || action == @selector(openProductPageInBrowser:) || action == @selector(showAboutPanel:) || action == @selector(showPreferencesPanel:) || action == @selector(showGettingStarted:) || action == @selector(openKeyboardShortcuts:) )
+    else if ( action == @selector(showMessageOfTheDay:) || action == @selector(sendFeedback:) || action == @selector(openProductPageInBrowser:) || action == @selector(showAboutPanel:) || action == @selector(showPreferencesPanel:) || action == @selector(showGettingStarted:) || action == @selector(openKeyboardShortcuts:) || action == @selector(showCommandLineToolInstaller:) )
     {
 	return YES;
     }

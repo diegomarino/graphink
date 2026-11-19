@@ -12,6 +12,7 @@ Draw a graph without any data, or paste a table and plot it. Export sharp PDF an
   <a href="https://github.com/diegomarino/graphink/releases/latest">Download</a> ·
   <a href="#features">Features</a> ·
   <a href="#examples">Examples</a> ·
+  <a href="#command-line-and-agents">Command line</a> ·
   <a href="#build-from-source">Build</a>
 </p>
 
@@ -32,6 +33,8 @@ Draw a graph without any data, or paste a table and plot it. Export sharp PDF an
   and the graph never moves when you resize the window.
 - **Find.** Search every label with the standard find bar (⌘F, ⌘G).
 - **Export.** PDF, or PNG, JPEG and TIFF at 72 to 300 DPI, with the exact pixel size shown first.
+- **Command line and agents.** The `graphink` tool exports documents and builds them from a
+  short JSON spec.
 - **An open format.** `.graphink` documents are a small, documented
   [OPC package](docs/format/opc-v1.md). GraphSketcher's `.ograph` files still open and save.
 
@@ -45,6 +48,21 @@ Every image below is a document from File ▸ New From, exported by Graphink.
 | **Income and substitution effects**, a microeconomics lesson | **Third-degree price discrimination**, a microeconomics lesson |
 | ![A cubic function plotted on a grid](Examples/Templates/Previews/function-plot.png) | ![Income tax concentration in Spain, 2024](Examples/Data/Previews/irpf-concentration-2024.png) |
 | **Function plot**, a template | **Income tax concentration in Spain**, a chart from official data |
+
+## Command line and agents
+
+The `graphink` command creates and exports documents without opening the app:
+
+```bash
+graphink render lesson.graphink -o lesson.pdf          # or .png/.jpg/.tiff, --scale 2, --dpi 300
+graphink create plot.json -o plot.graphink             # a JSON spec, built with Graphink's own model
+```
+
+It ships inside the app: choose **Graphink ▸ Install Command-Line Tool…** and run the command it
+shows to put `graphink` on your `PATH`. Every release also attaches `graphink-cli.zip`, the same
+tool on its own. Details: [tools/cli/README.md](tools/cli/README.md).
+
+It needs a Mac: the tool draws with macOS's own frameworks.
 
 ## Download
 

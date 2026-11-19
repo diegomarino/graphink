@@ -76,7 +76,7 @@ the ones on `PATH`.
   lambdas, imports after the `sys.path` setup; nor `zip(strict=)` (`B905`) and
   `raise SystemExit` without `from` (`B904`). Do not run `ruff format`.
 - **shellcheck** (`-x -P SCRIPTDIR`, default severity) on `.github/scripts/*.sh`,
-  `scripts/**/*.sh`, `Checks/*.sh` and `.githooks/*`. Disable a rule only inline, on the
+  `scripts/**/*.sh`, `Checks/*.sh`, `tools/**/*.sh` and `.githooks/*`. Disable a rule only inline, on the
   command it applies to, with the reason after it:
   `# shellcheck disable=SC2054 # -Wl,-rpath,DIR is one linker argument`.
 
@@ -102,6 +102,7 @@ changes. `git commit --no-verify` skips the hook once; CI still runs everything.
 | `docs/format/check-opc.py` (fixture, `--self-check`) | Python, xmllint | fast |
 | `Examples/Tools/manifest.py` (check mode, once present) | Python | fast |
 | `Examples/Tools/sync-new-from.py` (check mode: bundled New From copies equal the catalog) | Python | fast |
+| `scripts/release/tests` (release notes and their groups, `cli_zip.py`, `casks.py`, versions) | Python | fast |
 | `Checks/check-documents.sh --self-check` | Bash | toolchain |
 | `Checks/Analyzer/dependencies/check-packaging.py` | git, OmniGroup clone, `/private/tmp` | toolchain |
 | `Checks/Analyzer/dependencies/check-regressions.py` | clang, patched OmniGroup | toolchain |
@@ -114,11 +115,13 @@ changes. `git commit --no-verify` skips the hook once; CI still runs everything.
 | `Checks/check-width-defaults.py`, `check-about-links.py` | Debug products | products |
 | `UI/check-style-defaults.py`, `UI/StylePresets/check-presets.py`, `check-creation-defaults.py`, `check-package-documents.py` | Debug products | products |
 | `Checks/check-document-types.py`, `check-new-from.py`, `check-legacy-roundtrips.py` | Debug products | products |
+| `tools/cli/check-cli.py` (the `graphink` helper in the app and in `graphink-cli.zip`, packaged by the check: signature and layout, every example and historical sample rendered read-only, PDFs equal to the previews, the example specs created and validated, refusals) | Debug products, xmllint | products |
 | `Checks/check-fixture-bundles.py` (no check fixture app can claim Graphink documents or ship with the products) | Debug products, the checks' evidence, read-only Launch Services database | products |
-| `Checks/check-sidebar.py`, `Checks/check-viewport.py`, `Checks/check-page-size.py`, `Checks/check-zoom-accessibility.py`, `Checks/check-assertion-policy.py`, `Checks/check-key-loop.py`, `Checks/check-snap-distance.py`, `Checks/check-native-qualification.py`, `Checks/check-find.py` | Debug products plus an Aqua session (offscreen `NSWindow`s; `check-assertion-policy.py` also runs an `NSApplication` event loop and accessibility requests; `check-native-qualification.py` emulates the key window and never shows the shared font and color panels; `check-find.py` uses the shared find pasteboard and restores it) | opt-in: `GUI_CHECKS=1` |
+| `Checks/check-sidebar.py`, `Checks/check-viewport.py`, `Checks/check-page-size.py`, `Checks/check-zoom-accessibility.py`, `Checks/check-assertion-policy.py`, `Checks/check-key-loop.py`, `Checks/check-snap-distance.py`, `Checks/check-native-qualification.py`, `Checks/check-find.py`, `Checks/check-cli-app.py` (File ▸ Export's data equals `graphink render`'s for every example; the Install Command-Line Tool… window), `Checks/check-export-paths.py` (with everything selected, the graph view's PNG export, its PDF, Copy as Image's PDF and the saved preview equal `graphink render`'s) | Debug products plus an Aqua session (offscreen `NSWindow`s; `check-assertion-policy.py` also runs an `NSApplication` event loop and accessibility requests; `check-native-qualification.py` emulates the key window and never shows the shared font and color panels; `check-find.py` uses the shared find pasteboard and restores it) | opt-in: `GUI_CHECKS=1` |
 | `UI/Graphink/Cursors/check-cursors.py`, `UI/Design/*`, `UI/LogoStudy/*` | Pillow, poppler (asset pipelines) | not in CI |
 | `UI/StylePresets/check-archives.py` | a separately compiled fixture and a native package | not in CI |
 | `Examples/Microeconomics/validate.py` | rendered PDFs from a generate run | not in CI |
+| `Checks/check-export-paths.py --base-root SRC --base-products P --base-objects LIST` (the same outputs compared with a build of another revision, e.g. main before a change to the drawing code; the references are made at check time) | Debug products of both revisions, an Aqua session | not in CI: needs a second build |
 
 "Windowless" means no `NSWindow` is created. Several of those checks still
 call `+[NSApplication sharedApplication]`. Hosted macOS runners provide a
@@ -237,9 +240,11 @@ Release notes are written for users and come from PR titles. PRs are
 
 | PR title type | Release notes |
 |---|---|
-| `feat:` | **Added** |
-| `fix:` | **Fixed** |
-| `perf:` | **Improved** |
+| `feat(cli):`, `fix(cli):`, `perf(cli):` | **Command line** (the `graphink` tool; also in the app's notes) |
+| `feat(skill):`, `fix(skill):`, `perf(skill):` | **Agent skill** (`skills/graphink`; GitHub release only) |
+| other `feat:` | **Added** |
+| other `fix:` | **Fixed** |
+| other `perf:` | **Improved** |
 | `docs`, `test`, `ci`, `build`, `refactor`, `chore`, `style`, `revert` | hidden, unless the commit body has a `Release-Note: notable` line (then **Improved**) |
 
 **A `feat`, `fix` or `perf` title appears in the release notes verbatim**, with
@@ -248,16 +253,20 @@ them, not how. Good: `feat: export PNG and JPEG at 72, 144, 150 or 300 DPI`,
 `fix: keep the default line width when you resize a selected line`. Not:
 `fix: guard RSUnknown in setWidth`. They are for product changes only: a fix to
 CI, scripts or checks is `chore(ci): ...` (see [CONTRIBUTING.md](../CONTRIBUTING.md)). Scopes are optional
-(`feat(export): ...`) and are not shown. Start the subject in lower case, as commitlint requires.
+and not shown (`feat(export): ...`), except `cli` and `skill`, which pick the group above. Spell them
+exactly so; any other type with them (`test(cli):`, `docs(skill):`) stays hidden. Start the subject
+in lower case, as commitlint requires.
 Commits that are not Conventional Commits (the inherited GraphSketcher history)
 are skipped.
 
 A version's notes are `release-notes/<version>.md` when that file exists
 (hand-written; it replaces the generated notes), otherwise git-cliff's entries
 for the commits since the previous tag. The file uses the same `### Added`,
-`### Fixed` and `### Improved` groups, may start with a short paragraph, and
+`### Fixed`, `### Improved`, `### Command line` and `### Agent skill` groups
+(`notes.py` refuses others), may start with a short paragraph, and
 blocks a release while it contains the word `DRAFT`. The same notes are used
-for the GitHub release body and inside the app: the build phase
+for the GitHub release body and inside the app, which leaves out Agent skill (the skill does not
+ship in the app): the build phase
 "Generate Release Notes" runs
 [`scripts/release/notes.py html`](../scripts/release/notes.py) and bundles the
 notes of every **published** version reachable from `HEAD` (tags only, never
@@ -268,8 +277,10 @@ from Help > Release Notes. There is no committed changelog file.
 ## Releases
 
 **Artifact contract** (download links rely on it): every release attaches
-a Release-configuration **`Graphink.dmg`** plus `Graphink.dmg.sha256` and
-`BUILD-INFO.txt`. Releases are normal (not draft, not prerelease) and marked
+a Release-configuration **`Graphink.dmg`** plus `Graphink.dmg.sha256`,
+**`graphink-cli.zip`** plus `graphink-cli.zip.sha256` (the command-line tool
+from the same app: `graphink-cli/Contents/Helpers/graphink`, the frameworks it
+links, the style fonts and license notices) and `BUILD-INFO.txt`. Releases are normal (not draft, not prerelease) and marked
 latest, so `https://github.com/<REPO_SLUG>/releases/latest/download/Graphink.dmg`
 always resolves to the newest one. Debug is never packaged.
 
@@ -305,13 +316,37 @@ annotated tag on a clean `main` that matches `origin/main` and prints the
      embeds dates and UUIDs;
    - verifies the image, mounts it read-only without Finder, re-runs every app
      check on the mounted copy, `diff`s it against the build and checks the
-     symlink, then writes `Graphink.dmg.sha256` and `BUILD-INFO.txt`.
+     symlink, then writes `Graphink.dmg.sha256` and `BUILD-INFO.txt`;
+   - also refuses a `Contents/Helpers/graphink` that is missing, sandboxed or
+     carries a development entitlement.
+   [`package-cli.sh`](../.github/scripts/package-cli.sh) then copies the tool,
+   its frameworks and fonts from the checked app into `graphink-cli.zip` (no
+   re-signing; resource forks and extended attributes left out) and runs it once.
+   The build job downloads the previous release's zip and compares the two by
+   content ([`cli_zip.py`](../scripts/release/cli_zip.py): UUIDs, version numbers
+   and signature hashes left out; each binary's signing identity, Team ID, flags
+   such as Hardened Runtime, requirements and entitlements kept), writing
+   `changed` or `unchanged` to `CLI-CHANGE.txt` in the artifact. That file is for
+   information only; a comparison that fails fails the build, before publishing.
    The release body comes from [`release-notes.sh`](../.github/scripts/release-notes.sh):
    the version's notes ("What's new"), the download and install notes, and
    `BUILD-INFO.txt`. The app inside the DMG bundles the same notes.
 3. Job **publish** waits for approval on the `release` environment (required
-   reviewers). That approval is the manual gate. It then verifies the checksum
+   reviewers). That approval is the manual gate. It then verifies the checksums
    and runs `gh release create --latest`, which publishes the release.
+4. Job **homebrew** (off for now) updates
+   [diegomarino/homebrew-tap](https://github.com/diegomarino/homebrew-tap):
+   `Casks/graphink-app.rb` gets the new version and DMG checksum every time;
+   `Casks/graphink-cli.rb` only when the new zip differs by content from the
+   release that cask points to now (its `version`; not necessarily the previous
+   release, since the job may have been off or failed), so `brew upgrade` offers
+   the tool only when it really changed
+   ([`casks.py`](../scripts/release/casks.py)). A version without a
+   `graphink-cli.zip` counts as changed. To turn it on: create the
+   `homebrew-tap` environment (restricted to `v*` tags) with the secret
+   `HOMEBREW_TAP_TOKEN`, a fine-grained token with *Contents: read and write*
+   on `diegomarino/homebrew-tap` only, then set the repository variable
+   `HOMEBREW_TAP_UPDATE` to `true`.
 
 A manual run of `release.yml` on an existing tag ref
 (`gh workflow run release.yml --ref v2026.11.0`) rebuilds it. It publishes only
@@ -335,10 +370,12 @@ command unchanged.
 **`developer-id` (later, ready but never exercised).**
 [`sign-developer-id.sh`](../.github/scripts/sign-developer-id.sh) re-signs every
 nested framework/bundle and then the app with the Developer ID identity,
-`--options runtime` (Hardened Runtime back on) and `--timestamp`. It keeps the
-app's own Release entitlements and strips the development ones. It then signs
-the DMG, notarizes it with `notarytool --wait`, staples it, and checks it with
-`spctl`. `RELEASE_DISTRIBUTION_SETTINGS` is not applied in this mode. To switch:
+`--options runtime` (Hardened Runtime back on) and `--timestamp`, signs
+`Contents/Helpers/graphink` as `com.diegomarino.Graphink.cli` without
+entitlements, then the app. It keeps the app's own Release entitlements and
+strips the development ones. It then signs the DMG, notarizes it with
+`notarytool --wait`, staples it, and checks it with `spctl`; `graphink-cli.zip`
+is notarized too (a zip cannot be stapled; Gatekeeper looks the ticket up). `RELEASE_DISTRIBUTION_SETTINGS` is not applied in this mode. To switch:
 1. Join the Apple Developer Program; create a *Developer ID Application*
    certificate and an App Store Connect API key (Developer role).
 2. Add secrets to the `release-build` environment (restrict it to `v*` tags):

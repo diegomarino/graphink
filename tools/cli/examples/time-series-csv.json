@@ -1,0 +1,16 @@
+{
+  "graphink": 1,
+  "$comment": "Illustrative monthly figures, not real data. The CSV keeps its header row; columns are picked by name.",
+  "title": "Visitors per Month",
+  "subtitle": "Illustrative data, 2025",
+  "x": {"title": "Month (2025)", "min": 0, "max": 12, "step": 1, "grid": true},
+  "y": {"title": "Visitors (thousands)", "min": 0, "max": 60, "step": 10, "grid": true},
+  "objects": [
+    {"type": "series", "connect": "straight", "marker": "circle", "color": "blue",
+     "columns": ["month", "visitors"],
+     "csv": "month,visitors,notes\n1,21.4,\n2,23.0,\n3,27.9,\n4,31.2,\n5,35.6,\n6,44.1,summer\n7,52.3,summer\n8,49.8,summer\n9,38.0,\n10,33.5,\n11,26.7,\n12,30.9,holidays",
+     "label": {"text": "Visitors", "position": 0.2}},
+    {"type": "line", "points": [[6.5, 0], [6.5, 56]], "color": "guide", "width": 1, "dash": "dashed"},
+    {"type": "label", "text": "Peak season", "at": [6.65, 55], "size": 13, "bold": true}
+  ]
+}

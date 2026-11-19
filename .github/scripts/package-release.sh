@@ -31,6 +31,15 @@ check_app() {
   done
   grep -q com.apple.security.app-sandbox <<<"$entitlements" || {
     echo "::error::$candidate lost the app-sandbox entitlement" >&2; return 1; }
+  # The command-line tool runs from Terminal on the user's files: never sandboxed, never debuggable.
+  local helper="$candidate/Contents/Helpers/graphink" helper_entitlements
+  test -x "$helper" || { echo "::error::$candidate has no Contents/Helpers/graphink" >&2; return 1; }
+  helper_entitlements=$(codesign -d --entitlements - --xml "$helper" 2>/dev/null || true)
+  for forbidden in com.apple.security.app-sandbox com.apple.security.cs.disable-library-validation com.apple.security.get-task-allow; do
+    if grep -q "$forbidden" <<<"$helper_entitlements"; then
+      echo "::error::$helper carries $forbidden" >&2; return 1
+    fi
+  done
   # An ad-hoc app with Hardened Runtime enforces library validation; dyld then
   # rejects its ad-hoc embedded frameworks ("different Team IDs") at launch.
   signature=$(codesign -dv "$candidate" 2>&1)

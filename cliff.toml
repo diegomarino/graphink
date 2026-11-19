@@ -1,9 +1,11 @@
 # git-cliff configuration (https://git-cliff.org), pinned in CI to git-cliff 2.14.2.
-# Produces only the Added / Fixed / Improved groups of the next release; scripts/release/
-# changelog.py merges them with the hand-written "Unreleased" notes into CHANGELOG.md.
+# Produces the Added / Fixed / Improved / Command line / Agent skill groups of a release;
+# scripts/release/notes.py reads them (and shows all but Agent skill in the app).
 #
 # Commit subjects are Conventional Commits (squash merges use the PR title):
-#   feat -> Added, fix -> Fixed, perf -> Improved (user-facing; write them for users)
+#   feat(cli), fix(cli), perf(cli) -> Command line (the graphink tool)
+#   feat(skill), fix(skill), perf(skill) -> Agent skill (skills/graphink)
+#   other feat -> Added, fix -> Fixed, perf -> Improved (user-facing; write them for users)
 #   docs, test, ci, build, refactor, chore, style, revert -> hidden, unless the commit has a
 #   "Release-Note: notable" footer, which lists it under Improved.
 # Commits that are not conventional (the inherited GraphSketcher history) are skipped.
@@ -32,6 +34,9 @@ tag_pattern = "^v20[0-9]{2}\\.([1-9]|1[0-2])\\.(0|[1-9][0-9]*)$"
 topo_order = false
 sort_commits = "oldest"
 commit_parsers = [
+  # Scopes first: the first matching parser wins. Other types with these scopes stay hidden.
+  { message = "^(feat|fix|perf)\\(cli\\)", group = "<!-- 3 -->Command line" },
+  { message = "^(feat|fix|perf)\\(skill\\)", group = "<!-- 4 -->Agent skill" },
   { message = "^feat", group = "<!-- 0 -->Added" },
   { message = "^fix", group = "<!-- 1 -->Fixed" },
   { message = "^perf", group = "<!-- 2 -->Improved" },

@@ -31,7 +31,9 @@ sys.path.insert(0, str(HERE))
 import version as versions  # noqa: E402
 
 ROOT = HERE.parents[1]
-GROUPS = ('Added', 'Fixed', 'Improved')
+GROUPS = ('Added', 'Fixed', 'Improved', 'Command line', 'Agent skill')
+# Help > Release Notes: the command-line tool ships inside the app; the agent skill does not.
+IN_APP_GROUPS = ('Added', 'Fixed', 'Improved', 'Command line')
 RELEASES_URL = 'https://github.com/diegomarino/graphink/releases'
 NOTHING_TO_RELEASE = 3
 
@@ -62,7 +64,7 @@ def parse(body, where):
                 raise NotesError(f'{where}: unknown group "### {group}" (use {", ".join(GROUPS)})')
         elif line.startswith('- '):
             if group is None:
-                raise NotesError(f'{where}: bullet outside Added/Fixed/Improved: {line!r}')
+                raise NotesError(f'{where}: bullet outside {"/".join(GROUPS)}: {line!r}')
             groups[group].append(line[2:].strip())
         elif line.startswith('  ') and line.strip() and group and groups[group]:
             groups[group][-1] += ' ' + line.strip()
@@ -134,7 +136,7 @@ def render(template, published, cliff=git_cliff, root=ROOT, warn=print):
             other, groups = [], {}
             parts.append(f'<p><a href="{RELEASES_URL}/tag/v{html.escape(version)}">Read the notes for this version on GitHub.</a></p>')
         parts += [f'<p>{inline(line.lstrip("> ").strip())}</p>' for line in other]
-        for name in GROUPS:
+        for name in IN_APP_GROUPS:
             if groups.get(name):
                 parts.append(f'<h3>{name}</h3>\n<ul>\n' + '\n'.join(f'<li>{inline(i)}</li>' for i in groups[name]) + '\n</ul>')
         parts.append('</section>')
@@ -179,7 +181,7 @@ def main(argv=None):
             if source == 'override' and is_draft(text):
                 raise NotesError(f'release-notes/{args.version}.md is still marked DRAFT')
             if not has_entries(text, args.version):
-                raise NotesError(f'{args.version} has no Added/Fixed/Improved notes')
+                raise NotesError(f'{args.version} has no {"/".join(GROUPS)} notes')
             print(text)
     except (NotesError, OSError, subprocess.CalledProcessError) as error:
         print(f'error: {error}', file=sys.stderr)
