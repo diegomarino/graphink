@@ -4,7 +4,8 @@ name: Release build
 # (release-tag.yml) or locally with scripts/release.sh; the version comes from the tag, never
 # from a committed file. This builds and checks the exact tagged source with
 # MARKETING_VERSION=YYYY.M.n injected, packages the Release app as Graphink.dmg plus
-# Graphink.dmg.sha256, and writes the notes (release-notes/<version>.md or git-cliff). Publishing
+# Graphink.dmg.sha256 and its command-line tool as graphink-cli.zip plus graphink-cli.zip.sha256
+# (the same signed binary and frameworks, in the app's layout), and writes the notes (release-notes/<version>.md or git-cliff). Publishing
 # is a separate job gated by the `release` environment (required reviewers): after approval it
 # creates a normal (not draft, not prerelease) Release marked latest, so
 # /releases/latest/download/Graphink.dmg resolves. Debug is never packaged.
@@ -68,7 +69,7 @@ jobs:
           fi
           BUILD_NUMBER=$((GITHUB_RUN_NUMBER + BUILD_NUMBER_BASE)) \
             .github/scripts/build.sh Release "$RUNNER_TEMP/build"
-      - name: Package Graphink.dmg
+      - name: Package Graphink.dmg and graphink-cli.zip
         env:
           DEVELOPER_ID_P12_BASE64: ${{ secrets.DEVELOPER_ID_P12_BASE64 }}
           DEVELOPER_ID_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
@@ -77,6 +78,10 @@ jobs:
           NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
         run: |
           .github/scripts/package-release.sh "$RUNNER_TEMP/build" "$RUNNER_TEMP/dist" "$MARKETING_VERSION"
+          .github/scripts/package-cli.sh "$RUNNER_TEMP/build/Release/Products/Release/$APP_NAME.app" "$RUNNER_TEMP/dist"
+          if [ "$SIGNING_MODE" = developer-id ]; then
+            .github/scripts/sign-developer-id.sh notarize-zip "$RUNNER_TEMP/dist/graphink-cli.zip"
+          fi
           .github/scripts/release-notes.sh "$MARKETING_VERSION" "$RUNNER_TEMP/dist/BUILD-INFO.txt" "$RUNNER_TEMP/dist/RELEASE-NOTES.md"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -120,9 +125,9 @@ jobs:
         with:
           name: release-${{ env.TAG }}
           path: dist
-      - name: Verify Graphink.dmg checksum
+      - name: Verify Graphink.dmg and graphink-cli.zip checksums
         working-directory: dist
-        run: sha256sum -c Graphink.dmg.sha256
+        run: sha256sum -c Graphink.dmg.sha256 graphink-cli.zip.sha256
       - name: Publish release (not draft, not prerelease, latest)
         run: |
           set -euo pipefail
@@ -132,6 +137,7 @@ jobs:
           fi
           gh release create "$TAG" --verify-tag --latest \
             --title "Graphink ${TAG#v}" --notes-file dist/RELEASE-NOTES.md \
-            dist/Graphink.dmg dist/Graphink.dmg.sha256 dist/BUILD-INFO.txt
+            dist/Graphink.dmg dist/Graphink.dmg.sha256 dist/graphink-cli.zip dist/graphink-cli.zip.sha256 \
+            dist/BUILD-INFO.txt
           gh release view "$TAG" --json isDraft,isPrerelease,assets \
             --jq '"draft=\(.isDraft) prerelease=\(.isPrerelease) assets=\([.assets[].name] | join(","))"'

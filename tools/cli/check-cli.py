@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""Check the graphink command-line tool shipped in Graphink.app and in graphink-cli.zip.
+
+The tool under test is the one the build embeds, Graphink.app/Contents/Helpers/graphink, and the same
+binary from graphink-cli.zip (made by .github/scripts/package-cli.sh from that app and unpacked here).
+Both copies are checked as shipped: signed, identified as com.diegomarino.Graphink.cli, without
+entitlements, linking only system libraries and the frameworks beside it, and with an embedded
+Info.plist that claims no document types.
+
+With the app's helper: every example (Examples/**/*.graphink) and the 35 historical .ograph samples
+render to PNG and PDF read-only (every input is hashed before and after). Example renders are compared
+with their shipped previews: the PDF, rasterized the way Examples/Tools/GenerateCatalog.m made the
+previews, must match them pixel for pixel; the direct PNG (the app's raster export, drawn into a
+Generic RGB bitmap) may differ only by antialiasing and color rounding. The example specs are created,
+checked with docs/format/check-opc.py and the RELAX NG schema, reopened and rendered. Invalid specs and
+arguments must be refused with a message and write nothing.
+
+With the zip's copy: every PNG is byte-identical to the helper's and every created document has the
+same contents.xml.
+"""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import plistlib
+import re
+import struct
+import subprocess
+import sys
+import zipfile
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+SPECS = ROOT / 'tools/cli/examples'
+IDENTIFIER = 'com.diegomarino.Graphink.cli'
+CLAIMS = ('CFBundleDocumentTypes', 'UTExportedTypeDeclarations', 'UTImportedTypeDeclarations', 'CFBundleURLTypes', 'NSServices')
+NOISE = re.compile(r'^(\*\*\* Assertions are ON \*\*\*|    OBEnableExpensiveAssertions = NO|.* graphink\[\d+:\d+\] xml validates)$')
+
+
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def png_width(path):
+    data = Path(path).read_bytes()[:24]
+    assert data[:8] == b'\x89PNG\r\n\x1a\n' and data[12:16] == b'IHDR', f'{path}: not a PNG'
+    return int.from_bytes(data[16:20], 'big')
+
+
+def run(command, log, expect=0):
+    proc = subprocess.run([str(c) for c in command], capture_output=True, text=True, timeout=300)
+    Path(log).write_text('$ ' + ' '.join(map(str, command)) + '\n' + proc.stdout + proc.stderr)
+    if expect is not None and proc.returncode != expect:
+        raise AssertionError(f'Exit {proc.returncode} (expected {expect}); see {log}')
+    return proc
+
+
+def messages(proc):
+    """stderr without the Debug frameworks' banner and the writer's schema note."""
+    return [line for line in proc.stderr.splitlines() if line and not NOISE.match(line)]
+
+
+def embedded_info_plist(binary):
+    """The __TEXT,__info_plist section of a thin 64-bit Mach-O."""
+    data = Path(binary).read_bytes()
+    magic, _, _, _, ncmds, _, _, _ = struct.unpack_from('<8I', data, 0)
+    assert magic == 0xFEEDFACF, f'{binary}: not a thin 64-bit Mach-O'
+    offset = 32
+    for _ in range(ncmds):
+        cmd, size = struct.unpack_from('<2I', data, offset)
+        if cmd == 0x19 and data[offset + 8:offset + 24].rstrip(b'\0') == b'__TEXT':  # LC_SEGMENT_64
+            nsects = struct.unpack_from('<I', data, offset + 64)[0]
+            for index in range(nsects):
+                section = offset + 72 + index * 80
+                if data[section:section + 16].rstrip(b'\0') == b'__info_plist':
+                    length, start = struct.unpack_from('<QI', data, section + 40)
+                    return plistlib.loads(data[start:start + length])
+        offset += size
+    raise AssertionError(f'{binary}: no embedded Info.plist')
+
+
+def check_shipped(tool, version, log_dir, name):
+    """The tool as it ships: signature, identity, no entitlements, dependencies, embedded Info.plist."""
+    run(['codesign', '--verify', '--strict', tool], log_dir / f'{name}-codesign-verify.log')
+    signature = run(['codesign', '-dv', tool], log_dir / f'{name}-codesign.log').stderr
+    assert f'Identifier={IDENTIFIER}' in signature, f'{tool}: not signed as {IDENTIFIER}'
+    entitlements = run(['codesign', '-d', '--entitlements', '-', '--xml', tool], log_dir / f'{name}-entitlements.log').stdout
+    # Debug signatures carry Xcode's get-task-allow (package-release.sh refuses it in a release); never the sandbox,
+    # which would confine the tool to a container instead of the user's files.
+    assert 'com.apple.security.app-sandbox' not in entitlements, f'{tool}: is sandboxed'
+    frameworks = tool.parent.parent / 'Frameworks'
+    linked = run(['otool', '-L', tool], log_dir / f'{name}-otool.log').stdout.splitlines()[1:]
+    for line in linked:
+        path = line.strip().split(' (')[0]
+        match = re.match(r'@rpath/([^/]+\.framework)/', path)
+        assert path.startswith(('/System/Library/', '/usr/lib/')) or (match and (frameworks / match.group(1)).is_dir()), f'{tool}: links {path}'
+    rpaths = run(['otool', '-l', tool], log_dir / f'{name}-load-commands.log').stdout
+    assert re.findall(r'path (\S+) \(offset', rpaths) == ['@executable_path/../Frameworks'], f'{tool}: unexpected rpaths'
+    info = embedded_info_plist(tool)
+    assert info.get('CFBundleIdentifier') == IDENTIFIER and info.get('OFControllerClass') == 'GICController', f'{tool}: {info}'
+    assert not set(CLAIMS) & set(info), f'{tool}: Info.plist declares {set(CLAIMS) & set(info)}'
+    assert info.get('CFBundleShortVersionString') == version, f'{tool}: version {info.get("CFBundleShortVersionString")}, the app is {version}'
+    assert (tool.parent.parent / 'Resources/StyleFonts/Kalam-Bold.ttf').is_file(), f'{tool}: no style fonts beside it'
+    return {'linked': [line.strip().split(' (')[0] for line in linked], 'version': info['CFBundleShortVersionString']}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--products', required=True, type=Path, help='<build root>/Debug/Products/Debug from .github/scripts/build.sh')
+    parser.add_argument('--output', required=True, type=Path, help='a new evidence directory')
+    args = parser.parse_args()
+    out = args.output.absolute()
+    if out.exists():
+        parser.error('--output already exists')
+    app = args.products.absolute() / 'Graphink.app'
+    helper = app / 'Contents/Helpers/graphink'
+    if not helper.is_file():
+        parser.error(f'No {helper}; build the app first')
+    out.mkdir(parents=True)
+    logs = out / 'logs'
+    logs.mkdir()
+    report = {'passed': False}
+    version = plistlib.loads((app / 'Contents/Info.plist').read_bytes())['CFBundleShortVersionString']
+
+    historical = re.findall(r'^([a-f0-9]{64})  (GraphSketcher/.+\.ograph)$', (ROOT / 'Checks/historical-samples.sha256').read_text(), re.M)
+    assert len(historical) == 35, 'Expected 35 historical samples'
+    examples = sorted(p.relative_to(ROOT) for p in (ROOT / 'Examples').rglob('*.graphink'))
+    inputs = [Path(p) for _, p in historical] + examples
+    before = {str(p): digest(ROOT / p) for p in inputs}
+    assert all(before[p] == h for h, p in historical), 'Historical samples differ from Checks/historical-samples.sha256'
+
+    # 0. Both shipped copies: the app's helper and the unpacked zip.
+    run([ROOT / '.github/scripts/package-cli.sh', app, out / 'dist'], logs / 'package-cli.log')
+    run(['ditto', '-x', '-k', out / 'dist/graphink-cli.zip', out / 'unpacked'], logs / 'unzip.log')
+    unpacked = out / 'unpacked/graphink-cli/Contents/Helpers/graphink'
+    report['shipped'] = {'helper': check_shipped(helper, version, logs, 'helper'), 'zip': check_shipped(unpacked, version, logs, 'zip')}
+    assert digest(helper) == digest(unpacked), 'The zip holds a different binary than the app'
+
+    imagediff = out / 'ImageDiff'
+    run(['xcrun', 'clang', '-fobjc-arc', '-Wall', '-Werror', '-framework', 'Foundation', '-framework', 'CoreGraphics',
+         '-framework', 'ImageIO', HERE / 'ImageDiff.m', '-o', imagediff], logs / 'imagediff-build.log')
+
+    # 1. Command line: version, help and usage errors.
+    proc = run([helper, '--version'], logs / 'version.log')
+    assert proc.stdout.startswith(f'graphink {version} (build '), proc.stdout
+    for topic in ([], ['render'], ['create']):
+        assert 'Usage: graphink' in run([helper, 'help', *topic], logs / f'help{"-".join([""] + topic)}.log').stdout
+    for name, command in {'none': [], 'unknown': ['draw'], 'help-unknown': ['help', 'draw'], 'render-none': ['render'],
+                          'create-none': ['create'], 'create-type': ['create', SPECS / 'function-plot.json', '-o', out / 'x.png']}.items():
+        proc = run([helper, *command], logs / f'usage-{name}.log', expect=2)
+        assert 'Usage: graphink' in proc.stderr or 'graphink create:' in proc.stderr, f'{name}: {proc.stderr}'
+
+    # 2. Render every input to PNG and PDF; compare examples with their previews.
+    renders, comparisons, warnings = out / 'renders', {}, {}
+    renders.mkdir()
+    for path in inputs:
+        stem = re.sub(r'[^A-Za-z0-9.-]+', '_', str(path))
+        for ext in ('png', 'pdf'):
+            proc = run([helper, 'render', ROOT / path, '-o', renders / f'{stem}.{ext}'], logs / f'{stem}.{ext}.log')
+            # The production reader logs the known defects of some historical samples (docs/BUILDING.md, Known limits).
+            if path.suffix == '.ograph':
+                warnings[str(path)] = sorted({re.sub(r'^.*\] ', '', m) for m in messages(proc)} | set(warnings.get(str(path), [])))
+            else:
+                assert not messages(proc), f'{path}: unexpected messages rendering .{ext}: {messages(proc)}'
+        assert (renders / f'{stem}.pdf').read_bytes().startswith(b'%PDF-'), f'{path}: not a PDF'
+        preview = ROOT / path.parent / 'Previews' / (path.stem + '.png')
+        if preview.exists():
+            # Previews are 1x, except the welcome document's (2x): match the preview's own scale.
+            scale = png_width(preview) / png_width(renders / f'{stem}.png')
+            assert scale in (1, 2), f'{preview}: unexpected preview scale {scale}'
+            png = renders / f'{stem}.png'
+            if scale != 1:
+                png = renders / f'{stem}@{scale:g}x.png'
+                run([helper, 'render', ROOT / path, '-o', png, '--scale', f'{scale:g}'], logs / f'{stem}.png-scaled.log')
+            run([imagediff, '--rasterize-pdf', renders / f'{stem}.pdf', renders / f'{stem}.pdf.png', f'{scale:g}'], logs / f'{stem}.rasterize.log')
+            pdf_diff = json.loads(run([imagediff, renders / f'{stem}.pdf.png', preview, out / f'{stem}.pdf-diff.png'], logs / f'{stem}.pdf-diff.log').stdout)
+            png_diff = json.loads(run([imagediff, png, preview, out / f'{stem}.png-diff.png'], logs / f'{stem}.png-diff.log').stdout)
+            comparisons[str(path)] = {'pdfRaster': pdf_diff, 'png': png_diff}
+            assert pdf_diff['sameSize'] and png_diff['sameSize'], f'{path}: render size differs from its preview'
+            assert pdf_diff['differing'] == 0, f'{path}: the PDF differs from the shipped preview: {pdf_diff}'
+            # The PNG is drawn straight into a Generic RGB bitmap like the app's export, the previews through a PDF into
+            # DeviceRGB: colored edges and text antialias slightly differently. The exact PDF comparison above is the
+            # geometry check; this one bounds the raster path (a moved label or a cropped page fails it).
+            assert png_diff['over64'] <= png_diff['pixels'] // 1000 and png_diff['meanChannelDiff'] < 2, f'{path}: the PNG differs from the shipped preview beyond color space: {png_diff}'
+    report['rendered'] = [str(p) for p in inputs]
+    report['historicalReaderMessages'] = {p: m for p, m in warnings.items() if m}
+    report['previewComparisons'] = comparisons
+    # Examples/Tools/pre-credit holds the generator's pinned inputs, which have no previews.
+    previewed = [str(p) for p in examples if 'pre-credit' not in p.parts]
+    assert sorted(comparisons) == previewed, f'Expected a preview for every example: {sorted(set(previewed) - set(comparisons))}'
+
+    # 3. Resolution options: pixel size = round(points * dpi / 72).
+    sample = ROOT / 'Examples/Templates/function-plot.graphink'
+    for option, value, pixels in (('--scale', '2', '2160 × 1600'), ('--dpi', '300', '4500 × 3333'), ('--dpi', '150', '2250 × 1667')):
+        proc = run([helper, 'render', sample, '-o', renders / f'resolution{option}{value}.png', option, value], logs / f'resolution{option}{value}.log')
+        assert pixels in proc.stdout, f'{option} {value}: expected {pixels}: {proc.stdout}'
+    assert '1080 × 800 pt' in run([helper, 'render', sample, '--info'], logs / 'info.log').stdout
+
+    # 4. Create the example specs; check, reopen and render each.
+    created = out / 'created'
+    created.mkdir()
+    report['created'] = {}
+    specs = sorted(SPECS.glob('*.json'))
+    assert len(specs) >= 4, f'Expected the example specs in {SPECS}'
+    for spec in specs:
+        doc = created / (spec.stem + '.graphink')
+        proc = run([helper, 'create', spec, '-o', doc], logs / f'create-{spec.stem}.log')
+        assert 'reopened with the production reader' in proc.stdout and not messages(proc), f'{spec.name}: {proc.stdout} {messages(proc)}'
+        run([sys.executable, ROOT / 'docs/format/check-opc.py', doc], logs / f'opc-{spec.stem}.log')
+        with zipfile.ZipFile(doc) as package:
+            (created / (spec.stem + '-contents.xml')).write_bytes(package.read('contents.xml'))
+            assert package.read('preview.pdf').startswith(b'%PDF-') if 'preview.pdf' in package.namelist() else True
+        run(['xmllint', '--noout', '--relaxng', ROOT / 'GraphSketcher/Model/XML/GraphSketcher.rng', created / (spec.stem + '-contents.xml')], logs / f'schema-{spec.stem}.log')
+        run([helper, 'render', doc, '-o', created / (spec.stem + '.png')], logs / f'render-{spec.stem}.log')
+        report['created'][spec.name] = {'document': str(doc), 'sha256': digest(doc), 'summary': proc.stdout.strip()}
+
+    # 5. Refusals: each must exit 1 or 2 with one clear line and write nothing.
+    bad = out / 'bad'
+    bad.mkdir()
+    cases = {
+        'unknown-key': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [{'type': 'line', 'points': [[0, 0], [1, 1]], 'colour': 'red'}]}, 'objects[0]: unknown key "colour"'),
+        'bad-point': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [{'type': 'line', 'points': [[0, 0], [1]]}]}, 'objects[0].points[1] must be a point'),
+        'bad-formula': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [{'type': 'function', 'f': 'sinx', 'from': 0, 'to': 1}]}, 'unknown name "sinx"'),
+        'bad-range': ({'graphink': 1, 'x': {'min': 2, 'max': 1}, 'y': {'min': 0, 'max': 1}}, 'max > min'),
+        'bad-version': ({'graphink': 2, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}}, 'must be 1'),
+        'bad-color': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [{'type': 'point', 'at': [0, 0], 'color': 'mauve'}]}, 'objects[0].color must be #RRGGBB'),
+        'bad-style': ({'graphink': 1, 'style': 'neon', 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}}, 'style must be one of paper, sketch, chalkboard, studio, editorial'),
+    }
+    for name, (spec, expected) in cases.items():
+        path = bad / f'{name}.json'
+        path.write_text(json.dumps(spec))
+        proc = run([helper, 'create', path, '-o', bad / f'{name}.graphink'], logs / f'refuse-{name}.log', expect=1)
+        assert any(expected in line for line in messages(proc)) and len(messages(proc)) == 1, f'{name}: {messages(proc)}'
+        assert not (bad / f'{name}.graphink').exists(), f'{name}: wrote a document'
+    first = created / (specs[0].stem + '.graphink')
+    run([helper, 'create', specs[0], '-o', first], logs / 'refuse-overwrite.log', expect=1)
+    # The reader detects the container from the bytes, so a document named .pdf still opens: it must not be replaced.
+    disguised = bad / 'document.pdf'
+    disguised.write_bytes(first.read_bytes())
+    run([helper, 'render', disguised, '-o', disguised, '--force'], logs / 'refuse-input.log', expect=1)
+    assert disguised.read_bytes() == first.read_bytes(), 'graphink render wrote over its input'
+    run([helper, 'render', first, '-o', out / 'x.svg'], logs / 'refuse-type.log', expect=2)
+    run([helper, 'render', first, '-o', out / 'x.png', '--dpi', '5000'], logs / 'refuse-dpi.log', expect=2)
+    run([helper, 'render', out / 'missing.graphink', '-o', out / 'x.png'], logs / 'refuse-missing.log', expect=1)
+    assert not (out / 'x.png').exists() and not (out / 'x.svg').exists()
+    assert digest(first) == report['created'][specs[0].name]['sha256'], 'A refused overwrite changed the document'
+
+    # 6. The zip's copy draws and creates exactly what the app's helper does.
+    zipped = out / 'zip-renders'
+    zipped.mkdir()
+    for path in inputs:
+        stem = re.sub(r'[^A-Za-z0-9.-]+', '_', str(path))
+        run([unpacked, 'render', ROOT / path, '-o', zipped / f'{stem}.png'], logs / f'zip-{stem}.png.log')
+        assert digest(zipped / f'{stem}.png') == digest(renders / f'{stem}.png'), f'{path}: the zip renders a different PNG'
+    for spec in specs:
+        doc = zipped / (spec.stem + '.graphink')
+        run([unpacked, 'create', spec, '-o', doc], logs / f'zip-create-{spec.stem}.log')
+        with zipfile.ZipFile(doc) as package:
+            assert package.read('contents.xml') == (created / (spec.stem + '-contents.xml')).read_bytes(), f'{spec.name}: the zip creates a different document'
+
+    after = {str(p): digest(ROOT / p) for p in inputs}
+    report['inputsUnchanged'] = after == before
+    assert report['inputsUnchanged'], 'An input document changed'
+    report['passed'] = True
+    (out / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
+    worst = max(c['png']['meanChannelDiff'] for c in comparisons.values())
+    print(f'PASS graphink {version} from Graphink.app and graphink-cli.zip: rendered {len(inputs)} documents read-only '
+          f'({len(comparisons)} examples match their previews; PNG mean channel difference at most {worst:.3f}), '
+          f'created {len(specs)} specs, {len(cases)} bad specs refused; evidence: {out}')
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except AssertionError as exc:
+        print('FAIL: ' + str(exc), file=sys.stderr)
+        sys.exit(1)

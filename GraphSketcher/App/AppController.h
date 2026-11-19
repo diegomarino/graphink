@@ -24,6 +24,7 @@
 
 // Showing windows
 - (IBAction)showGettingStarted:(id)sender;
+- (IBAction)showCommandLineToolInstaller:(id)sender;  // Graphink ▸ Install Command-Line Tool…
 
 
 // Inspectors

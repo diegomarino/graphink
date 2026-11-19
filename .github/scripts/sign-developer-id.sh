@@ -6,6 +6,8 @@
 #
 #   sign-developer-id.sh sign APP        re-sign frameworks and app (Hardened Runtime)
 #   sign-developer-id.sh notarize DMG    sign the DMG, notarize, staple, assess
+#   sign-developer-id.sh notarize-zip ZIP  notarize graphink-cli.zip (a zip cannot be stapled;
+#                                        Gatekeeper finds the ticket online)
 #
 # Required environment (repository or `release` environment secrets):
 #   DEVELOPER_ID_P12_BASE64     base64 of the Developer ID Application .p12
@@ -60,6 +62,9 @@ sign_app() {
     while IFS= read -r -d '' nested; do
       codesign --force --timestamp --options runtime --sign "$id" "$nested"
     done
+  # The command-line tool: no entitlements (never sandboxed), its own identifier.
+  codesign --force --timestamp --options runtime --identifier com.diegomarino.Graphink.cli \
+    --sign "$id" "$app/Contents/Helpers/graphink"
   codesign --force --timestamp --options runtime --entitlements "$entitlements" --sign "$id" "$app"
   codesign --verify --deep --strict "$app"
 }
@@ -79,8 +84,18 @@ notarize_dmg() {
   spctl --assess --type open --context context:primary-signature -vv "$dmg"
 }
 
+notarize_zip() {
+  local zip=$1 key="$RUNNER_TEMP/notary-key.p8"
+  : "${NOTARY_KEY_P8_BASE64:?}" "${NOTARY_KEY_ID:?}" "${NOTARY_ISSUER_ID:?}"
+  base64 --decode <<<"$NOTARY_KEY_P8_BASE64" > "$key"
+  xcrun notarytool submit "$zip" --key "$key" --key-id "$NOTARY_KEY_ID" \
+    --issuer "$NOTARY_ISSUER_ID" --wait --timeout 30m
+  rm -f "$key"
+}
+
 case "${1:-}" in
   sign) sign_app "${2:?app}" ;;
   notarize) notarize_dmg "${2:?dmg}" ;;
-  *) echo "usage: sign-developer-id.sh sign APP | notarize DMG" >&2; exit 2 ;;
+  notarize-zip) notarize_zip "${2:?zip}" ;;
+  *) echo "usage: sign-developer-id.sh sign APP | notarize DMG | notarize-zip ZIP" >&2; exit 2 ;;
 esac

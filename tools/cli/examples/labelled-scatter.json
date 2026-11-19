@@ -1,0 +1,15 @@
+{
+  "graphink": 1,
+  "$comment": "Illustrative values, not real data. A third element in a point is its label. The trend line is drawn by hand and says so.",
+  "title": "Study Time and Test Scores",
+  "subtitle": "Eight students, illustrative data",
+  "style": "studio",
+  "x": {"title": "Study time (hours per week)", "min": 0, "max": 12, "step": 2},
+  "y": {"title": "Test score (points)", "min": 40, "max": 100, "step": 10},
+  "objects": [
+    {"type": "series", "marker": "circle", "size": 2.2, "color": "teal",
+     "points": [[1.5, 52, "Ana"], [2.5, 61, "Ben"], [4, 58, "Chloé"], [5, 70, "Dev"], [6.5, 74, "Eli"], [7.5, 69, "Fay"], [9, 85, "Gus"], [10.5, 90, "Hana"]]},
+    {"type": "line", "points": [[1, 52], [11, 91]], "color": "orange", "width": 1.5, "dash": "dashed", "shared": false},
+    {"type": "label", "text": "Trend drawn by eye\n(not a computed fit)", "at": [8.2, 60], "size": 13, "color": "orange"}
+  ]
+}

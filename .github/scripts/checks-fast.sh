@@ -34,7 +34,7 @@ done
 # --force-exclude applies pyproject.toml's excludes to the files named here.
 git ls-files -z '*.py' > "$logs/ruff-files"
 run_check ruff "$logs" xargs -0 "$ruff" check --force-exclude --no-cache < "$logs/ruff-files"
-git ls-files -z '.github/scripts/*.sh' 'scripts/*.sh' 'Checks/*.sh' '.githooks/*' > "$logs/shellcheck-files"
+git ls-files -z '.github/scripts/*.sh' 'scripts/*.sh' 'Checks/*.sh' 'tools/*.sh' '.githooks/*' > "$logs/shellcheck-files"
 # SCRIPTDIR resolves the scripts' `. "$(dirname "$0")/common.sh"` sources.
 run_check shellcheck "$logs" xargs -0 "$shellcheck" -x -P SCRIPTDIR < "$logs/shellcheck-files"
 # actionlint checks every .github/workflows file, and their run: blocks with the same shellcheck.
