@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        C2A000000000000000000001 /* RSDrawing.h in Headers */ = {isa = PBXBuildFile; fileRef = C2A000000000000000000003 /* RSDrawing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+        C2A000000000000000000002 /* RSDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A000000000000000000004 /* RSDrawing.m */; };
         B22000000000000000000001 /* RSGraphArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = B22000000000000000000011; settings = {ATTRIBUTES = (Public, ); }; };
         B22000000000000000000002 /* RSGraphArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = B22000000000000000000012; };
         B22000000000000000000003 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B22000000000000000000013; };
@@ -156,6 +158,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        C2A000000000000000000003 /* RSDrawing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSDrawing.h; sourceTree = "<group>"; };
+        C2A000000000000000000004 /* RSDrawing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSDrawing.m; sourceTree = "<group>"; };
         B22000000000000000000011 /* RSGraphArchive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSGraphArchive.h; sourceTree = "<group>"; };
         B22000000000000000000012 /* RSGraphArchive.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSGraphArchive.m; sourceTree = "<group>"; };
         B22000000000000000000013 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -416,7 +420,9 @@
 			children = (
 				34A6417D111A9119002CCA09 /* RSDataMapper.h */,
 				34A6417E111A9119002CCA09 /* RSDataMapper.m */,
-				34A6417F111A9119002CCA09 /* RSGraphRenderer.h */,
+				C2A000000000000000000003 /* RSDrawing.h */,
+                C2A000000000000000000004 /* RSDrawing.m */,
+                34A6417F111A9119002CCA09 /* RSGraphRenderer.h */,
 				34A64180111A9119002CCA09 /* RSGraphRenderer.m */,
 				00E3157E11249952008645EC /* RSGraphElement-Rendering.h */,
 				00E3157F11249952008645EC /* RSGraphElement-Rendering.m */,
@@ -741,7 +747,8 @@
 				5FC62D03184FF15400B05EB4 /* OSErrors.h in Headers */,
 				34A6417A111A910D002CCA09 /* NSArray-RSExtensions.h in Headers */,
 				34A64181111A9119002CCA09 /* RSDataMapper.h in Headers */,
-				34A64183111A9119002CCA09 /* RSGraphRenderer.h in Headers */,
+				C2A000000000000000000001 /* RSDrawing.h in Headers */,
+                34A64183111A9119002CCA09 /* RSGraphRenderer.h in Headers */,
 				34A84F38111A93B6005EE3AA /* RSLog.h in Headers */,
 				34A850C2111A9914005EE3AA /* RSVertexList.h in Headers */,
 				34A5B0D0111B51810009E163 /* RSFontAttributes.h in Headers */,
@@ -883,7 +890,8 @@
 				5FC62D4E184FF3A900B05EB4 /* OSURLStyleAttribute.m in Sources */,
 				34A6417B111A910D002CCA09 /* NSArray-RSExtensions.m in Sources */,
 				34A64182111A9119002CCA09 /* RSDataMapper.m in Sources */,
-				34A64184111A9119002CCA09 /* RSGraphRenderer.m in Sources */,
+				C2A000000000000000000002 /* RSDrawing.m in Sources */,
+                34A64184111A9119002CCA09 /* RSGraphRenderer.m in Sources */,
 				009FB9781120C9A90081EB55 /* RSGraphElementSelector.m in Sources */,
 				34C1390F1121FC460032BA71 /* RSText.m in Sources */,
 				5FC62D3E184FF32900B05EB4 /* OSColorStyleAttribute.m in Sources */,
