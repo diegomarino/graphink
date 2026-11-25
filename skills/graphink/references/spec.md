@@ -2,7 +2,8 @@
 
 `graphink create SPEC.json -o OUT.graphink` reads this JSON and builds the document with Graphink's own
 model, then saves it with the app's OPC writer. Every object becomes an ordinary, editable Graphink
-object (points, lines, fills, labels): nothing is an image, and nothing is recomputed later.
+object (points, lines, best-fit lines, fills, labels): nothing is an image. Only a best-fit line is
+recomputed later, by the app, when its points move.
 
 Unknown keys, wrong types and out-of-range values are refused. The message names the exact place in the
 spec, for example `objects[3].points[2] must be a point [x, y], not a number`.
@@ -137,6 +138,7 @@ the label attaches to the first piece.
 
 | Key | Default | Meaning |
 | --- | --- | --- |
+| `id` | none | A name for the series, unique in the spec, so that a `fit` can refer to it. |
 | `points` | | `[x, y]` or `[x, y, "label"]`: the third element labels that point. |
 | `csv` | | Text, one row per line, separated by commas, semicolons or tabs. Rows whose chosen cells are not both numbers are skipped (notes, blanks). Give `points` or `csv`. |
 | `columns` | `[0, 1]` | The x and y columns: numbers from 0, or names from the first row (then the first row is the header). |
@@ -148,6 +150,32 @@ the label attaches to the first piece.
 | `color`, `width`, `dash`, `shared` | | As for `line`. |
 
 Dates are not parsed: convert them to numbers (years, months 1–12, decimal years) first.
+
+### `fit`: the least-squares line of a series
+
+```json
+{"type": "series", "id": "students", "points": [[1.5, 52], [2.5, 61], [4, 58], [5, 70]]},
+{"type": "fit", "series": "students"}
+```
+
+Graphink's own best-fit line, made the way Edit ▸ Line ▸ Best-Fit makes one for the selected
+points: the line y = mx + b of least squares through the series' points. It stays tied to them, so in
+the app dragging a point moves the line and its equation, and selecting it shows
+"Best-fit line: y = …" in the status bar. Use it for any trend in data; never draw a trend by eye with
+a `line`.
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `series` | required | The `id` of a `series` (before or after the fit in `objects`). It needs at least two points with different x. |
+| `color` | the series' color | |
+| `width`, `dash` | 2.6, `solid` | As for `line`. |
+| `extent` | `data` | Where the line starts and ends: `data` (the smallest to the largest x of the points, as in the app), `axis` (the whole x axis), or `[from, to]` in x units. Both ends must stay within the axes. When a point moves, the line keeps its ends' x. |
+| `label` | true | The equation label Graphink adds, `y = 3.941x + 46.97    R² = 0.8995` (formatted like the axis numbers, with the decimal separator of the Mac's language), 12 pt in the line's color at 0.75 along the line. `false` leaves it out; `{"size", "bold", "color", "position"}` styles or moves it. It has no `text`: Graphink rewrites it whenever the line changes, so put other words in a `label` object. |
+
+The `graphink create` summary prints each fit's equation as the status bar shows it, for example
+`objects[1]: Best-fit line:   y = 3.941x + 46.97    R² = 0.8995`. A best-fit line needs linear axes:
+with a logarithmic axis it is refused, as the app disables Best-Fit. Points at the same coordinate
+are one Graphink point (see Coordinates), so the fit counts a repeated point once unless the series has `"shared": false`.
 
 ### `point`: one marked point
 

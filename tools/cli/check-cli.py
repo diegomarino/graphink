@@ -14,7 +14,8 @@ previews, must match them pixel for pixel; the direct PNG (the app's raster expo
 Generic RGB bitmap) may differ only by antialiasing and color rounding. The agent skill's example specs
 (skills/graphink/assets/examples) are created, checked with docs/format/check-opc.py and the RELAX NG
 schema, reopened and rendered, and the skill's make-graph.sh makes one of them with the helper found on
-PATH. Invalid specs and arguments must be refused with a message and write nothing.
+PATH. Every best-fit line a spec creates (a "fit") is checked against a least-squares fit computed here from
+the points stored in the document. Invalid specs and arguments must be refused with a message and write nothing.
 
 With the zip's copy: every PNG is byte-identical to the helper's and every created document has the
 same contents.xml.
@@ -28,6 +29,7 @@ import re
 import struct
 import subprocess
 import sys
+import xml.etree.ElementTree as ET
 import zipfile
 
 HERE = Path(__file__).resolve().parent
@@ -60,6 +62,41 @@ def run(command, log, expect=0):
 def messages(proc):
     """stderr without the Debug frameworks' banner and the writer's schema note."""
     return [line for line in proc.stderr.splitlines() if line and not NOISE.match(line)]
+
+
+def least_squares(points):
+    """Slope, intercept and R² of the ordinary least-squares line y = mx + b, from deviations about the means."""
+    n = len(points)
+    mx, my = sum(x for x, _ in points) / n, sum(y for _, y in points) / n
+    sxx = sum((x - mx) ** 2 for x, _ in points)
+    sxy = sum((x - mx) * (y - my) for x, y in points)
+    syy = sum((y - my) ** 2 for _, y in points)
+    m = sxy / sxx
+    return m, my - m * mx, (sxy * sxy / (sxx * syy) if syy else 0)
+
+
+def check_fits(contents, summary, name):
+    """Each best-fit line stored in contents.xml (line class="fit") must run along the least-squares line of its
+    data points, from the stored vertices; create's summary must report each one as the app's status bar does.
+    Returns [{data, slope, intercept, r2, from, to}] per line."""
+    root = ET.fromstring(contents)
+    vertices = {v.get('id'): (float(v.get('x', 0)), float(v.get('y', 0))) for v in root.iterfind('.//{*}vertex')}
+    fits = []
+    for line in root.iterfind('.//{*}line'):
+        if line.get('class') != 'fit':
+            continue
+        data = [vertices[i] for i in line.find('{*}data').get('ids').split()]
+        (x1, y1), (x2, y2) = vertices[line.get('v1')], vertices[line.get('v2')]
+        m, b, r2 = least_squares(data)
+        stored_m = (y2 - y1) / (x2 - x1)
+        stored_b = y1 - stored_m * x1
+        scale = max(1.0, *(abs(y) for _, y in data))
+        assert abs(stored_m - m) <= 1e-9 * max(1.0, abs(m)) and abs(stored_b - b) <= 1e-9 * scale, \
+            f'{name}: stored fit y = {stored_m!r}x + {stored_b!r}, least squares y = {m!r}x + {b!r}'
+        fits.append({'data': len(data), 'slope': m, 'intercept': b, 'r2': r2, 'from': x1, 'to': x2})
+    reported = [line for line in summary.splitlines() if 'Best-fit line:' in line]
+    assert len(reported) == len(fits), f'{name}: {len(fits)} fit lines stored, {len(reported)} reported: {summary}'
+    return fits
 
 
 def embedded_info_plist(binary):
@@ -214,7 +251,49 @@ def main():
             assert package.read('preview.pdf').startswith(b'%PDF-') if 'preview.pdf' in package.namelist() else True
         run(['xmllint', '--noout', '--relaxng', ROOT / 'GraphSketcher/Model/XML/GraphSketcher.rng', created / (spec.stem + '-contents.xml')], logs / f'schema-{spec.stem}.log')
         run([helper, 'render', doc, '-o', created / (spec.stem + '.png')], logs / f'render-{spec.stem}.log')
-        report['created'][spec.name] = {'document': str(doc), 'sha256': digest(doc), 'summary': proc.stdout.strip()}
+        fits = check_fits((created / (spec.stem + '-contents.xml')).read_bytes(), proc.stdout, spec.name)
+        report['created'][spec.name] = {'document': str(doc), 'sha256': digest(doc), 'summary': proc.stdout.strip(), 'fits': fits}
+    assert any(c['fits'] for c in report['created'].values()), 'Expected an example spec with a best-fit line'
+
+    # 4a. Best-fit lines: extents, a connected series, a fit given before its series, no label, a style preset.
+    # Each document is checked like the examples, and its fit against an independent least-squares fit.
+    fit_dir = out / 'fits'
+    fit_dir.mkdir()
+    scatter = [[1, 2.1], [2, 3.9], [3, 6.2], [4, 7.8], [5, 10.1], [6, 12.2]]
+    axes = {'x': {'min': 0, 'max': 8}, 'y': {'min': -5, 'max': 20}}
+    fit_cases = {
+        'data': ([{'type': 'series', 'id': 's', 'points': scatter}, {'type': 'fit', 'series': 's'}], (1, 6)),
+        'axis': ([{'type': 'series', 'id': 's', 'points': scatter}, {'type': 'fit', 'series': 's', 'extent': 'axis', 'label': False}], (0, 8)),
+        'range': ([{'type': 'fit', 'series': 's', 'extent': [0.5, 7.5], 'color': 'red', 'dash': 'dotted', 'label': {'position': 0.2, 'bold': True}},
+                   {'type': 'series', 'id': 's', 'points': scatter}], (0.5, 7.5)),
+        'connected': ([{'type': 'series', 'id': 'a', 'points': scatter, 'connect': 'straight', 'marker': 'square'},
+                       {'type': 'series', 'id': 'b', 'points': [[1, 15], [3, 11], [5, 9], [7, 4]], 'color': 'orange'},
+                       {'type': 'fit', 'series': 'a'}, {'type': 'fit', 'series': 'b'}], (1, 6)),
+        'style': ([{'type': 'series', 'id': 's', 'points': scatter}, {'type': 'fit', 'series': 's'}], (1, 6)),
+    }
+    report['fits'] = {}
+    for name, (objects, extent) in fit_cases.items():
+        spec = fit_dir / f'{name}.json'
+        spec.write_text(json.dumps({'graphink': 1, **axes, **({'style': 'chalkboard'} if name == 'style' else {}), 'objects': objects}))
+        doc = fit_dir / f'{name}.graphink'
+        proc = run([helper, 'create', spec, '-o', doc], logs / f'fit-create-{name}.log')
+        assert 'reopened with the production reader' in proc.stdout and not messages(proc), f'fit {name}: {proc.stdout} {messages(proc)}'
+        run([sys.executable, ROOT / 'docs/format/check-opc.py', doc], logs / f'fit-opc-{name}.log')
+        with zipfile.ZipFile(doc) as package:
+            contents = package.read('contents.xml')
+        (fit_dir / f'{name}-contents.xml').write_bytes(contents)
+        run(['xmllint', '--noout', '--relaxng', ROOT / 'GraphSketcher/Model/XML/GraphSketcher.rng', fit_dir / f'{name}-contents.xml'], logs / f'fit-schema-{name}.log')
+        run([helper, 'render', doc, '-o', fit_dir / f'{name}.png'], logs / f'fit-render-{name}.log')
+        fits = check_fits(contents, proc.stdout, f'fit {name}')
+        assert len(fits) == sum(o['type'] == 'fit' for o in objects), f'fit {name}: {fits}'
+        assert (fits[0]['from'], fits[0]['to']) == extent, f'fit {name}: extent {fits[0]["from"]}..{fits[0]["to"]}, expected {extent}'
+        # The equation label: owned by the fit line, unless the spec says "label": false.
+        root = ET.fromstring(contents)
+        fit_ids = {line.get('id') for line in root.iterfind('.//{*}line') if line.get('class') == 'fit'}
+        labelled = {label.get('owner') for label in root.iterfind('.//{*}label')} & fit_ids
+        expected_labels = set() if name == 'axis' else fit_ids
+        assert labelled == expected_labels, f'fit {name}: equation labels on {sorted(labelled)}, expected {sorted(expected_labels)}'
+        report['fits'][name] = {'fits': fits, 'summary': proc.stdout.strip()}
 
     # 4b. The skill's make-graph.sh, finding the helper through PATH as an agent would.
     path = out / 'path'
@@ -244,6 +323,27 @@ def main():
         'bad-version': ({'graphink': 2, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}}, 'must be 1'),
         'bad-color': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [{'type': 'point', 'at': [0, 0], 'color': 'mauve'}]}, 'objects[0].color must be #RRGGBB'),
         'bad-style': ({'graphink': 1, 'style': 'neon', 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}}, 'style must be one of paper, sketch, chalkboard, studio, editorial'),
+        'fit-unknown-series': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[0, 0], [1, 1]]}, {'type': 'fit', 'series': 'b'}]}, 'objects[1].series: no series has the id "b" (ids: a)'),
+        'fit-one-point': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[0.5, 0.5]]}, {'type': 'fit', 'series': 'a'}]}, 'objects[1]: series "a" has 1 point; a best-fit line needs at least 2'),
+        'fit-same-point': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[0.5, 0.5], [0.5, 0.5]]}, {'type': 'fit', 'series': 'a'}]}, 'objects[1]: series "a" has 1 point'),
+        'fit-same-x': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[0.5, 0.2], [0.5, 0.8]]}, {'type': 'fit', 'series': 'a'}]}, 'objects[1]: every point of series "a" has x = 0.5'),
+        'fit-log-axis': ({'graphink': 1, 'x': {'min': 1, 'max': 100, 'log': True}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[1, 0.2], [10, 0.8]]}, {'type': 'fit', 'series': 'a'}]}, 'objects[1]: a best-fit line needs linear axes'),
+        'fit-label-text': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[0, 0], [1, 1]]}, {'type': 'fit', 'series': 'a', 'label': {'text': 'trend'}}]}, 'objects[1].label: a best-fit line\'s label is its equation'),
+        'fit-bad-extent': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[0, 0], [1, 1]]}, {'type': 'fit', 'series': 'a', 'extent': [1, 0]}]}, 'objects[1].extent: to must be greater than from'),
+        'fit-extent-outside': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[0.2, 0.2], [0.8, 0.8]]}, {'type': 'fit', 'series': 'a', 'extent': [-1, 1]}]}, 'objects[1].extent must stay within the x axis range (0 to 1)'),
+        'fit-extent-off-y': ({'graphink': 1, 'x': {'min': 0, 'max': 10}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[4, 0.2], [5, 0.8]]}, {'type': 'fit', 'series': 'a', 'extent': 'axis'}]}, 'objects[1].extent: the line reaches y = -2.2 at x = 0, outside the y axis range (0 to 1)'),
+        'fit-duplicate-id': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [
+            {'type': 'series', 'id': 'a', 'points': [[0, 0]]}, {'type': 'series', 'id': 'a', 'points': [[1, 1]]}]}, 'objects[1].id: "a" is already the id of objects[0]'),
+        'fit-no-series': ({'graphink': 1, 'x': {'min': 0, 'max': 1}, 'y': {'min': 0, 'max': 1}, 'objects': [{'type': 'fit'}]}, 'objects[0]: "series" is required'),
     }
     for name, (spec, expected) in cases.items():
         path = bad / f'{name}.json'
@@ -321,7 +421,7 @@ def main():
     worst = max(c['png']['meanChannelDiff'] for c in comparisons.values())
     print(f'PASS graphink {version} from Graphink.app and graphink-cli.zip: rendered {len(inputs)} documents read-only '
           f'({len(comparisons)} examples match their previews; PNG mean channel difference at most {worst:.3f}), '
-          f'created {len(specs)} specs, {len(cases)} bad specs refused, the input refused as {", ".join(report["inputIdentity"])}; evidence: {out}')
+          f'created {len(specs)} specs and {len(fit_cases)} best-fit cases (stored fits equal least squares), {len(cases)} bad specs refused, the input refused as {", ".join(report["inputIdentity"])}; evidence: {out}')
 
 
 if __name__ == '__main__':

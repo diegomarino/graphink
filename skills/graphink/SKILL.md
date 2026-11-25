@@ -53,4 +53,4 @@ Messages and fixes: [references/troubleshooting.md](references/troubleshooting.m
 | [supply-demand-tax.json](assets/examples/supply-demand-tax.json) | Supply and demand with a per-unit tax: shared intersection points, welfare fills, guides, point labels |
 | [time-series-csv.json](assets/examples/time-series-csv.json) | A monthly series from CSV text with a header, a grid, a marked event |
 | [function-plot.json](assets/examples/function-plot.json) | f(x) and f′(x) sampled from formulas, axes through the origin, extrema marked |
-| [labelled-scatter.json](assets/examples/labelled-scatter.json) | A scatter with a name on every point, a dashed trend drawn by eye, the Studio style |
+| [labelled-scatter.json](assets/examples/labelled-scatter.json) | A scatter with a name on every point, its best-fit line with the equation, the Studio style |
