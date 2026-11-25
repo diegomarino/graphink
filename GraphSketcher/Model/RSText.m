@@ -7,6 +7,7 @@
 
 #import <OmniAppKit/NSUserDefaults-OAExtensions.h>
 #import "RSText.h"
+#import "RSDrawing.h"
 
 #import <AppKit/NSColor.h>
 #import <OmniAppKit/OAFontDescriptor.h>
@@ -378,29 +379,7 @@ NSDictionary *RSTextAttributesMake(OAFontDescriptor *fontDescriptor, NSColor *co
     }
     CGContextRestoreGState(ctx);
 #else
-    if (degrees) {
-	[NSGraphicsContext saveGraphicsState];
-	NSAffineTransform *AT = [NSAffineTransform transform];
-	[AT translateXBy:pt.x yBy:pt.y];
-	[AT rotateByDegrees:degrees];
-	[AT concat];
-        
-        // width of 0 means "no maximum width"
-        [_attributedString drawWithRect:CGRectMake(0, 0, 0, 0) options:RS_STRING_DRAWING_OPTIONS];
-
-	[NSGraphicsContext restoreGraphicsState];
-    } else {
-        if (0) {
-            CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
-            [[NSColor redColor] set];
-            CGSize size = [self size];
-            CGContextStrokeRect(ctx, CGRectMake(pt.x, pt.y, size.width, size.height));
-        }
-
-	//[attributedString drawAtPoint:p];
-        // width of 0 means "no maximum width"
-        [_attributedString drawWithRect:CGRectMake(pt.x, pt.y, 0, 0) options:RS_STRING_DRAWING_OPTIONS];
-    }
+    RSDrawAttributedString(_attributedString, pt, degrees);
 #endif
 }
 

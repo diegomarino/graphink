@@ -17,6 +17,10 @@ void RSDrawGraphForExport(RSGraphEditor *editor);
 // One vector PDF page of bounds.size points, drawn by an offscreen view.
 NSData *RSGraphPDFData(RSGraphEditor *editor, NSRect bounds);
 
+// Native SVG paths and editable text. Fonts are referenced by family, not embedded.
+// Currently rejects nonzero document shadows; the app's Export menu does not expose SVG yet.
+NSData *RSGraphSVGData(RSGraphEditor *editor, NSRect bounds);
+
 // The whole canvas offscreen at `dpi`: 8-bit RGBA, calibrated RGB, RSRasterPixelSize pixels. The
 // rep's point size is the canvas size, so the image records the resolution.
 NSBitmapImageRep *RSGraphBitmapImageRep(RSGraphEditor *editor, NSRect bounds, CGFloat dpi);

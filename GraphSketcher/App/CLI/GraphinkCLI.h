@@ -37,6 +37,7 @@ NSString *GICContainingBundlePath(void);
 
 // Export, laid out first: RSGraphPDFData and RSGraphRasterData over the whole canvas.
 NSData *GICPDFData(GICDocument *document);
+NSData *GICSVGData(GICDocument *document);
 NSData *GICRasterData(GICDocument *document, CGFloat dpi, NSString *typeIdentifier);
 
 // Refuses (GICFail) an output that is the input file, an existing directory, or an existing file

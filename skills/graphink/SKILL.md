@@ -45,6 +45,12 @@ Messages and fixes: [references/troubleshooting.md](references/troubleshooting.m
 - Never launch Graphink.app to check the work; rendering is the check.
 - To export an existing document: `graphink render IN.graphink -o OUT.pdf` (or `.png`, with
   `--scale 2` or `--dpi 300` for sharper images). It never changes its input.
+- For editable vector text, experimental `graphink render IN.graphink -o OUT.svg` uses the
+  same renderer. Fonts are named, not embedded: the receiving machine needs the same fonts,
+  including Kalam for Sketch/Chalkboard. SVG does not yet support document shadows. Always
+  inspect the rendered result; SVG text shaping can differ from PDF. For an outline-based
+  fallback, install Poppler separately (`brew install poppler`), export PDF, then run
+  `pdftocairo -svg OUT.pdf OUT.svg` (not validated here; text becomes uneditable glyph outlines).
 
 ## Examples
 
