@@ -54,3 +54,41 @@ The focused checks should catch lost geometry/style, wrong y direction or rotate
 flattened/noneditable text, multiline baseline errors, XML metacharacters, fonts with
 bold/italic traits, output overwrite/input protection, and a backend leaking into later
 PDF/PNG draws. Existing comparators, historical samples and baselines remain untouched.
+
+## Current experiment
+
+`graphink render INPUT -o OUTPUT.svg` now records native geometry and text. The default
+seam was compared against a build of main (8d59f38): all 170 exports of the 34 examples
+matched exactly (PNG pixels and rasterized PDF pixels). The recorder references fonts;
+it does not embed them. It rejects nonzero document shadows with a PDF fallback message.
+
+Run the additional check separately from the existing product checks:
+
+```bash
+python3 Checks/check-svg-export.py --products "$root/Debug/Products/Debug" --output NEW_DIR
+```
+
+The check renders all 34 examples plus disposable Kalam and Medium-weight text fixtures,
+rasterizes SVG using an unshown WebKit view at 2×, and reports every pixel comparison in
+`report.json` with PDF/SVG/difference PNGs. It supplies Kalam to WebKit using checker-only
+CSS, modeling an environment with that font available. The exported files contain no
+font data. No tolerance or allowlist hides discrepancies. `--structure-only` skips the
+rasterizer, and `--tool` can select a development helper.
+
+The remaining fidelity work is concentrated in text. AppKit string drawing and TextKit
+can choose different baselines when a line contains font fallback characters (for example
+the welcome document's ⌘ symbols), and browser shaping can differ. Rich-text decorations,
+explicit kerning, bidirectional text, ligatures across attribute boundaries and unusual
+paragraph alignment need further qualification. Scientific notation's reduced font and
+baseline offsets pass through the same layout manager, but are not a general promise of
+rich-text equivalence. SVG retains real text nodes; Illustrator/Figma import and editing
+have not been tested. Zero-width hairline strokes are another unqualified edge case.
+
+For portable Kalam output, an opt-in embedded `@font-face` subset would avoid installation
+requirements; the bundled font's OFL permits redistribution under its terms. Browser
+support is straightforward, but an SVG editor's support for embedded fonts must be tested.
+Naming the font remains the most interoperable editing option when it is installed.
+
+Adding the app Export menu item would require registering the SVG export type, teaching
+the export panel and save path to call `RSGraphSVGData`, localizing its label, and adding
+offscreen menu/export checks. It does not require document-format changes or new layout.
