@@ -8,6 +8,8 @@
 #import <GraphSketcherModel/RSUndoer.h>
 #import <GraphSketcherModel/RSVertex.h>
 #import <GraphSketcherModel/RSConnectLine.h>
+#import <GraphSketcherModel/RSFitLine.h>
+#import <GraphSketcherModel/RSNumber.h>
 #import <GraphSketcherModel/RSGroup.h>
 #import <GraphSketcherModel/RSFill.h>
 #import <GraphSketcherModel/RSTextLabel.h>
@@ -218,10 +220,13 @@ static double Evaluate(NSString *formula, double x, NSString *path)
     NSMutableArray *pending;  // owned labels, positioned once the layout is final: @[owner, attributed string, slide or NSNull]
     NSMutableArray *pageLabels;  // @[label, page point, alignment]
     NSUInteger arrows;
+    NSMutableDictionary *series;  // a series' "id": @[its vertices, without repeats, in order; its path]
+    NSMutableArray *fits;  // @[fit object, path], built once every series exists
+    NSMutableArray *fitPaths;  // the path of each best-fit line, in the order of the graph's lines
 }
 @end
 @implementation Builder
-- (void)dealloc { [points release]; [pending release]; [pageLabels release]; [super dealloc]; }
+- (void)dealloc { [points release]; [pending release]; [pageLabels release]; [series release]; [fits release]; [fitPaths release]; [super dealloc]; }
 @end
 
 static RSVertex *Vertex(Builder *b, RSDataPoint p, BOOL shared)
@@ -375,8 +380,8 @@ static void ApplyMarker(Builder *b, RSVertex *v, NSDictionary *object, NSString 
 
 static void AddObject(Builder *b, NSDictionary *object, NSString *path)
 {
-    NSString *type = Choice(object, @"type", path, @[@"line", @"function", @"series", @"point", @"fill", @"bars", @"label"], nil);
-    if (!type) GICFail(@"%@: \"type\" is required (line, function, series, point, fill, bars or label)", path);
+    NSString *type = Choice(object, @"type", path, @[@"line", @"function", @"series", @"fit", @"point", @"fill", @"bars", @"label"], nil);
+    if (!type) GICFail(@"%@: \"type\" is required (line, function, series, fit, point, fill, bars or label)", path);
     BOOL shared = Bool(object, @"shared", path, YES);
     NSColor *color = Color(object, @"color", path, nil);
     if ([type isEqual:@"line"]) {
@@ -415,7 +420,7 @@ static void AddObject(Builder *b, NSDictionary *object, NSString *path)
         OwnedLabel(b, first, object[@"label"], Join(path, @"label"), first.color, YES);
     }
     else if ([type isEqual:@"series"]) {
-        Keys(object, path, @[@"type", @"points", @"csv", @"columns", @"connect", @"marker", @"size", @"color", @"width", @"dash", @"label", @"labels", @"shared"]);
+        Keys(object, path, @[@"type", @"id", @"points", @"csv", @"columns", @"connect", @"marker", @"size", @"color", @"width", @"dash", @"label", @"labels", @"shared"]);
         NSMutableArray *names = [NSMutableArray array];
         NSArray *list;
         if (object[@"points"] && object[@"csv"]) GICFail(@"%@: give \"points\" or \"csv\", not both", path);
@@ -441,6 +446,19 @@ static void AddObject(Builder *b, NSDictionary *object, NSString *path)
             id name = labels ? labels[i] : (i < names.count ? names[i] : NSNull.null);
             if (name != NSNull.null) OwnedLabel(b, vertices[i], name, Join(Join(path, labels ? @"labels" : @"points"), @(i)), Palette()[@"ink"], NO);
         }
+        // An id lets a "fit" name this series. Points at the same coordinate are one Graphink point, as everywhere.
+        NSString *identifier = Value(object, @"id", NSString.class, path, NO);
+        if (identifier) {
+            if (!identifier.length) GICFail(@"%@.id must not be empty", path);
+            if (b->series[identifier]) GICFail(@"%@.id: \"%@\" is already the id of %@", path, identifier, b->series[identifier][1]);
+            NSMutableArray *unique = [NSMutableArray array];
+            for (RSVertex *v in vertices) if (![unique containsObjectIdenticalTo:v]) [unique addObject:v];
+            b->series[identifier] = @[unique, path];
+        }
+    }
+    else if ([type isEqual:@"fit"]) {
+        Keys(object, path, @[@"type", @"series", @"color", @"width", @"dash", @"extent", @"label"]);
+        [b->fits addObject:@[object, path]];
     }
     else if ([type isEqual:@"point"]) {
         Keys(object, path, @[@"type", @"at", @"marker", @"size", @"color", @"label", @"shared"]);
@@ -505,6 +523,81 @@ static void AddObject(Builder *b, NSDictionary *object, NSString *path)
     }
 }
 
+// A least-squares line through a series, made the way the app makes one for the selected points (Edit ▸ Line ▸
+// Best-Fit and the Style inspector's line type: RSGraph -changeLineTypeOf:toConnectMethod:), so it stays an RSFitLine that
+// recomputes when a point moves. Its label is the app's equation label, which the line rewrites on every change.
+static void AddFit(Builder *b, NSDictionary *object, NSString *path)
+{
+    RSGraph *g = b->g;
+    NSString *identifier = Value(object, @"series", NSString.class, path, YES);
+    NSArray *entry = b->series[identifier];
+    if (!entry) GICFail(@"%@.series: no series has the id \"%@\"%@", path, identifier,
+                        [b->series count] ? [NSString stringWithFormat:@" (ids: %@)", [[b->series.allKeys sortedArrayUsingSelector:@selector(compare:)] componentsJoinedByString:@", "]]
+                                          : @" (give the series an \"id\")");
+    // Edit ▸ Line ▸ Best-Fit is disabled when an axis is logarithmic (RSGraphView -validateMenuItem:).
+    if ([g hasLogarithmicAxis]) GICFail(@"%@: a best-fit line needs linear axes; Graphink disables Best-Fit when an axis is logarithmic", path);
+    NSArray *vertices = entry[0];
+    if (vertices.count < 2) GICFail(@"%@: series \"%@\" has %lu point; a best-fit line needs at least 2", path, identifier, (unsigned long)vertices.count);
+    data_p minX = ((RSVertex *)vertices[0]).position.x, maxX = minX;
+    for (RSVertex *v in vertices) { minX = MIN(minX, v.position.x); maxX = MAX(maxX, v.position.x); }
+    if (nearlyEqualDataValues(minX, maxX)) GICFail(@"%@: every point of series \"%@\" has x = %g; a best-fit line y = mx + b needs at least two different x values", path, identifier, minX);
+
+    double width = Number(object, @"width", path, 2.6);
+    if (width <= 0) GICFail(@"%@.width must be positive", path);
+    NSInteger dash = [Dashes()[Choice(object, @"dash", path, [Dashes().allKeys sortedArrayUsingSelector:@selector(compare:)], @"solid")] integerValue];
+    // "extent": the data's x range (the app's own), the x axis range, or [from, to]: the endpoints' x, which the
+    // line keeps when it recomputes (as when the person drags an endpoint along it in the app).
+    id extent = object[@"extent"] ?: @"data";
+    data_p from = minX, to = maxX;
+    if ([extent isKindOfClass:NSArray.class]) {
+        if ([extent count] != 2 || !IsNumber(extent[0]) || !IsNumber(extent[1])) GICFail(@"%@.extent must be \"data\", \"axis\" or [from, to]", path);
+        from = [extent[0] doubleValue]; to = [extent[1] doubleValue];
+        if (!isfinite(from) || !isfinite(to)) GICFail(@"%@.extent must be finite", path);
+        if (!(to > from)) GICFail(@"%@.extent: to must be greater than from", path);
+    } else if ([extent isEqual:@"axis"]) {
+        from = g.xAxis.min; to = g.xAxis.max;
+    } else if (![extent isEqual:@"data"]) GICFail(@"%@.extent must be \"data\", \"axis\" or [from, to], not %@", path, [extent isKindOfClass:NSString.class] ? [NSString stringWithFormat:@"\"%@\"", extent] : Describe(extent));
+
+    id label = object[@"label"] ?: @YES;
+    NSDictionary *style = nil;
+    if (IsBool(label)) style = [label boolValue] ? @{} : nil;
+    else if ([label isKindOfClass:NSDictionary.class]) {
+        style = label;
+        if (style[@"text"]) GICFail(@"%@.label: a best-fit line's label is its equation, which Graphink rewrites when a point moves; it takes size, bold, color and position, not text (use a label object for other text)", path);
+        Keys(style, Join(path, @"label"), @[@"size", @"bold", @"color", @"position"]);
+    }
+    else GICFail(@"%@.label must be true, false or {\"size\", \"bold\", \"color\", \"position\"} (the label is the line's equation), not %@", path, Describe(label));
+
+    // The app's command: the selected points become the line's data, colored like them when they share a color.
+    RSGroup *selection = [[[RSGroup alloc] initWithGraph:g byCopyingArray:vertices] autorelease];
+    NSUInteger before = g.Lines.count;
+    [g changeLineTypeOf:selection toConnectMethod:RSConnectLinearRegression];
+    RSFitLine *fit = g.Lines.count == before + 1 ? g.Lines.lastObject : nil;
+    if (![fit isKindOfClass:RSFitLine.class]) GICFail(@"%@: Graphink did not make a best-fit line from series \"%@\"", path, identifier);
+    [b->fitPaths addObject:path];
+
+    // Then the spec's style, as the inspector would set it.
+    fit.color = Color(object, @"color", path, fit.data.color ?: Palette()[@"blue"]);
+    fit.width = width;
+    fit.dash = dash;
+    if (from != minX || to != maxX) {
+        // Inside the axes: the renderer draws nothing of a line with an end off the page.
+        if (from < g.xAxis.min || to > g.xAxis.max) GICFail(@"%@.extent must stay within the x axis range (%g to %g)", path, g.xAxis.min, g.xAxis.max);
+        [fit.startVertex setPositionx:from];
+        [fit.endVertex setPositionx:to];
+        [fit updateEndpoints];  // y = mx + b at the new x, what -recomputeNow does after a point moves
+        for (RSVertex *end in @[fit.startVertex, fit.endVertex])
+            if (end.position.y < g.yAxis.min || end.position.y > g.yAxis.max)
+                GICFail(@"%@.extent: the line reaches y = %g at x = %g, outside the y axis range (%g to %g); shorten the extent", path, end.position.y, end.position.x, g.yAxis.min, g.yAxis.max);
+    }
+    if (!style) { [g removeLabel:fit.label]; return; }
+    NSString *at = Join(path, @"label");
+    double slide = Number(style, @"position", at, 0.75);  // the app's place for the equation
+    if (slide < 0 || slide > 1) GICFail(@"%@.position must be between 0 and 1", at);
+    NSAttributedString *string = Text(fit.equationString, Number(style, @"size", at, 12), Bool(style, @"bold", at, NO), Color(style, @"color", at, fit.color));
+    [b->pending addObject:@[fit, string, @(slide)]];
+}
+
 static void Axis(Builder *b, RSAxis *axis, NSDictionary *object, NSString *path, BOOL edge)
 {
     Keys(object, path, @[@"title", @"min", @"max", @"step", @"placement", @"grid", @"log", @"ticks", @"tickLabels", @"titleSize"]);
@@ -526,7 +619,7 @@ static void Axis(Builder *b, RSAxis *axis, NSDictionary *object, NSString *path,
     [axis.title setAttributedString:Text(title ?: @"", Number(object, @"titleSize", path, 15), YES, b->ink)];
 }
 
-static GICDocument *Build(NSDictionary *spec)
+static GICDocument *Build(NSDictionary *spec, NSArray **fitPaths)
 {
     Keys(spec, @"spec", @[@"graphink", @"page", @"style", @"title", @"subtitle", @"x", @"y", @"objects", @"$comment"]);
     NSNumber *version = Value(spec, @"graphink", NSNumber.class, @"spec", YES);
@@ -547,6 +640,7 @@ static GICDocument *Build(NSDictionary *spec)
     Builder *b = [[[Builder alloc] init] autorelease];
     b->document = document; b->g = document.graph; b->ink = Palette()[@"ink"];
     b->points = [[NSMutableDictionary alloc] init]; b->pending = [[NSMutableArray alloc] init]; b->pageLabels = [[NSMutableArray alloc] init];
+    b->series = [[NSMutableDictionary alloc] init]; b->fits = [[NSMutableArray alloc] init]; b->fitPaths = [[NSMutableArray alloc] init];
     RSGraph *g = b->g;
     NSUndoManager *undo = g.undoManager;
     [undo disableUndoRegistration];
@@ -596,6 +690,8 @@ static GICDocument *Build(NSDictionary *spec)
             if (![object isKindOfClass:NSDictionary.class]) GICFail(@"%@ must be an object, not %@", path, Describe(object));
             AddObject(b, object, path);
         }];
+        // Fits last, so that a fit may name a series given before or after it.
+        for (NSArray *fit in b->fits) AddFit(b, fit[0], fit[1]);
         if (title) [b->pageLabels addObject:@[[[[RSTextLabel alloc] initWithGraph:g identifier:nil attributedString:Text(title, 29, YES, b->ink) position:RSDataPointMake(0, 0) rotation:0] autorelease],
                                               Boxed(RSDataPointMake(58, height - 70)), @"left-page"]];
         if (subtitle) [b->pageLabels addObject:@[[[[RSTextLabel alloc] initWithGraph:g identifier:nil attributedString:Text(subtitle, 16, NO, b->ink) position:RSDataPointMake(0, 0) rotation:0] autorelease],
@@ -621,6 +717,7 @@ static GICDocument *Build(NSDictionary *spec)
             // The app's own placement for a new owned label, then the text, then placement again for its size.
             RSPositionNewLabel(document.editor.renderer, owner);
             owner.label.attributedString = entry[1];
+            if ([owner isKindOfClass:RSFitLine.class]) [(RSFitLine *)owner updateLabel];  // the equation, as formatted after layout
             [document.editor.renderer positionLabel:owner.label forOwner:owner];
         }
         [g recomputeNow];
@@ -633,6 +730,7 @@ static GICDocument *Build(NSDictionary *spec)
     }
     [undo removeAllActions];
     [document.editor prepareForSave];
+    *fitPaths = [[b->fitPaths copy] autorelease];
     return document;
 }
 
@@ -641,6 +739,35 @@ static GICDocument *Build(NSDictionary *spec)
 static NSDictionary *Counts(RSGraph *g)
 {
     return @{@"vertices":@(g.Vertices.count), @"lines":@(g.Lines.count), @"fills":@(g.Fills.count), @"labels":@(g.userLabels.count)};
+}
+
+static NSArray *FitLines(RSGraph *g)
+{
+    NSMutableArray *fits = [NSMutableArray array];
+    for (RSLine *line in g.Lines) if ([line isKindOfClass:RSFitLine.class]) [fits addObject:line];
+    return fits;
+}
+
+// Each reopened best-fit line, recomputed from its data as the app does when a point moves, must keep the endpoints
+// it was saved with: what was written is the least-squares line of its points. Returns the status bar texts.
+static NSArray *CheckFits(RSGraph *written, RSGraph *reopened, NSArray *paths)
+{
+    NSArray *before = FitLines(written), *after = FitLines(reopened);
+    if (after.count != paths.count || before.count != paths.count) GICFail(@"Reopened %lu best-fit lines, expected %lu", (unsigned long)after.count, (unsigned long)paths.count);
+    NSMutableArray *info = [NSMutableArray array];
+    [after enumerateObjectsUsingBlock:^(RSFitLine *fit, NSUInteger i, BOOL *stop) {
+        RSFitLine *original = before[i];
+        if (fit.data.count != original.data.count) GICFail(@"%@: the reopened best-fit line has %lu points, expected %lu", paths[i], (unsigned long)fit.data.count, (unsigned long)original.data.count);
+        RSDataPoint saved[2] = {fit.startVertex.position, fit.endVertex.position};
+        [fit setNeedsRecompute];
+        [fit recomputeNow];
+        RSDataPoint now[2] = {fit.startVertex.position, fit.endVertex.position};
+        for (int k = 0; k < 2; k++)
+            if (!nearlyEqualDataValues(saved[k].x, now[k].x) || !nearlyEqualDataValues(saved[k].y, now[k].y))
+                GICFail(@"%@: the reopened best-fit line moved when recomputed, (%.17g, %.17g) to (%.17g, %.17g)", paths[i], saved[k].x, saved[k].y, now[k].x, now[k].y);
+        [info addObject:[NSString stringWithFormat:@"%@: %@", paths[i], fit.infoString]];
+    }];
+    return info;
 }
 
 void GICCreateUsage(FILE *out)
@@ -685,7 +812,8 @@ int GICCreateMain(int argc, const char *argv[])
             NSDictionary *spec = [NSJSONSerialization JSONObjectWithData:json options:0 error:&error];
             if (![spec isKindOfClass:NSDictionary.class]) GICFail(@"%@ is not a JSON object: %@", input, error.localizedDescription ?: @"the top level must be {...}");
             GICStart();
-            document = Build(spec);
+            NSArray *fitPaths = nil, *fitInfo = nil;
+            document = Build(spec, &fitPaths);
             RSGraph *g = document.graph;
             NSData *xml = [g generateXMLOfType:RSGraphFileType frame:CGRectZero error:&error];
             if (!xml) GICFail(@"Cannot generate the document XML: %@", error.localizedDescription);
@@ -700,6 +828,7 @@ int GICCreateMain(int argc, const char *argv[])
                 if (reopened.encoding != RSGraphArchiveOPC) GICFail(@"The written file did not reopen as an OPC package");
                 if (![Counts(reopened.graph) isEqual:Counts(g)]) GICFail(@"Reopened %@, expected %@", Counts(reopened.graph), Counts(g));
                 if (!CGSizeEqualToSize(reopened.graph.canvasSize, g.canvasSize)) GICFail(@"The canvas size changed on reopen");
+                fitInfo = CheckFits(g, reopened.graph, fitPaths);
                 NSURL *target = [NSURL fileURLWithPath:output];
                 if (force && [NSFileManager.defaultManager fileExistsAtPath:output]) {
                     if (![NSFileManager.defaultManager replaceItemAtURL:target withItemAtURL:[NSURL fileURLWithPath:temporary] backupItemName:nil options:0 resultingItemURL:NULL error:&error])
@@ -713,6 +842,7 @@ int GICCreateMain(int argc, const char *argv[])
             printf("wrote %s (%.0f × %.0f pt; %s vertices, %s lines, %s fills, %s labels); reopened with the production reader\n", output.UTF8String,
                    g.canvasSize.width, g.canvasSize.height, [counts[@"vertices"] description].UTF8String, [counts[@"lines"] description].UTF8String,
                    [counts[@"fills"] description].UTF8String, [counts[@"labels"] description].UTF8String);
+            for (NSString *line in fitInfo) printf("%s\n", line.UTF8String);
         } @catch (NSException *exception) {
             fprintf(stderr, "graphink create: %s\n", exception.reason.UTF8String);
             status = GICExitFailure;
