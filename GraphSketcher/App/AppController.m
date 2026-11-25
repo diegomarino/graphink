@@ -543,9 +543,6 @@ static void RSHandleSystemFrameworkAssertion(NSString *location, NSString *descr
 - (IBAction)addPointToFill:(id)sender {
     [[self frontDocument] performMenuItem:@selector(addPointToFill:) withName:[sender title]];
 }
-- (IBAction)bestFitLine:(id)sender {
-    [[self frontDocument] performMenuItem:@selector(bestFitLine:) withName:[sender title]];
-}
 - (IBAction)histogram:(id)sender {
     [[self frontDocument] performMenuItem:@selector(histogram:) withName:[sender title]];
 }

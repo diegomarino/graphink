@@ -38,7 +38,6 @@
 - (IBAction)connectPointsCircular:(id)sender;
 - (IBAction)fillArea:(id)sender;
 - (IBAction)addPointToFill:(id)sender;
-- (IBAction)bestFitLine:(id)sender;
 - (IBAction)histogram:(id)sender;
 - (IBAction)groupUngroup:(id)sender;
 - (IBAction)lockUnlock:(id)sender;
