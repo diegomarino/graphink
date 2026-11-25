@@ -55,6 +55,15 @@ start the tag pipeline) get more.
      packaged with `package-release.sh`; `Graphink.dmg` is uploaded as a workflow
      artifact kept for 5 days. That is never a tag or a GitHub Release.
    - Otherwise only logs are uploaded. PR builds never upload an app.
+   - The `macos-<configuration>-logs` artifact (and `release-<tag>-logs` in
+     `release.yml`) holds the build log, the check logs, and what
+     [`collect-diagnostics.py`](../.github/scripts/collect-diagnostics.py) adds:
+     every `*.log` under the build root's `checks/` (for example the cli check's
+     one log per `graphink` run; at most 1 MiB each, 20 MiB in all, never
+     products, renders or binaries) and the crash reports in
+     `~/Library/Logs/DiagnosticReports` written during the job by Graphink,
+     `graphink` or a check fixture. The step prints what it copied and the
+     artifact's size, and never fails the job.
 
 ### Linters
 
