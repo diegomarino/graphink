@@ -253,6 +253,7 @@ def main():
         run([helper, 'render', doc, '-o', created / (spec.stem + '.png')], logs / f'render-{spec.stem}.log')
         fits = check_fits((created / (spec.stem + '-contents.xml')).read_bytes(), proc.stdout, spec.name)
         report['created'][spec.name] = {'document': str(doc), 'sha256': digest(doc), 'summary': proc.stdout.strip(), 'fits': fits}
+    assert any(c['fits'] for c in report['created'].values()), 'Expected an example spec with a best-fit line'
 
     # 4a. Best-fit lines: extents, a connected series, a fit given before its series, no label, a style preset.
     # Each document is checked like the examples, and its fit against an independent least-squares fit.

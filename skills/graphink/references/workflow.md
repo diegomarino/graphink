@@ -41,6 +41,9 @@ Rules that keep graphs correct and editable:
   hand-drawn shape where overshoot does not matter (an indifference curve sketch).
 - Fill corners go **in order around the region**, with the same coordinates as the lines that bound
   it.
+- A trend or regression line through data is a `fit` on the series (give the series an `id`), never a
+  `line` placed by eye: Graphink computes the least-squares line, labels it with its equation and R²,
+  and keeps it right when a point moves in the app.
 - Guides (dotted lines to the axes) use `"color": "guide", "width": 1, "dash": "dotted"`.
 - Label each curve once. Short names (`D`, `S`, `MC`, `f(x)`) as the line's `label`; longer notes as
   `label` objects in empty space.
