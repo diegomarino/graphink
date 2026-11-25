@@ -53,6 +53,19 @@ for flags, present in ((['-DDEBUG', '-DDEBUG_ci'], True), ([], False)):
         assert (needle in preprocessed) == present, (flags, needle)
 (output / 'preprocessed-release.m').write_text(preprocessed)
 print('PASS: Experimental menu builder and call only under #ifdef DEBUG; the Release preprocessor output has none of it')
+# The two Omni keyboard hacks on the canvas (Option-Delete resizes the window, Command-Shift-Up
+# generates fake data) are Debug-only too: Release gets the standard AppKit behaviour.
+view = (root / 'GraphSketcher/App/RSGraphView.m').read_text()
+HACKS = ('- (void)deleteWordBackward:(id)sender', '- (void)moveToBeginningOfDocumentAndModifySelection:(id)sender;')
+assert all(view.count(h.split(':')[0] + ':') == 1 for h in HACKS), 'Each keyboard hack is implemented exactly once'
+guard = view.rindex('#ifdef DEBUG\n', 0, view.index(HACKS[0]))
+hacks = view[guard:view.index('\n#endif\n', guard) + len('\n#endif\n')]
+assert all(h in hacks for h in HACKS) and hacks.count('#if') == 1, 'Both keyboard hacks must sit in one #ifdef DEBUG block'
+for flags, present in ((['-DDEBUG', '-DDEBUG_ci'], True), ([], False)):
+    preprocessed = subprocess.run(['xcrun', 'clang', '-E', '-P', '-x', 'objective-c', *flags, '-'], input=hacks, capture_output=True, text=True, check=True).stdout
+    for needle in ('deleteWordBackward:', 'moveToBeginningOfDocumentAndModifySelection:', 'generateStandardNormalData:', 'setFrame:frame'):
+        assert (needle in preprocessed) == present, (flags, needle)
+print('PASS: the fake-data and window-size keyboard hacks only under #ifdef DEBUG; the Release preprocessor output has none of them')
 action = extract((root / 'GraphSketcher/App/RSGraphView.m').read_text(), '- (IBAction)addEquationLine:')
 model = (root / 'GraphSketcher/Model/RSEquationLine.h').read_text()
 model = model[model.index('typedef enum'):model.index('RSEquation RSEquationZero')]
