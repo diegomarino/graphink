@@ -1570,6 +1570,7 @@
 			baseConfigurationReference = 00BB84060EA7C66800A9D91D /* Omni-Application-Release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(OMNI_BUNDLE_IDENTIFIER).entitlements";
+				EXCLUDED_SOURCE_FILE_NAMES = experimental.png;
 				HEADER_SEARCH_PATHS = (
 					$PROJECT_DERIVED_FILE_DIR,
 					/usr/include/libxml2,
