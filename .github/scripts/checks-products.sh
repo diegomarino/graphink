@@ -30,6 +30,8 @@ run_check document-types "$logs" python3 Checks/check-document-types.py --produc
 run_check new-from "$logs" python3 Checks/check-new-from.py --products "$products" --output "$evidence/new-from"
 run_check legacy-roundtrips "$logs" python3 Checks/check-legacy-roundtrips.py --products "$products" --output "$evidence/legacy-roundtrips"
 run_check cli "$logs" python3 tools/cli/check-cli.py --products "$products" --output "$evidence/cli"
+run_check svg-structure "$logs" python3 Checks/check-svg-export.py --products "$products" --structure-only \
+  --output "$evidence/svg-structure"
 
 if [[ "${GUI_CHECKS:-0}" == 1 ]]; then
   run_check sidebar "$logs" python3 Checks/check-sidebar.py --products "$products" --output "$evidence/sidebar"
@@ -63,8 +65,10 @@ if [[ "${GUI_CHECKS:-0}" == 1 ]]; then
   run_check export-paths "$logs" python3 Checks/check-export-paths.py --products "$products" \
     --objects "$build_root/Debug/Intermediates/GraphSketcher.build/Debug/GraphSketcher.build/Objects-normal/arm64/$APP_NAME.LinkFileList" \
     --output "$evidence/export-paths"
+  run_check svg-export "$logs" python3 Checks/check-svg-export.py --products "$products" \
+    --output "$evidence/svg-export"
 else
-  echo "Window-creating checks (sidebar, viewport, page-size, zoom-accessibility, assertion-policy, key-loop, snap-distance, native-qualification, find, cli-app, export-paths) skipped; set GUI_CHECKS=1 in a GUI session"
+  echo "Window-creating checks (sidebar, viewport, page-size, zoom-accessibility, assertion-policy, key-loop, snap-distance, native-qualification, find, cli-app, export-paths, svg-export) skipped; set GUI_CHECKS=1 in a GUI session"
 fi
 # Last: every fixture the checks above wrote must not claim Graphink documents, and nothing but
 # Graphink.app may sit in the products directory that is zipped and delivered.
