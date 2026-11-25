@@ -6,6 +6,7 @@
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
 #import "RSGraphElement-Rendering.h"
+#import "RSDrawing.h"
 
 #import <GraphSketcherModel/RSDataMapper.h>
 #import <GraphSketcherModel/RSGraphRenderer.h>
@@ -263,22 +264,18 @@
     if( [self shape] == RS_HOLLOW ) {
 	// clear what's behind it
 	P = [self pathUsingMapper:mapper newWidth:(CGFloat)([self width]*0.8 - 0.4) newShape:RS_CIRCLE];
-	[[_graph backgroundColor] set];
-	[P fill];
+	RSFillDrawingPath(P, [_graph backgroundColor]);
 	// draw the hollow point
 	P = [self pathUsingMapper:mapper];
-	[[self color] set];
-	[P fill];
+	RSFillDrawingPath(P, [self color]);
     }
     else if( [self isBar] ) {
 	P = [self pathUsingMapper:mapper];
-	[[self color] set];
-	[P fill];
+	RSFillDrawingPath(P, [self color]);
     }
     else {
 	P = [self pathUsingMapper:mapper];
-	[[self color] set];
-	[P fill];
+	RSFillDrawingPath(P, [self color]);
     }
 }
 

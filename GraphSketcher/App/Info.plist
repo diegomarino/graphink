@@ -294,8 +294,6 @@
 				
 				
 				<!-- Debugging -->
-				<key>ShowExperimentalFeaturesMenu</key>
-				<false/>
 				<key>ValidateXMLOnSave</key>
 				<false/>
 				<key>SaveFilesAsPlainXML</key>

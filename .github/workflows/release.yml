@@ -80,6 +80,8 @@ jobs:
           fi
           BUILD_NUMBER=$((GITHUB_RUN_NUMBER + BUILD_NUMBER_BASE)) \
             .github/scripts/build.sh Release "$RUNNER_TEMP/build"
+      - name: Release has no Experimental menu
+        run: python3 Checks/check-experimental-menu.py --products "$RUNNER_TEMP/build/Release/Products/Release" --configuration Release --output "$RUNNER_TEMP/build/checks/experimental-menu-release"
       - name: Package Graphink.dmg and graphink-cli.zip
         env:
           DEVELOPER_ID_P12_BASE64: ${{ secrets.DEVELOPER_ID_P12_BASE64 }}

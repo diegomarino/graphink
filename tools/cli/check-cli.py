@@ -394,7 +394,7 @@ def main():
     (bad / 'replaced.graphink').write_bytes(b'old')
     run([helper, 'create', specs[0], '-o', bad / 'replaced.graphink', '--force'], logs / 'create-force.log')
     run([sys.executable, ROOT / 'docs/format/check-opc.py', bad / 'replaced.graphink'], logs / 'create-force-opc.log')
-    run([helper, 'render', first, '-o', out / 'x.svg'], logs / 'refuse-type.log', expect=2)
+    run([helper, 'render', first, '-o', out / 'x.bmp'], logs / 'refuse-type.log', expect=2)
     run([helper, 'render', first, '-o', out / 'x.png', '--dpi', '5000'], logs / 'refuse-dpi.log', expect=2)
     # --dpi and --scale take a positive number and nothing else.
     for index, (option, value) in enumerate((('--dpi', 'abc'), ('--dpi', '0'), ('--dpi', '-72'), ('--dpi', '72abc'), ('--dpi', ''),
@@ -405,7 +405,7 @@ def main():
         run([helper, 'render', first, '--info', option, value], logs / f'refuse-resolution-info-{index}.log', expect=2)
     run([helper, 'render', first, '-o', out / 'x.png', '--dpi', '72', '--scale', '1'], logs / 'refuse-dpi-and-scale.log', expect=2)
     run([helper, 'render', out / 'missing.graphink', '-o', out / 'x.png'], logs / 'refuse-missing.log', expect=1)
-    assert not (out / 'x.png').exists() and not (out / 'x.svg').exists()
+    assert not (out / 'x.png').exists() and not (out / 'x.bmp').exists()
     assert digest(first) == report['created'][specs[0].name]['sha256'], 'A refused overwrite changed the document'
 
     # 6. The zip's copy draws and creates exactly what the app's helper does.

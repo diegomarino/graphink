@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check real AppKit menu construction and production equation dispatch offscreen."""
+"""Check real AppKit menu construction, the Debug-only Experimental menu guard and production equation dispatch offscreen."""
 import argparse
 import hashlib
 import json
@@ -29,8 +29,43 @@ def extract(text, signature):
     return text[start:end]
 
 controller = (root / 'GraphSketcher/App/AppController.m').read_text()
-menu = extract(controller, 'if ([[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"ShowExperimentalFeaturesMenu"])')
-menu = menu[menu.index('{') + 1:-1]
+# The Experimental menu is Debug-only: its builder and its one call sit inside `#ifdef DEBUG`
+# (DEBUG comes from Omni-Global-Debug.xcconfig), and no preference can turn it on in Release.
+assert 'ShowExperimentalFeaturesMenu' not in controller, 'The Experimental menu must not depend on a preference'
+assert b'ShowExperimentalFeaturesMenu' not in (root / 'GraphSketcher/App/Info.plist').read_bytes(), 'Stale ShowExperimentalFeaturesMenu default'
+assert '#define DEBUG' not in controller and '#undef DEBUG' not in controller
+assert 'DEBUG DEBUG_$(USER)' in (root / 'OmniGroup/Configurations/Omni-Global-Debug.xcconfig').read_text(), 'Debug no longer defines DEBUG'
+assert 'PREPROCESSOR_DEFINITIONS' not in (root / 'OmniGroup/Configurations/Omni-Global-Release.xcconfig').read_text(), 'Release must not define DEBUG'
+DEFINITION = '#ifdef DEBUG\n- (void)_installExperimentalMenu;\n{\n'
+CALL = '#ifdef DEBUG\n    // Debug builds always show the Experimental menu; Release builds compile it out entirely.\n    [self _installExperimentalMenu];\n#endif\n}\n'
+assert controller.count('_installExperimentalMenu') == 2 and controller.count(DEFINITION) == 1 and controller.count(CALL) == 1
+assert controller.index(CALL) < controller.index('- (void)applicationDidFinishLaunching:'), 'The call must stay in applicationWillFinishLaunching:'
+method = extract(controller, '- (void)_installExperimentalMenu;')
+assert controller[controller.index(method) + len(method):].startswith('\n#endif\n'), 'The builder must end inside its #ifdef DEBUG'
+assert controller.count('"Experimental menu item"') == method.count('"Experimental menu item"'), 'Experimental strings outside the Debug-only builder'
+menu = method[method.index('{') + 1:-1]
+# Preprocess the production text (no headers needed) the way each configuration does: with
+# -DDEBUG the call and the builder survive; without it nothing of the menu does.
+region = controller[controller.index(CALL):controller.index(method) + len(method) + len('\n#endif\n')]
+for flags, present in ((['-DDEBUG', '-DDEBUG_ci'], True), ([], False)):
+    preprocessed = subprocess.run(['xcrun', 'clang', '-E', '-P', '-x', 'objective-c', *flags, '-'], input=region, capture_output=True, text=True, check=True).stdout
+    for needle in ('_installExperimentalMenu', 'NSLocalizedString(@"Experimental"', 'insertItem:experimentalMenuItem atIndex:7'):
+        assert (needle in preprocessed) == present, (flags, needle)
+(output / 'preprocessed-release.m').write_text(preprocessed)
+print('PASS: Experimental menu builder and call only under #ifdef DEBUG; the Release preprocessor output has none of it')
+# The two Omni keyboard hacks on the canvas (Option-Delete resizes the window, Command-Shift-Up
+# generates fake data) are Debug-only too: Release gets the standard AppKit behaviour.
+view = (root / 'GraphSketcher/App/RSGraphView.m').read_text()
+HACKS = ('- (void)deleteWordBackward:(id)sender', '- (void)moveToBeginningOfDocumentAndModifySelection:(id)sender;')
+assert all(view.count(h.split(':')[0] + ':') == 1 for h in HACKS), 'Each keyboard hack is implemented exactly once'
+guard = view.rindex('#ifdef DEBUG\n', 0, view.index(HACKS[0]))
+hacks = view[guard:view.index('\n#endif\n', guard) + len('\n#endif\n')]
+assert all(h in hacks for h in HACKS) and hacks.count('#if') == 1, 'Both keyboard hacks must sit in one #ifdef DEBUG block'
+for flags, present in ((['-DDEBUG', '-DDEBUG_ci'], True), ([], False)):
+    preprocessed = subprocess.run(['xcrun', 'clang', '-E', '-P', '-x', 'objective-c', *flags, '-'], input=hacks, capture_output=True, text=True, check=True).stdout
+    for needle in ('deleteWordBackward:', 'moveToBeginningOfDocumentAndModifySelection:', 'generateStandardNormalData:', 'setFrame:frame'):
+        assert (needle in preprocessed) == present, (flags, needle)
+print('PASS: the fake-data and window-size keyboard hacks only under #ifdef DEBUG; the Release preprocessor output has none of them')
 action = extract((root / 'GraphSketcher/App/RSGraphView.m').read_text(), '- (IBAction)addEquationLine:')
 model = (root / 'GraphSketcher/Model/RSEquationLine.h').read_text()
 model = model[model.index('typedef enum'):model.index('RSEquation RSEquationZero')]

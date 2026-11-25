@@ -120,6 +120,9 @@ jobs:
             export EXTRA_BUILD_SETTINGS="$RELEASE_DISTRIBUTION_SETTINGS"
           fi
           .github/scripts/build.sh "$CONFIGURATION" "$RUNNER_TEMP/build"
+      - name: Release has no Experimental menu
+        if: matrix.configuration == 'Release'
+        run: python3 Checks/check-experimental-menu.py --products "$RUNNER_TEMP/build/Release/Products/Release" --configuration Release --output "$RUNNER_TEMP/build/checks/experimental-menu-release"
       - name: Windowless product checks
         if: matrix.configuration == 'Debug'
         run: .github/scripts/checks-products.sh "$RUNNER_TEMP/build" "$RUNNER_TEMP/logs/products"

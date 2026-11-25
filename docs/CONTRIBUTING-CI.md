@@ -51,6 +51,8 @@ start the tag pipeline) get more.
      then signature and architecture checks.
    - Debug only, [`checks-products.sh`](../.github/scripts/checks-products.sh):
      windowless checks against this run's own Debug products.
+   - Release only: `Checks/check-experimental-menu.py --configuration Release`, so the
+     Debug-only Experimental menu never reaches a Release product.
    - On pushes to `main`, Release is built with the distribution settings and
      packaged with `package-release.sh`; `Graphink.dmg` is uploaded as a workflow
      artifact kept for 5 days. That is never a tag or a GitHub Release.
@@ -117,7 +119,7 @@ changes. `git commit --no-verify` skips the hook once; CI still runs everything.
 | `Checks/Analyzer/dependencies/check-packaging.py` | git, OmniGroup clone, `/private/tmp` | toolchain |
 | `Checks/Analyzer/dependencies/check-regressions.py` | clang, patched OmniGroup | toolchain |
 | `Checks/Analyzer/model/check-model.py` | clang | toolchain |
-| `Checks/Analyzer/app/checks.py`, `menu-checks.py` | clang (menus build offscreen, no window) | toolchain |
+| `Checks/Analyzer/app/checks.py`, `menu-checks.py` (the Experimental menu is built only under `#ifdef DEBUG`: the production text preprocessed with and without `DEBUG`) | clang (menus build offscreen, no window) | toolchain |
 | `Checks/check-graphink-extensions.py` | clang | toolchain |
 | `Checks/check-documents.sh --products` | Debug products | products |
 | `docs/format/check-format.py` | Debug products | products |
@@ -126,8 +128,10 @@ changes. `git commit --no-verify` skips the hook once; CI still runs everything.
 | `UI/check-style-defaults.py`, `UI/StylePresets/check-presets.py`, `check-creation-defaults.py`, `check-package-documents.py` | Debug products | products |
 | `Checks/check-document-types.py`, `check-new-from.py`, `check-legacy-roundtrips.py` | Debug products | products |
 | `tools/cli/check-cli.py` (the `graphink` helper in the app and in `graphink-cli.zip`, packaged by the check: signature and layout, every example and historical sample rendered read-only, PDFs equal to the previews, the skill's example specs created and validated, its scripts run with the tool, refusals) | Debug products, xmllint | products |
+| `Checks/check-experimental-menu.py --configuration Debug` (the executable carries the Experimental menu) / `--configuration Release` (no file in the bundle carries its titles, its builder or its icon) | Debug products; Release products (macOS Release job, `release.yml`, and `checks-products.sh` when the build root also holds a Release build) | products / Release |
+| `Checks/check-svg-export.py --structure-only` (`graphink render` SVG for every example and its text fixtures: real `<text>`, no outlines or images, paths, dashes, deterministic output, refusals) | Debug products | products |
 | `Checks/check-fixture-bundles.py` (no check fixture app can claim Graphink documents or ship with the products) | Debug products, the checks' evidence, read-only Launch Services database | products |
-| `Checks/check-sidebar.py`, `Checks/check-viewport.py`, `Checks/check-page-size.py`, `Checks/check-zoom-accessibility.py`, `Checks/check-assertion-policy.py`, `Checks/check-key-loop.py`, `Checks/check-snap-distance.py`, `Checks/check-native-qualification.py`, `Checks/check-find.py`, `Checks/check-cli-app.py` (File ▸ Export's data equals `graphink render`'s for every example; the Install Command-Line Tool… window), `Checks/check-export-paths.py` (with everything selected, the graph view's PNG export, its PDF, Copy as Image's PDF and the saved preview equal `graphink render`'s) | Debug products plus an Aqua session (offscreen `NSWindow`s; `check-assertion-policy.py` also runs an `NSApplication` event loop and accessibility requests; `check-native-qualification.py` emulates the key window and never shows the shared font and color panels; `check-find.py` uses the shared find pasteboard and restores it) | opt-in: `GUI_CHECKS=1` |
+| `Checks/check-sidebar.py`, `Checks/check-viewport.py`, `Checks/check-page-size.py`, `Checks/check-zoom-accessibility.py`, `Checks/check-assertion-policy.py`, `Checks/check-key-loop.py`, `Checks/check-snap-distance.py`, `Checks/check-native-qualification.py`, `Checks/check-find.py`, `Checks/check-cli-app.py` (File ▸ Export's data equals `graphink render`'s for every example; the Install Command-Line Tool… window), `Checks/check-svg-export.py` (the same, plus each SVG rasterized offscreen with WebKit and compared with the PDF; differences are reported, not hidden), `Checks/check-export-paths.py` (with everything selected, the graph view's PNG export, its PDF, Copy as Image's PDF and the saved preview equal `graphink render`'s) | Debug products plus an Aqua session (offscreen `NSWindow`s; `check-assertion-policy.py` also runs an `NSApplication` event loop and accessibility requests; `check-native-qualification.py` emulates the key window and never shows the shared font and color panels; `check-find.py` uses the shared find pasteboard and restores it) | opt-in: `GUI_CHECKS=1` |
 | `UI/Graphink/Cursors/check-cursors.py`, `UI/Design/*`, `UI/LogoStudy/*` | Pillow, poppler (asset pipelines) | not in CI |
 | `UI/StylePresets/check-archives.py` | a separately compiled fixture and a native package | not in CI |
 | `Examples/Microeconomics/validate.py` | rendered PDFs from a generate run | not in CI |

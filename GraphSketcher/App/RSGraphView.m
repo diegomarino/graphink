@@ -1194,9 +1194,13 @@ BOOL showWhaBam = NO;
 
 
 
-/////////////
+#ifdef DEBUG
+// Debug-only keyboard hacks, kept with the Experimental menu. Release builds compile them out, so
+// Option-Delete and Command-Shift-Up on the canvas get the standard AppKit behaviour there. A label
+// being edited is unaffected in both builds: its field editor handles these keys itself.
+
 // a hack to set the screen to default size
-// the key combo is ctrl-option-delete
+// the key combo is option-delete (or ctrl-option-delete)
 - (void)deleteWordBackward:(id)sender {
     NSRect frame = [[self window] frame];
     frame.origin.y += frame.size.height - 500;
@@ -1206,11 +1210,12 @@ BOOL showWhaBam = NO;
 }
 
 // Temporary hack to add fake data
-// the key combo is command-shift-up
+// the key combo is command-shift-up (or shift-home)
 - (void)moveToBeginningOfDocumentAndModifySelection:(id)sender;
 {
     [self generateStandardNormalData:sender];
 }
+#endif
 
 
 // "Escape" key pressed

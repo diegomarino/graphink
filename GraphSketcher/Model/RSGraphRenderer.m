@@ -28,6 +28,7 @@
 #import <OmniFoundation/CFArray-OFExtensions.h>
 
 #import "RSText.h"
+#import "RSDrawing.h"
 
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
 #import <AppKit/NSShadow.h>
@@ -2627,7 +2628,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     [self applyDashStyleForLine:L toPath:P];
     CGFloat w = [L width];
     [P setLineWidth:w];
-    [[L color] set];
+
     
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
     CGRect allScreens = CGRectZero;
@@ -2643,7 +2644,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     }
 #endif
     
-    [P stroke];
+    RSStrokeDrawingPath(P, [L color]);
     
     // make rounded edges
     if ([L dash] > 1) {
@@ -2651,14 +2652,14 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
             CGPoint p = [_mapper convertToViewCoords:[L startPoint]];
             CGRect r = CGRectMake(p.x - w*0.5f, p.y - w*0.5f, w, w);
             P = [NSBezierPath bezierPathWithOvalInRect:r];
-            [P fill];
+            RSFillDrawingPath(P, [L color]);
         }
         
         if ([[L endVertex] shape] == RS_NONE) {
             CGPoint p = [_mapper convertToViewCoords:[L endPoint]];
             CGRect r = CGRectMake(p.x - w*0.5f, p.y - w*0.5f, w, w);
             P = [NSBezierPath bezierPathWithOvalInRect:r];
-            [P fill];
+            RSFillDrawingPath(P, [L color]);
         }
     }
     
@@ -2698,7 +2699,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    //}
 	    [P rotateInFrame:r byDegrees:rotation];
 	    // draw the arrowhead
-	    [P fill];
+	    RSFillDrawingPath(P, [L color]);
 	}
     }
     // reverse direction
@@ -2729,7 +2730,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    rotation = [_mapper degreesFromHorizontalOfLine:L atTime:t];
 	    [P rotateInFrame:r byDegrees:rotation];
 	    // draw the arrowhead
-	    [P fill];
+	    RSFillDrawingPath(P, [L color]);
 	}
     }
     //////
@@ -2762,7 +2763,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    rotation = [_mapper degreesFromHorizontalOfLine:L atTime:t];
 	    [P rotateInFrame:r byDegrees:rotation];
 	    
-	    [P fill];
+	    RSFillDrawingPath(P, [L color]);
 	}
     }
 }
@@ -2809,8 +2810,8 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	    width /= 4;
 	
 	P = [[F firstVertex] pathUsingMapper:_mapper newWidth:width];
-	[[F color] set];
-	[P fill];
+
+	RSFillDrawingPath(P, [F color]);
     }
     else if ( [F isTwoVertices] ) {	// only contains two vertices
 	// draw as an oversized line
@@ -2840,18 +2841,18 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	//if( ![V1 shape] )  width *= 2;
 	//if( ![V2 shape] )  width *= 2;
 	[P setLineWidth:width];
-	[[F color] set];
+
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
         [P setLineCapStyle:kCGLineCapRound];
 #else
 	[P setLineCapStyle:NSLineCapStyleRound];
 #endif
-	[P stroke];
+	RSStrokeDrawingPath(P, [F color]);
     }
     
     // more than two vertices
     else {
-	[[F color] set];
+
         
         CGFloat area = 0;
         if (inProgress) {
@@ -2866,11 +2867,11 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 #else
             [P setLineCapStyle:NSLineCapStyleRound];
 #endif
-            [P stroke];
+            RSStrokeDrawingPath(P, [F color]);
         } else {
             // Otherwise, draw normally (as a filled-in area)
             P = [self pathFromFill:F];
-            [P fill];
+            RSFillDrawingPath(P, [F color]);
         }
 
 	
@@ -2951,13 +2952,11 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     NSBezierPath *P;
     if ( [[_graph xGrid] displayGrid] ) {
 	P = [self pathFromGrid:[_graph xGrid] width:[[_graph xGrid] width]];
-	[[_graph gridColor] set];
-	[P stroke];
+	RSStrokeDrawingPath(P, [_graph gridColor]);
     }
     if ( [[_graph yGrid] displayGrid] ) {
 	P = [self pathFromGrid:[_graph yGrid] width:[[_graph yGrid] width]];
-	[[_graph gridColor] set];
-	[P stroke];
+	RSStrokeDrawingPath(P, [_graph gridColor]);
     }
 }
 
@@ -2968,8 +2967,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	return;
     
     NSBezierPath *P = [self pathFromAxis:A width:[A width]];
-    [[A color] set];
-    [P stroke];
+    RSStrokeDrawingPath(P, [A color]);
     
     //
     // Arrow shape extras:
@@ -3026,7 +3024,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 		P = [NSBezierPath arrowheadWithBaseAtPoint:p width:b height:c];
 		//r.origin = p;
 		//[self rotateBezierPath:P inFrame:r byDegrees:180];
-		[P fill];
+		RSFillDrawingPath(P, [A color]);
 	    }
 	    // arrowhead at max-end
 	    if( [A shouldDrawMaxArrow] ) {
@@ -3049,7 +3047,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 		P = [NSBezierPath arrowheadWithBaseAtPoint:p width:b height:c];
 		r.origin = p;
 		[P rotateInFrame:r byDegrees:180];
-		[P fill];
+		RSFillDrawingPath(P, [A color]);
 	    }
 	}
 	else if( [A orientation] == RS_ORIENTATION_VERTICAL && [[_graph otherAxis:A] placement] != RSBothEdgesPlacement ) {
@@ -3063,7 +3061,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 		P = [NSBezierPath arrowheadWithBaseAtPoint:p width:b height:c];
 		r.origin = p;
 		[P rotateInFrame:r byDegrees:90];
-		[P fill];
+		RSFillDrawingPath(P, [A color]);
 	    }
 	    // arrowhead at max-end
 	    if( [A shouldDrawMaxArrow] ) {
@@ -3075,7 +3073,7 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 		P = [NSBezierPath arrowheadWithBaseAtPoint:p width:b height:c];
 		r.origin = p;
 		[P rotateInFrame:r byDegrees:270];
-		[P fill];
+		RSFillDrawingPath(P, [A color]);
 	    }
 	}
     }
@@ -3472,12 +3470,11 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
     
     //////////////////
     // Fill view with background color
-    [backgroundColor set];
-
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
+    [backgroundColor set];
     CGContextFillRect(UIGraphicsGetCurrentContext(), bounds);
 #else
-    [NSBezierPath fillRect: bounds];
+    RSFillDrawingRect(bounds, backgroundColor);
 #endif
     
     ///////////////////
