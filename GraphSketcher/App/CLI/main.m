@@ -5,7 +5,7 @@
 
 static void Usage(FILE *out)
 {
-    fputs("Usage: graphink render INPUT -o OUTPUT.{pdf,png,jpg,tiff} [--dpi N | --scale N] [--force] [--info]\n"
+    fputs("Usage: graphink render INPUT -o OUTPUT.{pdf,svg,png,jpg,tiff} [--dpi N | --scale N] [--force] [--info]\n"
           "       graphink create SPEC.json -o OUTPUT.graphink [--force]\n"
           "       graphink --version\n"
           "       graphink help [render|create]\n"

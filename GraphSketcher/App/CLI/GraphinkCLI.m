@@ -173,6 +173,15 @@ NSData *GICPDFData(GICDocument *document)
     return data;
 }
 
+NSData *GICSVGData(GICDocument *document)
+{
+    NSRect bounds = Canvas(document);
+    [document layOut];
+    NSData *data = RSGraphSVGData(document.editor, bounds);
+    if (!data.length) GICFail(@"Cannot draw the SVG");
+    return data;
+}
+
 NSData *GICRasterData(GICDocument *document, CGFloat dpi, NSString *typeIdentifier)
 {
     NSRect bounds = Canvas(document);
