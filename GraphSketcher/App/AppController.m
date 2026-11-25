@@ -313,40 +313,47 @@ static void RSHandleSystemFrameworkAssertion(NSString *location, NSString *descr
     
     [self _installNewFromMenu];
     
-    // Add a menu of experimental features if the preference for it is turned on.
-    if ([[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"ShowExperimentalFeaturesMenu"]) {
-        NSMenu *experimentalMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Experimental", @"Experimental menu item")];
-        NSInteger index = -1;
-        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Generate Normal Data", @"Experimental menu item") action:@selector(generateStandardNormalData:) keyEquivalent:@"" atIndex:++index];
-        
-        [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
-        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Tufte Tick Marks", @"Experimental menu item") action:@selector(toggleTickLayoutAtData:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Tufte Axis Extent", @"Experimental menu item") action:@selector(toggleAxesUseDataExtent:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Show Data Quartiles", @"Experimental menu item") action:@selector(toggleAxesUseDataQuartiles:) keyEquivalent:@"" atIndex:++index];
-        
-        [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
-        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Dotted Grid Lines", @"Experimental menu item") action:@selector(toggleDottedGrid:) keyEquivalent:@"" atIndex:++index];
-        
-        [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
-        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = x^2 + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeSquare];
-        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = x^3 + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeCube];
-        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = sin(x) + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeSine];
-        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = e^(-x^2) + c (Bell Curve)", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeGaussian];
-        [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = 1/(1 + e^-x) + c (Logistic)", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeLogistic];
-        
-        [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
-        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Import and Replace Data", @"Experimental menu item") action:@selector(importDataSeriesReplacingCurrent:) keyEquivalent:@"" atIndex:++index];
-        [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Import Data Series In Rows", @"Experimental menu item") action:@selector(importDataInRows:) keyEquivalent:@"" atIndex:++index];
-        
-        NSMenuItem *experimentalMenuItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Experimental", @"Experimental menu item") action:NULL keyEquivalent:@""];
-        [experimentalMenuItem setImage:[NSImage imageNamed:@"experimental"]];
-        [experimentalMenuItem setSubmenu:experimentalMenu];
-        [[[NSApplication sharedApplication] mainMenu] insertItem:experimentalMenuItem atIndex:7];
-        
-        [experimentalMenu release];
-        [experimentalMenuItem release];
-    }
+#ifdef DEBUG
+    // Debug builds always show the Experimental menu; Release builds compile it out entirely.
+    [self _installExperimentalMenu];
+#endif
 }
+
+#ifdef DEBUG
+- (void)_installExperimentalMenu;
+{
+    NSMenu *experimentalMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Experimental", @"Experimental menu item")];
+    NSInteger index = -1;
+    [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Generate Normal Data", @"Experimental menu item") action:@selector(generateStandardNormalData:) keyEquivalent:@"" atIndex:++index];
+    
+    [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
+    [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Tufte Tick Marks", @"Experimental menu item") action:@selector(toggleTickLayoutAtData:) keyEquivalent:@"" atIndex:++index];
+    [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Tufte Axis Extent", @"Experimental menu item") action:@selector(toggleAxesUseDataExtent:) keyEquivalent:@"" atIndex:++index];
+    [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Show Data Quartiles", @"Experimental menu item") action:@selector(toggleAxesUseDataQuartiles:) keyEquivalent:@"" atIndex:++index];
+    
+    [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
+    [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Dotted Grid Lines", @"Experimental menu item") action:@selector(toggleDottedGrid:) keyEquivalent:@"" atIndex:++index];
+    
+    [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
+    [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = x^2 + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeSquare];
+    [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = x^3 + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeCube];
+    [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = sin(x) + c", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeSine];
+    [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = e^(-x^2) + c (Bell Curve)", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeGaussian];
+    [[experimentalMenu insertItemWithTitle:NSLocalizedString(@"y = 1/(1 + e^-x) + c (Logistic)", @"Experimental menu item") action:@selector(addEquationLine:) keyEquivalent:@"" atIndex:++index] setTag:RSEquationTypeLogistic];
+    
+    [experimentalMenu insertItem:[NSMenuItem separatorItem] atIndex:++index];
+    [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Import and Replace Data", @"Experimental menu item") action:@selector(importDataSeriesReplacingCurrent:) keyEquivalent:@"" atIndex:++index];
+    [experimentalMenu insertItemWithTitle:NSLocalizedString(@"Import Data Series In Rows", @"Experimental menu item") action:@selector(importDataInRows:) keyEquivalent:@"" atIndex:++index];
+    
+    NSMenuItem *experimentalMenuItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Experimental", @"Experimental menu item") action:NULL keyEquivalent:@""];
+    [experimentalMenuItem setImage:[NSImage imageNamed:@"experimental"]];
+    [experimentalMenuItem setSubmenu:experimentalMenu];
+    [[[NSApplication sharedApplication] mainMenu] insertItem:experimentalMenuItem atIndex:7];
+    
+    [experimentalMenu release];
+    [experimentalMenuItem release];
+}
+#endif
 
 - (void)applicationDidFinishLaunching:(NSNotification *)note
 {
