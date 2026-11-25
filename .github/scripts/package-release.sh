@@ -11,6 +11,26 @@ build_root=${1:?build root}
 out=${2:?output dir}
 expected_version=${3:?expected marketing version}
 
+# set -e alone exits without a word. On failure only, name the command, line and function that
+# failed (set -E: also inside functions). Silent while everything succeeds.
+set -E
+report_failure() {
+  local code=$1 line=$2 command=$3
+  echo "::error::package-release.sh line $line${FUNCNAME[1]:+ (in ${FUNCNAME[*]:1})}: exit $code from: $command" >&2
+}
+trap 'report_failure $? "$LINENO" "$BASH_COMMAND"' ERR
+
+# hdiutil's output, printed only if it fails (it can fail with a reason such as "Resource busy").
+hdiutil_logged() {
+  local output code=0
+  output=$(trap - ERR; hdiutil "$@" 2>&1) || code=$?
+  if [[ $code != 0 ]]; then
+    printf '%s\n' "$output" >&2
+    echo "::error::hdiutil $1 failed with exit $code" >&2
+  fi
+  return "$code"
+}
+
 app="$build_root/Release/Products/Release/$APP_NAME.app"
 test -d "$app" || { echo "::error::No Release app at $app" >&2; exit 1; }
 case "$app" in */Debug/*) echo "::error::Refusing a Debug product" >&2; exit 1 ;; esac
@@ -92,9 +112,9 @@ stamp=$(TZ=UTC0 git log -1 --format=%cd --date=format-local:%Y%m%d%H%M.%S HEAD)
 find "$staging" -exec touch -h -t "$stamp" {} +
 codesign --verify --deep --strict "$staging/$APP_NAME.app"
 
-hdiutil create -quiet -volname "$APP_NAME" -srcfolder "$staging" -fs HFS+ \
+hdiutil_logged create -volname "$APP_NAME" -srcfolder "$staging" -fs HFS+ \
   -format UDZO -imagekey zlib-level=9 "$dmg"
-hdiutil verify -quiet "$dmg"
+hdiutil_logged verify "$dmg"
 if [[ "$SIGNING_MODE" == developer-id ]]; then
   "$(dirname "$0")/sign-developer-id.sh" notarize "$dmg"
 fi
@@ -102,7 +122,7 @@ fi
 # Mount read-only, without Finder, and check what a user would drag out.
 mountpoint="$work/mount"
 mkdir "$mountpoint"
-hdiutil attach -quiet -readonly -nobrowse -noautoopen -mountpoint "$mountpoint" "$dmg"
+hdiutil_logged attach -readonly -nobrowse -noautoopen -mountpoint "$mountpoint" "$dmg"
 status=0
 {
   [[ "$(readlink "$mountpoint/Applications")" == /Applications ]] &&
@@ -110,7 +130,7 @@ status=0
   check_app "$mountpoint/$APP_NAME.app" &&
   diff <(manifest "$app") <(manifest "$mountpoint/$APP_NAME.app")
 } || status=$?
-hdiutil detach -quiet "$mountpoint"
+hdiutil_logged detach "$mountpoint"
 [[ $status == 0 ]] || { echo "::error::Mounted DMG check failed" >&2; exit "$status"; }
 
 (cd "$out" && shasum -a 256 "$APP_NAME.dmg" > "$APP_NAME.dmg.sha256")

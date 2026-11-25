@@ -26,6 +26,7 @@ import json
 from pathlib import Path
 import plistlib
 import re
+import signal
 import struct
 import subprocess
 import sys
@@ -55,6 +56,13 @@ def run(command, log, expect=0):
     proc = subprocess.run([str(c) for c in command], capture_output=True, text=True, timeout=300)
     Path(log).write_text('$ ' + ' '.join(map(str, command)) + '\n' + proc.stdout + proc.stderr)
     if expect is not None and proc.returncode != expect:
+        if proc.returncode < 0:
+            # Killed by a signal (an abort is -6): the per-run log is not uploaded, so put its tail in
+            # the job log, which run_check tails (40 lines) on failure.
+            try: name = signal.Signals(-proc.returncode).name
+            except ValueError: name = f'signal {-proc.returncode}'
+            tail = Path(log).read_text(errors='replace').splitlines()[-30:]
+            print(f'--- {name}: last {len(tail)} lines of {log} ---', *tail, '--- end of log ---', sep='\n', flush=True)
         raise AssertionError(f'Exit {proc.returncode} (expected {expect}); see {log}')
     return proc
 
