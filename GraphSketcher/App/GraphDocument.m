@@ -663,12 +663,6 @@ NSString *RSErrorDomain = @"OmniGraphSketcher Error Domain";
 	else
 	    [menuItem setTitle:NSLocalizedString(@"In Creation Order", @"Menu item")];
     }
-    else if (menuAction == @selector(bestFitLine:)) {
-	if ( [_s selected] )
-	    [menuItem setTitle:NSLocalizedString(@"Insert Best-Fit Line for Selection", @"Menu item")];
-	else
-	    [menuItem setTitle:NSLocalizedString(@"Insert Best-Fit Line", @"Menu item")];
-    }
     else if (menuAction == @selector(histogram:)) {
 	if ( [_editor.graph displayHistogram] ) {
 	    //[menuItem setTitle:@"Hide Grid"];
