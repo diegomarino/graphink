@@ -35,6 +35,11 @@ second point of its `points`, `x` and `y` the axes, `page` the page, `spec` the 
 | `objects[0].dash must be one of ...`, `... marker must be one of ...` | Use a listed value. |
 | `objects[0].csv has no numeric rows in columns ...`, `no column named "..."` | Check `columns` against the header row, and that the chosen cells are numbers. |
 | `objects[0].labels has N entries for M points` | One label (or `null`) per point. |
+| `objects[1].series: no series has the id "b" (ids: a)` | Give the series an `"id"` and use the same string in the fit's `series`. |
+| `objects[1]: series "a" has 1 point; a best-fit line needs at least 2`, `every point of series "a" has x = ...` | A fit needs at least two points with different x (repeated points count once). |
+| `objects[1]: a best-fit line needs linear axes` | Remove `"log": true`, or leave the fit out: Graphink has no best-fit line on a logarithmic axis. |
+| `objects[1].label: a best-fit line's label is its equation ...` | Drop `text`; the label is always the equation. Put other words in a `label` object. |
+| `objects[1].extent must stay within the x axis range ...`, `the line reaches y = ... outside the y axis range` | Shorten the extent, widen the axis, or use the default `"data"`. |
 | `page width and height must be 100-5000 points` | Keep the page in that range (default 1080 × 800). |
 | `page.margins leave no room for the plot` | Smaller margins, or a larger page. |
 | `spec.graphink must be 1` | Set `"graphink": 1`. |
@@ -62,6 +67,7 @@ second point of its `points`, `x` and `y` the axes, `page` the page, `spec` the 
 | Text cut off at an edge | Widen that side's `page.margins`, or move the label inward. |
 | A label on top of a line | Move it (`at` for free labels, `position` 0–1 for a line's label). |
 | A line missing on a log axis | Every point must be at or above the y axis `min`. |
+| The fit's equation label on top of a point or a name | Move it along the line with `"label": {"position": 0.3}` (0–1). |
 | Curves that should meet do not | Use the same solved coordinate in both, so they share a vertex. |
 | A curved line overshoots | Use straight segments through more points, or a `function`. |
 | Tick numbers crowded or sparse | Change `step` (5–12 ticks). |

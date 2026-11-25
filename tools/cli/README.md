@@ -13,7 +13,11 @@ graphink --version | help [render|create]
   `.ograph` the way File ▸ Export does. It never writes to its input.
 - **`create`** builds a document from a JSON spec (the agent skill's
   [spec](../../skills/graphink/references/spec.md)), saves it with the production OPC writer (with
-  its PDF preview) and reopens it with the production reader before it reports success.
+  its PDF preview) and reopens it with the production reader before it reports success. A `fit`
+  in the spec is the app's own best-fit line (`RSFitLine`, made through
+  `-[RSGraph changeLineTypeOf:toConnectMethod:]` as Edit ▸ Line ▸ Best-Fit does); after reopening,
+  each one is recomputed from its points and must keep its saved endpoints, and the summary prints
+  its status bar text (`objects[1]: Best-fit line:   y = …    R² = …`).
 
 Exit status: 0 success, 1 read, spec, render or write failure (one line on stderr), 2 invalid
 arguments. An existing output is refused unless `--force`.
@@ -68,7 +72,10 @@ Built against Debug products, the tool prints OmniBase's two-line assertions ban
   were made, must equal its `Previews/*.png` pixel for pixel. It creates the example specs
   (the agent skill's `skills/graphink/assets/examples`), runs `docs/format/check-opc.py` and the
   RELAX NG schema on them, runs the skill's `make-graph.sh` on one with the helper on `PATH`, and
-  checks that bad specs and arguments are refused without writing anything.
+  checks that bad specs and arguments are refused without writing anything. Every best-fit line a
+  spec creates (the examples and five more cases: extents, a connected series, a fit before its
+  series, no label, a style preset) must run along the least-squares line the check computes from
+  the points stored in `contents.xml`.
   The zip's copy must render byte-identical PNGs and create identical documents.
 - `Checks/check-cli-app.py` (`GUI_CHECKS=1`) opens every example in production app objects, draws
   it in an offscreen window and takes File ▸ Export's data: `graphink render` must produce the
