@@ -1,4 +1,4 @@
-// graphink render: draw a Graphink document to PDF, PNG, JPEG or TIFF with File ▸ Export's own functions.
+// graphink render: draw a Graphink document through the shared export renderer.
 // The input is only read; nothing is saved back to it.
 #import "GraphinkCLI.h"
 #import "RSPageGeometry.h"
@@ -9,8 +9,9 @@ void GICRenderUsage(FILE *out)
           "       graphink render INPUT --info [--dpi N | --scale N]\n"
           "\n"
           "Draws INPUT (.graphink, or a GraphSketcher .ograph) the way File > Export does.\n"
-          "The OUTPUT extension picks the format: .pdf (vector, page = canvas), or .png, .jpg/.jpeg,\n"
-          ".tif/.tiff (raster).\n"
+          "The OUTPUT extension picks the format: .pdf or .svg (vector, page = canvas),\n"
+          "or .png, .jpg/.jpeg, .tif/.tiff (raster). SVG keeps editable text and names fonts;\n"
+          "install Kalam for Sketch/Chalkboard. Document shadows are not yet supported in SVG.\n"
           "\n"
           "  -o, --output PATH  file to write; an existing file is refused unless --force\n"
           "  --dpi N            raster resolution, 1-1200 (default 72: one pixel per point);\n"
@@ -57,9 +58,9 @@ int GICRenderMain(int argc, const char *argv[])
         if (dpiGiven && scaleGiven) { fputs("graphink render: pass --dpi or --scale, not both\n", stderr); return GICExitUsage; }
         if (scaleGiven) dpi = 72 * scale;
         if (!(dpi >= 1 && dpi <= 1200)) { fputs("graphink render: the resolution must be 1-1200 DPI\n", stderr); return GICExitUsage; }
-        NSDictionary *types = @{@"pdf":@"com.adobe.pdf", @"png":@"public.png", @"jpg":@"public.jpeg", @"jpeg":@"public.jpeg", @"tif":@"public.tiff", @"tiff":@"public.tiff"};
+        NSDictionary *types = @{@"pdf":@"com.adobe.pdf", @"svg":@"public.svg-image", @"png":@"public.png", @"jpg":@"public.jpeg", @"jpeg":@"public.jpeg", @"tif":@"public.tiff", @"tiff":@"public.tiff"};
         NSString *type = output ? types[output.pathExtension.lowercaseString] : nil;
-        if (output && !type) { fprintf(stderr, "graphink render: unknown output type .%s (use .pdf, .png, .jpg or .tiff)\n", output.pathExtension.UTF8String); return GICExitUsage; }
+        if (output && !type) { fprintf(stderr, "graphink render: unknown output type .%s (use .pdf, .svg, .png, .jpg or .tiff)\n", output.pathExtension.UTF8String); return GICExitUsage; }
 
         int status = GICExitOK;
         GICDocument *document = nil;
@@ -71,9 +72,10 @@ int GICRenderMain(int argc, const char *argv[])
                 printf("%s: canvas %.0f × %.0f pt; raster %.0f × %.0f px at %g DPI\n", input.UTF8String, points.width, points.height, pixels.width, pixels.height, dpi);
             } else {
                 BOOL pdf = [type isEqual:@"com.adobe.pdf"];
-                NSData *data = pdf ? GICPDFData(document) : GICRasterData(document, dpi, type);
+                BOOL svg = [type isEqual:@"public.svg-image"];
+                NSData *data = svg ? GICSVGData(document) : pdf ? GICPDFData(document) : GICRasterData(document, dpi, type);
                 GICWrite(data, output, force, input);
-                if (pdf) printf("wrote %s (PDF, %.0f × %.0f pt)\n", output.UTF8String, points.width, points.height);
+                if (pdf || svg) printf("wrote %s (%s, %.0f × %.0f pt)\n", output.UTF8String, svg ? "SVG" : "PDF", points.width, points.height);
                 else printf("wrote %s (%.0f × %.0f px at %g DPI)\n", output.UTF8String, pixels.width, pixels.height, dpi);
             }
         } @catch (NSException *exception) {

@@ -4,7 +4,7 @@
 framework (`GraphSketcherModel`):
 
 ```
-graphink render IN -o OUT.{pdf,png,jpg,tiff} [--dpi N | --scale N] [--force] [--info]
+graphink render IN -o OUT.{pdf,svg,png,jpg,tiff} [--dpi N | --scale N] [--force] [--info]
 graphink create SPEC.json -o OUT.graphink [--force]
 graphink --version | help [render|create]
 ```
@@ -21,6 +21,26 @@ graphink --version | help [render|create]
 
 Exit status: 0 success, 1 read, spec, render or write failure (one line on stderr), 2 invalid
 arguments. An existing output is refused unless `--force`.
+
+## SVG (experimental)
+
+`graphink render in.graphink -o out.svg` records the shared renderer's paths and editable
+text. SVG uses the canvas size in points; `--dpi` and `--scale` only affect raster output.
+The app's Export menu does not offer SVG yet. SVG currently refuses documents with nonzero
+shadows. Text uses the saved font family, size, bold/italic traits and TextKit line positions.
+Fonts are named, not embedded: install Kalam (in the app's `Contents/Resources/StyleFonts`,
+licensed under the included OFL) to view Sketch/Chalkboard exports faithfully. An editor's
+font substitution or text shaping can change the result. See [the experiment](../../docs/svg-export.md).
+
+For a PDF-based alternative, install Poppler separately (`brew install poppler`) and run:
+
+```bash
+graphink render in.graphink -o out.pdf
+pdftocairo -svg out.pdf out.svg
+```
+
+This converts text to glyph outlines, so it loses text editing. Poppler is GPL and is not
+bundled with Graphink. This conversion command has not been validated by this experiment.
 
 ## Where it comes from
 
