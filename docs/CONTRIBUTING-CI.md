@@ -64,8 +64,11 @@ start the tag pipeline) get more.
      one log per `graphink` run; at most 1 MiB each, 20 MiB in all, never
      products, renders or binaries) and the crash reports in
      `~/Library/Logs/DiagnosticReports` written during the job by Graphink,
-     `graphink` or a check fixture. The step prints what it copied and the
-     artifact's size, and never fails the job.
+     `graphink` or a check fixture. It lists the file and process names of the
+     reports it leaves out. macOS writes a report a moment after the crash, so
+     when the job failed the step keeps looking for one of ours for up to 30
+     seconds. It prints what it copied and the artifact's size, and never fails
+     the job.
 
 ### Linters
 

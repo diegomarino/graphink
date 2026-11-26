@@ -142,6 +142,9 @@ jobs:
       # a development entitlement and must not be distributed).
       - name: Collect logs
         if: always()
+        env:
+          # A failed job waits for macOS to finish writing the crash report.
+          CRASH_REPORT_WAIT: ${{ job.status == 'failure' && '30' || '0' }}
         run: |
           mkdir -p "$RUNNER_TEMP/logs"
           if [ -f "$RUNNER_TEMP/build/$CONFIGURATION/build.log" ]; then
@@ -149,7 +152,7 @@ jobs:
           fi
           # Small check logs (never products or binaries) and crash reports of our processes from this job.
           python3 .github/scripts/collect-diagnostics.py --build-root "$RUNNER_TEMP/build" --logs "$RUNNER_TEMP/logs" \
-            --since "$RUNNER_TEMP/job-start" --executables-in '/private/tmp/graphink-ci-toolchain.*' \
+            --since "$RUNNER_TEMP/job-start" --executables-in '/private/tmp/graphink-ci-toolchain.*' --wait "$CRASH_REPORT_WAIT" \
             || echo "::warning::collect-diagnostics.py failed"
           du -sh "$RUNNER_TEMP/logs"
       - if: always()
