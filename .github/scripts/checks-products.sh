@@ -33,6 +33,10 @@ run_check cli "$logs" python3 tools/cli/check-cli.py --products "$products" --ou
 run_check svg-structure "$logs" python3 Checks/check-svg-export.py --products "$products" --structure-only \
   --output "$evidence/svg-structure"
 run_check experimental-menu "$logs" python3 Checks/check-experimental-menu.py --products "$products" --configuration Debug --output "$evidence/experimental-menu"
+# Windowless: links the app's objects into a fixture that drives the Experimental menu's actions.
+run_check experimental-actions "$logs" python3 Checks/check-experimental-actions.py --products "$products" \
+  --objects "$build_root/Debug/Intermediates/GraphSketcher.build/Debug/GraphSketcher.build/Objects-normal/arm64/$APP_NAME.LinkFileList" \
+  --output "$evidence/experimental-actions"
 # A Release build in the same root (build.sh Release BUILD_ROOT) must carry no trace of that menu.
 release_products="$build_root/Release/Products/Release"
 if [[ -d "$release_products/$APP_NAME.app" ]]; then

@@ -2285,12 +2285,9 @@ BOOL showWhaBam = NO;
         return ([[self allOrSelectedVertices] count] > 0);
     }
     else if (menuAction == @selector(toggleDottedGrid:)) {
-        if ([_graph xGrid].dotted) {
-            [menuItem setState:NSControlStateValueOn];
-        } else {
-            [menuItem setState:NSControlStateValueOff];
-        }
-        return YES;
+        // Checked when every shown grid is dotted; disabled while no grid is shown.
+        [menuItem setState:[self _shownGridsAreDotted] ? NSControlStateValueOn : NSControlStateValueOff];
+        return [_graph displayGrid];
     }
     else if (menuAction == @selector(importDataInRows:)) {
         if ([[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"ImportDataSeriesAsRows"]) {
@@ -2944,12 +2941,37 @@ static ErrorBarSheet *errorBarSheet = nil;
     }
 }
 
-- (IBAction)toggleDottedGrid:(id)sender;
+- (BOOL)_shownGridsAreDotted;
 {
-    [_graph xGrid].dotted = ![_graph xGrid].dotted;
-    [_graph yGrid].dotted = ![_graph yGrid].dotted;
+    if (![_graph displayGrid])
+        return NO;
+    return (![[_graph xAxis] displayGrid] || [_graph xGrid].dotted) && (![[_graph yAxis] displayGrid] || [_graph yGrid].dotted);
+}
+
+- (void)_setXGridDotted:(BOOL)xDotted yGridDotted:(BOOL)yDotted;
+{
+    NSUndoManager *undoManager = [_graph undoManager];
+    [[undoManager prepareWithInvocationTarget:self] _setXGridDotted:[_graph xGrid].dotted yGridDotted:[_graph yGrid].dotted];
+    if (![undoManager isUndoing] && ![undoManager isRedoing])
+        [_editor.undoer setActionName:NSLocalizedStringFromTable(@"Change Grid Style", @"UndoActions", @"Undo action name")];
+    
+    [_graph xGrid].dotted = xDotted;
+    [_graph yGrid].dotted = yDotted;
     
     [self setNeedsDisplay:YES];
+}
+
+// Makes every shown grid dotted, or solid if all of them already are; hidden grids keep their style.
+- (IBAction)toggleDottedGrid:(id)sender;
+{
+    if (![_graph displayGrid])
+        return;
+    
+    BOOL dotted = ![self _shownGridsAreDotted];
+    BOOL xDotted = [[_graph xAxis] displayGrid] ? dotted : [_graph xGrid].dotted;
+    BOOL yDotted = [[_graph yAxis] displayGrid] ? dotted : [_graph yGrid].dotted;
+    [self _setXGridDotted:xDotted yGridDotted:yDotted];
+    [_editor.undoer endRepetitiveUndo];
 }
 
 - (IBAction)addEquationLine:(id)sender;
