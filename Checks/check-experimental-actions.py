@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Link exact production app objects into a windowless fixture for Experimental menu actions.
+"""Link exact production app objects into a windowless fixture for two Experimental menu actions.
 
 Checks/ExperimentalActionChecks.m drives a real RSGraphView and GraphDocument with no window,
 application delegate, launch loop or pasteboard. Dotted Grid Lines must be one undo step named
 Change Grid Style that marks the document edited, change only the grids that are shown, and be
-disabled (and ignored) while no grid is shown. The Experimental menu is built into Debug products
-only, so pass Debug products. The real application preference domains must be unchanged afterwards.
+disabled (and ignored) while no grid is shown. Import and Replace Data must replace the current
+series in one undo step, and undo must restore the document with no leftover label. The
+Experimental menu is built into Debug products only, so pass Debug products. The real application
+preference domains must be unchanged afterwards.
 """
 import argparse
 import hashlib
@@ -84,7 +86,10 @@ print(log.decode(errors="replace"))
 required = (b"PASS dotted grid: disabled and ignored while no grid is shown",
             b"PASS dotted grid: one undo step named Change Grid Style, marks the document edited, undo and redo",
             b"PASS dotted grid: both shown grids change together in one step",
-            b"PASS experimental action checks: Dotted Grid Lines; windowless")
+            b"PASS import and replace: three points replace five in one undo step; undo restores the document and its labels",
+            b"PASS import and replace: a second import replaces again",
+            b"PASS import and replace: an empty import changes nothing",
+            b"PASS experimental action checks: Dotted Grid Lines and Import and Replace Data; windowless")
 failed = returncode or not all(marker in log for marker in required) or any(marker in log for marker in (b"ASSERT failed", b"PRECONDITION failed", b"Assertion Failed:", b"Exception raised:", b"FAIL "))
 if failed or not preferences_unchanged:
     raise SystemExit("FAIL experimental action checks; inspect " + str(output))

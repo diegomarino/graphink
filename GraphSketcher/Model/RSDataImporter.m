@@ -1436,7 +1436,7 @@ static RSAxis *_shouldHideEndLabels = nil;
     }
     
     if (numberOfSeriesFound != NULL) {
-        *numberOfSeriesFound = index - 1;
+        *numberOfSeriesFound = index;
     }
     
     return everything;

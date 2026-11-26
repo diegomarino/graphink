@@ -2986,8 +2986,6 @@ static ErrorBarSheet *errorBarSheet = nil;
 
 - (IBAction)importDataSeriesReplacingCurrent:(id)sender;
 {
-    NSArray *prototypes = [_graph importedDataPrototypes];
-    
     NSPasteboard *pb = [NSPasteboard generalPasteboard];
     NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObjects:OmniDataOnlyTabularPboardType, NSTabularTextPboardType, NSStringPboardType, nil]];
     
@@ -2996,12 +2994,23 @@ static ErrorBarSheet *errorBarSheet = nil;
         return;
     }
     
-    NSString *string = [pb stringForType:type];
+    [self importDataSeriesReplacingCurrentFromString:[pb stringForType:type]];
+}
+
+// Replaces each current data series, in order, with one imported from `string` (styled like it);
+// any further imported series are added. One undo step.
+- (void)importDataSeriesReplacingCurrentFromString:(NSString *)string;
+{
+    NSArray *prototypes = [_graph importedDataPrototypes];
+    
     NSInteger numberOfSeries = 0;
     RSGraphElement *everything = [[RSDataImporter sharedDataImporter] graphElementsFromString:string forGraph:_editor.graph prototypes:prototypes connectSeries:YES found:&numberOfSeries];
+    if (!everything || numberOfSeries <= 0)
+        return;
     
     // Remove all of the prototype data series that are being replaced with imported data
-    for (NSInteger i = 0; i < numberOfSeries; i += 1) {
+    NSInteger replaced = MIN(numberOfSeries, (NSInteger)[prototypes count]);
+    for (NSInteger i = 0; i < replaced; i += 1) {
         RSVertex *V = [prototypes objectAtIndex:i];
         RSGroup *group = [V group];
         if (!group) {
@@ -3014,7 +3023,11 @@ static ErrorBarSheet *errorBarSheet = nil;
             [group addElement:[line vertices]];
         }
         
-        [_graph removeElement:group];
+        // Removing an element can take others with it (a point its line) and changes the groups
+        // they belong to, so work from a snapshot and skip what is already gone.
+        for (RSGraphElement *element in [[[group elements] copy] autorelease])
+            if ([_graph containsElement:element])
+                [_graph removeElement:element];
     }
     
     // Add the new data series to the graph

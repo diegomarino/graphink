@@ -1,13 +1,18 @@
-// Windowless checks of Debug-only Experimental menu actions on a real RSGraphView and
+// Windowless checks of two Debug-only Experimental menu actions on a real RSGraphView and
 // GraphDocument (no NSWindow, no application delegate, no launch loop, no pasteboard):
 // - Dotted Grid Lines is one undo step that marks the document edited, changes only the grids
 //   that are shown, and is disabled (and ignored) while no grid is shown.
+// - Import and Replace Data replaces the current series in one undo step; undo restores the
+//   document exactly, with no leftover label.
 #import "GraphDocument.h"
 #import "RSGraphView.h"
 #import <GraphSketcherModel/RSGraph.h>
 #import <GraphSketcherModel/RSGraphEditor.h>
 #import <GraphSketcherModel/RSAxis.h>
 #import <GraphSketcherModel/RSGrid.h>
+#import <GraphSketcherModel/RSLine.h>
+#import <GraphSketcherModel/RSGroup.h>
+#import <GraphSketcherModel/RSVertex.h>
 #import <GraphSketcherModel/RSUndoer.h>
 #import <OmniFoundation/OFController.h>
 
@@ -18,6 +23,9 @@
 - (id)makeUntitledDocumentOfType:(NSString *)typeName error:(NSError **)outError {
     return [[[GraphDocument alloc] initWithType:RSGraphFileType error:outError] autorelease];
 }
+@end
+@interface RSGraphView (ExperimentalActionChecks)
+- (void)importDataSeriesReplacingCurrentFromString:(NSString *)string;
 @end
 @interface FixtureGraphView : RSGraphView
 - (void)useDocument:(GraphDocument *)document;
@@ -106,6 +114,52 @@ static void CheckDottedGrid(void) {
     puts("PASS dotted grid: both shown grids change together in one step");
 }
 
+static NSString *Shape(RSGraph *graph) {
+    NSMutableArray *series = [NSMutableArray array];
+    for (RSLine *line in graph.Lines)
+        [series addObject:[NSString stringWithFormat:@"%lu", (unsigned long)line.vertices.elements.count]];
+    return [NSString stringWithFormat:@"%lu vertices, lines [%@], %lu labels, %lu user labels", (unsigned long)graph.Vertices.count, [series componentsJoinedByString:@" "], (unsigned long)graph.Labels.count, (unsigned long)graph.userLabels.count];
+}
+static NSArray *Points(RSGraph *graph) {
+    NSMutableArray *points = [NSMutableArray array];
+    for (RSVertex *vertex in graph.Vertices)
+        [points addObject:[NSString stringWithFormat:@"%g,%g", vertex.position.x, vertex.position.y]];
+    return [points sortedArrayUsingSelector:@selector(compare:)];  // undo need not restore array order
+}
+
+static void CheckImportAndReplace(void) {
+    FixtureGraphView *view = nil;
+    GraphDocument *document = NewDocument(&view);
+    RSGraph *graph = document.graph;
+    NSUndoManager *undo = document.undoManager;
+
+    // One connected series of five points: the import into an empty graph adds it.
+    [view importDataSeriesReplacingCurrentFromString:@"1\t2\n2\t4\n3\t3\n4\t6\n5\t5\n"]; Drain();
+    Check(graph.Vertices.count == 5 && graph.Lines.count == 1, [@"The first series: " stringByAppendingString:Shape(graph)]);
+    ClearHistory(document);
+    NSString *before = Shape(graph);
+    NSArray *beforePoints = Points(graph);
+
+    [view importDataSeriesReplacingCurrentFromString:@"1\t10\n2\t20\n3\t15\n"]; Drain();
+    Check(graph.Vertices.count == 3 && graph.Lines.count == 1 && [Points(graph) isEqual:@[@"1,10", @"2,20", @"3,15"]], [NSString stringWithFormat:@"Three points replace five: %@ %@", Shape(graph), Points(graph)]);
+    Check(undo.canUndo && [undo.undoActionName isEqualToString:@"Import and Replace"] && document.isDocumentEdited, [NSString stringWithFormat:@"An undoable Import and Replace, got %d '%@'", undo.canUndo, undo.undoActionName]);
+    [undo undo]; Drain();
+    Check([Shape(graph) isEqualToString:before] && [Points(graph) isEqual:beforePoints], [NSString stringWithFormat:@"One undo restores the original series and labels: %@ %@, expected %@ %@", Shape(graph), Points(graph), before, beforePoints]);
+    Check(!undo.canUndo && !document.isDocumentEdited, @"Import and Replace is a single undo step");
+    [undo redo]; Drain();
+    Check(graph.Vertices.count == 3 && graph.Lines.count == 1, [@"Redo replaces again: " stringByAppendingString:Shape(graph)]);
+    puts("PASS import and replace: three points replace five in one undo step; undo restores the document and its labels");
+
+    [view importDataSeriesReplacingCurrentFromString:@"1\t1\n2\t2\n3\t3\n4\t4\n"]; Drain();
+    Check(graph.Vertices.count == 4 && graph.Lines.count == 1, [@"Four points replace three: " stringByAppendingString:Shape(graph)]);
+    puts("PASS import and replace: a second import replaces again");
+
+    NSString *replaced = Shape(graph);
+    [view importDataSeriesReplacingCurrentFromString:@""]; Drain();
+    Check([Shape(graph) isEqualToString:replaced], [@"An empty import changes nothing: " stringByAppendingString:Shape(graph)]);
+    puts("PASS import and replace: an empty import changes nothing");
+}
+
 int main(int argc, const char *argv[]) {
     @autoreleasepool { @try {
         [(Class)NSBundle.mainBundle.principalClass sharedApplication];
@@ -121,10 +175,11 @@ int main(int argc, const char *argv[]) {
         [lifecycle didInitialize]; [lifecycle startedRunning];
         Check(NSApp.delegate == nil, @"Fixture must not install the application delegate");
         CheckDottedGrid();
+        CheckImportAndReplace();
         Check(NSApp.windows.count == 0, [NSString stringWithFormat:@"No window was created, found %@", NSApp.windows]);
         Check([lifecycle requestTermination] == OFControllerTerminateNow, @"Fixture lifecycle refused termination");
         [lifecycle willTerminate];
-        puts("PASS experimental action checks: Dotted Grid Lines; windowless");
+        puts("PASS experimental action checks: Dotted Grid Lines and Import and Replace Data; windowless");
     } @catch (NSException *exception) {
         NSLog(@"FAIL experimental actions: %@", exception); return 1;
     } }
