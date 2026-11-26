@@ -238,6 +238,100 @@ static NSArray *linePathsClippedToRect(NSBezierPath *P, CGRect rect) {
             [undashed appendBezierPath:piece];
     return [undashed isEmpty] ? [NSArray array] : [NSArray arrayWithObject:undashed];
 }
+
+// Calls mark(point, degrees) every `spacing` along P, counted from its start (or from its end if
+// `fromEnd`), as the arrows and ticks of a line are, but only for the marks that fall inside
+// `visible`. `degrees` is the direction of P at the mark. The far parts of P are only measured,
+// never walked mark by mark, so a line with a point far off the page still marks its visible part.
+static void markVisiblePositionsAlongPath(NSBezierPath *P, CGRect visible, CGFloat spacing, BOOL fromEnd, void (^mark)(CGPoint, CGFloat)) {
+    if (!(spacing > 0) || !isfinite(spacing))
+        return;
+
+    typedef struct { CGPoint a, b; CGFloat start, length, t0, t1; } VisibleSegment;
+    NSMutableData *segments = [NSMutableData data];
+    __block CGFloat total = 0;
+
+    void (^addSegment)(CGPoint, CGPoint) = ^(CGPoint a, CGPoint b) {
+        CGFloat length = hypot(b.x - a.x, b.y - a.y);
+        CGFloat t0, t1;
+        if (length > 0 && clipSegmentToRect(a, b, visible, &t0, &t1)) {
+            VisibleSegment segment = {a, b, total, length, t0, t1};
+            [segments appendBytes:&segment length:sizeof(segment)];
+        }
+        total += length;
+    };
+    // A curve that can reach `visible` is split into short straight pieces; a curve that cannot
+    // only adds its length.
+    __block void (^addCurve)(CGPoint, CGPoint, CGPoint, CGPoint, NSUInteger);
+    addCurve = ^(CGPoint p0, CGPoint c1, CGPoint c2, CGPoint p3, NSUInteger depth) {
+        CGFloat minX = MIN(MIN(p0.x, c1.x), MIN(c2.x, p3.x)), maxX = MAX(MAX(p0.x, c1.x), MAX(c2.x, p3.x));
+        CGFloat minY = MIN(MIN(p0.y, c1.y), MIN(c2.y, p3.y)), maxY = MAX(MAX(p0.y, c1.y), MAX(c2.y, p3.y));
+        CGRect bounds = CGRectMake(minX, minY, maxX - minX, maxY - minY);
+        BOOL reaches = CGRectIntersectsRect(visible, bounds);
+        CGFloat chord = hypot(p3.x - p0.x, p3.y - p0.y);
+        CGFloat hull = hypot(c1.x - p0.x, c1.y - p0.y) + hypot(c2.x - c1.x, c2.y - c1.y) + hypot(p3.x - c2.x, p3.y - c2.y);
+        if (depth >= 32 || (reaches && MAX(CGRectGetWidth(bounds), CGRectGetHeight(bounds)) < 1)) {
+            addSegment(p0, p3);
+            return;
+        }
+        if (!reaches && hull - chord <= 1e-4 * hull) {
+            total += (chord + hull) / 2;
+            return;
+        }
+        // de Casteljau at t = 0.5
+        CGPoint a = CGPointMake((p0.x + c1.x) / 2, (p0.y + c1.y) / 2), b = CGPointMake((c1.x + c2.x) / 2, (c1.y + c2.y) / 2), c = CGPointMake((c2.x + p3.x) / 2, (c2.y + p3.y) / 2);
+        CGPoint ab = CGPointMake((a.x + b.x) / 2, (a.y + b.y) / 2), bc = CGPointMake((b.x + c.x) / 2, (b.y + c.y) / 2);
+        CGPoint mid = CGPointMake((ab.x + bc.x) / 2, (ab.y + bc.y) / 2);
+        addCurve(p0, a, ab, mid, depth + 1);
+        addCurve(mid, bc, c, p3, depth + 1);
+    };
+
+    CGPoint current = CGPointZero, subpathStart = CGPointZero;
+    for (NSInteger index = 0; index < [P elementCount]; index++) {
+        NSPoint points[3];
+        switch ([P elementAtIndex:index associatedPoints:points]) {
+            case NSBezierPathElementMoveTo:
+                current = subpathStart = points[0];
+                break;
+            case NSBezierPathElementLineTo:
+                addSegment(current, points[0]);
+                current = points[0];
+                break;
+            case NSBezierPathElementCurveTo:
+                addCurve(current, points[0], points[1], points[2], 0);
+                current = points[2];
+                break;
+            case NSBezierPathElementClosePath:
+                addSegment(current, subpathStart);
+                current = subpathStart;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Marks sit at k * spacing (k >= 1) from the start, or from the end, and never on the far end itself.
+    NSUInteger count = [segments length] / sizeof(VisibleSegment);
+    const VisibleSegment *list = [segments bytes];
+    NSUInteger marks = 0, maxMarks = 100000;
+    for (NSUInteger i = 0; i < count && marks < maxMarks; i++) {
+        VisibleSegment segment = list[i];
+        CGFloat d0 = segment.start + segment.t0 * segment.length, d1 = segment.start + segment.t1 * segment.length;
+        CGFloat degrees = degreesFromHorizontalOfVector(segment.a, segment.b);
+        // Each segment owns the distances in [d0, d1) (from the start) or (d0, d1] (from the end).
+        CGFloat k = fromEnd ? MAX(1, ceil((total - d1) / spacing)) : MAX(1, ceil(d0 / spacing));
+        for (; marks < maxMarks; k += 1) {
+            CGFloat d = fromEnd ? total - k * spacing : k * spacing;
+            if (fromEnd ? !(d > d0 && d > 0) : !(d < d1 && d < total))
+                break;
+            if (fromEnd ? d > d1 : d < d0)
+                continue;
+            CGFloat u = (d - segment.start) / segment.length;
+            mark(CGPointMake(segment.a.x + u * (segment.b.x - segment.a.x), segment.a.y + u * (segment.b.y - segment.a.y)), degrees);
+            marks++;
+        }
+    }
+}
 #endif
 
 static NSColor *baseSelectionColor(void) {
@@ -2833,8 +2927,13 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
         return;
     for (NSBezierPath *piece in pieces)
         RSStrokeDrawingPath(piece, [L color]);
+    // A line that was cut places its arrows or ticks along its path, where they can show.
+    NSBezierPath *cutLinePath = ([pieces count] == 1 && [pieces objectAtIndex:0] == P) ? nil : P;
+    CGRect markArea = CGRectInset(canvas, -(4 * w + 2), -(4 * w + 2));
 #else
     RSStrokeDrawingPath(P, [L color]);
+    NSBezierPath *cutLinePath = nil;
+    CGRect markArea = CGRectZero;
 #endif
     
     // make rounded edges
@@ -2867,9 +2966,16 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	CGFloat spacing = w*12;  // space between arrows
         
 	// draw arrow heads
+        if (cutLinePath) {
+            markVisiblePositionsAlongPath(cutLinePath, markArea, spacing, NO, ^(CGPoint p, CGFloat degrees) {
+                NSBezierPath *head = [[NSBezierPath bezierPath] appendArrowheadAtPoint:p width:b height:b];
+                [head rotateInFrame:CGRectMake(p.x, p.y, b, b) byDegrees:180 + degrees];
+                RSFillDrawingPath(head, [L color]);
+            });
+        }
         NSUInteger maxIters = 500;
         NSUInteger iters = 0;
-	while( t < 1 && iters < maxIters ) {
+	while( !cutLinePath && t < 1 && iters < maxIters ) {
             iters++;
             
 	    // first, find the next t-value
@@ -2903,9 +3009,16 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	CGFloat spacing = w*12;  // space between arrows
         
 	// draw arrow heads
+        if (cutLinePath) {
+            markVisiblePositionsAlongPath(cutLinePath, markArea, spacing, YES, ^(CGPoint p, CGFloat degrees) {
+                NSBezierPath *head = [[NSBezierPath bezierPath] appendArrowheadAtPoint:p width:b height:b];
+                [head rotateInFrame:CGRectMake(p.x, p.y, b, b) byDegrees:degrees];
+                RSFillDrawingPath(head, [L color]);
+            });
+        }
         NSUInteger maxIters = 500;
         NSUInteger iters = 0;
-	while( t > 0 && iters < maxIters ) {
+	while( !cutLinePath && t > 0 && iters < maxIters ) {
             iters++;
             
 	    // first, find the next t-value
@@ -2934,10 +3047,17 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 	CGFloat rotation;
 	CGFloat spacing = 12 + w*4;  // space between tick marks
         
+        if (cutLinePath) {
+            markVisiblePositionsAlongPath(cutLinePath, markArea, spacing, NO, ^(CGPoint p, CGFloat degrees) {
+                NSBezierPath *tick = [[NSBezierPath bezierPath] appendTickAtPoint:p width:w height:b];
+                [tick rotateInFrame:CGRectMake(p.x, p.y, b, b) byDegrees:degrees];
+                RSFillDrawingPath(tick, [L color]);
+            });
+        }
         NSUInteger maxIters = 500;
         NSUInteger iters = 0;
 	// draw tick marks
-	while( t < 1 && iters < maxIters ) {
+	while( !cutLinePath && t < 1 && iters < maxIters ) {
             iters++;
             
 	    // first, find the next t-value
