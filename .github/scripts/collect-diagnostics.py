@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Copy small check logs and this job's crash reports into the uploaded logs directory.
 
-Usage: collect-diagnostics.py --build-root BUILD_ROOT --logs LOG_DIR --since MARKER [--executables-in GLOB ...]
+Usage: collect-diagnostics.py --build-root BUILD_ROOT --logs LOG_DIR --since MARKER [--executables-in GLOB ...] [--wait SECONDS]
 
 The product checks keep their per-run logs (for example every `graphink render` of the cli check)
 under BUILD_ROOT/checks, which is not uploaded. This copies every *.log file there into
@@ -13,7 +13,9 @@ Crash reports (*.ips, *.crash) in ~/Library/Logs/DiagnosticReports modified afte
 touched when the job started) are copied into LOG_DIR/crash-reports when they are for one of our
 processes, matched by name (macOS redacts the paths in reports): Graphink, the graphink command-line
 tool, or any Mach-O executable in BUILD_ROOT/*/Products, BUILD_ROOT/checks or an --executables-in
-directory (the checks' fixtures). Reports of other processes stay where they are.
+directory (the checks' fixtures). Reports of other processes stay where they are; their file and
+process names are listed. macOS writes a report a moment after the crash, so with --wait (used when
+the job failed) it keeps looking for up to that many seconds while none of ours has appeared.
 
 Diagnostics only: it prints what it copied and the total size, and a problem here is reported but
 never fails the job (exit 0).
@@ -25,6 +27,7 @@ import os
 from pathlib import Path
 import re
 import sys
+import time
 
 FILE_LIMIT = 1 << 20
 TOTAL_LIMIT = 20 << 20
@@ -38,6 +41,7 @@ parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.R
 parser.add_argument('--build-root', required=True, type=Path)
 parser.add_argument('--logs', required=True, type=Path)
 parser.add_argument('--since', required=True, type=Path, help='File whose modification time is the job start')
+parser.add_argument('--wait', type=float, default=0, metavar='SECONDS', help='Keep looking this long for a crash report of ours')
 parser.add_argument('--executables-in', action='append', default=[], metavar='GLOB', help='Directories (a glob) whose executables are ours too, such as the toolchain checks\' fixtures')
 args = parser.parse_args()
 
@@ -120,14 +124,21 @@ def copy_crash_reports():
         return 0
     since = args.since.stat().st_mtime
     folder = Path.home() / 'Library/Logs/DiagnosticReports'
-    candidates = sorted(p for p in folder.glob('*') if p.suffix in ('.ips', '.crash') and p.is_file() and p.stat().st_mtime > since) if folder.is_dir() else []
-    ours = our_executables() if candidates else set()
-    total, found, others = 0, 0, 0
-    for path in candidates:
-        text = path.read_bytes()[:CRASH_LIMIT].decode('utf-8', errors='replace')
-        names = process_names(text)
+    ours = None
+    deadline = time.monotonic() + args.wait
+    while True:
+        candidates = sorted(p for p in folder.glob('*') if p.suffix in ('.ips', '.crash') and p.is_file() and p.stat().st_mtime > since) if folder.is_dir() else []
+        reports = [(path, path.read_bytes()[:CRASH_LIMIT].decode('utf-8', errors='replace')) for path in candidates]
+        if reports and ours is None:
+            ours = our_executables()
+        mine = [(path, text, process_names(text)) for path, text in reports]
+        if any(names & ours for _, _, names in mine) or time.monotonic() >= deadline:
+            break
+        time.sleep(2)
+    total, found, others = 0, 0, []
+    for path, text, names in mine:
         if not names & ours:
-            others += 1
+            others.append(f'{path.name} ({", ".join(sorted(names)) or "no process name"})')
             continue
         target = args.logs / 'crash-reports' / path.name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -135,7 +146,9 @@ def copy_crash_reports():
         total += target.stat().st_size
         found += 1
         print(f'Crash report: {path.name} ({", ".join(sorted(names & ours))})')
-    print(f'Copied {found} crash reports ({size(total)}) from {folder}; {others} newer reports of other processes left out')
+    print(f'Copied {found} crash reports ({size(total)}) from {folder}; {len(others)} newer reports of other processes left out')
+    for line in others:
+        print(f'  left out {line}')
     return total
 
 
