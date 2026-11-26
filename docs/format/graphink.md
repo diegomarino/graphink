@@ -131,8 +131,8 @@ Sources: [allocation, reading and writing](../../GraphSketcher/Model/XML/RSGraph
 
 Vertex and ordinary label `x`/`y` are **graph data coordinates**, not screen
 pixels. Ranges and tick/grid spacing use the same data units. There is no
-persisted unit registry, currency, economic variable, equation, function or
-constraint-solver schema. Put units (for example quantity or price) in editable
+persisted unit registry, currency, economic variable or constraint-solver schema;
+the only stored functions are the six equation-line families (§4). Put units (for example quantity or price) in editable
 axis titles/labels and explain economic assumptions in accompanying prose.
 Intersections that must remain editable need actual vertices and connections;
 text saying “equilibrium” does not create an intersection constraint.
@@ -196,6 +196,7 @@ Sources: [canvas defaults](../../GraphSketcher/Model/XML/RSGraph-XML.m#L517),
 | `vertex` | `id`, `x`, `y`, `width`, optional `shape`, `arrow-parent`, `label-placement`, `label-distance`, `locked`; optional color and `snapped-to/element idref="…" param="…"` |
 | `line class="connect"` | Common stroke/color/label fields; `method="none\|straight\|curved"`; child `vertices ids="…"` in connection order |
 | `line class="fit"` | Common fields; `v1`, `v2` endpoint vertex references; `data ids="…"` for regression inputs; optional method only recognizes `linear-regression` |
+| `line class="equation"` | Common fields; required `v1`, `v2` endpoint vertex references; one child `equation family="…" a="…" b="…" c="…"`. Needs `equation-lines-v1` in an OPC package; never written to a legacy container |
 | `fill` | Ordered boundary `vertices ids="…"`, color, optional `label-placement-x`, `label-placement-y` fractions |
 | `label` | `id`, data-coordinate `x`, `y`, optional `owner`, `rotation`, `locked`, `visible`; rich `text` child |
 | `group` | `id`, `elements="…"`; sets each referenced object's group membership |
@@ -219,6 +220,26 @@ write the class. Missing connect method defaults to `curved`; explicitly choose
 vertices; it is not a stored analytic function. Fit lines recompute parameters
 from their data and can synthesize missing endpoints; do not use them as a
 substitute for explicitly constructed economic curves.
+
+**Equation lines** (`RSEquationLine`, added 2026-11-26, #27) store a function, not points:
+
+```xml
+<line id="e7" width="2" class="equation" v1="e8" v2="e9">
+  <equation family="square" a="0" b="0" c="1"/>
+</line>
+```
+
+`family` is `linear` `y = ax + b` (`c` unused, still stored), `square` `y = c(x - a)^2 + b`,
+`cube` `y = c(x - a)^3 + b`, `sine` `y = c·sin(x - a) + b`, `gaussian` `y = c·e^-(x - a)^2 + b`
+or `logistic` `y = c/(1 + e^-(x - a)) + b` (the model's evaluation; the header comments omit `c`
+for square, cube and sine). `a`, `b` and `c` are required finite numbers written `%.15g`, like
+vertex coordinates. No x range is stored: the model evaluates the curve across the canvas width
+and draws the part inside the canvas. `v1` and `v2` are ordinary `vertex` elements owned by the
+line, at the x-axis minimum and maximum and `y = f(x)` as of the last layout; they are written so
+they keep their identity, read as stored, and recomputed on the next layout. The OPC gate refuses
+an invalid equation line ([opc-v1.md](opc-v1.md)); other inputs log it and skip the line, leaving
+its endpoints as points, without assertions. Older readers drop the class (an unknown line class,
+§6), which is why a package carries `equation-lines-v1` and legacy containers never carry one.
 
 Fill defaults: black at alpha .5, label placement (.5,.5). Use at least three
 valid boundary vertices in intended perimeter order. Sharing vertices with lines
@@ -377,7 +398,8 @@ acceptance**:
 
 Debug native save validation logs diagnostics; `validateXML` returns void and
 cannot turn schema errors into a failed save. Use explicit `xmllint` exit status
-when schema checking a generated supported subset. No RNG was modified here.
+when schema checking a generated supported subset. No RNG was modified for this
+audit; the `equation` line class was added to it later (#27).
 
 Sources: [namespace branch](../../GraphSketcher/Model/XML/RSGraph-XML.m#L207),
 [disconnected warning helper](../../GraphSketcher/App/GraphDocument.m#L142),

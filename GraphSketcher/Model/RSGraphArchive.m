@@ -23,6 +23,8 @@ static NSString * const DocumentRole=@"urn:graphink:relationships:document";
 static NSString * const GraphRole=@"urn:graphink:relationships:graph";
 static NSString * const PreviewRole=@"urn:graphink:relationships:preview";
 static NSUInteger const PartLimit=64*1024*1024,PackageLimit=128*1024*1024;
+static NSString * const DefaultsFeature=@"creation-defaults-v1";
+static NSString * const EquationsFeature=@"equation-lines-v1";
 
 static BOOL Fail(NSError **error,NSString *reason,BOOL unsupported)
 {
@@ -196,7 +198,7 @@ static NSColor *ReadColor(NSXMLElement *element,NSError **error)
     OFXMLCursor *cursor=[[[OFXMLCursor alloc] initWithDocument:doc] autorelease];
     return [NSColor colorFromXML:cursor];
 }
-static NSDictionary *Control(NSData *data,NSError **error)
+static NSDictionary *Control(NSData *data,NSSet **outFeatures,NSError **error)
 {
     NSXMLDocument *doc=XML(data,error); NSXMLElement *root=doc.rootElement;
     if (!doc || !Element(root,@"document",ControlNS,@[@"version",@"required-features"],error)) return nil;
@@ -204,7 +206,7 @@ static NSDictionary *Control(NSData *data,NSError **error)
     NSMutableSet *features=[NSMutableSet set];
     for (NSString *token in [Attr(root,@"required-features") componentsSeparatedByCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet]) {
         if (!token.length) continue;
-        if (![token isEqual:@"creation-defaults-v1"]) { Fail(error,@"Unknown required document feature.",YES); return nil; }
+        if (![token isEqual:DefaultsFeature] && ![token isEqual:EquationsFeature]) { Fail(error,@"Unknown required document feature.",YES); return nil; }
         if ([features containsObject:token]) { Fail(error,@"Duplicate required feature.",NO); return nil; } [features addObject:token];
     }
     NSArray *children=Children(root,error); if (!children) return nil;
@@ -214,7 +216,8 @@ static NSDictionary *Control(NSData *data,NSError **error)
     if (![Attr(payload,@"format") isEqual:@"native-graph-xml"] || ![Attr(payload,@"version") isEqual:@"1"]) { Fail(error,@"Unsupported native payload format/version.",YES); return nil; }
     NSArray *nested=Children(payload,error); if (!nested) return nil;
     if (nested.count) { Fail(error,@"Payload descriptor cannot contain elements.",YES); return nil; }
-    if ((children.count==2)!=(features.count==1)) { Fail(error,@"Creation defaults and required feature disagree.",NO); return nil; }
+    if ((children.count==2)!=[features containsObject:DefaultsFeature]) { Fail(error,@"Creation defaults and required feature disagree.",NO); return nil; }
+    if (outFeatures) *outFeatures=features;
     NSMutableDictionary *defaults=[NSMutableDictionary dictionary];
     if (children.count==2) {
         NSXMLElement *values=children[1];
@@ -238,17 +241,60 @@ static BOOL PDFPreview(NSData *data,NSError **error)
 {
     return (data.length>=5 && memcmp(data.bytes,"%PDF-",5)==0) || Fail(error,@"Preview part is not a PDF.",NO);
 }
-static BOOL NativePayload(NSData *data,NSError **error)
+static BOOL Finite(NSXMLElement *e,NSString *name)
+{
+    NSString *value=Attr(e,name); if (!value) return NO;
+    NSScanner *scanner=[NSScanner scannerWithString:value]; double number;
+    return [scanner scanDouble:&number] && scanner.isAtEnd && isfinite(number);
+}
+// Equation lines of a native graph (docs/format/graphink.md §4): -1 and an error when one is invalid.
+static NSInteger EquationLines(NSXMLElement *graph,NSString *ns,NSError **error)
+{
+    NSInteger count=0;
+    NSArray *families=@[@"linear",@"square",@"cube",@"sine",@"gaussian",@"logistic"];
+    for (NSXMLNode *node in graph.children) {
+        if (node.kind!=NSXMLElementKind) continue; NSXMLElement *line=(id)node;
+        if (![line.localName isEqual:@"line"] || ![line.URI?:@"" isEqual:ns] || ![Attr(line,@"class") isEqual:@"equation"]) continue;
+        NSArray *equations=[line.children filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSXMLNode *child,NSDictionary *bindings){return child.kind==NSXMLElementKind && [child.localName isEqual:@"equation"];}]];
+        NSXMLElement *equation=equations.firstObject;
+        BOOL valid=Attr(line,@"v1").length && Attr(line,@"v2").length && ![Attr(line,@"v1") isEqual:Attr(line,@"v2")] && equations.count==1 && [equation.URI?:@"" isEqual:ns] && !equation.childCount;
+        for (NSXMLNode *attribute in equation.attributes) valid&=!attribute.URI.length && [@[@"family",@"a",@"b",@"c"] containsObject:attribute.name];
+        valid&=[families containsObject:Attr(equation,@"family")?:@""] && Finite(equation,@"a") && Finite(equation,@"b") && Finite(equation,@"c");
+        if (!valid) { Fail(error,@"An equation line needs two distinct endpoints and one equation with a known family and finite a, b and c.",NO); return -1; }
+        count++;
+    }
+    return count;
+}
+static BOOL NativePayload(NSData *data,NSInteger *outEquations,NSError **error)
 {
     NSXMLDocument *doc=XML(data,error); if (!doc) return NO;
     NSXMLElement *root=doc.rootElement;
     if (![root.localName isEqual:@"document"] || ![root.URI isEqual:NativeNS]) return Fail(error,@"Unsupported native graph payload namespace.",YES);
-    NSUInteger graphs=0;
+    NSUInteger graphs=0; NSInteger equations=0;
     for (NSXMLNode *node in root.children) if (node.kind==NSXMLElementKind) {
         if ([node.localName isEqual:@"model"]) return Fail(error,@"Pasteboard models are not document payloads.",NO);
-        if ([node.localName isEqual:@"graph"] && [node.URI isEqual:NativeNS]) graphs++;
+        if ([node.localName isEqual:@"graph"] && [node.URI isEqual:NativeNS]) { graphs++; equations=EquationLines((id)node,NativeNS,error); if (equations<0) return NO; }
     }
+    if (outEquations) *outEquations=equations;
     return graphs==1 || Fail(error,@"Native document requires exactly one graph.",NO);
+}
+// The required features must name exactly the optional data the document holds.
+static BOOL Features(NSSet *features,NSInteger equations,NSError **error)
+{
+    return [features containsObject:EquationsFeature]==(equations>0) || Fail(error,@"Equation lines and their required feature disagree.",NO);
+}
+// Legacy containers have no required-feature list, and older readers drop an unknown line class
+// silently, so a graph with equation lines is never written to one.
+static BOOL LegacyWritable(NSData *xml,NSError **error)
+{
+    static const char needle[]="equation";
+    if ([xml rangeOfData:[NSData dataWithBytes:needle length:sizeof(needle)-1] options:0 range:NSMakeRange(0,xml.length)].location==NSNotFound) return YES;
+    NSXMLElement *root=[[[[NSXMLDocument alloc] initWithData:xml options:NSXMLNodeLoadExternalEntitiesNever error:NULL] autorelease] rootElement];
+    for (NSXMLNode *node in root.children) {
+        if (node.kind!=NSXMLElementKind || ![node.localName isEqual:@"graph"]) continue;
+        if (EquationLines((id)node,node.URI?:@"",NULL)!=0) return Fail(error,@"Equation lines can only be saved in a Graphink (.graphink) package: this older format cannot mark them as required, and older readers would drop them. Use Save As.",YES);
+    }
+    return YES;
 }
 static NSXMLElement *Node(NSString *name,NSString *ns,NSDictionary *attributes)
 {
@@ -256,9 +302,12 @@ static NSXMLElement *Node(NSString *name,NSString *ns,NSDictionary *attributes)
     for (NSString *key in attributes) [element addAttribute:[NSXMLNode attributeWithName:key stringValue:attributes[key]]];
     return element;
 }
-static NSData *ControlData(NSDictionary *defaults,NSError **error)
+static NSData *ControlData(NSDictionary *defaults,BOOL equations,NSError **error)
 {
-    NSXMLElement *root=Node(@"g:document",ControlNS,@{@"version":@"1",@"required-features":defaults.count?@"creation-defaults-v1":@""});
+    NSMutableArray *features=[NSMutableArray array]; // Sorted, one space apart.
+    if (defaults.count) [features addObject:DefaultsFeature];
+    if (equations) [features addObject:EquationsFeature];
+    NSXMLElement *root=Node(@"g:document",ControlNS,@{@"version":@"1",@"required-features":[features componentsJoinedByString:@" "]});
     [root addNamespace:[NSXMLNode namespaceWithName:@"g" stringValue:ControlNS]];
     [root addChild:Node(@"g:payload",ControlNS,@{@"format":@"native-graph-xml",@"version":@"1"})];
     if (defaults.count) {
@@ -393,8 +442,9 @@ static NSData *ReadFile(NSURL *url,NSError **error)
     NSDictionary *rels=Relationships(parts[@"graphink/_rels/document.xml.rels"],@"graphink/document.xml",@[GraphRole,PreviewRole],error);
     if (!rels) return nil;
     if (rels.count!=(preview?2u:1u) || ![rels[GraphRole] isEqual:@"contents.xml"] || (preview && ![rels[PreviewRole] isEqual:@"preview.pdf"])) { Fail(error,@"Payload/preview relationships disagree with package parts.",NO); return nil; }
-    NSDictionary *defaults=Control(parts[@"graphink/document.xml"],error); if (!defaults) return nil;
-    if (!NativePayload(parts[@"contents.xml"],error)) return nil;
+    NSSet *features=nil; NSInteger equations=0;
+    NSDictionary *defaults=Control(parts[@"graphink/document.xml"],&features,error); if (!defaults) return nil;
+    if (!NativePayload(parts[@"contents.xml"],&equations,error) || !Features(features,equations,error)) return nil;
     NSMutableDictionary *result=[NSMutableDictionary dictionaryWithDictionary:@{@"xml":parts[@"contents.xml"],@"defaults":defaults,@"encoding":@(RSGraphArchiveOPC)}];
     if (preview) result[@"preview"]=parts[@"preview.pdf"];
     return result;
@@ -402,14 +452,16 @@ static NSData *ReadFile(NSURL *url,NSError **error)
 + (BOOL)writeXML:(NSData *)xml defaults:(NSDictionary *)defaults preview:(NSData *)preview encoding:(RSGraphArchiveEncoding)encoding toURL:(NSURL *)url error:(NSError **)error
 {
     if (!url.isFileURL || !xml) return Fail(error,@"Cannot save without XML and a local file URL.",NO);
+    if (encoding!=RSGraphArchiveLegacyXML && encoding!=RSGraphArchiveLegacyZIP && encoding!=RSGraphArchiveOPC) return Fail(error,@"Unsupported document save encoding.",YES);
+    if (encoding!=RSGraphArchiveOPC && !LegacyWritable(xml,error)) return NO;
     if (encoding==RSGraphArchiveLegacyXML) return [xml writeToURL:url options:NSDataWritingAtomic error:error];
-    if (encoding!=RSGraphArchiveLegacyZIP && encoding!=RSGraphArchiveOPC) return Fail(error,@"Unsupported document save encoding.",YES);
     NSMutableDictionary *parts=[NSMutableDictionary dictionaryWithObject:xml forKey:@"contents.xml"];
     if (preview) parts[@"preview.pdf"]=preview;
     if (encoding==RSGraphArchiveOPC) {
         if (preview && !PDFPreview(preview,error)) return NO;
-        if (!NativePayload(xml,error)) return NO;
-        NSData *control=ControlData(defaults,error); if (!control || !Control(control,error)) return NO;
+        NSInteger equations=0; NSSet *features=nil;
+        if (!NativePayload(xml,&equations,error)) return NO;
+        NSData *control=ControlData(defaults,equations>0,error); if (!control || !Control(control,&features,error) || !Features(features,equations,error)) return NO;
         parts[@"graphink/document.xml"]=control;
         NSXMLElement *types=Node(@"Types",TypesNS,@{}); [types addNamespace:[NSXMLNode namespaceWithName:@"" stringValue:TypesNS]];
         [types addChild:Node(@"Default",TypesNS,@{@"Extension":@"rels",@"ContentType":RelsType})];

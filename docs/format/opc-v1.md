@@ -94,10 +94,21 @@ of app-version. Native graph namespace remains
 no pasteboard model. Keep existing native model/attributed serialization.
 
 `required-features` is a mandatory whitespace-separated set (empty string when
-none). The **only** v1 feature token is `creation-defaults-v1`, present iff the
-creation-defaults element exists; duplicates are malformed. Unknown tokens or
-unsupported document/payload/defaults versions/formats are **unsupported** and
-refused before native graph decoding, not silently ignored. Namespace versions
+none). The v1 feature tokens are:
+
+- `creation-defaults-v1`, present iff the creation-defaults element exists;
+- `equation-lines-v1` (added 2026-11-26, #27), present iff the native graph has at least one
+  `line class="equation"` ([graphink.md](graphink.md) §4). The gate also refuses, as malformed,
+  an equation line without two distinct `v1`/`v2` references or without exactly one `equation`
+  child with a known `family` and finite `a`, `b`, `c`.
+
+Writers list the tokens sorted, one space apart (`creation-defaults-v1 equation-lines-v1`).
+A token without its data, data without its token, or a duplicate token is malformed. Unknown
+tokens or unsupported document/payload/defaults versions/formats are **unsupported** and
+refused before native graph decoding, not silently ignored. A reader that predates a token
+therefore refuses the whole document: every reader up to f2ebd22 reports
+"Unsupported Graphink package profile" (unknown required document feature) for a package with
+equation lines, and decodes nothing. Namespace versions
 other than the control namespace above are unsupported. No use of app-version
 as the new contract version and no native XML namespace bump.
 
@@ -239,6 +250,8 @@ and external attributes only**, never made-low. See the regression fixture under
   valid OPC forms outside this subset are refused, not preserved.
 - Legacy `.ograph` and phase-1 `.graphink` keep their legacy behavior on normal Save (see
   [graphink.md](graphink.md) §6, including the seven baseline-identical legacy smoke failures).
+  They have no feature list, so a graph with equation lines is never written to them: the save
+  is refused as unsupported, and Save As `.graphink` adopts this profile.
 - Native light appearance, legacy Save As cancellation, full-screen restoration and the live
   font and color panels are covered by offscreen checks only; human acceptance in the native app
   is manual.

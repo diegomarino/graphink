@@ -72,6 +72,41 @@ static NSUInteger dashStyleFromName(NSString *name)
 }
 
 
+// Native names of RSEquationType, in enum order (docs/format/graphink.md §4).
+static NSString * const EquationFamilyNames[] = {@"linear", @"square", @"cube", @"sine", @"gaussian", @"logistic"};
+static NSUInteger const EquationFamilyCount = sizeof(EquationFamilyNames) / sizeof(EquationFamilyNames[0]);
+
+static NSString *nameFromEquationType(RSEquationType type)
+{
+    return (NSUInteger)type < EquationFamilyCount ? EquationFamilyNames[type] : nil;
+}
+
+static BOOL equationTypeFromName(NSString *name, RSEquationType *type)
+{
+    for (NSUInteger i = 0; i < EquationFamilyCount; i++) {
+        if ([name isEqualToString:EquationFamilyNames[i]]) {
+            *type = (RSEquationType)i;
+            return YES;
+        }
+    }
+    return NO;
+}
+
+// The whole attribute must be one finite number; no default.
+static BOOL finiteValueForAttribute(OFXMLElement *element, NSString *name, data_p *value)
+{
+    NSString *string = [element attributeNamed:name];
+    if (!string)
+        return NO;
+    NSScanner *scanner = [NSScanner scannerWithString:string];
+    double number;
+    if (![scanner scanDouble:&number] || ![scanner isAtEnd] || !isfinite(number))
+        return NO;
+    *value = number;
+    return YES;
+}
+
+
 @implementation RSLine (XML)
 
 #pragma mark -
@@ -143,6 +178,26 @@ static NSUInteger dashStyleFromName(NSString *name)
 	[xmlDoc pushElement:@"data"];
 	[xmlDoc setAttribute:@"ids" string:[_graph idrefsFromArray:[[(RSFitLine *)self data] elements]]];
 	[xmlDoc popElement];
+    }
+    else if ([self isKindOfClass:[RSEquationLine class]]) {
+        // The endpoints are derived (the x axis range and y = f(x)); they are written so that they keep their identity.
+        RSEquation equation = [(RSEquationLine *)self equation];
+        NSString *family = nameFromEquationType(equation.type);
+        if (!family) {
+            if (outError)
+                *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileWriteUnknownError userInfo:@{NSLocalizedFailureReasonErrorKey:@"Unknown equation line family."}];
+            return NO;
+        }
+        [xmlDoc setAttribute:@"class" string:[RSEquationLine xmlClassName]];
+        [xmlDoc setAttribute:@"v1" string:[_graph identiferForObject:[self startVertex]]];
+        [xmlDoc setAttribute:@"v2" string:[_graph identiferForObject:[self endVertex]]];
+        
+        [xmlDoc pushElement:@"equation"];
+        [xmlDoc setAttribute:@"family" string:family];
+        [xmlDoc setAttribute:@"a" double:equation.a];
+        [xmlDoc setAttribute:@"b" double:equation.b];
+        [xmlDoc setAttribute:@"c" double:equation.c];
+        [xmlDoc popElement];
     }
     
     [xmlDoc popElement];
@@ -302,6 +357,70 @@ static NSUInteger dashStyleFromName(NSString *name)
     NSArray *lineChildren = [super childObjectsForXML];
     
     return [lineChildren arrayByAddingObjectsFromArray:[[self data] elements]];
+}
+
+@end
+
+
+#pragma mark -
+@implementation RSEquationLine (XML)
+
++ (NSString *)xmlClassName;
+{
+    return @"equation";
+}
+
+// <line class="equation" v1="…" v2="…"><equation family="…" a="…" b="…" c="…"/></line>. An OPC
+// document is checked before decoding (RSGraphArchive); other inputs that lack a valid equation are
+// logged and skipped, leaving their endpoints as ordinary points, never asserted.
+- (BOOL)readContentsXML:(OFXMLCursor *)cursor error:(NSError **)outError;
+{
+    [super readContentsXML:cursor error:outError];
+    
+    OFXMLElement *element = [cursor currentElement];
+    
+    RSEquation equation = RSEquationZero();
+    BOOL valid = NO;
+    if ([cursor openNextChildElementNamed:@"equation"]) {
+        OFXMLElement *child = [cursor currentElement];
+        valid = equationTypeFromName([child attributeNamed:@"family"], &equation.type)
+            && finiteValueForAttribute(child, @"a", &equation.a)
+            && finiteValueForAttribute(child, @"b", &equation.b)
+            && finiteValueForAttribute(child, @"c", &equation.c);
+        [cursor closeElement];
+    }
+    if (!valid) {
+        NSLog(@"XML error: equation line '%@' at cursor path %@ has no valid 'equation' child; the line is skipped.", [element attributeNamed:@"id"], [cursor currentPath]);
+        return NO;
+    }
+    _equation = equation;
+    
+    BOOL needResetEndpoints = NO;
+    RSVertex *endpoints[2] = {nil, nil};
+    NSString *names[2] = {@"v1", @"v2"};
+    for (int i = 0; i < 2; i++) {
+        NSString *idref = [element attributeNamed:names[i]];
+        id object = idref ? [_graph objectForIdentifier:idref] : nil;
+        if ([object isKindOfClass:[RSVertex class]] && object != endpoints[0]) {
+            endpoints[i] = object;
+        } else {
+            NSLog(@"XML error: equation line '%@' endpoint %@ '%@' not found; it is recomputed.", [element attributeNamed:@"id"], names[i], idref);
+            endpoints[i] = [[[RSVertex alloc] initWithGraph:_graph] autorelease];
+            needResetEndpoints = YES;
+        }
+    }
+    _v1 = [endpoints[0] retain];
+    [_v1 addParent:self];
+    _v2 = [endpoints[1] retain];
+    [_v2 addParent:self];
+    
+    // non-XML: the stored endpoints are kept as written; the next layout recomputes them.
+    _needsRecompute = NO;
+    if (needResetEndpoints) {
+        [self updateEndpoints];
+    }
+    
+    return YES;
 }
 
 @end
