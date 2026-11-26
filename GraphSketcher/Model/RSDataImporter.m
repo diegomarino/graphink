@@ -1384,6 +1384,7 @@ static RSAxis *_shouldHideEndLabels = nil;
     
     NSUInteger limit = prototypes ? [prototypes count] : 0;
     NSUInteger index = 0;
+    NSInteger numericSeries = 0;
     
     // Process each data series
     for (RSGroup *series in A) {
@@ -1394,6 +1395,14 @@ static RSAxis *_shouldHideEndLabels = nil;
             continue;
         }
         
+        // Text with no numbers comes back as a group holding one label: it is not a data series.
+        for (RSGraphElement *element in [series elements]) {
+            if ([element isKindOfClass:[RSVertex class]]) {
+                numericSeries += 1;
+                break;
+            }
+        }
+
         // Initialize default style settings
         CGFloat currentWidth = 0;
         NSUInteger currentShape = RS_NONE;
@@ -1436,7 +1445,7 @@ static RSAxis *_shouldHideEndLabels = nil;
     }
     
     if (numberOfSeriesFound != NULL) {
-        *numberOfSeriesFound = index - 1;
+        *numberOfSeriesFound = numericSeries;
     }
     
     return everything;

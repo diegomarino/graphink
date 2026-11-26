@@ -2285,12 +2285,9 @@ BOOL showWhaBam = NO;
         return ([[self allOrSelectedVertices] count] > 0);
     }
     else if (menuAction == @selector(toggleDottedGrid:)) {
-        if ([_graph xGrid].dotted) {
-            [menuItem setState:NSControlStateValueOn];
-        } else {
-            [menuItem setState:NSControlStateValueOff];
-        }
-        return YES;
+        // Checked when every shown grid is dotted; disabled while no grid is shown.
+        [menuItem setState:[self _shownGridsAreDotted] ? NSControlStateValueOn : NSControlStateValueOff];
+        return [_graph displayGrid];
     }
     else if (menuAction == @selector(importDataInRows:)) {
         if ([[OFPreferenceWrapper sharedPreferenceWrapper] boolForKey:@"ImportDataSeriesAsRows"]) {
@@ -2944,12 +2941,37 @@ static ErrorBarSheet *errorBarSheet = nil;
     }
 }
 
-- (IBAction)toggleDottedGrid:(id)sender;
+- (BOOL)_shownGridsAreDotted;
 {
-    [_graph xGrid].dotted = ![_graph xGrid].dotted;
-    [_graph yGrid].dotted = ![_graph yGrid].dotted;
+    if (![_graph displayGrid])
+        return NO;
+    return (![[_graph xAxis] displayGrid] || [_graph xGrid].dotted) && (![[_graph yAxis] displayGrid] || [_graph yGrid].dotted);
+}
+
+- (void)_setXGridDotted:(BOOL)xDotted yGridDotted:(BOOL)yDotted;
+{
+    NSUndoManager *undoManager = [_graph undoManager];
+    [[undoManager prepareWithInvocationTarget:self] _setXGridDotted:[_graph xGrid].dotted yGridDotted:[_graph yGrid].dotted];
+    if (![undoManager isUndoing] && ![undoManager isRedoing])
+        [_editor.undoer setActionName:NSLocalizedStringFromTable(@"Change Grid Style", @"UndoActions", @"Undo action name")];
+    
+    [_graph xGrid].dotted = xDotted;
+    [_graph yGrid].dotted = yDotted;
     
     [self setNeedsDisplay:YES];
+}
+
+// Makes every shown grid dotted, or solid if all of them already are; hidden grids keep their style.
+- (IBAction)toggleDottedGrid:(id)sender;
+{
+    if (![_graph displayGrid])
+        return;
+    
+    BOOL dotted = ![self _shownGridsAreDotted];
+    BOOL xDotted = [[_graph xAxis] displayGrid] ? dotted : [_graph xGrid].dotted;
+    BOOL yDotted = [[_graph yAxis] displayGrid] ? dotted : [_graph yGrid].dotted;
+    [self _setXGridDotted:xDotted yGridDotted:yDotted];
+    [_editor.undoer endRepetitiveUndo];
 }
 
 - (IBAction)addEquationLine:(id)sender;
@@ -2964,8 +2986,6 @@ static ErrorBarSheet *errorBarSheet = nil;
 
 - (IBAction)importDataSeriesReplacingCurrent:(id)sender;
 {
-    NSArray *prototypes = [_graph importedDataPrototypes];
-    
     NSPasteboard *pb = [NSPasteboard generalPasteboard];
     NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObjects:OmniDataOnlyTabularPboardType, NSTabularTextPboardType, NSStringPboardType, nil]];
     
@@ -2974,12 +2994,33 @@ static ErrorBarSheet *errorBarSheet = nil;
         return;
     }
     
-    NSString *string = [pb stringForType:type];
+    [self importDataSeriesReplacingCurrentFromString:[pb stringForType:type]];
+}
+
+// Replaces each current data series, in order, with one imported from `string` (styled like it);
+// any further imported series are added. One undo step.
+- (void)importDataSeriesReplacingCurrentFromString:(NSString *)string;
+{
+    NSArray *prototypes = [_graph importedDataPrototypes];
+    
+    // Parsing builds new elements that are not in the graph yet; their setters must not log undo, or
+    // text with no numbers (parsed as a label that is then dropped) would leave an empty undo step.
     NSInteger numberOfSeries = 0;
-    RSGraphElement *everything = [[RSDataImporter sharedDataImporter] graphElementsFromString:string forGraph:_editor.graph prototypes:prototypes connectSeries:YES found:&numberOfSeries];
+    NSUndoManager *undoManager = [_graph undoManager];
+    [undoManager disableUndoRegistration];
+    RSGraphElement *everything = nil;
+    @try {
+        everything = [[RSDataImporter sharedDataImporter] graphElementsFromString:string forGraph:_editor.graph prototypes:prototypes connectSeries:YES found:&numberOfSeries];
+    } @finally {
+        [undoManager enableUndoRegistration];
+    }
+    // Only numeric series replace anything; text with no numbers changes nothing.
+    if (!everything || numberOfSeries <= 0)
+        return;
     
     // Remove all of the prototype data series that are being replaced with imported data
-    for (NSInteger i = 0; i < numberOfSeries; i += 1) {
+    NSInteger replaced = MIN(numberOfSeries, (NSInteger)[prototypes count]);
+    for (NSInteger i = 0; i < replaced; i += 1) {
         RSVertex *V = [prototypes objectAtIndex:i];
         RSGroup *group = [V group];
         if (!group) {
@@ -2992,7 +3033,11 @@ static ErrorBarSheet *errorBarSheet = nil;
             [group addElement:[line vertices]];
         }
         
-        [_graph removeElement:group];
+        // Removing an element can take others with it (a point its line) and changes the groups
+        // they belong to, so work from a snapshot and skip what is already gone.
+        for (RSGraphElement *element in [[[group elements] copy] autorelease])
+            if ([_graph containsElement:element])
+                [_graph removeElement:element];
     }
     
     // Add the new data series to the graph

@@ -28,6 +28,8 @@ disabled. Path helpers construct geometry but do not paint it.
 Two existing behaviors need care: `drawLine:` culls against the union of screen bounds,
 and `drawAllGraphElementsExcept:` invokes the shadow methods. The experiment must not
 change either for existing outputs. Nonzero shadows need a separate fidelity decision.
+(Since #26, `drawLine:` no longer culls: a line reaching beyond a page-sized margin
+around the canvas is cut at that margin, so every export draws its visible part.)
 
 ## Seam and implementation sequence
 
