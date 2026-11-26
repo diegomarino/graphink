@@ -237,8 +237,9 @@ vertex coordinates. No x range is stored: the model evaluates the curve across t
 and draws the part inside the canvas. `v1` and `v2` are ordinary `vertex` elements owned by the
 line, at the x-axis minimum and maximum and `y = f(x)` as of the last layout; they are written so
 they keep their identity, read as stored, and recomputed on the next layout. The OPC gate refuses
-an invalid equation line ([opc-v1.md](opc-v1.md)); other inputs log it and skip the line, leaving
-its endpoints as points, without assertions. Older readers drop the class (an unknown line class,
+an invalid equation line, including `v1`/`v2` that are missing or do not name two distinct
+`vertex` elements ([opc-v1.md](opc-v1.md)); other inputs log it and skip the line, leaving its
+endpoints as points and making no replacement vertices, without assertions. Older readers drop the class (an unknown line class,
 §6), which is why a package carries `equation-lines-v1` and legacy containers never carry one.
 
 Fill defaults: black at alpha .5, label placement (.5,.5). Use at least three

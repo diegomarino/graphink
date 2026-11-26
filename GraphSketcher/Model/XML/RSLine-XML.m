@@ -372,7 +372,8 @@ static BOOL finiteValueForAttribute(OFXMLElement *element, NSString *name, data_
 
 // <line class="equation" v1="…" v2="…"><equation family="…" a="…" b="…" c="…"/></line>. An OPC
 // document is checked before decoding (RSGraphArchive); other inputs that lack a valid equation are
-// logged and skipped, leaving their endpoints as ordinary points, never asserted.
+// logged and skipped, as are lines whose v1 and v2 are not two distinct vertices (no replacement
+// vertices are made): their endpoints stay ordinary points, never asserted.
 - (BOOL)readContentsXML:(OFXMLCursor *)cursor error:(NSError **)outError;
 {
     [super readContentsXML:cursor error:outError];
@@ -393,33 +394,26 @@ static BOOL finiteValueForAttribute(OFXMLElement *element, NSString *name, data_
         NSLog(@"XML error: equation line '%@' at cursor path %@ has no valid 'equation' child; the line is skipped.", [element attributeNamed:@"id"], [cursor currentPath]);
         return NO;
     }
-    _equation = equation;
-    
-    BOOL needResetEndpoints = NO;
     RSVertex *endpoints[2] = {nil, nil};
     NSString *names[2] = {@"v1", @"v2"};
     for (int i = 0; i < 2; i++) {
         NSString *idref = [element attributeNamed:names[i]];
         id object = idref ? [_graph objectForIdentifier:idref] : nil;
-        if ([object isKindOfClass:[RSVertex class]] && object != endpoints[0]) {
-            endpoints[i] = object;
-        } else {
-            NSLog(@"XML error: equation line '%@' endpoint %@ '%@' not found; it is recomputed.", [element attributeNamed:@"id"], names[i], idref);
-            endpoints[i] = [[[RSVertex alloc] initWithGraph:_graph] autorelease];
-            needResetEndpoints = YES;
+        if (![object isKindOfClass:[RSVertex class]] || object == endpoints[0]) {
+            NSLog(@"XML error: equation line '%@' endpoint %@ '%@' is not a distinct vertex; the line is skipped.", [element attributeNamed:@"id"], names[i], idref);
+            return NO;
         }
+        endpoints[i] = object;
     }
+    _equation = equation;
     _v1 = [endpoints[0] retain];
     [_v1 addParent:self];
     _v2 = [endpoints[1] retain];
     [_v2 addParent:self];
-    
+
     // non-XML: the stored endpoints are kept as written; the next layout recomputes them.
     _needsRecompute = NO;
-    if (needResetEndpoints) {
-        [self updateEndpoints];
-    }
-    
+
     return YES;
 }
 

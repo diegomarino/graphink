@@ -252,15 +252,23 @@ static NSInteger EquationLines(NSXMLElement *graph,NSString *ns,NSError **error)
 {
     NSInteger count=0;
     NSArray *families=@[@"linear",@"square",@"cube",@"sine",@"gaussian",@"logistic"];
+    // v1 and v2 must each name exactly one graph object, and it must be a vertex.
+    NSCountedSet *ids=[NSCountedSet set]; NSMutableSet *vertices=[NSMutableSet set];
+    for (NSXMLNode *node in graph.children) {
+        if (node.kind!=NSXMLElementKind) continue; NSString *identifier=Attr((id)node,@"id"); if (!identifier) continue;
+        [ids addObject:identifier];
+        if ([node.localName isEqual:@"vertex"] && [node.URI?:@"" isEqual:ns]) [vertices addObject:identifier];
+    }
     for (NSXMLNode *node in graph.children) {
         if (node.kind!=NSXMLElementKind) continue; NSXMLElement *line=(id)node;
         if (![line.localName isEqual:@"line"] || ![line.URI?:@"" isEqual:ns] || ![Attr(line,@"class") isEqual:@"equation"]) continue;
         NSArray *equations=[line.children filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSXMLNode *child,NSDictionary *bindings){return child.kind==NSXMLElementKind && [child.localName isEqual:@"equation"];}]];
         NSXMLElement *equation=equations.firstObject;
-        BOOL valid=Attr(line,@"v1").length && Attr(line,@"v2").length && ![Attr(line,@"v1") isEqual:Attr(line,@"v2")] && equations.count==1 && [equation.URI?:@"" isEqual:ns] && !equation.childCount;
+        NSString *v1=Attr(line,@"v1"), *v2=Attr(line,@"v2");
+        BOOL valid=v1 && v2 && ![v1 isEqual:v2] && [vertices containsObject:v1] && [vertices containsObject:v2] && [ids countForObject:v1]==1 && [ids countForObject:v2]==1 && equations.count==1 && [equation.URI?:@"" isEqual:ns] && !equation.childCount;
         for (NSXMLNode *attribute in equation.attributes) valid&=!attribute.URI.length && [@[@"family",@"a",@"b",@"c"] containsObject:attribute.name];
         valid&=[families containsObject:Attr(equation,@"family")?:@""] && Finite(equation,@"a") && Finite(equation,@"b") && Finite(equation,@"c");
-        if (!valid) { Fail(error,@"An equation line needs two distinct endpoints and one equation with a known family and finite a, b and c.",NO); return -1; }
+        if (!valid) { Fail(error,@"An equation line needs two distinct vertices as endpoints and one equation with a known family and finite a, b and c.",NO); return -1; }
         count++;
     }
     return count;

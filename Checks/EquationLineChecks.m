@@ -233,6 +233,36 @@ static void MainChecks(void)
     Check(WriteArchive(Generate(reopened), nil, RSGraphArchiveOPC, Fresh(@"removed.graphink"), &error), [NSString stringWithFormat:@"Write after removal: %@", error]);
     Check(EquationLines(MustRead([NSURL fileURLWithPath:[Output stringByAppendingPathComponent:@"removed.graphink"]])).count == 0, @"No equation line after removal");
     printf("PASS equation lines removed: document saved and reopened\n");
+
+    // Legacy XML whose equation line names a missing or non-vertex endpoint: the line is logged and
+    // skipped, no vertex is made up, and the stored vertices stay points (the OPC gate refuses these).
+    NSString *path = [Output stringByAppendingPathComponent:@"menu-square-1.xml"];
+    NSString *source = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+    NSXMLDocument *doc = [[[NSXMLDocument alloc] initWithXMLString:source options:0 error:NULL] autorelease];
+    NSXMLElement *line = [[doc nodesForXPath:@"//*[local-name()='line' and @class='equation']" error:NULL] firstObject];
+    NSString *lineID = [line attributeForName:@"id"].stringValue, *v1 = [line attributeForName:@"v1"].stringValue, *v2 = [line attributeForName:@"v2"].stringValue;
+    NSString *labelID = [[[doc nodesForXPath:@"//*[local-name()='graph']/*[local-name()='label']/@id" error:NULL] firstObject] stringValue];
+    Check(lineID && v1 && v2 && labelID, @"Equation line ids and a label id in menu-square-1.xml");
+    NSString *(^attribute)(NSString *, NSString *) = ^(NSString *name, NSString *value) { return [NSString stringWithFormat:@"%@=\"%@\"", name, value]; };
+    NSDictionary *variants = @{
+        @"missing": @[attribute(@"v2", v2), attribute(@"v2", @"e999999")],
+        @"absent": @[[@" " stringByAppendingString:attribute(@"v2", v2)], @""],
+        @"label": @[attribute(@"v2", v2), attribute(@"v2", labelID)],
+        @"line": @[attribute(@"v1", v1), attribute(@"v1", lineID)],
+        @"same": @[attribute(@"v2", v2), attribute(@"v2", v1)],
+    };
+    for (NSString *name in [variants.allKeys sortedArrayUsingSelector:@selector(compare:)]) {
+        NSArray *edit = variants[name];
+        Check([source componentsSeparatedByString:edit[0]].count == 2, [NSString stringWithFormat:@"endpoint-%@: %@ found once", name, edit[0]]);
+        NSString *changed = [source stringByReplacingOccurrencesOfString:edit[0] withString:edit[1]];
+        NSURL *url = Fresh([NSString stringWithFormat:@"endpoint-%@.ograph", name]);
+        Check([changed writeToURL:url atomically:NO encoding:NSUTF8StringEncoding error:NULL], @"Write endpoint variant");
+        RSGraph *graph = MustRead(url);
+        NSUInteger stored = [changed componentsSeparatedByString:@"<vertex "].count - 1;
+        Check(EquationLines(graph).count == 0, [NSString stringWithFormat:@"endpoint-%@: equation line skipped", name]);
+        Check(graph.Vertices.count == stored, [NSString stringWithFormat:@"endpoint-%@: %lu vertices read, %lu stored", name, (unsigned long)graph.Vertices.count, (unsigned long)stored]);
+    }
+    printf("PASS legacy XML equation lines with a missing, absent, same, label or line endpoint skipped, no vertex made up\n");
 }
 
 static void ReadReport(NSArray *paths)

@@ -99,7 +99,8 @@ none). The v1 feature tokens are:
 - `creation-defaults-v1`, present iff the creation-defaults element exists;
 - `equation-lines-v1` (added 2026-11-26, #27), present iff the native graph has at least one
   `line class="equation"` ([graphink.md](graphink.md) §4). The gate also refuses, as malformed,
-  an equation line without two distinct `v1`/`v2` references or without exactly one `equation`
+  an equation line whose `v1` and `v2` are not the ids of two distinct `vertex` elements of the
+  same graph (each id carried by exactly one graph child), or without exactly one `equation`
   child with a known `family` and finite `a`, `b`, `c`.
 
 Writers list the tokens sorted, one space apart (`creation-defaults-v1 equation-lines-v1`).

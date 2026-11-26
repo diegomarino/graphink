@@ -9,7 +9,8 @@ rewritten byte-identically and rendered identically; the curve must draw. Legacy
 The emitted packages are then checked here: the `equation-lines-v1` token is present exactly when the
 graph has an equation line, docs/format/check-opc.py accepts them, `graphink render` draws a saved
 and a resaved document identically, and modified packages (unknown or missing token, invalid
-equation) are refused by both the production reader and check-opc.py. No UI is launched.
+equation, endpoints that are not two distinct vertices) are refused by both the production reader
+and check-opc.py; in legacy XML such a line is skipped without making up vertices. No UI is launched.
 """
 import argparse
 import importlib.util
@@ -140,6 +141,10 @@ def variant(name, source, member, old, new, kind):
     return path, kind
 
 
+graph = opc.xml(square[PAYLOAD]).find(f'{{{opc.NATIVE}}}graph')
+equation_line = graph.find(f'{{{opc.NATIVE}}}line[@class="equation"]')
+line_id, v1, v2 = (equation_line.get(key).encode() for key in ('id', 'v1', 'v2'))
+label_id = graph.find(f'{{{opc.NATIVE}}}label').get('id').encode()
 cases = [
     variant('future-token', square, CONTROL, b'"equation-lines-v1"', b'"equation-lines-v2"', 'unsupported'),
     variant('token-missing', square, CONTROL, b'"equation-lines-v1"', b'""', 'malformed'),
@@ -148,6 +153,12 @@ cases = [
     variant('missing-c', square, PAYLOAD, b' c="1"', b'', 'malformed'),
     variant('infinite-a', square, PAYLOAD, b' a="0"', b' a="inf"', 'malformed'),
     variant('no-equation', square, PAYLOAD, b'<equation family="square" a="0" b="0" c="1"/>', b'', 'malformed'),
+    # Endpoints must be two distinct vertices of the graph: never replaced by made-up vertices.
+    variant('missing-endpoint', square, PAYLOAD, b'v2="' + v2 + b'"', b'v2="e999999"', 'malformed'),
+    variant('absent-endpoint', square, PAYLOAD, b' v2="' + v2 + b'"', b'', 'malformed'),
+    variant('same-endpoints', square, PAYLOAD, b'v2="' + v2 + b'"', b'v2="' + v1 + b'"', 'malformed'),
+    variant('label-endpoint', square, PAYLOAD, b'v2="' + v2 + b'"', b'v2="' + label_id + b'"', 'malformed'),
+    variant('line-endpoint', square, PAYLOAD, b'v1="' + v1 + b'"', b'v1="' + line_id + b'"', 'malformed'),
 ]
 report = run([probe, '--read'] + [path for path, _ in cases], 'read-negative')
 print(report)

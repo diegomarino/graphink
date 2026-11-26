@@ -3,6 +3,7 @@
 import argparse
 import base64
 import binascii
+import collections
 import hashlib
 import io
 import json
@@ -213,10 +214,14 @@ def control(data):
 def equation_lines(graph):
     """Count the graph's equation lines, refusing an invalid one (graphink.md section 4)."""
     count = 0
+    # v1 and v2 must each name exactly one graph object, and it must be a vertex.
+    ids = collections.Counter(child.get('id') for child in graph if child.get('id') is not None)
+    vertices = {child.get('id') for child in graph if child.tag == '{'+NATIVE+'}vertex'}
     for line in graph.findall('{'+NATIVE+'}line'):
         if line.get('class') != 'equation':
             continue
-        need(bool(line.get('v1')) and bool(line.get('v2')) and line.get('v1') != line.get('v2'), 'Equation line needs two distinct endpoints')
+        v1, v2 = line.get('v1'), line.get('v2')
+        need(v1 != v2 and all(v in vertices and ids[v] == 1 for v in (v1, v2)), 'Equation line needs two distinct vertices as endpoints')
         equations = [child for child in line if child.tag == '{'+NATIVE+'}equation']
         need(len(equations) == 1 and not len(equations[0]), 'Equation line needs exactly one equation')
         equation = equations[0]
@@ -332,6 +337,9 @@ def self_check():
         'equation-parameter': equation_case(MEMBERS[4], b' c="2"', b' c="inf"'),
         'equation-missing-parameter': equation_case(MEMBERS[4], b' a="0"', b''),
         'equation-same-endpoints': equation_case(MEMBERS[4], b'v2="e4"', b'v2="e3"'),
+        'equation-missing-endpoint': equation_case(MEMBERS[4], b'v2="e4"', b'v2="e99"'),
+        'equation-label-endpoint': equation_case(MEMBERS[4], b'v2="e4"', b'v2="e6"'),
+        'equation-line-endpoint': equation_case(MEMBERS[4], b'v1="e3"', b'v1="e5"'),
     }
     for name, fn in {
         'document-version': lambda p: [(n, b.replace(b'version="1" required', b'version="2" required') if n == MEMBERS[2] else b) for n, b in p],
