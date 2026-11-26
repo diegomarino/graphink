@@ -33,7 +33,6 @@
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
 #import <AppKit/NSShadow.h>
 #import <AppKit/NSGraphicsContext.h>
-#import <AppKit/NSScreen.h>
 #endif
 
 #define AXIS_LINE_HINTING_WIDTH_CUTOFF (1.5)
@@ -46,6 +45,200 @@ static CGFloat nearestPixelIfEnabled(CGFloat f) {
     // else
     return f;
 }
+
+#if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
+// Liang-Barsky: the parameter range [*t0, *t1] of a->b inside r, or NO if none of it is.
+static BOOL clipSegmentToRect(CGPoint a, CGPoint b, CGRect r, CGFloat *t0, CGFloat *t1) {
+    CGFloat dx = b.x - a.x, dy = b.y - a.y;
+    CGFloat p[4] = {-dx, dx, -dy, dy};
+    CGFloat q[4] = {a.x - CGRectGetMinX(r), CGRectGetMaxX(r) - a.x, a.y - CGRectGetMinY(r), CGRectGetMaxY(r) - a.y};
+    *t0 = 0;
+    *t1 = 1;
+    for (int i = 0; i < 4; i++) {
+        if (p[i] == 0) {
+            if (q[i] < 0)
+                return NO;
+            continue;
+        }
+        CGFloat t = q[i] / p[i];
+        if (p[i] < 0)
+            *t0 = MAX(*t0, t);
+        else
+            *t1 = MIN(*t1, t);
+    }
+    return *t0 <= *t1;
+}
+
+static NSBezierPath *styledPieceLikePath(NSBezierPath *P, const CGFloat *dash, NSInteger dashCount, CGFloat phase) {
+    NSBezierPath *piece = [NSBezierPath bezierPath];
+    [piece setLineWidth:[P lineWidth]];
+    [piece setLineCapStyle:[P lineCapStyle]];
+    [piece setLineJoinStyle:[P lineJoinStyle]];
+    [piece setMiterLimit:[P miterLimit]];
+    [piece setWindingRule:[P windingRule]];
+    if (dashCount)
+        [piece setLineDash:dash count:dashCount phase:phase];
+    return piece;
+}
+
+// The stroked line paths to draw for P on a canvas whose drawing area is `rect`. A path inside
+// `rect` is returned as is. Otherwise the path is cut to `rect`, so a line with a vertex far off
+// the page draws its visible part without stroking an unbounded path: straight segments are
+// clipped exactly, and a curve crossing the edge of `rect` is split so its parts inside stay
+// curves. Dashed pieces keep the dash phase of the full line. Non-finite paths draw nothing.
+static NSArray *linePathsClippedToRect(NSBezierPath *P, CGRect rect) {
+    CGRect pathBounds = [P bounds];
+    if (!isfinite(pathBounds.origin.x) || !isfinite(pathBounds.origin.y) || !isfinite(pathBounds.size.width) || !isfinite(pathBounds.size.height))
+        return [NSArray array];
+    if (CGRectContainsRect(rect, pathBounds))
+        return [NSArray arrayWithObject:P];
+    if (!CGRectIntersectsRect(rect, pathBounds))
+        return [NSArray array];
+    
+    NSInteger dashCount = 0;
+    CGFloat basePhase = 0, dashLength = 0;
+    [P getLineDash:NULL count:&dashCount phase:&basePhase];
+    NSMutableData *dashStorage = [NSMutableData dataWithLength:(NSUInteger)MAX(dashCount, 1) * sizeof(CGFloat)];
+    CGFloat *dash = [dashStorage mutableBytes];
+    if (dashCount)
+        [P getLineDash:dash count:&dashCount phase:&basePhase];
+    for (NSInteger i = 0; i < dashCount; i++)
+        dashLength += dash[i];
+    
+    NSMutableArray *pieces = [NSMutableArray array];
+    __block NSBezierPath *open = nil;  // the piece being extended, if the last segment ended inside
+    __block NSBezierPath *first = nil;  // the current subpath's first piece, if it starts at the subpath's start
+    __block CGPoint current = CGPointZero;
+    __block CGFloat distance = 0;  // along the current subpath, where the dash pattern restarts
+    
+    void (^startPiece)(CGPoint) = ^(CGPoint from) {
+        CGFloat phase = basePhase + distance;
+        if (dashLength > 0)
+            phase = fmod(phase, dashLength);
+        open = styledPieceLikePath(P, dash, dashCount, dashCount ? phase : 0);
+        [open moveToPoint:from];
+        [pieces addObject:open];
+    };
+    // A straight segment from the current point; `length` is how far it advances the dash pattern.
+    void (^addSegment)(CGPoint, CGFloat) = ^(CGPoint b, CGFloat length) {
+        CGPoint a = current;
+        CGFloat t0, t1;
+        if (clipSegmentToRect(a, b, rect, &t0, &t1)) {
+            if (!open || t0 > 0) {
+                distance += t0 * length;
+                startPiece(CGPointMake(a.x + t0 * (b.x - a.x), a.y + t0 * (b.y - a.y)));
+                distance -= t0 * length;
+            }
+            [open lineToPoint:CGPointMake(a.x + t1 * (b.x - a.x), a.y + t1 * (b.y - a.y))];
+            if (t1 < 1)
+                open = nil;
+        } else {
+            open = nil;
+        }
+        distance += length;
+        current = b;
+    };
+    
+    // A curve from the current point. Parts inside the rect stay curves and parts outside are
+    // skipped; only the small parts on its edge, far outside the canvas, are drawn as lines.
+    __block void (^addCurve)(CGPoint, CGPoint, CGPoint, CGPoint, NSUInteger);
+    addCurve = ^(CGPoint p0, CGPoint c1, CGPoint c2, CGPoint p3, NSUInteger depth) {
+        NSBezierPath *curve = [NSBezierPath bezierPath];
+        [curve moveToPoint:p0];
+        [curve curveToPoint:p3 controlPoint1:c1 controlPoint2:c2];
+        CGRect bounds = [curve controlPointBounds];
+        if (CGRectContainsRect(rect, bounds) || !CGRectIntersectsRect(rect, bounds) || depth >= 32 || MAX(CGRectGetWidth(bounds), CGRectGetHeight(bounds)) < 1) {
+            // The length that places dashes: the curve flattened at the default flatness, as Quartz does.
+            NSBezierPath *flat = [curve bezierPathByFlatteningPath];
+            CGFloat length = 0;
+            NSPoint previous = p0;
+            for (NSInteger i = 1; i < [flat elementCount]; i++) {
+                NSPoint q[3];
+                [flat elementAtIndex:i associatedPoints:q];
+                length += hypot(q[0].x - previous.x, q[0].y - previous.y);
+                previous = q[0];
+            }
+            if (CGRectContainsRect(rect, bounds)) {
+                if (!open)
+                    startPiece(p0);
+                [open curveToPoint:p3 controlPoint1:c1 controlPoint2:c2];
+                distance += length;
+                current = p3;
+            } else if (!CGRectIntersectsRect(rect, bounds)) {
+                open = nil;
+                distance += length;
+                current = p3;
+            } else {
+                addSegment(p3, length);
+            }
+            return;
+        }
+        // de Casteljau at t = 0.5
+        CGPoint a = CGPointMake((p0.x + c1.x) / 2, (p0.y + c1.y) / 2), b = CGPointMake((c1.x + c2.x) / 2, (c1.y + c2.y) / 2), c = CGPointMake((c2.x + p3.x) / 2, (c2.y + p3.y) / 2);
+        CGPoint ab = CGPointMake((a.x + b.x) / 2, (a.y + b.y) / 2), bc = CGPointMake((b.x + c.x) / 2, (b.y + c.y) / 2);
+        CGPoint mid = CGPointMake((ab.x + bc.x) / 2, (ab.y + bc.y) / 2);
+        addCurve(p0, a, ab, mid, depth + 1);
+        addCurve(mid, bc, c, p3, depth + 1);
+    };
+    
+    CGPoint subpathStart = CGPointZero;
+    for (NSInteger index = 0; index < [P elementCount]; index++) {
+        NSPoint points[3];
+        switch ([P elementAtIndex:index associatedPoints:points]) {
+            case NSBezierPathElementMoveTo:
+                current = subpathStart = points[0];
+                distance = 0;
+                open = first = nil;
+                if (CGRectContainsPoint(rect, current)) {
+                    startPiece(current);
+                    first = open;
+                }
+                break;
+            case NSBezierPathElementLineTo:
+                addSegment(points[0], hypot(points[0].x - current.x, points[0].y - current.y));
+                break;
+            case NSBezierPathElementCurveTo:
+                addCurve(current, points[0], points[1], points[2], 0);
+                break;
+            case NSBezierPathElementClosePath:
+                if (open && open == first && CGPointEqualToPoint(current, subpathStart)) {
+                    [open closePath];
+                } else {
+                    addSegment(subpathStart, hypot(subpathStart.x - current.x, subpathStart.y - current.y));
+                    // Back at the start inside the rect: rejoin the first piece so the corner keeps
+                    // its line join. Dashed pieces stay apart, since the pattern restarts there.
+                    if (open && first && open != first && !dashCount) {
+                        for (NSInteger i = 1; i < [first elementCount]; i++) {
+                            NSPoint q[3];
+                            NSBezierPathElement element = [first elementAtIndex:i associatedPoints:q];
+                            if (element == NSBezierPathElementLineTo)
+                                [open lineToPoint:q[0]];
+                            else if (element == NSBezierPathElementCurveTo)
+                                [open curveToPoint:q[2] controlPoint1:q[0] controlPoint2:q[1]];
+                        }
+                        [pieces removeObjectIdenticalTo:first];
+                    } else if (open && open == first) {
+                        [open closePath];
+                    }
+                }
+                current = subpathStart;
+                distance = 0;
+                open = first = nil;
+                break;
+            default:
+                break;
+        }
+    }
+    if (dashCount)
+        return pieces;
+    // Undashed pieces share one path; they only meet at cut points outside the drawing area.
+    NSBezierPath *undashed = styledPieceLikePath(P, NULL, 0, 0);
+    for (NSBezierPath *piece in pieces)
+        if ([piece elementCount] > 1)
+            [undashed appendBezierPath:piece];
+    return [undashed isEmpty] ? [NSArray array] : [NSArray arrayWithObject:undashed];
+}
+#endif
 
 static NSColor *baseSelectionColor(void) {
     NSColor *systemColor = [NSColor selectedTextBackgroundColor];
@@ -2631,20 +2824,18 @@ static void appendTick(NSBezierPath *path, int axisOrientation, CGFloat p, CGFlo
 
     
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
-    CGRect allScreens = CGRectZero;
-    NSArray *screens = [NSScreen screens];
-    
-    for(NSScreen *currScreen in screens){
-        allScreens = CGRectUnion(allScreens, currScreen.frame);
-    }
-
-    if(!CGRectContainsRect(allScreens, P.bounds))
-    {
+    // Draw the part of the line that can show on the canvas. The margin keeps every cut point and
+    // its end cap well outside the canvas, so the context's own clip decides what is visible.
+    CGRect canvas = [_mapper bounds];
+    CGFloat margin = MAX(CGRectGetWidth(canvas), CGRectGetHeight(canvas)) + 4 * w;
+    NSArray *pieces = linePathsClippedToRect(P, CGRectInset(canvas, -margin, -margin));
+    if (![pieces count])
         return;
-    }
-#endif
-    
+    for (NSBezierPath *piece in pieces)
+        RSStrokeDrawingPath(piece, [L color]);
+#else
     RSStrokeDrawingPath(P, [L color]);
+#endif
     
     // make rounded edges
     if ([L dash] > 1) {

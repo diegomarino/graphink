@@ -15,7 +15,9 @@ Generic RGB bitmap) may differ only by antialiasing and color rounding. The agen
 (skills/graphink/assets/examples) are created, checked with docs/format/check-opc.py and the RELAX NG
 schema, reopened and rendered, and the skill's make-graph.sh makes one of them with the helper found on
 PATH. Every best-fit line a spec creates (a "fit") is checked against a least-squares fit computed here from
-the points stored in the document. Invalid specs and arguments must be refused with a message and write nothing.
+the points stored in the document. Lines with a point off the page draw their visible part in PNG, PDF and SVG
+(cut near the page, not stroked out to the far point), and nothing when they miss the page. Invalid specs and
+arguments must be refused with a message and write nothing.
 
 With the zip's copy: every PNG is byte-identical to the helper's and every created document has the
 same contents.xml.
@@ -303,6 +305,49 @@ def main():
         assert labelled == expected_labels, f'fit {name}: equation labels on {sorted(labelled)}, expected {sorted(expected_labels)}'
         report['fits'][name] = {'fits': fits, 'summary': proc.stdout.strip()}
 
+    # 4c. Lines with a point off the page (#26): each draws its visible part in PNG, PDF and SVG, and nothing when it
+    # misses the page. Each case is rendered against the same axes without the line. In the SVG, every stroked path
+    # stays within a page-sized margin around the page: a line is cut there, never stroked out to its far point.
+    edge_dir = out / 'off-page-lines'
+    edge_dir.mkdir()
+    edge_axes = {'x': {'min': 0, 'max': 8}, 'y': {'min': 0, 'max': 15}}
+    edge_cases = {
+        'issue-26': ({'type': 'line', 'points': [[-1, -2], [7.5, 15]]}, True),
+        'far-dashed': ({'type': 'line', 'points': [[-1e6, -2e6], [1e6, 2e6]], 'dash': 'dashed', 'color': 'red'}, True),
+        'far-curved': ({'type': 'line', 'points': [[1, 1], [4, 14], [9e5, 3]], 'curve': 'curved', 'color': 'green'}, True),
+        'far-wide': ({'type': 'line', 'points': [[-5000, 7], [5000, 7]], 'dash': 'dash-dot', 'width': 4}, True),
+        'missing-the-page': ({'type': 'line', 'points': [[-100, 1e5], [1e5, 1e5]]}, False),
+    }
+    renders_of = {}
+    for name, objects in [('blank', [])] + [(n, [line]) for n, (line, _) in edge_cases.items()]:
+        spec = edge_dir / f'{name}.json'
+        spec.write_text(json.dumps({'graphink': 1, **edge_axes, 'objects': objects}))
+        doc = edge_dir / f'{name}.graphink'
+        proc = run([helper, 'create', spec, '-o', doc], logs / f'edge-create-{name}.log')
+        assert 'reopened with the production reader' in proc.stdout and not messages(proc), f'off-page {name}: {proc.stdout} {messages(proc)}'
+        for ext in ('png', 'pdf', 'svg'):
+            run([helper, 'render', doc, '-o', edge_dir / f'{name}.{ext}'], logs / f'edge-render-{name}.{ext}.log')
+        run([imagediff, '--rasterize-pdf', edge_dir / f'{name}.pdf', edge_dir / f'{name}.pdf.png'], logs / f'edge-rasterize-{name}.log')
+        svg = (edge_dir / f'{name}.svg').read_text()
+        strokes = [d for d, rest in re.findall(r'<path d="([^"]*)"([^>]*)/>', svg) if 'fill="none"' in rest]
+        coords = [abs(float(v)) for d in strokes for v in re.findall(r'-?\d+(?:\.\d+)?(?:e[-+]?\d+)?', d)]
+        renders_of[name] = {'strokes': len(strokes), 'maxStrokeCoordinate': max(coords)}
+    page = max(1080, 800)  # the default canvas, in points
+    report['offPageLines'] = {}
+    for name, (_, visible) in edge_cases.items():
+        result = {'svg': renders_of[name]}
+        for kind, suffix in (('png', 'png'), ('pdf', 'pdf.png')):
+            result[kind] = json.loads(run([imagediff, edge_dir / f'{name}.{suffix}', edge_dir / f'blank.{suffix}', edge_dir / f'{name}.{kind}-diff.png'], logs / f'edge-diff-{name}.{kind}.log').stdout)
+            assert result[kind]['sameSize'], f'off-page {name}: {kind} size differs from the blank page'
+            if visible:
+                assert result[kind]['over64'] > 500, f'off-page {name}: the {kind.upper()} does not show the visible part of the line: {result[kind]}'
+            else:
+                assert result[kind]['differing'] == 0, f'off-page {name}: a line that misses the page changed the {kind.upper()}: {result[kind]}'
+        extra = renders_of[name]['strokes'] - renders_of['blank']['strokes']
+        assert extra == (1 if visible else 0), f'off-page {name}: {extra} more stroked SVG paths than the blank page'
+        assert renders_of[name]['maxStrokeCoordinate'] <= 3 * page, f'off-page {name}: an SVG stroke reaches {renders_of[name]["maxStrokeCoordinate"]}'
+        report['offPageLines'][name] = result
+
     # 4b. The skill's make-graph.sh, finding the helper through PATH as an agent would.
     path = out / 'path'
     path.mkdir()
@@ -429,7 +474,7 @@ def main():
     worst = max(c['png']['meanChannelDiff'] for c in comparisons.values())
     print(f'PASS graphink {version} from Graphink.app and graphink-cli.zip: rendered {len(inputs)} documents read-only '
           f'({len(comparisons)} examples match their previews; PNG mean channel difference at most {worst:.3f}), '
-          f'created {len(specs)} specs and {len(fit_cases)} best-fit cases (stored fits equal least squares), {len(cases)} bad specs refused, the input refused as {", ".join(report["inputIdentity"])}; evidence: {out}')
+          f'created {len(specs)} specs, {len(fit_cases)} best-fit cases (stored fits equal least squares) and {len(edge_cases)} off-page line cases, {len(cases)} bad specs refused, the input refused as {", ".join(report["inputIdentity"])}; evidence: {out}')
 
 
 if __name__ == '__main__':
