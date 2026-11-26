@@ -619,6 +619,9 @@ static void allocAndRegisterObjectWithIdentifier(OFXMLElement *element, NSString
 	else if ([className isEqualToString:[RSFitLine xmlClassName]]) {
 	    [[[RSFitLine alloc] initWithGraph:graph identifier:identifier] autorelease];
 	}
+	else if ([className isEqualToString:[RSEquationLine xmlClassName]]) {
+	    [[[RSEquationLine alloc] initWithGraph:graph identifier:identifier] autorelease];
+	}
 	else {
 	    NSLog(@"Unsupported line class: '%@'", className);
 	}

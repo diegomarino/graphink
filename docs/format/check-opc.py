@@ -3,6 +3,7 @@
 import argparse
 import base64
 import binascii
+import collections
 import hashlib
 import io
 import json
@@ -29,6 +30,9 @@ TYPES = {'/graphink/document.xml': 'application/vnd.graphink.document+xml',
 MEMBERS = ['[Content_Types].xml', '_rels/.rels', 'graphink/document.xml',
            'graphink/_rels/document.xml.rels', 'contents.xml']
 MAX_PART, MAX_TOTAL = 64 * 1024 * 1024, 128 * 1024 * 1024
+DEFAULTS_FEATURE, EQUATIONS_FEATURE = 'creation-defaults-v1', 'equation-lines-v1'
+FAMILIES = {'linear', 'square', 'cube', 'sine', 'gaussian', 'logistic'}
+DECIMAL = re.compile(r'[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?')
 
 
 class Refusal(Exception):
@@ -182,7 +186,7 @@ def control(data):
     need(root.get('version') == '1', 'Unsupported document version', 'unsupported')
     features = root.get('required-features').split()
     need(len(features) == len(set(features)), 'Duplicate required feature')
-    need(set(features) <= {'creation-defaults-v1'}, 'Unsupported required feature', 'unsupported')
+    need(set(features) <= {DEFAULTS_FEATURE, EQUATIONS_FEATURE}, 'Unsupported required feature', 'unsupported')
     children = list(root)
     need(children and children[0].tag == '{'+G+'}payload', 'Missing payload declaration')
     payload = children[0]
@@ -190,7 +194,7 @@ def control(data):
     need(not len(payload), 'Unknown payload declaration content', 'unsupported')
     need(payload.get('format') == 'native-graph-xml' and payload.get('version') == '1', 'Unsupported payload format/version', 'unsupported')
     need(len(children) <= 2 and all(c.tag == '{'+G+'}creation-defaults' for c in children[1:]), 'Unknown control elements', 'unsupported')
-    need(bool(features) == (len(children) == 2), 'Defaults feature/block mismatch')
+    need((DEFAULTS_FEATURE in features) == (len(children) == 2), 'Defaults feature/block mismatch')
     if len(children) == 2:
         defaults = children[1]
         attrs(defaults, ['version', 'font-name'], ['version'])
@@ -204,6 +208,30 @@ def control(data):
             attrs(wrapper, [])
             need(len(wrapper) == 1, 'Color wrapper must contain one native color')
             color(wrapper[0])
+    return set(features)
+
+
+def equation_lines(graph):
+    """Count the graph's equation lines, refusing an invalid one (graphink.md section 4)."""
+    count = 0
+    # v1 and v2 must each name exactly one graph object, and it must be a vertex.
+    ids = collections.Counter(child.get('id') for child in graph if child.get('id') is not None)
+    vertices = {child.get('id') for child in graph if child.tag == '{'+NATIVE+'}vertex'}
+    for line in graph.findall('{'+NATIVE+'}line'):
+        if line.get('class') != 'equation':
+            continue
+        v1, v2 = line.get('v1'), line.get('v2')
+        need(v1 != v2 and all(v in vertices and ids[v] == 1 for v in (v1, v2)), 'Equation line needs two distinct vertices as endpoints')
+        equations = [child for child in line if child.tag == '{'+NATIVE+'}equation']
+        need(len(equations) == 1 and not len(equations[0]), 'Equation line needs exactly one equation')
+        equation = equations[0]
+        attrs(equation, ['family', 'a', 'b', 'c'], ['family', 'a', 'b', 'c'])
+        need(equation.get('family') in FAMILIES, 'Unknown equation family')
+        for key in 'abc':
+            value = equation.get(key)
+            need(DECIMAL.fullmatch(value) is not None and math.isfinite(float(value)), 'Equation parameters must be finite numbers')
+        count += 1
+    return count
 
 
 def validate(data, expected_payload=None):
@@ -231,10 +259,11 @@ def validate(data, expected_payload=None):
     role = 'urn:graphink:relationships:'
     relationships(blobs['_rels/.rels'], '/', {role+'document': '/graphink/document.xml'})
     relationships(blobs['graphink/_rels/document.xml.rels'], '/graphink/document.xml', {role+'graph': '/contents.xml'} | ({role+'preview': '/preview.pdf'} if has_preview else {}))
-    control(blobs['graphink/document.xml'])
+    features = control(blobs['graphink/document.xml'])
     graph = xml(blobs['contents.xml'])
     need(graph.tag == '{'+NATIVE+'}document', 'Unsupported native payload namespace/root', 'unsupported')
     need(len(graph.findall('{'+NATIVE+'}graph')) == 1 and not graph.findall('{'+NATIVE+'}model'), 'Expected exactly one native graph, no pasteboard model')
+    need((EQUATIONS_FEATURE in features) == (equation_lines(graph.find('{'+NATIVE+'}graph')) > 0), 'Equation lines/feature mismatch')
     if expected_payload is not None:
         need(blobs['contents.xml'] == expected_payload, 'Native payload bytes changed')
     if has_preview:
@@ -288,7 +317,30 @@ def self_check():
     for child in list(partial_defaults[1]):
         partial_defaults[1].remove(child)
     validate(pack([(n, ET.tostring(partial_defaults) if n == MEMBERS[2] else b) for n, b in parts]))
-    cases = {}
+    # Equation lines (in memory only; the fixture files are unchanged).
+    with_equation = dict(parts)
+    line = b'<line id="e5" class="connect" method="straight"><vertices ids="e3 e4"/></line>'
+    with_equation[MEMBERS[4]] = with_equation[MEMBERS[4]].replace(line, line + b'\n    <line id="e8" class="equation" v1="e3" v2="e4"><equation family="sine" a="0" b="5" c="2"/></line>')
+    with_equation[MEMBERS[2]] = with_equation[MEMBERS[2]].replace(b'creation-defaults-v1"', b'creation-defaults-v1 equation-lines-v1"')
+    need(with_equation[MEMBERS[2]] != parts[2][1] and with_equation[MEMBERS[4]] != parts[4][1], 'Equation self-check fixture edit')
+    validate(pack([(n, with_equation[n]) for n in MEMBERS]))
+
+    def equation_case(member, old, new):
+        changed = dict(with_equation)
+        need(changed[member].count(old) == 1, 'Equation self-check edit')
+        changed[member] = changed[member].replace(old, new)
+        return pack([(n, changed[n]) for n in MEMBERS])
+    cases = {
+        'equation-without-feature': equation_case(MEMBERS[2], b' equation-lines-v1"', b'"'),
+        'feature-without-equation': pack([(n, with_equation[MEMBERS[2]] if n == MEMBERS[2] else b) for n, b in parts]),
+        'equation-family': equation_case(MEMBERS[4], b'family="sine"', b'family="tangent"'),
+        'equation-parameter': equation_case(MEMBERS[4], b' c="2"', b' c="inf"'),
+        'equation-missing-parameter': equation_case(MEMBERS[4], b' a="0"', b''),
+        'equation-same-endpoints': equation_case(MEMBERS[4], b'v2="e4"', b'v2="e3"'),
+        'equation-missing-endpoint': equation_case(MEMBERS[4], b'v2="e4"', b'v2="e99"'),
+        'equation-label-endpoint': equation_case(MEMBERS[4], b'v2="e4"', b'v2="e6"'),
+        'equation-line-endpoint': equation_case(MEMBERS[4], b'v1="e3"', b'v1="e5"'),
+    }
     for name, fn in {
         'document-version': lambda p: [(n, b.replace(b'version="1" required', b'version="2" required') if n == MEMBERS[2] else b) for n, b in p],
         'required-feature': lambda p: [(n, b.replace(b'creation-defaults-v1"', b'future-feature"') if n == MEMBERS[2] else b) for n, b in p],

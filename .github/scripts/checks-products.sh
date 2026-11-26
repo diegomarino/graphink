@@ -29,6 +29,7 @@ run_check package-documents "$logs" python3 UI/StylePresets/check-package-docume
 run_check document-types "$logs" python3 Checks/check-document-types.py --products "$products" --output "$evidence/document-types"
 run_check new-from "$logs" python3 Checks/check-new-from.py --products "$products" --output "$evidence/new-from"
 run_check legacy-roundtrips "$logs" python3 Checks/check-legacy-roundtrips.py --products "$products" --output "$evidence/legacy-roundtrips"
+run_check equation-lines "$logs" python3 Checks/check-equation-lines.py --products "$products" --output "$evidence/equation-lines"
 run_check cli "$logs" python3 tools/cli/check-cli.py --products "$products" --output "$evidence/cli"
 run_check svg-structure "$logs" python3 Checks/check-svg-export.py --products "$products" --structure-only \
   --output "$evidence/svg-structure"
