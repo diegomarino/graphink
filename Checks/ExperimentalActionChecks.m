@@ -158,6 +158,14 @@ static void CheckImportAndReplace(void) {
     [view importDataSeriesReplacingCurrentFromString:@""]; Drain();
     Check([Shape(graph) isEqualToString:replaced], [@"An empty import changes nothing: " stringByAppendingString:Shape(graph)]);
     puts("PASS import and replace: an empty import changes nothing");
+
+    // Text with no numbers imports as a label, not a series: nothing is replaced and nothing is added.
+    ClearHistory(document);
+    NSArray *replacedPoints = Points(graph);
+    [view importDataSeriesReplacingCurrentFromString:@"not data"]; Drain();
+    Check([Shape(graph) isEqualToString:replaced] && [Points(graph) isEqual:replacedPoints], [NSString stringWithFormat:@"Text with no numbers changes nothing: %@ %@, expected %@ %@", Shape(graph), Points(graph), replaced, replacedPoints]);
+    Check(!undo.canUndo && !document.isDocumentEdited, [NSString stringWithFormat:@"Text with no numbers registers no undo and leaves the document clean, got %d '%@', edited %d", undo.canUndo, undo.undoActionName, document.isDocumentEdited]);
+    puts("PASS import and replace: text with no numbers changes nothing");
 }
 
 int main(int argc, const char *argv[]) {

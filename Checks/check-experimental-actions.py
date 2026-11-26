@@ -89,6 +89,7 @@ required = (b"PASS dotted grid: disabled and ignored while no grid is shown",
             b"PASS import and replace: three points replace five in one undo step; undo restores the document and its labels",
             b"PASS import and replace: a second import replaces again",
             b"PASS import and replace: an empty import changes nothing",
+            b"PASS import and replace: text with no numbers changes nothing",
             b"PASS experimental action checks: Dotted Grid Lines and Import and Replace Data; windowless")
 failed = returncode or not all(marker in log for marker in required) or any(marker in log for marker in (b"ASSERT failed", b"PRECONDITION failed", b"Assertion Failed:", b"Exception raised:", b"FAIL "))
 if failed or not preferences_unchanged:

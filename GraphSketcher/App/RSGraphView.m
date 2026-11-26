@@ -3003,8 +3003,18 @@ static ErrorBarSheet *errorBarSheet = nil;
 {
     NSArray *prototypes = [_graph importedDataPrototypes];
     
+    // Parsing builds new elements that are not in the graph yet; their setters must not log undo, or
+    // text with no numbers (parsed as a label that is then dropped) would leave an empty undo step.
     NSInteger numberOfSeries = 0;
-    RSGraphElement *everything = [[RSDataImporter sharedDataImporter] graphElementsFromString:string forGraph:_editor.graph prototypes:prototypes connectSeries:YES found:&numberOfSeries];
+    NSUndoManager *undoManager = [_graph undoManager];
+    [undoManager disableUndoRegistration];
+    RSGraphElement *everything = nil;
+    @try {
+        everything = [[RSDataImporter sharedDataImporter] graphElementsFromString:string forGraph:_editor.graph prototypes:prototypes connectSeries:YES found:&numberOfSeries];
+    } @finally {
+        [undoManager enableUndoRegistration];
+    }
+    // Only numeric series replace anything; text with no numbers changes nothing.
     if (!everything || numberOfSeries <= 0)
         return;
     
