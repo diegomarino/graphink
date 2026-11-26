@@ -8,6 +8,7 @@
 #import <GraphSketcherModel/RSLine.h>
 #import <GraphSketcherModel/RSConnectLine.h>
 #import <GraphSketcherModel/RSFitLine.h>
+#import <GraphSketcherModel/RSEquationLine.h>
 
 #import "RSGraphElement-XML.h"
 
@@ -20,6 +21,11 @@
 @end
 
 @interface RSFitLine (XML)
++ (NSString *)xmlClassName;
+- (BOOL)readContentsXML:(OFXMLCursor *)cursor error:(NSError **)outError;
+@end
+
+@interface RSEquationLine (XML)
 + (NSString *)xmlClassName;
 - (BOOL)readContentsXML:(OFXMLCursor *)cursor error:(NSError **)outError;
 @end

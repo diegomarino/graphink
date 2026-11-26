@@ -466,6 +466,40 @@
 						</attribute>
 					</element>
 				</group>
+				<group>  <!-- equation line (needs the equation-lines-v1 feature in a Graphink package) -->
+					<attribute name="class">
+						<choice>
+							<value>equation</value>
+						</choice>
+					</attribute>
+					<attribute name="v1">  <!-- derived endpoints: x axis minimum/maximum, y = f(x) -->
+						<data type="IDREF"/>
+					</attribute>
+					<attribute name="v2">
+						<data type="IDREF"/>
+					</attribute>
+					<element name="equation">
+						<attribute name="family">
+							<choice>
+								<value>linear</value>  <!-- y = ax + b -->
+								<value>square</value>  <!-- y = c(x - a)^2 + b -->
+								<value>cube</value>  <!-- y = c(x - a)^3 + b -->
+								<value>sine</value>  <!-- y = c sin(x - a) + b -->
+								<value>gaussian</value>  <!-- y = c e^-(x - a)^2 + b -->
+								<value>logistic</value>  <!-- y = c/(1 + e^-(x - a)) + b -->
+							</choice>
+						</attribute>
+						<attribute name="a">
+							<data type="double"/>
+						</attribute>
+						<attribute name="b">
+							<data type="double"/>
+						</attribute>
+						<attribute name="c">
+							<data type="double"/>
+						</attribute>
+					</element>
+				</group>
 			</choice>
 			<optional>
 				<attribute name="width">
