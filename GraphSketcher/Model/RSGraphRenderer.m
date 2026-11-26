@@ -1783,17 +1783,40 @@ void RSAppendShapeToBezierPath(NSBezierPath *P, CGPoint p, NSInteger shape, CGFl
 
 
 
+// The part of segment q-p whose y lies in [low, high], as parameters t0 <= t1 in [0, 1].
+static BOOL RSClipSegmentToBand(CGPoint q, CGPoint p, CGFloat low, CGFloat high, CGFloat *t0, CGFloat *t1)
+{
+    CGFloat dy = p.y - q.y;
+    if (dy == 0) {
+        *t0 = 0;
+        *t1 = 1;
+        return q.y >= low && q.y <= high;
+    }
+    CGFloat ta = (low - q.y) / dy, tb = (high - q.y) / dy;
+    *t0 = MAX((CGFloat)0, MIN(ta, tb));
+    *t1 = MIN((CGFloat)1, MAX(ta, tb));
+    return *t0 <= *t1;
+}
+
 - (NSBezierPath *)pathFromEquationLine:(RSEquationLine *)L;
 {
     NSBezierPath *P = [NSBezierPath bezierPath];
     
 //    CGFloat start = [_mapper viewMins].x;
 //    CGFloat end = [_mapper viewMaxes].x;
-    CGFloat start = CGRectGetMinX([_mapper bounds]);
-    CGFloat end = CGRectGetMaxX([_mapper bounds]);
+    CGRect bounds = [_mapper bounds];
+    CGFloat start = CGRectGetMinX(bounds);
+    CGFloat end = CGRectGetMaxX(bounds);
     CGFloat step = 1.0f;  // pixels
     
-    BOOL firstPass = YES;
+    // Only the part of the curve inside the canvas is kept. -drawLine: skips any path whose bounds
+    // leave the screens, and an unbounded curve leaves them: y = x^2 over x 0…10 reaches y = 100, ten
+    // times the height of a 0…10 y axis, so the whole curve used to be skipped. Samples that are not
+    // finite break the curve.
+    CGFloat low = CGRectGetMinY(bounds);
+    CGFloat high = CGRectGetMaxY(bounds);
+    BOOL havePrevious = NO, open = NO;
+    CGPoint previous = CGPointZero;
     for (CGFloat viewX = start; viewX <= end; viewX += step) {
         
         data_p dataX = [_mapper convertToDataCoords:viewX inDimension:RS_ORIENTATION_HORIZONTAL];
@@ -1802,13 +1825,33 @@ void RSAppendShapeToBezierPath(NSBezierPath *P, CGPoint p, NSInteger shape, CGFl
         
         CGPoint p = CGPointMake(viewX, viewY);
         
-        if (firstPass) {
-            [P moveToPoint:p];
-            firstPass = NO;
+        if (!isfinite(viewY)) {
+            havePrevious = open = NO;
+            continue;
+        }
+        if (!havePrevious) {
+            if (viewY >= low && viewY <= high) {
+                [P moveToPoint:p];
+                open = YES;
+            }
         }
         else {
-            [P lineToPoint:p];
+            CGFloat t0, t1;
+            if (RSClipSegmentToBand(previous, p, low, high, &t0, &t1)) {
+                // Clamped: rounding can leave a crossing a hair outside the canvas, which is enough for -drawLine: to skip the curve.
+                CGPoint a = CGPointMake(previous.x + t0*(p.x - previous.x), MIN(MAX(previous.y + t0*(p.y - previous.y), low), high));
+                CGPoint b = CGPointMake(previous.x + t1*(p.x - previous.x), MIN(MAX(previous.y + t1*(p.y - previous.y), low), high));
+                if (!open || t0 > 0)
+                    [P moveToPoint:a];
+                [P lineToPoint:b];
+                open = t1 >= 1;
+            }
+            else {
+                open = NO;
+            }
         }
+        previous = p;
+        havePrevious = YES;
     }
     
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
